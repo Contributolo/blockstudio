@@ -23,6 +23,8 @@ parameters:
       path: includes/classes/block.php
     - identifier: class.notFound
       path: includes/classes/admin.php
+    - identifier: class.notFound
+      path: includes/classes/blade-renderer.php
     # WP_CONTENT_URL is correct here: the path is resolved before WordPress
     # can answer content_url() for a Composer-loaded runtime.
     - identifier: phpstanWP.wpConstant.fetch

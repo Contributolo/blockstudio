@@ -105,6 +105,6 @@ $paths = Blockstudio\Patterns::get_registered_paths();
 |---|-------|----------|
 | Storage | Synced to database as posts | Registered in memory |
 | Config | `page.json` | `pattern.json` |
-| Sync | Auto-syncs on file change | No sync needed |
+| Sync | Explicit, with `wp bs pages sync` | No sync needed |
 | Template lock | Yes | No |
 | Use case | Predefined page content | Reusable block templates |

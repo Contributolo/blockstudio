@@ -15,13 +15,13 @@ Blade is a templating engine used primarily with the Laravel framework. It enabl
 
 ## Setup
 
-To use Blade templates with Blockstudio, you first need to install the `jenssegers/blade` package using Composer.
+To use Blade templates with Blockstudio, install Laravel's `illuminate/view` package with Composer. Versions 8 through 12 work.
 
 ```bash title="Terminal"
-composer require jenssegers/blade
+composer require illuminate/view
 ```
 
-Next, you need to add a filter to your theme's `functions.php` file to tell Blockstudio how to render Blade templates. Blockstudio automatically collects all Blade templates and maps their paths, allowing you to use Blade's dot syntax for includes and layouts.
+Next, add a filter to your theme's `functions.php` file to tell Blockstudio how to render Blade templates. Blockstudio automatically collects all Blade templates and maps their paths, allowing you to use Blade's dot syntax for includes and layouts. `Blockstudio\Blade_Renderer` assembles the view factory from `illuminate/view` and caches compiled views in the system temporary directory.
 
 ```php title="functions.php"
 add_filter(
@@ -29,23 +29,24 @@ add_filter(
     function ($value, $block) {
         $blockPath = $block->path;
         if (str_ends_with($blockPath, ".blade.php")) {
-            // Ensure the Blade class exists before trying to use it.
-            if (!class_exists('Jenssegers\Blade\Blade')) {
-                // Optionally, you could log an error or return a message.
-                return 'Error: Blade class not found. Please run "composer require jenssegers/blade".';
+            if (!Blockstudio\Blade_Renderer::available()) {
+                return 'Error: Blade is not installed. Please run "composer require illuminate/view".';
             }
             $data = $block->blockstudio["data"];
             $bladeData = $data["blade"];
-            $blade = new \Jenssegers\Blade\Blade($bladeData["path"], sys_get_temp_dir());
 
-            return $blade->render($bladeData["templates"][$block->name], [
-                "a" => $data["attributes"],
-                "attributes" => $data["attributes"],
-                "b" => $data["block"],
-                "block" => $data["block"],
-                "c" => $data["context"],
-                "context" => $data["context"],
-            ]);
+            return Blockstudio\Blade_Renderer::render(
+                $bladeData["path"],
+                $bladeData["templates"][$block->name],
+                [
+                    "a" => $data["attributes"],
+                    "attributes" => $data["attributes"],
+                    "b" => $data["block"],
+                    "block" => $data["block"],
+                    "c" => $data["context"],
+                    "context" => $data["context"],
+                ]
+            );
         }
 
         return $value;
@@ -54,6 +55,8 @@ add_filter(
     2
 );
 ```
+
+The `jenssegers/blade` wrapper that earlier versions of this page used fails with `illuminate/view` 10 and later ("Target class [blade.compiler] does not exist"). If it is installed, `Blade_Renderer` uses the `illuminate/view` package it brought along instead.
 
 ## Template Variables
 

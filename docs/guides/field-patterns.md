@@ -129,12 +129,12 @@ A hero block where the background type determines which fields appear:
 }
 ```
 
-The overlay opacity field uses `!=` to appear for everything except solid color. Only one background field shows at a time. In the template:
+The overlay opacity field uses `!=` to appear for everything except solid color. Only one background field shows at a time. A `color` field returns an array with the color's `value`, `name`, and `slug`, so the template reads `['value']`:
 
 ```php title="index.php"
 <?php
 $bg_style = match ( $a['bgType'] ) {
-	'color'    => $a['bgColor'] ? "background-color: {$a['bgColor']}" : '',
+	'color'    => $a['bgColor'] ? "background-color: {$a['bgColor']['value']}" : '',
 	'gradient' => $a['bgGradient'] ? "background: {$a['bgGradient']}" : '',
 	'image'    => $a['bgImage'] ? "background-image: url({$a['bgImage']['url']})" : '',
 	default    => '',

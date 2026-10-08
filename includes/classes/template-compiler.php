@@ -32,9 +32,8 @@ class Template_Compiler {
 			return null;
 		}
 
-		if ( str_ends_with( $path, '.blade.php' ) && class_exists( 'Jenssegers\Blade\Blade' ) ) {
-			$blade = new \Jenssegers\Blade\Blade( $directory ?? dirname( $path ), sys_get_temp_dir() );
-			return $blade->render( basename( $path, '.blade.php' ), array() );
+		if ( str_ends_with( $path, '.blade.php' ) && Blade_Renderer::available() ) {
+			return Blade_Renderer::render( $directory ?? dirname( $path ), basename( $path, '.blade.php' ) );
 		}
 
 		if ( str_ends_with( $path, '.twig' ) && class_exists( 'Timber\Timber' ) ) {

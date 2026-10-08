@@ -603,7 +603,7 @@ hand it off entirely to the client, set `"sync": false` and create it with
 
 **Lock and unlock via PHP.** Call `Blockstudio\Pages::lock('about')` to prevent a specific page from syncing (useful during client editing sprints). Call `Blockstudio\Pages::unlock('about')` to re-enable syncing.
 
-**Template engines.** Besides PHP, templates can be written in Twig (requires [Timber](https://timber.github.io/docs/)) or Blade (requires [jenssegers/blade](https://github.com/jenssegers/blade)). This is useful for loops and filters, but page templates are compiled during explicit synchronization, not during the frontend request. Stick with PHP if the source compilation itself needs PHP-only helpers.
+**Template engines.** Besides PHP, templates can be written in Twig (requires [Timber](https://timber.github.io/docs/)) or Blade (requires [illuminate/view](https://packagist.org/packages/illuminate/view)). This is useful for loops and filters, but page templates are compiled during explicit synchronization, not during the frontend request. Stick with PHP if the source compilation itself needs PHP-only helpers.
 
 **Force sync ignores keys.** Calling `Pages::force_sync('about')` replaces the entire page content, ignoring keys and modification time checks. Use it when you intentionally want to reset a page to the template state.
 

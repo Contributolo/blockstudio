@@ -1276,13 +1276,13 @@ Blade is a templating engine used primarily with the Laravel framework. It enabl
 
 ## Setup
 
-To use Blade templates with Blockstudio, you first need to install the `jenssegers/blade` package using Composer.
+To use Blade templates with Blockstudio, install Laravel's `illuminate/view` package with Composer. Versions 8 through 12 work.
 
 ```bash
-composer require jenssegers/blade
+composer require illuminate/view
 ```
 
-Next, you need to add a filter to your theme's `functions.php` file to tell Blockstudio how to render Blade templates. Blockstudio automatically collects all Blade templates and maps their paths, allowing you to use Blade's dot syntax for includes and layouts.
+Next, add a filter to your theme's `functions.php` file to tell Blockstudio how to render Blade templates. Blockstudio automatically collects all Blade templates and maps their paths, allowing you to use Blade's dot syntax for includes and layouts. `Blockstudio\Blade_Renderer` assembles the view factory from `illuminate/view` and caches compiled views in the system temporary directory.
 
 ```php
 add_filter(
@@ -1290,23 +1290,24 @@ add_filter(
     function ($value, $block) {
         $blockPath = $block->path;
         if (str_ends_with($blockPath, ".blade.php")) {
-            // Ensure the Blade class exists before trying to use it.
-            if (!class_exists('Jenssegers\Blade\Blade')) {
-                // Optionally, you could log an error or return a message.
-                return 'Error: Blade class not found. Please run "composer require jenssegers/blade".';
+            if (!Blockstudio\Blade_Renderer::available()) {
+                return 'Error: Blade is not installed. Please run "composer require illuminate/view".';
             }
             $data = $block->blockstudio["data"];
             $bladeData = $data["blade"];
-            $blade = new \Jenssegers\Blade\Blade($bladeData["path"], sys_get_temp_dir());
 
-            return $blade->render($bladeData["templates"][$block->name], [
-                "a" => $data["attributes"],
-                "attributes" => $data["attributes"],
-                "b" => $data["block"],
-                "block" => $data["block"],
-                "c" => $data["context"],
-                "context" => $data["context"],
-            ]);
+            return Blockstudio\Blade_Renderer::render(
+                $bladeData["path"],
+                $bladeData["templates"][$block->name],
+                [
+                    "a" => $data["attributes"],
+                    "attributes" => $data["attributes"],
+                    "b" => $data["block"],
+                    "block" => $data["block"],
+                    "c" => $data["context"],
+                    "context" => $data["context"],
+                ]
+            );
         }
 
         return $value;
@@ -1315,6 +1316,8 @@ add_filter(
     2
 );
 ```
+
+The `jenssegers/blade` wrapper that earlier versions of this page used fails with `illuminate/view` 10 and later ("Target class [blade.compiler] does not exist"). If it is installed, `Blade_Renderer` uses the `illuminate/view` package it brought along instead.
 
 ## Template Variables
 
@@ -8234,6 +8237,17 @@ All cron events registered by Blockstudio are automatically unscheduled when
 the plugin is deactivated. This prevents orphaned cron jobs from persisting in
 the database after the plugin is removed.
 
+A Composer installation inside a theme or another plugin has no deactivation
+hook of its own, so removing it leaves the events scheduled. Run the teardown
+command before removing Blockstudio:
+
+```bash
+wp bs teardown
+```
+
+It unschedules every Blockstudio cron event and removes the static prerender
+state the installation owns. See CLI for details.
+
 ## Filter
 
 Modify or disable jobs programmatically:
@@ -9342,7 +9356,7 @@ Templates can be written in PHP, Twig, or Blade:
 |------|--------|-------------|
 | `index.php` | PHP | None |
 | `index.twig` | Twig | Timber |
-| `index.blade.php` | Blade | jenssegers/blade |
+| `index.blade.php` | Blade | illuminate/view |
 
 If multiple template files exist, the priority order is: `index.php` > `index.blade.php` > `index.twig`.
 
@@ -9706,7 +9720,7 @@ Templates can be written in PHP, Twig, or Blade:
 |------|--------|-------------|
 | `index.php` | PHP | None |
 | `index.twig` | Twig | Timber |
-| `index.blade.php` | Blade | jenssegers/blade |
+| `index.blade.php` | Blade | illuminate/view |
 
 If multiple template files exist, the priority order is: `index.php` > `index.blade.php` > `index.twig`.
 
@@ -11058,7 +11072,7 @@ $paths = Blockstudio\Patterns::get_registered_paths();
 |---|-------|----------|
 | Storage | Synced to database as posts | Registered in memory |
 | Config | `page.json` | `pattern.json` |
-| Sync | Auto-syncs on file change | No sync needed |
+| Sync | Explicit, with `wp bs pages sync` | No sync needed |
 | Template lock | Yes | No |
 | Use case | Predefined page content | Reusable block templates |
 

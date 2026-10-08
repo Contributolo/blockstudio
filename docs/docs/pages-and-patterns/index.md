@@ -63,7 +63,7 @@ Templates can be written in PHP, Twig, or Blade:
 |------|--------|-------------|
 | `index.php` | PHP | None |
 | `index.twig` | Twig | [Timber](https://timber.github.io/docs/) |
-| `index.blade.php` | Blade | [jenssegers/blade](https://github.com/jenssegers/blade) |
+| `index.blade.php` | Blade | [illuminate/view](https://packagist.org/packages/illuminate/view) |
 
 If multiple template files exist, the priority order is: `index.php` > `index.blade.php` > `index.twig`.
 

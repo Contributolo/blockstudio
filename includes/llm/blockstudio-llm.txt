@@ -81,7 +81,7 @@ route: /docs/blocks/templating/blade
 file: docs/docs/blocks/templating/blade.md
 purpose: Use Laravel Blade templates for your Blockstudio blocks.
 hooks: blockstudio/blocks/render
-php: $a, $b, $c
+php: $a, $b, $c, Blade_Renderer::available(), Blade_Renderer::render(), Blockstudio\Blade_Renderer
 
 ## Docs / Blocks / Assets
 
@@ -347,6 +347,7 @@ file: docs/docs/blocks/block-api/cron.md
 purpose: Define scheduled background tasks per block using WordPress Cron.
 hooks: blockstudio/cron
 php: Blockstudio\Attributes, Blockstudio\Cron, Blockstudio\Db, Db::get()
+cli: wp bs teardown
 
 ## Docs / Blocks / Hooks
 
@@ -388,6 +389,7 @@ file: docs/docs/pages-and-patterns/patterns.md
 purpose: Create WordPress block patterns from file templates.
 hooks: blockstudio/patterns/paths
 php: Blockstudio\Patterns, Patterns::get_pattern(), Patterns::get_registered_paths(), Patterns::patterns()
+cli: wp bs pages sync
 
 ### Site Templates
 route: /docs/pages-and-patterns/site-templates

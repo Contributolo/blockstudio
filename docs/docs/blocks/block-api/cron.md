@@ -227,6 +227,17 @@ All cron events registered by Blockstudio are automatically unscheduled when
 the plugin is deactivated. This prevents orphaned cron jobs from persisting in
 the database after the plugin is removed.
 
+A Composer installation inside a theme or another plugin has no deactivation
+hook of its own, so removing it leaves the events scheduled. Run the teardown
+command before removing Blockstudio:
+
+```bash
+wp bs teardown
+```
+
+It unschedules every Blockstudio cron event and removes the static prerender
+state the installation owns. See [CLI](/docs/dev/cli#teardown) for details.
+
 ## Filter
 
 Modify or disable jobs programmatically:
