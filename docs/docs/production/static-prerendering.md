@@ -194,6 +194,12 @@ to WordPress instead of served unstyled, which republishes the stylesheet and
 the document together. The same check runs before a response is stored, so a
 document that could not be served is never written.
 
+A request whose `Accept` header contains `text/markdown` bypasses both the
+PHP store and the drop-in, because stored documents are HTML and a page may
+answer that request with its [source Markdown](/docs/pages-and-patterns/pages#raw-markdown).
+Served documents therefore send `Vary: Accept`. Updating Blockstudio rewrites
+an older drop-in on the next map write.
+
 Mapped graph routes always use the activated artifact. When a safe anonymous
 route is not in that map but WordPress has since rendered and persisted it,
 Early Serve falls back to the identity-keyed runtime store before booting

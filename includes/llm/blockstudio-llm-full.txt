@@ -10173,6 +10173,8 @@ curl -H "Accept: text/markdown" https://example.com/docs/reference/
 
 Frontmatter is removed from the response. Successful raw Markdown responses send `Content-Type: text/markdown`, `X-Robots-Tag: noindex`, and a canonical `Link` header back to the HTML page. Missing `.md` routes return a real 404.
 
+Negotiation works with static prerendering: a request whose `Accept` header contains `text/markdown` is never answered from the prerender store or the early-serve drop-in, so it reaches WordPress and the Markdown handler. Prerendered HTML responses, and the HTML of a page that also negotiates Markdown, send `Vary: Accept`, so caches that honour `Vary` keep the two apart. A CDN that keys its cache on the URL alone needs its own rule to bypass the cache for such requests. `Pages::negotiates_markdown( $post_id )` reports whether a page answers Markdown requests.
+
 Collection Markdown keeps the same URL shape for raw Markdown:
 
 | Page URL | Raw Markdown URL |
@@ -12848,6 +12850,12 @@ stylesheet still exists on disk. A document whose stylesheet is gone is handed
 to WordPress instead of served unstyled, which republishes the stylesheet and
 the document together. The same check runs before a response is stored, so a
 document that could not be served is never written.
+
+A request whose `Accept` header contains `text/markdown` bypasses both the
+PHP store and the drop-in, because stored documents are HTML and a page may
+answer that request with its source Markdown.
+Served documents therefore send `Vary: Accept`. Updating Blockstudio rewrites
+an older drop-in on the next map write.
 
 Mapped graph routes always use the activated artifact. When a safe anonymous
 route is not in that map but WordPress has since rendered and persisted it,

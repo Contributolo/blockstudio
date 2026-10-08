@@ -1748,6 +1748,12 @@ class Pages {
 		$is_md_ext    = '.md' === substr( $uri_path, -3 );
 
 		if ( ! $wants_accept && ! $is_md_ext ) {
+			// The HTML of a page that also answers Accept: text/markdown is one
+			// representation of two, so shared caches must key on Accept.
+			if ( ! headers_sent() && self::negotiates_markdown( (int) get_queried_object_id() ) ) {
+				header( 'Vary: Accept', false );
+			}
+
 			return;
 		}
 
@@ -1803,6 +1809,30 @@ class Pages {
 
 		echo $markdown; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		exit;
+	}
+
+	/**
+	 * Whether a page answers `Accept: text/markdown` with its source Markdown.
+	 *
+	 * @since 7.7.0
+	 *
+	 * @param int $post_id Post ID.
+	 *
+	 * @return bool Whether the page has a readable Markdown source and raw Markdown serving is on.
+	 */
+	public static function negotiates_markdown( int $post_id ): bool {
+		if ( $post_id <= 0 || ! apply_filters( 'blockstudio/pages/serve_markdown', true ) ) {
+			return false;
+		}
+
+		$post = get_post( $post_id );
+		if ( ! $post instanceof \WP_Post || ! self::can_serve_markdown_post( $post ) ) {
+			return false;
+		}
+
+		$file = (string) get_post_meta( $post_id, '_blockstudio_page_content_path', true );
+
+		return '' !== $file && is_file( $file );
 	}
 
 	/**

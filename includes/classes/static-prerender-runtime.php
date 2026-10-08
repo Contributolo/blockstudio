@@ -318,7 +318,7 @@ final class Static_Prerender_Runtime {
 		bool $use_wordpress_state = false
 	): bool {
 		$method = strtoupper( (string) ( $server['REQUEST_METHOD'] ?? 'GET' ) );
-		$bypass = 'GET' !== $method;
+		$bypass = 'GET' !== $method || self::wants_markdown( $server );
 
 		if ( ! $bypass ) {
 			foreach ( array( 'HTTP_X_BLOCKSTUDIO_PREVIEW', 'HTTP_X_BLOCKSTUDIO_CANVAS', 'HTTP_X_WP_NONCE' ) as $header ) {
@@ -373,6 +373,25 @@ final class Static_Prerender_Runtime {
 		 * @param array<string,mixed> $cookies Cookie values.
 		 */
 		return (bool) apply_filters( 'blockstudio/static_prerender/request_bypass', $bypass, $server, $cookies );
+	}
+
+	/**
+	 * Whether a request negotiates Markdown through its Accept header.
+	 *
+	 * Stored documents are HTML, so such a request is never answered from
+	 * the prerender store or the early-serve drop-in and reaches the page's
+	 * Markdown handler instead.
+	 *
+	 * @since 7.7.0
+	 *
+	 * @param array<string,mixed> $server Server values.
+	 *
+	 * @return bool Whether the Accept header asks for text/markdown.
+	 */
+	public static function wants_markdown( array $server ): bool {
+		$accept = $server['HTTP_ACCEPT'] ?? '';
+
+		return is_string( $accept ) && false !== stripos( $accept, 'text/markdown' );
 	}
 
 	/**
@@ -598,6 +617,7 @@ final class Static_Prerender_Runtime {
 
 		if ( ! headers_sent() ) {
 			header( 'Content-Type: text/html; charset=UTF-8' );
+			header( 'Vary: Accept', false );
 			header( 'X-Blockstudio-Static-Prerender: HIT' );
 		}
 

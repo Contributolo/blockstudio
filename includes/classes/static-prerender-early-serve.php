@@ -23,7 +23,7 @@ final class Static_Prerender_Early_Serve {
 	 *
 	 * @var int
 	 */
-	public const DROPIN_VERSION = 4;
+	public const DROPIN_VERSION = 5;
 
 	/**
 	 * Ownership marker for the generated map.
@@ -522,6 +522,10 @@ function blockstudio_early_serve_static_prerender(): void {
 			return;
 		}
 	}
+	// Stored documents are HTML; a Markdown request goes to WordPress.
+	if ( false !== stripos( (string) ( \$_SERVER['HTTP_ACCEPT'] ?? '' ), 'text/markdown' ) ) {
+		return;
+	}
 
 	\$uri = (string) ( \$_SERVER['REQUEST_URI'] ?? '/' );
 	if ( '' === \$uri || str_contains( \$uri, '?' ) ) {
@@ -643,6 +647,7 @@ function blockstudio_early_serve_static_prerender(): void {
 
 	if ( ! headers_sent() ) {
 		header( 'Content-Type: text/html; charset=UTF-8' );
+		header( 'Vary: Accept', false );
 		header( 'X-Blockstudio-Static-Prerender: HIT-EARLY' );
 	}
 
