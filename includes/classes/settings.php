@@ -104,8 +104,9 @@ class Settings {
 			'output'  => 'source',
 		),
 		'cache'         => array(
-			'enabled' => true,
-			'path'    => 'blockstudio/cache',
+			'enabled'        => true,
+			'path'           => 'blockstudio/cache',
+			'namespaceGrace' => 86400,
 		),
 		'githooks'      => array(
 			'commit' => false,

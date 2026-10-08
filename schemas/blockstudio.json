@@ -149,6 +149,14 @@
           "description": "Cache directory. Relative paths resolve from WP_CONTENT_DIR; absolute paths are used as provided.",
           "descriptionFilter": "This filter allows you to change the Blockstudio file-backed cache directory.",
           "example": "cache/blockstudio"
+        },
+        "namespaceGrace": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 86400,
+          "description": "Seconds a retired cache namespace is kept, counted from the first cleanup sweep that finds it retired. Raise it to the longest time a CDN or browser may keep a page that links a cached stylesheet.",
+          "descriptionFilter": "This filter allows you to change how long a retired cache namespace is kept before it is collected.",
+          "example": 777600
         }
       },
       "additionalProperties": false

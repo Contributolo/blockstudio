@@ -91,14 +91,23 @@ final class Runtime_Cache {
 	private const DEFAULT_MAX_OBJECTS = 1000;
 
 	/**
-	 * Grace period before an unused namespace directory is collected.
+	 * Default grace period before a retired namespace directory is collected.
 	 *
 	 * The namespace folds in the active plugin list and the WordPress and PHP
 	 * versions, so activating a plugin or taking a point release moves every
-	 * path at once. The previous tree is dead from that moment, but a request
-	 * already in flight may still be reading it, so it is kept for a day.
+	 * path at once. Requests already in flight, and documents cached outside
+	 * WordPress that link files in the previous tree, can still reach it, so
+	 * it is kept for a grace period measured from its retirement. The
+	 * cache.namespaceGrace setting replaces the default.
 	 */
 	private const NAMESPACE_GRACE = DAY_IN_SECONDS;
+
+	/**
+	 * File that records when a sweep first found a namespace retired.
+	 *
+	 * @var string
+	 */
+	private const RETIRED_MARKER = '.retired';
 
 	/**
 	 * Wait budget for a concurrent builder.
@@ -722,7 +731,7 @@ final class Runtime_Cache {
 	 * namespace that stopped being current keeps whatever it holds. That matters
 	 * for anything served before WordPress loads: the identity rolls the moment
 	 * a stylesheet changes, and collect_stale_namespaces() will not touch the
-	 * abandoned tree until it is a day old, so an explicit purge appears to
+	 * abandoned tree until its grace has passed, so an explicit purge appears to
 	 * succeed while the previous build carries on being served.
 	 *
 	 * @param string $scope Cache scope.
@@ -780,6 +789,12 @@ final class Runtime_Cache {
 	 * alone, every plugin activation and every WordPress or PHP point release
 	 * orphans a whole tree that is never read again.
 	 *
+	 * The grace runs from the sweep that first finds a tree retired, not from
+	 * its newest file: a stylesheet written once and linked by cached pages for
+	 * weeks is as old as the tree it lives in, so measuring age from the files
+	 * deleted it a day after the runtime identity rotated, while documents
+	 * cached outside WordPress still linked it.
+	 *
 	 * @param string $scope_directory Current scope directory.
 	 *
 	 * @return void
@@ -808,21 +823,72 @@ final class Runtime_Cache {
 			return;
 		}
 
-		$threshold = time() - self::NAMESPACE_GRACE;
+		$now   = time();
+		$grace = self::namespace_grace();
 
 		foreach ( $siblings as $sibling ) {
-			if ( $sibling === $current_namespace ) {
+			$marker = $sibling . '/' . self::RETIRED_MARKER;
+
+			if ( $sibling === $current_namespace || self::is_current_namespace( $sibling ) ) {
+				if ( is_file( $marker ) ) {
+					@unlink( $marker ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions.unlink_unlink -- Internal cache marker; a concurrent sweep may have removed it.
+				}
 				continue;
 			}
 
-			$mtime = self::newest_mtime( $sibling );
-
-			if ( 0 === $mtime || $mtime >= $threshold ) {
+			$newest = self::newest_file_mtime( $sibling, $marker );
+			if ( null === $newest ) {
 				continue;
 			}
 
-			self::delete_tree( $sibling );
+			$retired_at = is_file( $marker ) ? (int) @filemtime( $marker ) : 0; // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Concurrent sweeps can remove the marker.
+
+			// Unmarked, or written after it was marked and so current again in
+			// between: the grace starts now.
+			if ( 0 === $retired_at || $newest > $retired_at ) {
+				@touch( $marker ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions.file_system_operations_touch -- Best-effort retirement marker.
+				continue;
+			}
+
+			if ( $now - $retired_at >= $grace ) {
+				self::delete_tree( $sibling );
+			}
 		}
+	}
+
+	/**
+	 * Whether a namespace directory is the current namespace of a scope it holds.
+	 *
+	 * Every scope resolves its own namespace, so the siblings a sweep walks
+	 * include the live trees of every other scope, such as the Tailwind
+	 * stylesheets when the sweep runs for the runtime scope.
+	 *
+	 * @param string $namespace_directory Namespace directory.
+	 *
+	 * @return bool Whether the namespace is live for one of its scopes.
+	 */
+	private static function is_current_namespace( string $namespace_directory ): bool {
+		$name   = basename( $namespace_directory );
+		$scopes = glob( $namespace_directory . '/*', GLOB_ONLYDIR );
+
+		foreach ( is_array( $scopes ) ? $scopes : array() as $scope_directory ) {
+			$scope = basename( $scope_directory );
+
+			if ( sanitize_key( $scope ) === $scope && Runtime_Context::namespace( $scope ) === $name ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Seconds a retired namespace is kept after a sweep first finds it.
+	 *
+	 * @return int Grace period in seconds.
+	 */
+	private static function namespace_grace(): int {
+		return max( 0, Settings::get_int( 'cache/namespaceGrace', self::NAMESPACE_GRACE ) );
 	}
 
 	/**
@@ -848,19 +914,19 @@ final class Runtime_Cache {
 	}
 
 	/**
-	 * Newest modification time anywhere beneath a directory.
+	 * Newest file modification time anywhere beneath a directory.
 	 *
 	 * @param string $directory Directory to scan.
+	 * @param string $ignore    File to leave out, such as the retirement marker.
 	 *
-	 * @return int Newest mtime, or 0 when the directory cannot be read.
+	 * @return int|null Newest mtime, 0 for a tree without files, or null when the directory cannot be read.
 	 */
-	private static function newest_mtime( string $directory ): int {
+	private static function newest_file_mtime( string $directory, string $ignore = '' ): ?int {
 		if ( ! is_dir( $directory ) ) {
-			return 0;
+			return null;
 		}
 
-		$directory_mtime = @filemtime( $directory ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Concurrent prunes can remove entries between check and stat.
-		$newest          = false === $directory_mtime ? 0 : (int) $directory_mtime;
+		$newest = 0;
 
 		try {
 			$iterator = new \RecursiveIteratorIterator(
@@ -868,6 +934,10 @@ final class Runtime_Cache {
 			);
 
 			foreach ( $iterator as $entry ) {
+				if ( $entry->getPathname() === $ignore ) {
+					continue;
+				}
+
 				$mtime = (int) $entry->getMTime();
 
 				if ( $mtime > $newest ) {
@@ -877,7 +947,7 @@ final class Runtime_Cache {
 		} catch ( \Throwable $error ) {
 			unset( $error );
 
-			return 0;
+			return null;
 		}
 
 		return $newest;

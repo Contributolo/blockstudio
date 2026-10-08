@@ -422,6 +422,16 @@ add_filter('blockstudio/settings/cache/path', function() {
 });
 ```
 
+### cache/namespace_grace
+
+This filter allows you to change how long a retired cache namespace is kept before it is collected.
+
+```php title="functions.php"
+add_filter('blockstudio/settings/cache/namespace_grace', function() {
+  return 777600;
+});
+```
+
 ### githooks/commit
 
 This filter exposes whether the Blockstudio-owned PHPStan commit hook is enabled.

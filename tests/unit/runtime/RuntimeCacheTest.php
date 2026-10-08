@@ -185,7 +185,8 @@ class RuntimeCacheTest extends TestCase {
 			wp_mkdir_p( $namespace . '/runtime' );
 			file_put_contents( $namespace . '/runtime/payload.php', '<?php return array();' );
 		}
-		foreach ( array( $stale . '/runtime/payload.php', $stale . '/runtime', $stale ) as $path ) {
+		touch( $stale . '/.retired' );
+		foreach ( array( $stale . '/runtime/payload.php', $stale . '/.retired', $stale . '/runtime', $stale ) as $path ) {
 			touch( $path, time() - 2 * DAY_IN_SECONDS );
 		}
 		clearstatcache();
@@ -382,6 +383,114 @@ class RuntimeCacheTest extends TestCase {
 		$this->assertDirectoryDoesNotExist( $legacy );
 
 		remove_filter( 'blockstudio/cache/legacy_cleanup_batch_size', $batch_size );
+	}
+
+	// The 2026-09-23 incident: a WordPress auto-update rotated every runtime
+	// identity, and a day later the previous namespaces were collected because
+	// their newest files were old, while CDN copies of pages kept linking the
+	// stylesheets inside them for days.
+	public function test_a_retired_namespace_is_kept_for_the_grace_counted_from_its_retirement(): void {
+		$retired = $this->site_directory() . '/retired-namespace';
+		$this->write_aged( $retired . '/tailwind/abc.css', 30 * DAY_IN_SECONDS );
+
+		$this->sweep();
+
+		$this->assertFileExists( $retired . '/tailwind/abc.css' );
+		$this->assertFileExists( $retired . '/.retired' );
+		$this->assertGreaterThanOrEqual( time() - MINUTE_IN_SECONDS, filemtime( $retired . '/.retired' ) );
+
+		touch( $retired . '/.retired', time() - DAY_IN_SECONDS + HOUR_IN_SECONDS );
+		$this->sweep();
+
+		$this->assertFileExists( $retired . '/tailwind/abc.css' );
+
+		touch( $retired . '/.retired', time() - DAY_IN_SECONDS - MINUTE_IN_SECONDS );
+		$this->sweep();
+
+		$this->assertDirectoryDoesNotExist( $retired );
+	}
+
+	// Every scope resolves its own namespace, so a sweep run for the runtime
+	// scope used to delete the live Tailwind namespace once its stylesheets
+	// were a day old.
+	public function test_current_namespaces_of_every_scope_are_never_retired(): void {
+		$this->assertTrue( Runtime_Cache::write( 'runtime', 'payload', 'runtime' ) );
+		$this->assertTrue( Runtime_Cache::write( 'tailwind', 'sheet', 'body{}', 'css' ) );
+		$payload  = Runtime_Cache::path( 'runtime', 'payload' );
+		$sheet    = Runtime_Cache::path( 'tailwind', 'sheet', 'css' );
+		$runtime  = dirname( $payload, 2 );
+		$tailwind = dirname( $sheet, 2 );
+		$this->assertNotSame( $runtime, $tailwind );
+
+		// A marker left from an earlier retirement of the same identity.
+		touch( $tailwind . '/.retired' );
+		foreach ( array( $payload, $sheet, $tailwind . '/.retired', dirname( $payload ), dirname( $sheet ), $runtime, $tailwind ) as $path ) {
+			touch( $path, time() - 30 * DAY_IN_SECONDS );
+		}
+		clearstatcache();
+
+		$this->sweep();
+		$this->sweep();
+
+		$this->assertFileExists( $payload );
+		$this->assertFileExists( $sheet );
+		$this->assertFileDoesNotExist( $runtime . '/.retired' );
+		$this->assertFileDoesNotExist( $tailwind . '/.retired', 'A stale marker on a live namespace must be cleared.' );
+	}
+
+	public function test_a_namespace_written_after_retirement_restarts_its_grace(): void {
+		$namespace = $this->site_directory() . '/reactivated-namespace';
+		$this->write_aged( $namespace . '/tailwind/old.css', 30 * DAY_IN_SECONDS );
+		touch( $namespace . '/.retired', time() - 3 * DAY_IN_SECONDS );
+		$this->write_aged( $namespace . '/tailwind/new.css', HOUR_IN_SECONDS );
+
+		$this->sweep();
+
+		$this->assertFileExists( $namespace . '/tailwind/old.css' );
+		$this->assertGreaterThanOrEqual( time() - MINUTE_IN_SECONDS, filemtime( $namespace . '/.retired' ) );
+	}
+
+	public function test_the_namespace_grace_is_configurable(): void {
+		$namespace = $this->site_directory() . '/configured-namespace';
+		$this->write_aged( $namespace . '/tailwind/abc.css', 30 * DAY_IN_SECONDS );
+		touch( $namespace . '/.retired', time() - 2 * DAY_IN_SECONDS );
+		$nine_days = static fn(): int => 9 * DAY_IN_SECONDS;
+		add_filter( 'blockstudio/settings/cache/namespace_grace', $nine_days );
+
+		try {
+			$this->assertSame( 9 * DAY_IN_SECONDS, Settings::get_int( 'cache/namespaceGrace' ) );
+
+			$this->sweep();
+			$this->assertFileExists( $namespace . '/tailwind/abc.css' );
+
+			touch( $namespace . '/.retired', time() - 9 * DAY_IN_SECONDS - MINUTE_IN_SECONDS );
+			$this->sweep();
+			$this->assertDirectoryDoesNotExist( $namespace );
+		} finally {
+			remove_filter( 'blockstudio/settings/cache/namespace_grace', $nine_days );
+		}
+	}
+
+	private function site_directory(): string {
+		return $this->root . '/sites/' . $this->site_key;
+	}
+
+	private function write_aged( string $path, int $age ): void {
+		wp_mkdir_p( dirname( $path ) );
+		file_put_contents( $path, 'cached' );
+		touch( $path, time() - $age );
+		clearstatcache();
+	}
+
+	/**
+	 * Run one namespace sweep the way the hourly cleanup batch does.
+	 */
+	private function sweep(): void {
+		wp_mkdir_p( Runtime_Cache::directory( 'runtime' ) );
+		@unlink( $this->site_directory() . '/.namespaces-collected' );
+		clearstatcache();
+		Runtime_Cache::cleanup_legacy_build_locks_batch();
+		clearstatcache();
 	}
 
 	private function remove_directory( string $directory ): void {

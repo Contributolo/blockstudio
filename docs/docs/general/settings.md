@@ -283,10 +283,11 @@ With `reset.enabled` active, Blockstudio also copies sanitized frontend
 
 ### cache
 
-| Option    | Type    | Default               | Description                                          |
-| --------- | ------- | --------------------- | ---------------------------------------------------- |
-| `enabled` | boolean | `true`                | Enable Blockstudio file-backed caches                |
-| `path`    | string  | `"blockstudio/cache"` | Cache path, relative to `WP_CONTENT_DIR` or absolute |
+| Option           | Type    | Default               | Description                                                  |
+| ---------------- | ------- | --------------------- | ------------------------------------------------------------ |
+| `enabled`        | boolean | `true`                | Enable Blockstudio file-backed caches                        |
+| `path`           | string  | `"blockstudio/cache"` | Cache path, relative to `WP_CONTENT_DIR` or absolute         |
+| `namespaceGrace` | integer | `86400`               | Seconds a retired cache namespace is kept before collection  |
 
 By default cache files are written to `wp-content/blockstudio/cache`, outside
 the uploads directory. A relative `path` is resolved from `WP_CONTENT_DIR`; an
@@ -333,8 +334,11 @@ runtime cache. If a scheduled batch is more than ten minutes overdue because
 cron is not firing, requests sweep a bounded number of locks once an hour so
 the drain cannot stall. Recent or held locks are
 left alone, and the new fixed-path locks are never collected. Once the backlog
-is drained the same batch collects abandoned cache namespaces that have been
-idle for a day, at most once an hour per site, and keeps a daily tick for it.
+is drained the same batch collects abandoned cache namespaces once their
+`namespaceGrace` has passed, at most once an hour per site, and keeps a daily
+tick for it. The grace counts from the first sweep that finds a namespace
+retired, not from its newest file, and a namespace that is still current for
+any of its scopes is never collected.
 Internal cache cleanup does not invoke WordPress attachment-deletion filters.
 Hosts with WP-Cron disabled should continue running their usual scheduled cron
 worker; do not indiscriminately delete live lock files to clear a backlog.

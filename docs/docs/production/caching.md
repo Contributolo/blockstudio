@@ -123,6 +123,24 @@ plugin activation and PHP or WordPress update. A deployment snippet that used
 to glob the old Tailwind cache directory should call
 `Blockstudio\Runtime_Cache::purge('tailwind')` instead.
 
+A namespace retires when the runtime identity moves, for example after a
+WordPress core update. The first cleanup sweep that finds it retired writes a
+`.retired` marker into it, and the tree is collected once `cache.namespaceGrace`
+seconds (a day by default) have passed since then. A tree that is written
+again in the meantime starts its grace over, and the current namespace of
+every scope is never collected. Pages cached outside WordPress keep linking
+the content-hashed stylesheets they were rendered with, so a site that serves
+`tailwind.output: "link"` pages through a CDN or long browser cache should
+raise the grace to the longest time such a copy can live:
+
+```json title="blockstudio.json"
+{
+  "cache": {
+    "namespaceGrace": 777600
+  }
+}
+```
+
 When an upgraded installation contains the pre-7.6 flat
 `cache/runtime` directory, Blockstudio atomically renames it out of the active
 path. A WP-Cron job then removes at most 500 filesystem entries per pass. This
@@ -166,7 +184,7 @@ wp bs cache cleanup
 
 `status` counts the remaining legacy locks and reports when the next batch
 runs. `cleanup` runs batches until nothing idle remains, then collects cache
-namespaces that have been idle for a day. Locks newer than an hour or still
+namespaces whose grace has passed. Locks newer than an hour or still
 held by a running request are left for the next pass. Never delete lock files
 by hand while the site is serving traffic; a held lock is the election that
 keeps concurrent requests from building in parallel.
