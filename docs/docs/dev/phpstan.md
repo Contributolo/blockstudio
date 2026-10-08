@@ -33,15 +33,19 @@ When a PHP file lives next to a `block.json`, the extension validates every
 
 ```php title="blockstudio/hero/index.php"
 <?php
-/** @var array<string, mixed> $a */
 
 echo $a['title'];     // OK
 echo $a['subtitle'];  // OK
 echo $a['typo'];      // Error: Field "typo" does not exist in block.json
 ```
 
-Add `/** @var array<string, mixed> $a */` at the top of each PHP template so
-PHPStan knows `$a` exists. The extension handles the rest.
+The extension knows that Blockstudio defines `$a`, `$attributes`, `$b`,
+`$block`, `$c`, `$context`, `$content`, `$isEditor`, `$isPreview`, and the
+island variables before it includes a template, so direct reads such as
+`$a['title']` are not reported as possibly undefined, and `$a` is typed from
+the `block.json` beside the template. Do not add a
+`/** @var array<string, mixed> $a */` docblock: it replaces that shape with an
+open array.
 
 Field keys follow Blockstudio's runtime flattening rules. `tabs` and anonymous
 `group` containers without an `id` are presentation-only, so their child fields
@@ -685,7 +689,7 @@ plugin source on your machine.
 ## Requirements
 
 - PHP 8.2+
-- PHPStan 2.0+
+- PHPStan 2.1.47+
 - `phpstan/extension-installer` (recommended, for auto-discovery)
 
 The package installs its BC Math compatibility provider automatically. Native

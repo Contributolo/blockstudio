@@ -518,7 +518,7 @@ file: docs/docs/dev/phpstan.md
 purpose: Static analysis for Blockstudio projects with type-safe templates, schema validation, and hook checking.
 settings: blockTags/prefixes, githooks/commit, phpstan/configuration, phpstan/excludePaths, phpstan/preset, tailwind/enabled, ui/enabled
 hooks: blockstudio/fields, blockstudio/render, blockstudio/rendrr, blockstudio/settings/tailwind/enabled
-php: $a, Blockstudio\Db, Build::blocks(), Build::extensions(), Build::get_build_dir(), Db::create(), Db::delete(), Db::get(), Db::get_record(), Db::list(), Db::update(), Field_Registry::all(), Field_Registry::get(), Field_Registry::instance(), Settings::get(), Settings::get_all(), bs_db_form(), bs_get_group(), bs_get_scoped_class(), bs_render_block()
+php: $a, $b, $c, Blockstudio\Db, Build::blocks(), Build::extensions(), Build::get_build_dir(), Db::create(), Db::delete(), Db::get(), Db::get_record(), Db::list(), Db::update(), Field_Registry::all(), Field_Registry::get(), Field_Registry::instance(), Settings::get(), Settings::get_all(), bs_db_form(), bs_get_group(), bs_get_scoped_class(), bs_render_block()
 cli: vendor/bin/blockstudio-agents, vendor/bin/blockstudio-githooks, vendor/bin/blockstudio-phpstan, wp bs db schemas, wp bs prerender status
 
 ### AI Integration
