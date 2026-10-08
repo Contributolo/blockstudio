@@ -12635,6 +12635,26 @@ Early Serve admin callback, and `warm.enabled: false` registers no cron callback
 or schedule. Turning either feature off removes previously owned state once;
 subsequent requests do no filesystem or cron cleanup checks.
 
+## Switching it off per environment
+
+Every value above can also be set with a settings filter. Blockstudio boots
+before the active theme, from a plugin or from the theme's Composer autoload,
+so it resolves its runtime settings again once the theme has loaded and decides
+on the static prerender hooks at `after_setup_theme`. A filter added by a plugin
+or in the theme's `functions.php` therefore takes effect:
+
+```php
+add_filter('blockstudio/settings/performance/staticPrerender/enabled', function ($enabled) {
+    return 'local' === wp_get_environment_type() ? false : $enabled;
+});
+```
+
+Switching the feature off this way works like switching it off in
+`blockstudio.json`: no request, content, admin, or cron hooks are registered,
+and a site that was served early before has its Early Serve entry removed once.
+A filter added later, for example on `init`, does not change which hooks are
+registered.
+
 ## Signature and graph modes
 
 `signature` mode fills an identity-keyed response on a normal anonymous miss.

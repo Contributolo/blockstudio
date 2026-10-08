@@ -62,6 +62,13 @@ final class Static_Prerender_Runtime {
 	private static bool $registered = false;
 
 	/**
+	 * Whether the feature hooks were decided.
+	 *
+	 * @var bool
+	 */
+	private static bool $features_registered = false;
+
+	/**
 	 * Buffered response key.
 	 *
 	 * @var string|null
@@ -108,6 +115,33 @@ final class Static_Prerender_Runtime {
 
 		self::$registered = true;
 		self::register_wp_cli_commands();
+
+		// Blockstudio boots from a plugin or from the theme's Composer autoload,
+		// before the theme's functions.php has added its settings filters, so a
+		// theme that switches the feature off, for example per environment,
+		// would otherwise be ignored by hooks registered from stale settings.
+		if ( function_exists( 'did_action' ) && ! did_action( 'after_setup_theme' ) ) {
+			add_action( 'after_setup_theme', array( self::class, 'register_features' ), PHP_INT_MAX );
+
+			return;
+		}
+
+		self::register_features();
+	}
+
+	/**
+	 * Register the request, content, admin, and cron hooks the settings enable.
+	 *
+	 * Runs at after_setup_theme, once plugin and theme settings filters exist.
+	 *
+	 * @return void
+	 */
+	public static function register_features(): void {
+		if ( self::$features_registered ) {
+			return;
+		}
+
+		self::$features_registered = true;
 		self::reconcile_feature_state();
 
 		if ( ! self::enabled( 'staticPrerender/enabled' ) ) {
@@ -150,11 +184,13 @@ final class Static_Prerender_Runtime {
 		remove_action( 'blockstudio/runtime/changed', array( self::class, 'handle_site_changed' ) );
 		remove_action( 'admin_init', array( Static_Prerender_Early_Serve::class, 'maybe_sync' ), 50 );
 		remove_action( self::CRON_HOOK, array( self::class, 'run_cron_warmer' ) );
+		remove_action( 'after_setup_theme', array( self::class, 'register_features' ), PHP_INT_MAX );
 		self::unschedule_cron();
 		self::reset_request_cache();
 		Static_Prerender_Early_Serve::remove_current_site();
 		delete_option( self::FEATURE_STATE_OPTION );
-		self::$registered = false;
+		self::$registered          = false;
+		self::$features_registered = false;
 	}
 
 	/**

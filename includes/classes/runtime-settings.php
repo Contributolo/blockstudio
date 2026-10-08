@@ -63,7 +63,11 @@ final class Runtime_Settings {
 	 * @return Runtime_Settings Resolved runtime settings.
 	 */
 	public static function current(): Runtime_Settings {
-		$fingerprint = Settings::fingerprint();
+		// Settings resolved while plugins load cannot see the filters the
+		// active theme adds in functions.php, so they are resolved again once
+		// the theme has loaded.
+		$fingerprint = Settings::fingerprint()
+			. ( function_exists( 'did_action' ) && did_action( 'after_setup_theme' ) ? ':theme' : ':boot' );
 
 		if ( null === self::$instance || self::$settings_fingerprint !== $fingerprint ) {
 			self::$settings_fingerprint = $fingerprint;
