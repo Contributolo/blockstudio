@@ -535,10 +535,7 @@ class Block {
 		}
 
 		if ( $is_editor_or_preview ) {
-			if (
-				class_exists( 'WP_HTML_Tag_Processor' ) &&
-				false !== strpos( $content, 'useBlockProps' )
-			) {
+			if ( self::content_has_component_cleanup_attribute( $content, array( 'useBlockProps' ) ) ) {
 				$processor = new WP_HTML_Tag_Processor( $content );
 				if ( $processor->next_tag() ) {
 					$classes = (string) $processor->get_attribute( 'class' );
@@ -568,11 +565,7 @@ class Block {
 
 			$content = self::expand_inner_blocks_allowed_blocks( $content );
 
-			return str_replace(
-				'useBlockProps',
-				'useblockprops="true"',
-				$content
-			);
+			return self::mark_block_props_roots( $content );
 		}
 
 		self::replace_custom_tag(
@@ -650,11 +643,7 @@ class Block {
 		$has_attribute = self::content_has_component_cleanup_attribute( $content, $attributes_to_remove );
 
 		if ( $has_attribute ) {
-			$content = str_replace(
-				'useBlockProps',
-				'useblockprops="true"',
-				$content
-			);
+			$content = self::mark_block_props_roots( $content );
 
 			$doc = new DOMDocument();
 			libxml_use_internal_errors( true );
@@ -742,9 +731,10 @@ class Block {
 	/**
 	 * Check whether rendered component HTML still contains cleanup attributes.
 	 *
-	 * A broad substring scan makes common words like "stage" match the `tag`
-	 * cleanup attribute and forces DOMDocument parsing for blocks that no
-	 * longer contain component attributes after RichText/InnerBlocks handling.
+	 * Only attributes of start tags count. Rendered text and attribute values
+	 * can contain the same words, as in documentation that explains
+	 * useBlockProps or prose that mentions a tag, and must neither force the
+	 * DOMDocument pass nor be rewritten by it.
 	 *
 	 * @param string $content    Rendered content.
 	 * @param array  $attributes Attribute names to remove.
@@ -752,19 +742,54 @@ class Block {
 	 * @return bool Whether DOM cleanup is required.
 	 */
 	private static function content_has_component_cleanup_attribute( string $content, array $attributes ): bool {
-		if ( array() === $attributes ) {
+		$names = array();
+		foreach ( $attributes as $attribute ) {
+			if ( is_string( $attribute ) && '' !== $attribute && false !== stripos( $content, $attribute ) ) {
+				$names[] = strtolower( $attribute );
+			}
+		}
+
+		if ( array() === $names ) {
 			return false;
 		}
 
-		$attribute_pattern = implode(
-			'|',
-			array_map(
-				static fn( string $attribute ): string => preg_quote( $attribute, '/' ),
-				$attributes
-			)
-		);
+		$processor = new WP_HTML_Tag_Processor( $content );
+		while ( $processor->next_tag() ) {
+			foreach ( $names as $name ) {
+				if ( null !== $processor->get_attribute( $name ) ) {
+					return true;
+				}
+			}
+		}
 
-		return 1 === preg_match( '/\s(?:' . $attribute_pattern . ')(?:\s*=\s*|(?=\s|\/?>))/i', $content );
+		return false;
+	}
+
+	/**
+	 * Write each useBlockProps marker as useblockprops="true".
+	 *
+	 * The marker is an attribute name in a start tag. A plain string
+	 * replacement also rewrote the word inside substituted RichText, echoed
+	 * field values, and attribute values, where the inserted quotes broke the
+	 * markup.
+	 *
+	 * @param string $content Rendered content.
+	 *
+	 * @return string Content with every marker attribute normalized.
+	 */
+	private static function mark_block_props_roots( string $content ): string {
+		if ( false === stripos( $content, 'useblockprops' ) ) {
+			return $content;
+		}
+
+		$processor = new WP_HTML_Tag_Processor( $content );
+		while ( $processor->next_tag() ) {
+			if ( null !== $processor->get_attribute( 'useblockprops' ) ) {
+				$processor->set_attribute( 'useblockprops', 'true' );
+			}
+		}
+
+		return $processor->get_updated_html();
 	}
 
 	/**

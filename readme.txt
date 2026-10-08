@@ -54,6 +54,9 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 
 == Changelog ==
 
+= 7.7.0 =
+* Fix: the `useBlockProps` marker is rewritten only where it is an attribute of a start tag, so RichText content, echoed field values, and attribute values that mention useBlockProps render verbatim instead of turning into `useblockprops="true"` and breaking the markup
+
 = 7.6.14 =
 * Fix: content and metadata changes refresh populated block choices without rebuilding block discovery or compiled assets, and a burst of writes such as a translation sync coalesces into one refresh per thirty seconds, adjustable with `blockstudio/cache/populate_debounce`
 * Fix: runtime build locks use fixed build paths instead of accumulating a new lock file for each content change
