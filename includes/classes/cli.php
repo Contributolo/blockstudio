@@ -116,6 +116,7 @@ class Cli {
 			'unchanged'  => (int) $report['unchanged'],
 			'removed'    => (int) $report['removed'],
 			'failed'     => (int) $report['failed'],
+			'dropped'    => (int) $report['droppedAttributes'],
 			'source_id'  => (string) $report['sourceId'],
 		);
 
@@ -123,6 +124,19 @@ class Cli {
 			\WP_CLI::line( (string) wp_json_encode( $report, JSON_PRETTY_PRINT ) );
 		} else {
 			\WP_CLI\Utils\format_items( 'table', array( $row ), array_keys( $row ) );
+
+			foreach ( $report['pages'] as $page => $page_report ) {
+				foreach ( $page_report['droppedAttributes'] ?? array() as $block_name => $keys ) {
+					\WP_CLI::warning(
+						sprintf(
+							'%1$s: the %2$s block drops %3$s, which it neither declares as a field nor forwards to its root element.',
+							$page,
+							$block_name,
+							implode( ', ', $keys )
+						)
+					);
+				}
+			}
 		}
 
 		if ( (int) $report['failed'] > 0 || ! empty( $report['errors'] ) ) {

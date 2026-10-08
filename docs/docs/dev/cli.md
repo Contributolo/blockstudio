@@ -71,6 +71,15 @@ For deployment scripts that need the complete report:
 wp bs pages sync --format=json
 ```
 
+Every page the command parses is checked for attributes that its blocks store
+but never render: attributes a Blockstudio block neither declares as a field
+nor forwards to its root element, such as an undeclared `class`. The table
+output prints a warning per page and block, the `dropped` column counts them,
+and the JSON report lists them under `pages.<name>.droppedAttributes`. Pages
+whose source did not change are not parsed again, so they are reported the
+next time they change, or on the first sync after an upgrade that changes the
+parser.
+
 The command exits unsuccessfully when discovery or reconciliation reports an
 error. See [Pages](/docs/pages-and-patterns/pages#sync-behavior) for the PHP API
 and deployment identity contract.

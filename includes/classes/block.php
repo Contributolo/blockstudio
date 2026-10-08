@@ -51,6 +51,35 @@ use WP_HTML_Tag_Processor;
 class Block {
 
 	/**
+	 * Global HTML attributes a block forwards to its root element when it does
+	 * not declare a field of the same name.
+	 *
+	 * @var array<string, true>
+	 */
+	private const FORWARDED_ATTRIBUTES = array(
+		'dir'      => true,
+		'hidden'   => true,
+		'id'       => true,
+		'lang'     => true,
+		'role'     => true,
+		'style'    => true,
+		'tabindex' => true,
+		'title'    => true,
+	);
+
+	/**
+	 * Keys of stored block attributes that are engine bookkeeping, not HTML.
+	 *
+	 * @var array<string, true>
+	 */
+	private const RESERVED_ATTRIBUTES = array(
+		'__BLOCKSTUDIO_KEY'    => true,
+		'_BLOCKSTUDIO_CONTEXT' => true,
+		'blockstudio'          => true,
+		'key'                  => true,
+	);
+
+	/**
 	 * Total number of blocks rendered in the current request.
 	 *
 	 * Incremented each time any Blockstudio block is rendered.
@@ -1078,6 +1107,182 @@ class Block {
 	}
 
 	/**
+	 * Resolve the root element attribute an undeclared block attribute
+	 * forwards to.
+	 *
+	 * `data-*` and `aria-*` attributes and the global attributes `dir`,
+	 * `hidden`, `id`, `lang`, `role`, `style`, `tabindex`, and `title` are
+	 * forwarded under their own name. An `html-` prefix names one of them
+	 * explicitly, so `html-role` forwards as `role`.
+	 *
+	 * @since 7.7.0
+	 *
+	 * @param string $key Attribute key as authored.
+	 *
+	 * @return string|null Root element attribute name, or null when the key is not forwarded.
+	 */
+	public static function forwarded_attribute_name( string $key ): ?string {
+		$name = strtolower( $key );
+
+		if ( str_starts_with( $name, 'html-' ) ) {
+			$name = substr( $name, 5 );
+		}
+
+		if ( 1 !== preg_match( '/^[a-z][a-z0-9-]*$/', $name ) ) {
+			return null;
+		}
+
+		if (
+			isset( self::FORWARDED_ATTRIBUTES[ $name ] ) ||
+			( str_starts_with( $name, 'data-' ) && strlen( $name ) > 5 ) ||
+			( str_starts_with( $name, 'aria-' ) && strlen( $name ) > 5 )
+		) {
+			return $name;
+		}
+
+		return null;
+	}
+
+	/**
+	 * List the attributes a block neither declares as a field nor forwards
+	 * to its root element, so they never reach the rendered HTML.
+	 *
+	 * @since 7.7.0
+	 *
+	 * @param string                   $name            Block name.
+	 * @param array<string|int, mixed> $attributes      Authored attributes.
+	 * @param bool                     $any_html_prefix Whether every `html-` attribute passes through, as on block tags.
+	 *
+	 * @return string[] Attribute keys, or an empty list when the block is not a Blockstudio block.
+	 */
+	public static function unhandled_attributes( string $name, array $attributes, bool $any_html_prefix = false ): array {
+		$block = Build::blocks()[ $name ] ?? null;
+
+		if ( ! is_object( $block ) ) {
+			return array();
+		}
+
+		$definitions = is_array( $block->attributes ?? null ) ? $block->attributes : array();
+		$unhandled   = array();
+
+		foreach ( array_keys( $attributes ) as $key ) {
+			$key = (string) $key;
+
+			if (
+				isset( self::RESERVED_ATTRIBUTES[ $key ] ) ||
+				isset( $definitions[ $key ]['blockstudio'] ) ||
+				null !== self::forwarded_attribute_name( $key ) ||
+				( $any_html_prefix && str_starts_with( $key, 'html-' ) )
+			) {
+				continue;
+			}
+
+			$unhandled[] = $key;
+		}
+
+		return $unhandled;
+	}
+
+	/**
+	 * Put a block's undeclared global attributes on its rendered root element.
+	 *
+	 * Page and pattern sources store every attribute an element carries, but
+	 * only declared fields reach the template, so an authored `id` or
+	 * `aria-hidden` never rendered.
+	 *
+	 * @param string                   $html        Rendered block.
+	 * @param array<string|int, mixed> $attributes  Stored attributes.
+	 * @param array<string, mixed>     $definitions Block attribute definitions.
+	 *
+	 * @return string Rendered block.
+	 */
+	private static function forward_root_attributes( string $html, array $attributes, array $definitions ): string {
+		$forward = array();
+
+		foreach ( $attributes as $key => $value ) {
+			$key = (string) $key;
+			if ( isset( $definitions[ $key ]['blockstudio'] ) || isset( self::RESERVED_ATTRIBUTES[ $key ] ) ) {
+				continue;
+			}
+
+			$name = self::forwarded_attribute_name( $key );
+			if ( null === $name ) {
+				continue;
+			}
+
+			$value = self::root_attribute_value( $name, $value );
+			if ( null !== $value ) {
+				$forward[ $name ] = $value;
+			}
+		}
+
+		if ( array() === $forward ) {
+			return $html;
+		}
+
+		$processor = new \WP_HTML_Tag_Processor( $html );
+		if ( ! $processor->next_tag() ) {
+			return $html;
+		}
+
+		foreach ( $forward as $name => $value ) {
+			if ( 'style' === $name && is_string( $value ) ) {
+				$existing = $processor->get_attribute( 'style' );
+				if ( is_string( $existing ) && '' !== trim( $existing ) ) {
+					$value = rtrim( trim( $existing ), ';' ) . ';' . $value;
+				}
+			}
+
+			$processor->set_attribute( $name, $value );
+		}
+
+		return $processor->get_updated_html();
+	}
+
+	/**
+	 * Convert a stored attribute value into a root element attribute value.
+	 *
+	 * The page parser turns `true`, `false`, numbers, and JSON into typed
+	 * values, which have to become attribute text again.
+	 *
+	 * @param string $name  Root element attribute name.
+	 * @param mixed  $value Stored value.
+	 *
+	 * @return string|bool|null Attribute value, true for a boolean attribute, or null to skip it.
+	 */
+	private static function root_attribute_value( string $name, mixed $value ): string|bool|null {
+		if ( 'hidden' === $name ) {
+			return false === $value || 'false' === $value ? null : true;
+		}
+
+		if ( is_bool( $value ) ) {
+			$value = $value ? 'true' : 'false';
+		} elseif ( is_int( $value ) || is_float( $value ) ) {
+			$value = (string) $value;
+		} elseif ( is_array( $value ) ) {
+			$value = wp_json_encode( $value );
+		}
+
+		if ( ! is_string( $value ) ) {
+			return null;
+		}
+
+		// Content saved through kses, as a sync or an editor save without
+		// unfiltered_html does, stores attribute text entity-encoded. The tag
+		// processor encodes again, so the text is decoded first, the way
+		// esc_attr() leaves existing entities alone.
+		$value = html_entity_decode( $value, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+
+		if ( 'style' === $name ) {
+			$value = safecss_filter_attr( $value );
+
+			return '' === $value ? null : $value;
+		}
+
+		return $value;
+	}
+
+	/**
 	 * Transform attributes.
 	 *
 	 * @since 4.1.5
@@ -1988,6 +2193,13 @@ class Block {
 					ARRAY_FILTER_USE_KEY
 				);
 
+		// Only attributes nested under blockstudio.attributes come from a page
+		// source or a block tag; top-level ones are WordPress' own, such as the
+		// block supports style object.
+		$authored_attributes = isset( $attributes['blockstudio']['attributes'] ) && is_array( $attributes['blockstudio']['attributes'] )
+			? $attributes['blockstudio']['attributes']
+			: array();
+
 		$perf_start = Perf::active() ? microtime( true ) : 0;
 
 		++self::$count;
@@ -2323,6 +2535,14 @@ class Block {
 				$blockstudio_id,
 				$assets,
 				$island_phase
+			);
+		}
+
+		if ( is_string( $result ) && '' !== $result && array() !== $authored_attributes ) {
+			$result = self::forward_root_attributes(
+				$result,
+				$authored_attributes,
+				$blocks[ $name ]->attributes + $extension_attributes
 			);
 		}
 

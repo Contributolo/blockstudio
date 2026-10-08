@@ -24,6 +24,13 @@ namespace Blockstudio;
 class Block_Tags {
 
 	/**
+	 * Block and attribute pairs already reported as dropped in this request.
+	 *
+	 * @var array<string, true>
+	 */
+	private static array $reported_attributes = array();
+
+	/**
 	 * Initialize page-level block tag rendering.
 	 *
 	 * @return void
@@ -234,29 +241,26 @@ class Block_Tags {
 			return $content;
 		}
 
-		$pattern = '/<([a-z][a-z0-9]*(?:-[a-z0-9]+)*)(\s[^>]*)?\s*\/>/si';
-
-		return preg_replace_callback(
-			$pattern,
-			function ( $matches ) use ( $aliases ) {
-				$tag_name = strtolower( $matches[1] );
+		return self::replace_self_closing_tags(
+			$content,
+			'/<([a-z][a-z0-9]*(?:-[a-z0-9]+)*)(?=[\s\/])/i',
+			static function ( string $tag, string $attr_string, string $original ) use ( $aliases ): string {
+				$tag_name = strtolower( $tag );
 
 				if ( ! isset( $aliases[ $tag_name ] ) ) {
-					return $matches[0];
+					return $original;
 				}
 
-				$attr_string = trim( $matches[2] ?? '' );
-				$attributes  = self::parse_attributes( $attr_string );
-				$block_name  = self::check_allow_deny( $aliases[ $tag_name ] );
+				$attributes = self::parse_attributes( $attr_string );
+				$block_name = self::check_allow_deny( $aliases[ $tag_name ] );
 
 				if ( ! $block_name ) {
-					return $matches[0];
+					return $original;
 				}
 
 				return self::render_block( $block_name, $attributes );
-			},
-			$content
-		) ?? $content;
+			}
+		);
 	}
 
 	// -------------------------------------------------------------------------
@@ -333,30 +337,25 @@ class Block_Tags {
 			return $content;
 		}
 
-		$pattern = '/<([a-z][a-z0-9]*(?:-[a-z0-9]+)*)(\s[^>]*)?\s*\/>/si';
-
-		return preg_replace_callback(
-			$pattern,
-			function ( $matches ) use ( $prefixes, $aliases, $blocks ) {
-				$tag_name = strtolower( $matches[1] );
+		return self::replace_self_closing_tags(
+			$content,
+			'/<([a-z][a-z0-9]*(?:-[a-z0-9]+)*)(?=[\s\/])/i',
+			static function ( string $tag, string $attr_string, string $original ) use ( $prefixes, $aliases, $blocks ): string {
+				$tag_name = strtolower( $tag );
 
 				if ( isset( $aliases[ $tag_name ] ) ) {
-					return $matches[0];
+					return $original;
 				}
 
 				$block_name = self::resolve_prefix_tag_name( $tag_name, $prefixes, $blocks );
 
 				if ( ! $block_name ) {
-					return $matches[0];
+					return $original;
 				}
 
-				$attr_string = trim( $matches[2] ?? '' );
-				$attributes  = self::parse_attributes( $attr_string );
-
-				return self::render_block( $block_name, $attributes );
-			},
-			$content
-		) ?? $content;
+				return self::render_block( $block_name, self::parse_attributes( $attr_string ) );
+			}
+		);
 	}
 
 	// -------------------------------------------------------------------------
@@ -438,24 +437,19 @@ class Block_Tags {
 	 * @return string Processed content.
 	 */
 	private static function replace_self_closing_bs_tags( string $content, array $blocks ): string {
-		$pattern = '/<bs:([a-z0-9](?:[a-z0-9-]*[a-z0-9])?)(\s[^>]*)?\s*\/>/si';
-
-		return preg_replace_callback(
-			$pattern,
-			function ( $matches ) use ( $blocks ) {
-				$tag_name    = $matches[1];
-				$attr_string = trim( $matches[2] ?? '' );
-				$attributes  = self::parse_attributes( $attr_string );
-				$block_name  = self::resolve_bs_tag_name( $tag_name, $blocks );
+		return self::replace_self_closing_tags(
+			$content,
+			'/<bs:([a-z0-9](?:[a-z0-9-]*[a-z0-9])?)(?=[\s\/])/i',
+			static function ( string $tag_name, string $attr_string, string $original ) use ( $blocks ): string {
+				$block_name = self::resolve_bs_tag_name( $tag_name, $blocks );
 
 				if ( ! $block_name ) {
-					return $matches[0];
+					return $original;
 				}
 
-				return self::render_block( $block_name, $attributes );
-			},
-			$content
-		) ?? $content;
+				return self::render_block( $block_name, self::parse_attributes( $attr_string ) );
+			}
+		);
 	}
 
 	// -------------------------------------------------------------------------
@@ -523,26 +517,66 @@ class Block_Tags {
 	 * @return string Processed content.
 	 */
 	private static function replace_self_closing_block_elements( string $content ): string {
-		$pattern = '/<block\s+([^>]*?)\s*\/>/si';
-
-		return preg_replace_callback(
-			$pattern,
-			function ( $matches ) {
-				$attr_string = trim( $matches[1] );
-				$attributes  = self::parse_attributes( $attr_string );
-				$block_name  = $attributes['name'] ?? '';
+		return self::replace_self_closing_tags(
+			$content,
+			'/<(block)(?=\s)/i',
+			static function ( string $tag, string $attr_string, string $original ): string {
+				unset( $tag );
+				$attributes = self::parse_attributes( $attr_string );
+				$block_name = $attributes['name'] ?? '';
 				unset( $attributes['name'] );
 
 				$block_name = self::check_allow_deny( $block_name );
 
 				if ( ! $block_name ) {
-					return $matches[0];
+					return $original;
 				}
 
 				return self::render_block( $block_name, $attributes );
-			},
-			$content
-		) ?? $content;
+			}
+		);
+	}
+
+	/**
+	 * Replace self-closing tags whose opening matches a pattern.
+	 *
+	 * Attribute values may contain ">", as Tailwind variants and animation
+	 * selectors do, so each tag ends where the quote-aware scanner finds its
+	 * closing angle instead of at the first ">".
+	 *
+	 * @param string                                  $content Content to process.
+	 * @param string                                  $opening Pattern matching "<" and the tag name, capturing the name.
+	 * @param callable(string, string, string):string $render  Receives the tag name, the attribute string, and the original tag, and returns the replacement.
+	 *
+	 * @return string Processed content.
+	 */
+	private static function replace_self_closing_tags( string $content, string $opening, callable $render ): string {
+		$length = strlen( $content );
+		$output = '';
+		$copied = 0;
+		$search = 0;
+
+		while ( $search < $length && 1 === preg_match( $opening, $content, $match, PREG_OFFSET_CAPTURE, $search ) ) {
+			$start    = $match[0][1];
+			$name_end = $start + strlen( $match[0][0] );
+			$gt_pos   = self::find_closing_angle( $content, $name_end );
+
+			if ( false === $gt_pos || '/' !== $content[ $gt_pos - 1 ] ) {
+				$search = $name_end;
+				continue;
+			}
+
+			$output .= substr( $content, $copied, $start - $copied );
+			$output .= $render(
+				$match[1][0],
+				trim( substr( $content, $name_end, $gt_pos - 1 - $name_end ) ),
+				substr( $content, $start, $gt_pos - $start + 1 )
+			);
+			$copied  = $gt_pos + 1;
+			$search  = $copied;
+		}
+
+		return 0 === $copied ? $content : $output . substr( $content, $copied );
 	}
 
 	// -------------------------------------------------------------------------
@@ -2062,6 +2096,13 @@ class Block_Tags {
 					$value = '';
 				}
 
+				// Attribute text is HTML, so it is decoded once here, the way a
+				// browser reads it. Anything that writes the value back escapes it
+				// again, and an undecoded &amp; came out as &amp;amp;.
+				if ( is_string( $value ) && str_contains( $value, '&' ) ) {
+					$value = html_entity_decode( $value, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+				}
+
 				if ( 'true' === $value ) {
 					$value = true;
 				} elseif ( 'false' === $value ) {
@@ -2120,6 +2161,8 @@ class Block_Tags {
 		$bs_blocks = Build::blocks();
 
 		if ( isset( $bs_blocks[ $block_name ] ) ) {
+			self::report_unhandled_attributes( $block_name, $block_attrs );
+
 			// Pre-process all nested tags for Blockstudio blocks.
 			if ( '' !== $inner_content ) {
 				$aliases    = self::get_tag_aliases();
@@ -2150,6 +2193,46 @@ class Block_Tags {
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Report block tag attributes that never reach the rendered HTML.
+	 *
+	 * An attribute that is neither a declared field nor a forwarded global or
+	 * data-, aria- or html- attribute is dropped without a trace, which is how
+	 * an undeclared class disappears. Reported once per block and attribute
+	 * per request, and only with WP_DEBUG on.
+	 *
+	 * @param string $block_name Block name.
+	 * @param array  $attributes Tag attributes without data- and html- passthrough.
+	 *
+	 * @return void
+	 */
+	private static function report_unhandled_attributes( string $block_name, array $attributes ): void {
+		if ( ! defined( 'WP_DEBUG' ) || ! WP_DEBUG ) {
+			return;
+		}
+
+		foreach ( Block::unhandled_attributes( $block_name, $attributes, true ) as $key ) {
+			$id = $block_name . '|' . $key;
+			if ( isset( self::$reported_attributes[ $id ] ) ) {
+				continue;
+			}
+			self::$reported_attributes[ $id ] = true;
+
+			_doing_it_wrong(
+				'Blockstudio\\Block_Tags::render',
+				esc_html(
+					sprintf(
+						/* translators: 1: attribute name, 2: block name. */
+						__( 'The "%1$s" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element.', 'blockstudio' ),
+						$key,
+						$block_name
+					)
+				),
+				'7.7.0'
+			);
+		}
 	}
 
 	/**

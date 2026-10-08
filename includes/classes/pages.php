@@ -206,6 +206,7 @@ class Pages {
 				'sourceId'           => $source_identity['hash'],
 				'sourceIdentity'     => $source_identity,
 				'pages'              => array(),
+				'droppedAttributes'  => 0,
 				'errors'             => $registry->get_errors(),
 			);
 
@@ -232,6 +233,10 @@ class Pages {
 					'postId' => $result['post_id'],
 					'locked' => $result['locked'],
 				);
+				if ( array() !== $result['dropped_attributes'] ) {
+					$report['pages'][ $name ]['droppedAttributes'] = $result['dropped_attributes'];
+					$report['droppedAttributes']                  += array_sum( array_map( 'count', $result['dropped_attributes'] ) );
+				}
 
 				if ( $result['error'] instanceof \WP_Error ) {
 					$report['errors'][] = array(

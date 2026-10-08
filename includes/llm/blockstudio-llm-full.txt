@@ -5814,6 +5814,24 @@ Attributes prefixed with `data-` pass through to the rendered block's root
 element. Attributes prefixed with `html-` also pass through, with the prefix
 stripped. Works with both syntaxes.
 
+A Blockstudio block also puts the global attributes it does not declare as
+fields on its root element: `id`, `style`, `role`, `title`, `lang`, `dir`,
+`hidden`, `tabindex`, and every `aria-*` attribute. A declared field always
+wins, so a block with a `title` field receives the value in `$a['title']`
+instead. Forwarded styles go through `safecss_filter_attr()`, the filter
+WordPress applies to style attributes in post content, and are appended to a
+style the template already sets.
+
+Attribute values are HTML, so entities are decoded once when a tag is parsed:
+`title="Tom &amp; Jerry"` reaches the template as `Tom & Jerry` and is escaped
+again on output. Quoted values may contain `>`, as Tailwind variants and
+animation selectors do, in self-closing tags as well as in paired ones.
+
+Any other attribute a block does not declare, including `class`, never reaches
+the HTML. With `WP_DEBUG` on, Blockstudio reports each such attribute once per
+request through `_doing_it_wrong()`. Declare a field for it, or write it as a
+`data-`, `aria-`, or `html-` attribute.
+
 ```html
 <bs:mytheme-card
   title="My Card"
@@ -9454,6 +9472,21 @@ HTML attributes on `<block>` elements are passed as block attributes. JSON value
 <img src="https://example.com/photo.jpg" alt="Photo" width="800" height="400" />
 ```
 
+Attribute values are decoded once, the way a browser reads them, so
+`data-animate="[&amp;>span]:fade"` and `data-animate="[&>span]:fade"` store the
+same value.
+
+On an element mapped to a Blockstudio block, every attribute is stored with the
+block. Declared fields reach the template; the global attributes the block does
+not declare (`id`, `style`, `role`, `title`, `lang`, `dir`, `hidden`,
+`tabindex`, `aria-`, and `data-`) are put on the block's root element when it
+renders, exactly as on block tags. In
+page and pattern sources an `html-` prefix only names one of those global
+attributes, so `html-role="note"` forwards as `role`, while event handlers such
+as `html-onclick` are never rendered. Everything else, including an undeclared
+`class`, stays in the post content without reaching the page, and
+`wp bs pages sync` reports it for every page it parses.
+
 ## Custom Block Renderers
 
 The HTML parser uses a registry-based architecture. Add a builder for a custom
@@ -9795,6 +9828,21 @@ HTML attributes on `<block>` elements are passed as block attributes. JSON value
 
 <img src="https://example.com/photo.jpg" alt="Photo" width="800" height="400" />
 ```
+
+Attribute values are decoded once, the way a browser reads them, so
+`data-animate="[&amp;>span]:fade"` and `data-animate="[&>span]:fade"` store the
+same value.
+
+On an element mapped to a Blockstudio block, every attribute is stored with the
+block. Declared fields reach the template; the global attributes the block does
+not declare (`id`, `style`, `role`, `title`, `lang`, `dir`, `hidden`,
+`tabindex`, `aria-`, and `data-`) are put on the block's root element when it
+renders, exactly as on block tags. In
+page and pattern sources an `html-` prefix only names one of those global
+attributes, so `html-role="note"` forwards as `role`, while event handlers such
+as `html-onclick` are never rendered. Everything else, including an undeclared
+`class`, stays in the post content without reaching the page, and
+`wp bs pages sync` reports it for every page it parses.
 
 ## Custom Block Renderers
 
@@ -13611,6 +13659,15 @@ For deployment scripts that need the complete report:
 ```bash
 wp bs pages sync --format=json
 ```
+
+Every page the command parses is checked for attributes that its blocks store
+but never render: attributes a Blockstudio block neither declares as a field
+nor forwards to its root element, such as an undeclared `class`. The table
+output prints a warning per page and block, the `dropped` column counts them,
+and the JSON report lists them under `pages.<name>.droppedAttributes`. Pages
+whose source did not change are not parsed again, so they are reported the
+next time they change, or on the first sync after an upgrade that changes the
+parser.
 
 The command exits unsuccessfully when discovery or reconciliation reports an
 error. See Pages for the PHP API

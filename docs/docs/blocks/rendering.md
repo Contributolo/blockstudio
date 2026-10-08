@@ -429,6 +429,24 @@ Attributes prefixed with `data-` pass through to the rendered block's root
 element. Attributes prefixed with `html-` also pass through, with the prefix
 stripped. Works with both syntaxes.
 
+A Blockstudio block also puts the global attributes it does not declare as
+fields on its root element: `id`, `style`, `role`, `title`, `lang`, `dir`,
+`hidden`, `tabindex`, and every `aria-*` attribute. A declared field always
+wins, so a block with a `title` field receives the value in `$a['title']`
+instead. Forwarded styles go through `safecss_filter_attr()`, the filter
+WordPress applies to style attributes in post content, and are appended to a
+style the template already sets.
+
+Attribute values are HTML, so entities are decoded once when a tag is parsed:
+`title="Tom &amp; Jerry"` reaches the template as `Tom & Jerry` and is escaped
+again on output. Quoted values may contain `>`, as Tailwind variants and
+animation selectors do, in self-closing tags as well as in paired ones.
+
+Any other attribute a block does not declare, including `class`, never reaches
+the HTML. With `WP_DEBUG` on, Blockstudio reports each such attribute once per
+request through `_doing_it_wrong()`. Declare a field for it, or write it as a
+`data-`, `aria-`, or `html-` attribute.
+
 ```html
 <bs:mytheme-card
   title="My Card"

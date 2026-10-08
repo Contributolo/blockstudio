@@ -194,6 +194,21 @@ HTML attributes on `<block>` elements are passed as block attributes. JSON value
 <img src="https://example.com/photo.jpg" alt="Photo" width="800" height="400" />
 ```
 
+Attribute values are decoded once, the way a browser reads them, so
+`data-animate="[&amp;>span]:fade"` and `data-animate="[&>span]:fade"` store the
+same value.
+
+On an element mapped to a Blockstudio block, every attribute is stored with the
+block. Declared fields reach the template; the global attributes the block does
+not declare (`id`, `style`, `role`, `title`, `lang`, `dir`, `hidden`,
+`tabindex`, `aria-*`, and `data-*`) are put on the block's root element when it
+renders, exactly as on [block tags](/docs/blocks/rendering#html-passthrough). In
+page and pattern sources an `html-` prefix only names one of those global
+attributes, so `html-role="note"` forwards as `role`, while event handlers such
+as `html-onclick` are never rendered. Everything else, including an undeclared
+`class`, stays in the post content without reaching the page, and
+`wp bs pages sync` reports it for every page it parses.
+
 ## Custom Block Renderers
 
 The HTML parser uses a registry-based architecture. Add a builder for a custom

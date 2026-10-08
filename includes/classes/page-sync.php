@@ -33,6 +33,13 @@ class Page_Sync {
 	private Html_Parser $parser;
 
 	/**
+	 * Attributes the page parsed by the current reconcile() stores but never renders.
+	 *
+	 * @var array<string, string[]>
+	 */
+	private array $dropped_attributes = array();
+
+	/**
 	 * Constructor.
 	 *
 	 * @param Html_Parser|null $parser Optional parser instance.
@@ -60,12 +67,13 @@ class Page_Sync {
 	 * @param array $page_data Desired page data from discovery.
 	 * @param array $args      Optional existing post, fingerprints, and authority flags.
 	 *
-	 * @return array{status:string,post_id:int,error:WP_Error|null,locked:bool}
+	 * @return array{status:string,post_id:int,error:WP_Error|null,locked:bool,dropped_attributes:array<string,string[]>}
 	 */
 	public function reconcile( array $page_data, array $args = array() ): array {
-		$page_data    = $this->prepare_page_data( $page_data );
-		$sync_enabled = $page_data['sync'] ?? true;
-		$existing     = isset( $args['existing'] ) && $args['existing'] instanceof WP_Post
+		$this->dropped_attributes = array();
+		$page_data                = $this->prepare_page_data( $page_data );
+		$sync_enabled             = $page_data['sync'] ?? true;
+		$existing                 = isset( $args['existing'] ) && $args['existing'] instanceof WP_Post
 			? $args['existing']
 			: $this->find_existing_post( $page_data );
 
@@ -158,7 +166,7 @@ class Page_Sync {
 			'pageSync'      => self::SYNC_ENGINE_VERSION,
 			'pageDiscovery' => '1',
 			'htmlParser'    => '1',
-			'blockTags'     => '1',
+			'blockTags'     => '2',
 		);
 
 		/**
@@ -300,15 +308,63 @@ class Page_Sync {
 	 * @param WP_Error|null $error   Optional error.
 	 * @param bool          $locked  Whether a changed page was kept locked.
 	 *
-	 * @return array{status:string,post_id:int,error:WP_Error|null,locked:bool}
+	 * @return array{status:string,post_id:int,error:WP_Error|null,locked:bool,dropped_attributes:array<string,string[]>}
 	 */
 	private function reconcile_result( string $status, int $post_id, ?WP_Error $error = null, bool $locked = false ): array {
 		return array(
-			'status'  => $status,
-			'post_id' => $post_id,
-			'error'   => $error,
-			'locked'  => $locked,
+			'status'             => $status,
+			'post_id'            => $post_id,
+			'error'              => $error,
+			'locked'             => $locked,
+			'dropped_attributes' => $this->dropped_attributes,
 		);
+	}
+
+	/**
+	 * List attributes that parsed blocks store but never render.
+	 *
+	 * Element and tag attributes become block attributes, and a Blockstudio
+	 * block only renders the ones it declares as fields and the global
+	 * attributes it forwards to its root element. Everything else, such as an
+	 * undeclared class, stays in the post content without reaching the page.
+	 *
+	 * @since 7.7.0
+	 *
+	 * @param array $blocks Parsed blocks.
+	 *
+	 * @return array<string, string[]> Attribute keys by block name.
+	 */
+	public static function dropped_attributes( array $blocks ): array {
+		$dropped = array();
+
+		foreach ( $blocks as $block ) {
+			if ( ! is_array( $block ) ) {
+				continue;
+			}
+
+			$name       = is_string( $block['blockName'] ?? null ) ? $block['blockName'] : '';
+			$attributes = $block['attrs']['blockstudio']['attributes'] ?? null;
+
+			if ( '' !== $name && is_array( $attributes ) ) {
+				foreach ( Block::unhandled_attributes( $name, $attributes ) as $key ) {
+					$dropped[ $name ][ $key ] = $key;
+				}
+			}
+
+			foreach ( self::dropped_attributes( is_array( $block['innerBlocks'] ?? null ) ? $block['innerBlocks'] : array() ) as $inner_name => $keys ) {
+				foreach ( $keys as $key ) {
+					$dropped[ $inner_name ][ $key ] = $key;
+				}
+			}
+		}
+
+		ksort( $dropped, SORT_STRING );
+		foreach ( $dropped as $name => $keys ) {
+			sort( $keys, SORT_STRING );
+			$dropped[ $name ] = array_values( $keys );
+		}
+
+		return $dropped;
 	}
 
 	/**
@@ -369,7 +425,8 @@ class Page_Sync {
 			$template_content = Page_Markdown::sanitize_docs_html( $template_content );
 		}
 
-		$blocks = $this->parser->parse_to_array( $template_content );
+		$blocks                   = $this->parser->parse_to_array( $template_content );
+		$this->dropped_attributes = self::dropped_attributes( $blocks );
 
 		return $this->apply_template_overrides( $blocks );
 	}

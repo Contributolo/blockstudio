@@ -136,7 +136,7 @@ class BlockTagsRichTextRoutingTest extends TestCase {
 		$this->assertCount( 1, $blocks );
 		$this->assertSame( 'custom/routed-image', $blocks[0]['blockName'] );
 		$this->assertSame( '/diagram.png', self::attributes_of( $blocks[0] )['src'] ?? null );
-		$this->assertSame( 'A &gt; B', self::attributes_of( $blocks[0] )['alt'] ?? null );
+		$this->assertSame( 'A > B', self::attributes_of( $blocks[0] )['alt'] ?? null );
 	}
 
 	public function test_image_only_paragraph_uses_the_default_core_image_mapping(): void {

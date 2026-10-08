@@ -371,6 +371,7 @@ purpose: Create WordPress pages and block patterns from file templates with auto
 settings: content
 hooks: blockstudio/block_tags/builders, blockstudio/parser/element_mapping, blockstudio/parser/renderers
 php: Block_Tags::parse_inner_blocks(), Blockstudio\Block_Tags
+cli: wp bs pages sync
 
 ### Pages
 route: /docs/pages-and-patterns/pages
