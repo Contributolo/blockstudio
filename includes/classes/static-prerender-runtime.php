@@ -48,6 +48,20 @@ final class Static_Prerender_Runtime {
 	private const WARM_SERVER_HEADER = 'HTTP_X_BLOCKSTUDIO_STATIC_PRERENDER_WARM';
 
 	/**
+	 * Request header that asks a warm render to report the files it read.
+	 *
+	 * @var string
+	 */
+	public const DEPENDENCY_HEADER = 'X-Blockstudio-Static-Prerender-Dependencies';
+
+	/**
+	 * Dependency-report server key.
+	 *
+	 * @var string
+	 */
+	private const DEPENDENCY_SERVER_HEADER = 'HTTP_X_BLOCKSTUDIO_STATIC_PRERENDER_DEPENDENCIES';
+
+	/**
 	 * Queue claim timeout.
 	 *
 	 * @var int
@@ -102,6 +116,20 @@ final class Static_Prerender_Runtime {
 	 * @var array<string,array<string,mixed>|null>
 	 */
 	private static array $index_record_cache = array();
+
+	/**
+	 * Report ID of the dependency report the current warm request writes.
+	 *
+	 * @var string|null
+	 */
+	private static ?string $dependency_report = null;
+
+	/**
+	 * Files the current warm request read, keyed by path.
+	 *
+	 * @var array<string,true>
+	 */
+	private static array $dependencies = array();
 
 	/**
 	 * Register runtime hooks.
@@ -259,6 +287,10 @@ final class Static_Prerender_Runtime {
 				exit;
 				// @codeCoverageIgnoreEnd
 			}
+		}
+
+		if ( self::is_warm_request( $server ) ) {
+			self::begin_dependency_report( $server );
 		}
 
 		self::$buffer_key = $key;
@@ -460,6 +492,8 @@ final class Static_Prerender_Runtime {
 		self::$buffer_url = null;
 
 		try {
+			self::finish_dependency_report();
+
 			if (
 				null === $key ||
 				! self::cacheable_html( $buffer, is_int( $status ) && $status > 0 ? $status : null )
@@ -1025,6 +1059,100 @@ final class Static_Prerender_Runtime {
 	}
 
 	/**
+	 * Create a signed token that asks one warm request for a dependency report.
+	 *
+	 * Graph builds fetch every route over HTTP, so the files a page reads are
+	 * only known inside that warm request, which is a separate PHP process. A
+	 * request carrying this token in the DEPENDENCY_HEADER writes the files it
+	 * read to a report in the site's cache directory, and
+	 * take_dependency_report() collects it once the response has arrived. The
+	 * signature keeps visitors from making a site write reports.
+	 *
+	 * @return string Token for the dependency header.
+	 */
+	public static function dependency_report_token(): string {
+		$id = bin2hex( random_bytes( 16 ) );
+
+		return $id . '.' . self::dependency_report_signature( $id );
+	}
+
+	/**
+	 * Collect and remove the dependency report of one warm request.
+	 *
+	 * @param string $token Token the request was sent with.
+	 *
+	 * @return string[] Dependency paths, empty when the request reported none.
+	 */
+	public static function take_dependency_report( string $token ): array {
+		$id = self::dependency_report_id( $token );
+		if ( null === $id ) {
+			return array();
+		}
+
+		$directory = self::dependency_report_directory();
+		$path      = $directory . '/' . $id . '.json';
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reading a local report.
+		$contents = is_file( $path ) ? file_get_contents( $path ) : false;
+		@unlink( $path ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions.unlink_unlink -- Internal report; it may not exist.
+
+		// A renderer that died before collecting leaves its reports behind.
+		$reports = glob( $directory . '/*.json' );
+		foreach ( is_array( $reports ) ? $reports : array() as $report ) {
+			$mtime = @filemtime( $report ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Concurrent renderers can remove the report.
+			if ( false !== $mtime && $mtime < time() - HOUR_IN_SECONDS ) {
+				@unlink( $report ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions.unlink_unlink -- Internal report.
+			}
+		}
+
+		$decoded = is_string( $contents ) ? json_decode( $contents, true ) : null;
+		$files   = is_array( $decoded ) && is_array( $decoded['files'] ?? null ) ? $decoded['files'] : array();
+
+		return array_values(
+			array_filter(
+				$files,
+				static fn( mixed $file ): bool => is_string( $file ) && '' !== $file
+			)
+		);
+	}
+
+	/**
+	 * Record files the current warm render read.
+	 *
+	 * Does nothing outside a warm request that was asked for a dependency
+	 * report, so ordinary requests pay one null check.
+	 *
+	 * @param array<mixed> $paths Dependency paths.
+	 *
+	 * @return void
+	 */
+	public static function record_dependencies( array $paths ): void {
+		if ( null === self::$dependency_report ) {
+			return;
+		}
+
+		foreach ( $paths as $path ) {
+			if ( is_string( $path ) && '' !== $path ) {
+				self::$dependencies[ wp_normalize_path( $path ) ] = true;
+			}
+		}
+	}
+
+	/**
+	 * Record the template WordPress loads for a reporting warm request.
+	 *
+	 * @param mixed $template Template path.
+	 *
+	 * @return mixed Unchanged template path.
+	 */
+	public static function record_template_dependency( mixed $template ): mixed {
+		if ( is_string( $template ) && '' !== $template ) {
+			self::record_dependencies( array( $template ) );
+		}
+
+		return $template;
+	}
+
+	/**
 	 * Persist one successful graph render.
 	 *
 	 * @param string              $source_url     Source URL.
@@ -1455,6 +1583,9 @@ final class Static_Prerender_Runtime {
 		self::$response_status    = null;
 		self::$warm_queue         = null;
 		self::$index_record_cache = array();
+		self::$dependency_report  = null;
+		self::$dependencies       = array();
+		remove_filter( 'template_include', array( self::class, 'record_template_dependency' ), PHP_INT_MAX );
 		Static_Prerender_Identity::reset();
 		Static_Prerender_Content_Hasher::reset();
 		Static_Prerender_Miss_Lock::release_all();
@@ -1658,6 +1789,143 @@ final class Static_Prerender_Runtime {
 		}
 
 		return $root . '/' . sanitize_file_name( $id ) . '.json';
+	}
+
+	/**
+	 * Start collecting dependencies when a warm request carries a valid token.
+	 *
+	 * @param array<string,mixed> $server Server values.
+	 *
+	 * @return void
+	 */
+	private static function begin_dependency_report( array $server ): void {
+		self::$dependencies      = array();
+		self::$dependency_report = self::dependency_report_id( (string) ( $server[ self::DEPENDENCY_SERVER_HEADER ] ?? '' ) );
+
+		if ( null !== self::$dependency_report ) {
+			add_filter( 'template_include', array( self::class, 'record_template_dependency' ), PHP_INT_MAX );
+		}
+	}
+
+	/**
+	 * Write the dependency report of the current warm request.
+	 *
+	 * Runs inside the response buffer callback, so the report exists before the
+	 * renderer receives the response.
+	 *
+	 * @return void
+	 */
+	private static function finish_dependency_report(): void {
+		$id = self::$dependency_report;
+		if ( null === $id ) {
+			return;
+		}
+
+		self::record_dependencies( self::page_source_dependencies() );
+		$files = array_keys( self::$dependencies );
+		sort( $files, SORT_STRING );
+		self::$dependency_report = null;
+		self::$dependencies      = array();
+		remove_filter( 'template_include', array( self::class, 'record_template_dependency' ), PHP_INT_MAX );
+
+		$encoded = wp_json_encode( array( 'files' => $files ), JSON_UNESCAPED_SLASHES );
+		if ( is_string( $encoded ) ) {
+			Single_Flight::publish( self::dependency_report_directory() . '/' . $id . '.json', $encoded );
+		}
+	}
+
+	/**
+	 * Source files of the synced page a warm request renders.
+	 *
+	 * Page content reaches the database through page synchronization, so the
+	 * page definition, template, content, and layout files stand in for the
+	 * stored content the render read.
+	 *
+	 * @return string[] Existing source paths.
+	 */
+	private static function page_source_dependencies(): array {
+		if ( ! function_exists( 'is_singular' ) || ! is_singular() ) {
+			return array();
+		}
+
+		$post_id = (int) get_queried_object_id();
+		if ( $post_id <= 0 ) {
+			return array();
+		}
+
+		$paths = array();
+		foreach ( array( '_blockstudio_page_template_path', '_blockstudio_page_content_path', '_blockstudio_page_layout' ) as $meta_key ) {
+			$paths[] = (string) get_post_meta( $post_id, $meta_key, true );
+		}
+
+		$roots = array_unique(
+			array(
+				wp_normalize_path( (string) get_stylesheet_directory() ),
+				wp_normalize_path( (string) get_template_directory() ),
+			)
+		);
+		$ids   = get_post_meta( $post_id, '_blockstudio_page_dependencies', true );
+		foreach ( is_array( $ids ) ? $ids : array() as $id ) {
+			if ( ! is_string( $id ) || ! str_starts_with( $id, 'theme:' ) ) {
+				continue;
+			}
+
+			foreach ( $roots as $root ) {
+				$candidate = trailingslashit( $root ) . ltrim( substr( $id, 6 ), '/' );
+				if ( is_file( $candidate ) ) {
+					$paths[] = $candidate;
+					break;
+				}
+			}
+		}
+
+		return array_values(
+			array_filter(
+				$paths,
+				static fn( string $path ): bool => '' !== $path && is_file( $path )
+			)
+		);
+	}
+
+	/**
+	 * Directory that holds dependency reports between a warm request and its renderer.
+	 *
+	 * The two run in different processes whose cache context can differ, a
+	 * renderer under WP-CLI and a warm request for a translated route for
+	 * example, so reports live beside the site's namespaces instead of inside
+	 * one. The leading dot keeps namespace collection from treating it as a
+	 * namespace.
+	 *
+	 * @return string Directory path.
+	 */
+	private static function dependency_report_directory(): string {
+		return dirname( Runtime_Cache::directory( 'static-prerender-state' ), 2 ) . '/.static-prerender-dependencies';
+	}
+
+	/**
+	 * Validate a dependency-report token.
+	 *
+	 * @param string $token Token.
+	 *
+	 * @return string|null Report ID, or null when the token is invalid.
+	 */
+	private static function dependency_report_id( string $token ): ?string {
+		if ( ! preg_match( '/^([a-f0-9]{32})\.([a-f0-9]{32})$/', trim( $token ), $matches ) ) {
+			return null;
+		}
+
+		return hash_equals( self::dependency_report_signature( $matches[1] ), $matches[2] ) ? $matches[1] : null;
+	}
+
+	/**
+	 * Sign a dependency-report ID with this installation's salt.
+	 *
+	 * @param string $id Report ID.
+	 *
+	 * @return string Signature.
+	 */
+	private static function dependency_report_signature( string $id ): string {
+		return substr( hash_hmac( 'sha256', 'static-prerender-dependencies|' . $id, wp_salt( 'nonce' ) ), 0, 32 );
 	}
 
 	/**

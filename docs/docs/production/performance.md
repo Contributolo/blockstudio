@@ -166,7 +166,10 @@ add_filter(
 
 The reported paths include the selected render template, discovered template
 files, and registered block asset files. A collector can add separately loaded
-files to its own dependency graph.
+files to its own dependency graph. Paths a filter adds are also recorded by
+[static prerender graph builds](/docs/production/static-prerendering), so a
+block that reads a data file can list it here and its routes re-render when the
+file changes.
 
 ## Render cache
 

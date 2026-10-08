@@ -55,6 +55,7 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 == Changelog ==
 
 = 7.7.0 =
+* New: graph builds rendered over HTTP record each route's dependencies, the loaded template, block templates and assets, files added through `blockstudio/render/dependencies`, and a synced page's source and layout files, so `build_plan()` re-renders exactly the routes whose files changed
 * New: `cache.namespaceGrace` sets how long a retired cache namespace is kept, counted from the first cleanup sweep that finds it retired instead of from its newest file, so stylesheets that CDN-cached pages still link survive an identity rotation for as long as the site needs
 * Fix: cache namespace collection never deletes the live namespace of another cache scope, such as the current Tailwind stylesheets, once its files are a day old
 * Fix: static prerendering decides its request, content, admin, and cron hooks once the active theme has loaded, and runtime settings resolved before that are resolved again with the theme's filters, so a theme filter such as one that switches static prerendering off on local installs takes effect

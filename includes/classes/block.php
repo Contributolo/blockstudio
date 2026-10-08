@@ -2035,7 +2035,8 @@ class Block {
 		 * Filters the resolved dependencies for a rendered block.
 		 *
 		 * Collectors can observe the returned paths to build a page dependency
-		 * graph, and integrations can append files loaded indirectly.
+		 * graph, and integrations can append files loaded indirectly. Static
+		 * prerender graph builds record the returned paths for the page.
 		 *
 		 * @param array<int, string> $dependencies Resolved source and template paths.
 		 * @param string             $name         Block name.
@@ -2043,7 +2044,11 @@ class Block {
 		 * @param bool               $is_editor    Whether this is an editor render.
 		 * @param bool               $is_preview   Whether this is a preview render.
 		 */
-		apply_filters( 'blockstudio/render/dependencies', $dependencies, $name, $block_data, $is_editor, $is_preview );
+		$dependencies = apply_filters( 'blockstudio/render/dependencies', $dependencies, $name, $block_data, $is_editor, $is_preview );
+
+		if ( ! $is_editor && ! $is_preview && is_array( $dependencies ) ) {
+			Static_Prerender_Runtime::record_dependencies( $dependencies );
+		}
 
 		$editor = $attributes['blockstudio']['editor'] ?? false;
 

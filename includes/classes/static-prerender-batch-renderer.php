@@ -179,15 +179,20 @@ final class Static_Prerender_Batch_Renderer {
 			);
 		}
 
-		$response = wp_remote_get(
+		$token        = Static_Prerender_Runtime::dependency_report_token();
+		$response     = wp_remote_get(
 			$url,
 			array(
 				'timeout'     => 30,
 				'redirection' => 0,
-				'headers'     => array( Static_Prerender_Runtime::WARM_HEADER => '1' ),
+				'headers'     => array(
+					Static_Prerender_Runtime::WARM_HEADER => '1',
+					Static_Prerender_Runtime::DEPENDENCY_HEADER => $token,
+				),
 				'user-agent'  => 'Blockstudio static prerender batch renderer',
 			)
 		);
+		$dependencies = Static_Prerender_Runtime::take_dependency_report( $token );
 
 		if ( function_exists( 'is_wp_error' ) && is_wp_error( $response ) ) {
 			return array(
@@ -205,7 +210,7 @@ final class Static_Prerender_Batch_Renderer {
 				$url,
 				$reason,
 				$code,
-				array(),
+				$dependencies,
 				array(),
 				self::string_option( $options, 'targetHost' ),
 				self::string_option( $options, 'targetHome' )
@@ -226,7 +231,7 @@ final class Static_Prerender_Batch_Renderer {
 		$persisted = Static_Prerender_Runtime::persist_built_response(
 			$url,
 			$html,
-			array(),
+			$dependencies,
 			array(),
 			self::string_option( $options, 'targetHost' ),
 			self::string_option( $options, 'targetHome' )
@@ -236,7 +241,7 @@ final class Static_Prerender_Batch_Renderer {
 			? array(
 				'status'       => 'rendered',
 				'httpCode'     => $code,
-				'dependencies' => 0,
+				'dependencies' => count( $dependencies ),
 			)
 			: array(
 				'status' => 'failed',

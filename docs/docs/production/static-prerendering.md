@@ -113,6 +113,27 @@ transport is supplied by the generic
 `blockstudio/static_prerender/render_internal` filter; optional HTTP fallback
 uses the normal warm header.
 
+### What graph mode tracks
+
+With the default HTTP transport, `Static_Prerender_Batch_Renderer::render()`
+sends each warm request a signed token, and the request reports the files it
+read: the template WordPress loaded, every rendered Blockstudio block's
+template, template files, and asset files, files added through
+`blockstudio/render/dependencies`, and, for a synced page, its definition,
+template, content, and layout files. The report is written to the site's cache
+directory, which the renderer and the web server already share for the rendered
+HTML. On the next build `build_plan()` hashes those files
+again and marks only the routes whose files changed, together with new routes,
+routes past their `ttl`, and every route when a shared file changes
+(`blockstudio.json`, `theme.json`, `style.css`, `functions.php`, `header.php`,
+`footer.php`, and everything under `inc/`, `parts/`, and `templates/`).
+
+Content that lives only in the database is not a file and is not tracked:
+posts edited in the admin, options, generated rows, or prices. A build that has
+to pick such changes up passes `$force` to `build_plan()` or renders the
+affected URLs itself. The `internal` transport records the dependencies its
+filter returns.
+
 ## Early serving and atomic deployment
 
 With `earlyServe` enabled, Blockstudio owns a small
