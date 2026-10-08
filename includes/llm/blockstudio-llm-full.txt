@@ -10441,6 +10441,52 @@ The `templateLock` property controls how users can edit the page in the editor:
 
 When a `templateLock` is set, Blockstudio disables the ability to unlock blocks via the editor UI.
 
+## Virtual Routes
+
+Some documents have no post behind them: a component reference generated
+from data, a catalog, or an account area. Register them as virtual routes
+instead of hooking `template_redirect` yourself:
+
+```php
+add_action( 'init', function () {
+    Blockstudio\Virtual_Routes::register(
+        'components',
+        function ( $component, string $rest ) {
+            get_header();
+            echo my_component_page( $component );
+            get_footer();
+        },
+        [
+            'prefix' => true,
+            'match'  => fn ( string $rest ) => '' === $rest ? 'index' : my_component( $rest ),
+            'title'  => fn ( $component ) => my_component_title( $component ),
+            'urls'   => fn () => my_component_paths(),
+        ]
+    );
+} );
+```
+
+The path is relative to the site home. With `prefix`, the route also serves
+every path below it, and `match` receives that remainder (an empty string for
+the route itself) and returns the value the render callback receives, or
+`null` to leave the URL to WordPress, which then answers 404 as usual. The
+render callback echoes the document or returns it as a string; `title` is a
+string or a closure that receives the match value.
+
+For a matched request Blockstudio keeps WordPress from flagging a 404 and
+`redirect_canonical` from redirecting it, clears the singular state the main
+query reports, sends the status (`status`, 200 by default), and renders at
+`template_redirect` priority `Virtual_Routes::PRIORITY`. That is right after
+Blockstudio's output buffer opens at `Assets::BUFFER_PRIORITY`, so the
+finished document gets its block assets, bundled UI assets, and compiled
+Tailwind like any page, and before `redirect_canonical` at priority 10. A
+handler that renders a whole document on its own must also run after
+`Assets::BUFFER_PRIORITY`, or that processing is skipped. The paths in `urls`
+(by default the route path itself, when it is not a prefix route) are added to
+static prerender builds, and
+`Virtual_Routes::urls()` returns them as absolute URLs for a sitemap.
+`Virtual_Routes::match( $path )` resolves a path the way a request would.
+
 ## Sync Behavior
 
 Page posts change only through an explicit synchronization operation:

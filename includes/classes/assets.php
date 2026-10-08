@@ -256,10 +256,23 @@ class Assets {
 	}
 
 	/**
+	 * Template redirect priority the frontend output buffer opens at.
+	 *
+	 * Output produced at a later template_redirect priority, as by a virtual
+	 * route that renders a whole document and exits, is still processed:
+	 * block assets are injected and Tailwind is compiled from the finished
+	 * HTML. Output produced earlier, or after an exit before this priority,
+	 * is not. Virtual_Routes renders at the next priority.
+	 *
+	 * @since 7.7.0
+	 */
+	public const BUFFER_PRIORITY = 3;
+
+	/**
 	 * Constructor.
 	 */
 	public function __construct() {
-		add_action( 'template_redirect', array( $this, 'maybe_buffer_output' ), 3 );
+		add_action( 'template_redirect', array( $this, 'maybe_buffer_output' ), self::BUFFER_PRIORITY );
 		add_filter( 'blockstudio/buffer/output', array( $this, 'parse_output' ), 1000000 );
 		add_filter(
 			'block_editor_settings_all',

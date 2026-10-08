@@ -160,6 +160,7 @@ class Plugin {
 		require_once $classes_dir . 'esmodules.php';
 		require_once $classes_dir . 'esmodulescss.php';
 		require_once $classes_dir . 'assets.php';
+		require_once $classes_dir . 'virtual-routes.php';
 		require_once $classes_dir . 'tailwind.php';
 		require_once $classes_dir . 'llm.php';
 		require_once $classes_dir . 'admin-page.php';
