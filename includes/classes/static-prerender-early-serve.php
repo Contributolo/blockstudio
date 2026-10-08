@@ -901,7 +901,29 @@ PHP;
 			. var_export( array( 'entries' => $entries ), true ) // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export -- Generates a data-only PHP map consumed before WordPress boots.
 			. ";\n";
 
-		return Single_Flight::publish( self::map_path(), $export );
+		if ( ! Single_Flight::publish( self::map_path(), $export ) ) {
+			return false;
+		}
+
+		self::forget_compiled_map();
+
+		return true;
+	}
+
+	/**
+	 * Drop the compiled map from the opcode cache after this process changed it.
+	 *
+	 * The map is read with include. With opcache on, a process that already
+	 * compiled the map keeps serving that copy until the next timestamp check,
+	 * and in a CLI process that check never comes, so an activation that
+	 * reads its own map back would see the entries it just replaced.
+	 *
+	 * @return void
+	 */
+	private static function forget_compiled_map(): void {
+		if ( function_exists( 'opcache_invalidate' ) ) {
+			opcache_invalidate( self::map_path(), true );
+		}
 	}
 
 	/**
@@ -1039,6 +1061,7 @@ PHP;
 		$map = self::map_path();
 		if ( is_file( $map ) && self::file_contains_marker( $map, self::MAP_MARKER ) ) {
 			wp_delete_file( $map );
+			self::forget_compiled_map();
 		}
 	}
 

@@ -36,6 +36,13 @@ final class Static_Prerender_Content_Hasher {
 	private static int $directory_scans = 0;
 
 	/**
+	 * Request-local bundled engine asset source hashes.
+	 *
+	 * @var array<string,string>|null
+	 */
+	private static ?array $engine_assets = null;
+
+	/**
 	 * Hash one file once per request.
 	 *
 	 * @param string $path File path.
@@ -169,6 +176,7 @@ final class Static_Prerender_Content_Hasher {
 		self::$file_hashes     = array();
 		self::$file_reads      = 0;
 		self::$directory_scans = 0;
+		self::$engine_assets   = null;
 	}
 
 	/**
@@ -262,23 +270,41 @@ final class Static_Prerender_Content_Hasher {
 	}
 
 	/**
-	 * Inventory generated engine assets whose names contain content hashes.
+	 * Hash the bundled engine asset sources that rendered pages embed.
 	 *
-	 * @return string[] Asset names.
+	 * The engine compiles these sources into _dist directories beside them
+	 * the first time bundled UI blocks build, so the identity is taken from
+	 * the sources: a signature taken before that first build has to equal
+	 * one taken after it, or a build's own render moves the signature that
+	 * its artifact entry was derived from.
+	 *
+	 * @return array<string,string> Content hashes keyed by path below includes/ui/blocks.
 	 */
 	private static function engine_asset_inventory(): array {
+		if ( null !== self::$engine_assets ) {
+			return self::$engine_assets;
+		}
+
+		self::$engine_assets = array();
 		if ( ! defined( 'BLOCKSTUDIO_DIR' ) || ! is_string( BLOCKSTUDIO_DIR ) || '' === trim( BLOCKSTUDIO_DIR ) ) {
-			return array();
+			return self::$engine_assets;
 		}
 
-		$names  = array();
-		$assets = glob( rtrim( wp_normalize_path( BLOCKSTUDIO_DIR ), '/' ) . '/includes/ui/blocks/_dist/*' );
-		foreach ( is_array( $assets ) ? $assets : array() as $asset ) {
-			$names[] = basename( $asset );
+		$root = rtrim( wp_normalize_path( BLOCKSTUDIO_DIR ), '/' ) . '/includes/ui/blocks';
+		foreach ( self::directory_files( $root ) as $path ) {
+			$relative = substr( wp_normalize_path( $path ), strlen( $root ) + 1 );
+			if (
+				str_contains( '/' . $relative, '/_dist/' ) ||
+				str_contains( '/' . $relative, '/node_modules/' ) ||
+				1 !== preg_match( '/\.(css|scss|js)$/', $relative )
+			) {
+				continue;
+			}
+			self::$engine_assets[ $relative ] = self::file_hash( $path );
 		}
-		sort( $names, SORT_STRING );
+		ksort( self::$engine_assets, SORT_STRING );
 
-		return $names;
+		return self::$engine_assets;
 	}
 
 	/**
