@@ -55,6 +55,7 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 == Changelog ==
 
 = 7.7.0 =
+* New: `wp bs prerender map status` and `wp bs prerender map prune` (and `Static_Prerender_Early_Serve::map_report()` and `prune_map()`) report and remove early-serve map entries whose site no longer exists or whose directory is gone, `wp bs prerender status` includes the report, deleting a multisite site removes its entries, and cache cleanup never collects the namespace an activated artifact is served from
 * New: graph builds rendered over HTTP record each route's dependencies, the loaded template, block templates and assets, files added through `blockstudio/render/dependencies`, and a synced page's source and layout files, so `build_plan()` re-renders exactly the routes whose files changed
 * New: `cache.namespaceGrace` sets how long a retired cache namespace is kept, counted from the first cleanup sweep that finds it retired instead of from its newest file, so stylesheets that CDN-cached pages still link survive an identity rotation for as long as the site needs
 * Fix: the static prerender shared signature hashes the sources of bundled UI assets instead of their compiled `_dist` files, so a build's first render no longer moves it between `build_plan()` and `artifact_entry()`, and every early-serve map write drops the map from the opcode cache, so a process that activates an artifact reads back the entry it installed even with `opcache.enable_cli` on

@@ -446,8 +446,8 @@ file: docs/docs/production/static-prerendering.md
 purpose: Serve anonymous pages as static HTML, optionally before WordPress boots.
 settings: performance/media/lazy, performance/profile, performance/staticPrerender/enabled
 hooks: blockstudio/cache/outcome, blockstudio/render/dependencies, blockstudio/settings/performance/staticPrerender/enabled, blockstudio/static_prerender/outcome, blockstudio/static_prerender/render_internal
-php: Blockstudio\Static_Prerender_Early_Serve, Blockstudio\Static_Prerender_Runtime, Static_Prerender_Batch_Renderer::is_rendering(), Static_Prerender_Batch_Renderer::parse_shard(), Static_Prerender_Batch_Renderer::render(), Static_Prerender_Early_Serve::install_artifact_entry(), Static_Prerender_Early_Serve::last_promotion(), Static_Prerender_Runtime::artifact_entry(), Static_Prerender_Runtime::build_plan(), Static_Prerender_Runtime::cache_root_path(), Static_Prerender_Runtime::garbage_collect(), Static_Prerender_Runtime::persist_built_response(), bs_media_image()
-cli: wp bs prerender purge, wp bs prerender status, wp bs prerender warm, wp bs teardown
+php: Blockstudio\Static_Prerender_Early_Serve, Blockstudio\Static_Prerender_Runtime, Static_Prerender_Batch_Renderer::is_rendering(), Static_Prerender_Batch_Renderer::parse_shard(), Static_Prerender_Batch_Renderer::render(), Static_Prerender_Early_Serve::install_artifact_entry(), Static_Prerender_Early_Serve::last_promotion(), Static_Prerender_Early_Serve::map_report(), Static_Prerender_Early_Serve::prune_map(), Static_Prerender_Runtime::artifact_entry(), Static_Prerender_Runtime::build_plan(), Static_Prerender_Runtime::cache_root_path(), Static_Prerender_Runtime::garbage_collect(), Static_Prerender_Runtime::persist_built_response(), bs_media_image()
+cli: wp bs prerender map, wp bs prerender purge, wp bs prerender status, wp bs prerender warm, wp bs teardown
 
 ### Caching
 route: /docs/production/caching
@@ -505,7 +505,7 @@ route: /docs/dev/cli
 file: docs/docs/dev/cli.md
 purpose: Manage Blockstudio blocks, pages, database, RPC, and cron from the command line via WP-CLI.
 settings: assets/enqueue, tailwind/enabled
-cli: wp bs assets list, wp bs blocks list, wp bs content pull, wp bs content push, wp bs content status, wp bs cron list, wp bs cron run, wp bs db create, wp bs db delete, wp bs db get, wp bs db list, wp bs db migrate, wp bs db schemas, wp bs db update, wp bs fields list, wp bs pages sync, wp bs prerender purge, wp bs prerender status, wp bs prerender warm, wp bs rpc call, wp bs rpc list, wp bs scss compile, wp bs settings get, wp bs settings list, wp bs tailwind cache, wp bs tailwind compile, wp bs teardown
+cli: wp bs assets list, wp bs blocks list, wp bs content pull, wp bs content push, wp bs content status, wp bs cron list, wp bs cron run, wp bs db create, wp bs db delete, wp bs db get, wp bs db list, wp bs db migrate, wp bs db schemas, wp bs db update, wp bs fields list, wp bs pages sync, wp bs prerender map, wp bs prerender purge, wp bs prerender status, wp bs prerender warm, wp bs rpc call, wp bs rpc list, wp bs scss compile, wp bs settings get, wp bs settings list, wp bs tailwind cache, wp bs tailwind compile, wp bs teardown
 
 ## Docs / Dev / Integrations
 

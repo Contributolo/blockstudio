@@ -391,8 +391,8 @@ this command works the queue down.
 wp bs prerender status
 ```
 
-Reports the active identity, files, bytes, graph records, queue state, and
-per-scope hit/miss/build/failure counters.
+Reports the active identity, files, bytes, graph records, queue state, the
+early-serve map report, and per-scope hit/miss/build/failure counters.
 
 ### Purge the cache
 
@@ -402,6 +402,21 @@ wp bs prerender purge
 
 Removes the current site's prerendered documents. The next anonymous request or
 warm pass rebuilds them.
+
+### Check and prune the early-serve map
+
+```bash
+wp bs prerender map status
+wp bs prerender map prune --dry-run
+wp bs prerender map prune
+```
+
+`map status` reports the installation-wide early-serve map: its entries and
+routes, route documents that are missing, `orphaned` entries whose site no
+longer exists, and `dead` entries whose directory is gone. `map prune` removes
+orphaned and dead entries and prints each removed entry with its reason;
+`--dry-run` prints the same report without writing. A map owned by another
+tool is never touched.
 
 ## Block Tag Migration
 

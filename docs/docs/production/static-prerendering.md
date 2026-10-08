@@ -212,10 +212,27 @@ signature is unchanged; interval passes enqueue only stale work.
 wp bs prerender warm
 wp bs prerender status
 wp bs prerender purge
+wp bs prerender map status
+wp bs prerender map prune --dry-run
 ```
 
 `status` reports the active identity, files, bytes, graph records, queue state,
-and per-scope hit/miss/build/failure counters. Observe individual response
+the early-serve map report, and per-scope hit/miss/build/failure counters.
+
+The early-serve map is shared by every site of an installation.
+`map status` (and `Static_Prerender_Early_Serve::map_report()`) lists entries
+that early serving can no longer use: `orphaned` entries whose site no longer
+exists and `dead` entries whose directory is gone, plus the number of `missing`
+route documents in the remaining entries. `map prune`
+(`Static_Prerender_Early_Serve::prune_map()`) removes orphaned and dead
+entries under the map lock and reports each with its reason; `--dry-run` only
+reports. Removing the last entry removes the map, the drop-in, and the
+`WP_CACHE` declaration. Deleting a site from a multisite network removes its
+entries right away, and cache cleanup never collects the namespace an
+activated artifact is served from, so entries only go dead when their files are
+removed by other means.
+
+Observe individual response
 outcomes with `blockstudio/static_prerender/outcome` and all shared cache
 outcomes with `blockstudio/cache/outcome`.
 

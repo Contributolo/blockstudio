@@ -823,13 +823,20 @@ final class Runtime_Cache {
 			return;
 		}
 
-		$now   = time();
-		$grace = self::namespace_grace();
+		$now    = time();
+		$grace  = self::namespace_grace();
+		$mapped = class_exists( Static_Prerender_Early_Serve::class )
+			? Static_Prerender_Early_Serve::mapped_directories()
+			: array();
 
 		foreach ( $siblings as $sibling ) {
 			$marker = $sibling . '/' . self::RETIRED_MARKER;
 
-			if ( $sibling === $current_namespace || self::is_current_namespace( $sibling ) ) {
+			if (
+				$sibling === $current_namespace ||
+				self::is_current_namespace( $sibling ) ||
+				self::holds_mapped_directory( $sibling, $mapped )
+			) {
 				if ( is_file( $marker ) ) {
 					@unlink( $marker ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions.unlink_unlink -- Internal cache marker; a concurrent sweep may have removed it.
 				}
@@ -875,6 +882,31 @@ final class Runtime_Cache {
 			$scope = basename( $scope_directory );
 
 			if ( sanitize_key( $scope ) === $scope && Runtime_Context::namespace( $scope ) === $name ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Whether a namespace holds a directory the early-serve map serves from.
+	 *
+	 * An activated artifact stays in the namespace that was current when it
+	 * was built. Once a runtime identity rotates, for example after a core
+	 * update, that namespace is no longer current, but the map keeps serving
+	 * from it until the next activation replaces the entry.
+	 *
+	 * @param string   $namespace_directory Namespace directory.
+	 * @param string[] $mapped              Directories the map serves from.
+	 *
+	 * @return bool Whether the namespace holds one of them.
+	 */
+	private static function holds_mapped_directory( string $namespace_directory, array $mapped ): bool {
+		$prefix = rtrim( wp_normalize_path( $namespace_directory ), '/' ) . '/';
+
+		foreach ( $mapped as $directory ) {
+			if ( str_starts_with( $directory . '/', $prefix ) ) {
 				return true;
 			}
 		}

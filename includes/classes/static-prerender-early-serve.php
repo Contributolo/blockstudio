@@ -210,6 +210,177 @@ final class Static_Prerender_Early_Serve {
 	}
 
 	/**
+	 * Report the owned map's entries that early serving can no longer use.
+	 *
+	 * An entry is orphaned when the site it was installed for no longer
+	 * exists, and dead when its directory is gone, so the drop-in can serve
+	 * none of its routes. `missing` counts routes of the remaining entries
+	 * whose document is gone. `owned` is false when there is no map or the
+	 * map belongs to another tool.
+	 *
+	 * @return array{owned:bool,entries:int,routes:int,missing:int,dead:string[],orphaned:string[]} Report.
+	 */
+	public static function map_report(): array {
+		$entries = self::owned_map_entries();
+		$report  = array(
+			'owned'    => null !== $entries && is_file( self::map_path() ),
+			'entries'  => is_array( $entries ) ? count( $entries ) : 0,
+			'routes'   => 0,
+			'missing'  => 0,
+			'dead'     => array(),
+			'orphaned' => array(),
+		);
+		$homes   = null;
+
+		foreach ( is_array( $entries ) ? $entries : array() as $key => $entry ) {
+			$problem = self::entry_problem( $key, $entry, $homes );
+			if ( null !== $problem ) {
+				$report[ $problem ][] = $key;
+				continue;
+			}
+
+			$directory = self::entry_directory( $entry );
+			foreach ( is_array( $entry['routes'] ?? null ) ? $entry['routes'] : array() as $route ) {
+				++$report['routes'];
+				if ( ! is_string( $route ) || ! is_file( $directory . '/' . $route . '.html' ) ) {
+					++$report['missing'];
+				}
+			}
+		}
+
+		return $report;
+	}
+
+	/**
+	 * Remove orphaned and dead entries from the owned map.
+	 *
+	 * Removing the last entry removes the map, the drop-in, and the
+	 * `WP_CACHE` declaration, as removing the last site does.
+	 *
+	 * @param bool $dry_run Report what would be removed without writing.
+	 *
+	 * @return array{owned:bool,kept:int,dropped:array<string,string>,written:bool} Outcome; `dropped` maps entry keys to `orphaned` or `dead`.
+	 */
+	public static function prune_map( bool $dry_run = false ): array {
+		$outcome     = array(
+			'owned'   => false,
+			'kept'    => 0,
+			'dropped' => array(),
+			'written' => false,
+		);
+		$content_dir = self::content_dir();
+		if ( null === $content_dir || ! is_dir( $content_dir ) || ! is_file( self::map_path() ) ) {
+			return $outcome;
+		}
+
+		self::with_exclusive_lock(
+			self::map_path() . '.lock',
+			static function () use ( &$outcome, $dry_run ): bool {
+				$entries = self::owned_map_entries();
+				if ( null === $entries ) {
+					return true;
+				}
+
+				$outcome['owned'] = true;
+				$homes            = null;
+				foreach ( $entries as $key => $entry ) {
+					$problem = self::entry_problem( $key, $entry, $homes );
+					if ( null !== $problem ) {
+						$outcome['dropped'][ $key ] = $problem;
+						unset( $entries[ $key ] );
+					}
+				}
+				$outcome['kept'] = count( $entries );
+
+				if ( $dry_run || array() === $outcome['dropped'] ) {
+					return true;
+				}
+
+				$outcome['written'] = self::replace_entries( $entries );
+
+				return true;
+			}
+		);
+
+		return $outcome;
+	}
+
+	/**
+	 * Remove the map entries of a site deleted from the network.
+	 *
+	 * Runs on `wp_delete_site`, so a deleted site's routes stop being served
+	 * before WordPress even when no deploy or cleanup ever runs for it again.
+	 *
+	 * @param mixed $site Deleted site.
+	 *
+	 * @return void
+	 */
+	public static function remove_deleted_site( mixed $site ): void {
+		if ( ! $site instanceof \WP_Site ) {
+			return;
+		}
+
+		$content_dir = self::content_dir();
+		if (
+			null === $content_dir ||
+			! is_dir( $content_dir ) ||
+			! self::file_contains_marker( self::map_path(), self::MAP_MARKER )
+		) {
+			return;
+		}
+
+		$site_id = (int) $site->blog_id;
+		$deleted = self::site_for_home( 'http://' . $site->domain . $site->path );
+		$key     = null === $deleted ? '' : $deleted['key'];
+
+		self::with_exclusive_lock(
+			self::map_path() . '.lock',
+			static function () use ( $site_id, $key ): bool {
+				$entries = self::owned_map_entries();
+				if ( null === $entries ) {
+					return true;
+				}
+
+				$removed = false;
+				foreach ( $entries as $entry_key => $entry ) {
+					$entry_site_id = is_numeric( $entry['site_id'] ?? null ) ? (int) $entry['site_id'] : 0;
+					if ( ( $site_id > 0 && $entry_site_id === $site_id ) || $entry_key === $key ) {
+						unset( $entries[ $entry_key ] );
+						$removed = true;
+					}
+				}
+
+				return ! $removed || self::replace_entries( $entries );
+			}
+		);
+	}
+
+	/**
+	 * Directories the owned map serves from.
+	 *
+	 * Cache namespace collection keeps every namespace holding one of these,
+	 * so an activated artifact is never collected from under its map entry.
+	 *
+	 * @return string[] Normalized directories.
+	 */
+	public static function mapped_directories(): array {
+		$directories = array();
+
+		foreach ( self::installed_map_entries() as $entry ) {
+			foreach ( array( 'dir', 'runtime_dir' ) as $field ) {
+				$directory = is_scalar( $entry[ $field ] ?? null )
+					? rtrim( wp_normalize_path( (string) $entry[ $field ] ), '/' )
+					: '';
+				if ( '' !== $directory ) {
+					$directories[ $directory ] = true;
+				}
+			}
+		}
+
+		return array_keys( $directories );
+	}
+
+	/**
 	 * Activate a complete dependency-graph artifact atomically.
 	 *
 	 * Every route is validated before the map rename makes it visible. Existing
@@ -536,7 +707,17 @@ PHP;
 			return null;
 		}
 
-		$home  = (string) home_url( '/' );
+		return self::site_for_home( (string) home_url( '/' ) );
+	}
+
+	/**
+	 * Resolve the map identity of one site home URL.
+	 *
+	 * @param string $home Home URL.
+	 *
+	 * @return array{host:string,home_path:string,key:string}|null Site.
+	 */
+	private static function site_for_home( string $home ): ?array {
 		$parts = wp_parse_url( $home );
 		if ( ! is_array( $parts ) || ! is_string( $parts['host'] ?? null ) || '' === $parts['host'] ) {
 			return null;
@@ -967,6 +1148,99 @@ PHP;
 				@unlink( $file ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions.unlink_unlink -- Internal cache files must not invoke media-deletion filters.
 			}
 		}
+	}
+
+	/**
+	 * Classify an entry that early serving can no longer use.
+	 *
+	 * @param string                  $key   Entry key.
+	 * @param array<string,mixed>     $entry Entry.
+	 * @param array<string,true>|null $homes Map keys of every site home, resolved on first use.
+	 *
+	 * @return string|null `orphaned`, `dead`, or null for a usable entry.
+	 */
+	private static function entry_problem( string $key, array $entry, ?array &$homes ): ?string {
+		$site_id = is_numeric( $entry['site_id'] ?? null ) ? (int) $entry['site_id'] : 0;
+
+		if ( $site_id > 0 ) {
+			$exists = function_exists( 'is_multisite' ) && is_multisite()
+				? null !== get_site( $site_id )
+				: (int) get_current_blog_id() === $site_id;
+		} else {
+			$homes  = $homes ?? self::site_home_keys();
+			$exists = isset( $homes[ $key ] );
+		}
+
+		if ( ! $exists ) {
+			return 'orphaned';
+		}
+
+		$directory = self::entry_directory( $entry );
+
+		return '' === $directory || ! is_dir( $directory ) ? 'dead' : null;
+	}
+
+	/**
+	 * Map keys of every site home in this installation.
+	 *
+	 * @return array<string,true> Keys.
+	 */
+	private static function site_home_keys(): array {
+		$homes = array();
+
+		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
+			foreach ( get_sites(
+				array(
+					'number' => 0,
+					'fields' => 'ids',
+				)
+			) as $site_id ) {
+				$site = self::site_for_home( (string) get_home_url( (int) $site_id, '/' ) );
+				if ( null !== $site ) {
+					$homes[ $site['key'] ] = true;
+				}
+			}
+
+			return $homes;
+		}
+
+		$site = self::current_site();
+		if ( null !== $site ) {
+			$homes[ $site['key'] ] = true;
+		}
+
+		return $homes;
+	}
+
+	/**
+	 * Read an entry's directory.
+	 *
+	 * @param array<string,mixed> $entry Entry.
+	 *
+	 * @return string Normalized directory, or an empty string.
+	 */
+	private static function entry_directory( array $entry ): string {
+		return is_scalar( $entry['dir'] ?? null )
+			? rtrim( wp_normalize_path( (string) $entry['dir'] ), '/' )
+			: '';
+	}
+
+	/**
+	 * Write the remaining entries, or remove the map and shared artifacts.
+	 *
+	 * @param array<string,array<string,mixed>> $entries Remaining entries.
+	 *
+	 * @return bool Whether the map now holds exactly these entries.
+	 */
+	private static function replace_entries( array $entries ): bool {
+		if ( array() !== $entries ) {
+			return self::write_map( $entries );
+		}
+
+		self::remove_owned_map();
+		self::remove_shared_artifacts();
+
+		return ! is_file( self::map_path() );
 	}
 
 	/**

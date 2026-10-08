@@ -144,6 +144,10 @@ final class Static_Prerender_Runtime {
 		self::$registered = true;
 		self::register_wp_cli_commands();
 
+		// A deleted site's entry lives in the network-wide map, whatever the
+		// settings of the site that deletes it.
+		add_action( 'wp_delete_site', array( Static_Prerender_Early_Serve::class, 'remove_deleted_site' ) );
+
 		// Blockstudio boots from a plugin or from the theme's Composer autoload,
 		// before the theme's functions.php has added its settings filters, so a
 		// theme that switches the feature off, for example per environment,
@@ -213,6 +217,7 @@ final class Static_Prerender_Runtime {
 		remove_action( 'admin_init', array( Static_Prerender_Early_Serve::class, 'maybe_sync' ), 50 );
 		remove_action( self::CRON_HOOK, array( self::class, 'run_cron_warmer' ) );
 		remove_action( 'after_setup_theme', array( self::class, 'register_features' ), PHP_INT_MAX );
+		remove_action( 'wp_delete_site', array( Static_Prerender_Early_Serve::class, 'remove_deleted_site' ) );
 		self::unschedule_cron();
 		self::reset_request_cache();
 		Static_Prerender_Early_Serve::remove_current_site();
@@ -1454,6 +1459,7 @@ final class Static_Prerender_Runtime {
 			'bytes'       => $bytes,
 			'records'     => count( self::all_index_records() ),
 			'queue'       => self::queue_stats(),
+			'map'         => Static_Prerender_Early_Serve::map_report(),
 			'diagnostics' => Runtime_Cache::diagnostics(),
 		);
 	}
@@ -2684,6 +2690,32 @@ final class Static_Prerender_Runtime {
 			static function (): void {
 				\WP_CLI::line( (string) wp_json_encode( self::status(), JSON_PRETTY_PRINT ) );
 			}
+		);
+		\WP_CLI::add_command(
+			'bs prerender map status',
+			static function (): void {
+				\WP_CLI::line( (string) wp_json_encode( Static_Prerender_Early_Serve::map_report(), JSON_PRETTY_PRINT ) );
+			},
+			array( 'shortdesc' => 'Report early-serve map entries whose site or directory is gone.' )
+		);
+		\WP_CLI::add_command(
+			'bs prerender map prune',
+			static function ( array $args, array $assoc_args ): void {
+				unset( $args );
+				$outcome = Static_Prerender_Early_Serve::prune_map( ! empty( $assoc_args['dry-run'] ) );
+				\WP_CLI::line( (string) wp_json_encode( $outcome, JSON_PRETTY_PRINT ) );
+			},
+			array(
+				'shortdesc' => 'Remove early-serve map entries whose site or directory is gone.',
+				'synopsis'  => array(
+					array(
+						'type'        => 'flag',
+						'name'        => 'dry-run',
+						'description' => 'Report what would be removed without writing the map.',
+						'optional'    => true,
+					),
+				),
+			)
 		);
 	}
 

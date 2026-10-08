@@ -127,11 +127,13 @@ A namespace retires when the runtime identity moves, for example after a
 WordPress core update. The first cleanup sweep that finds it retired writes a
 `.retired` marker into it, and the tree is collected once `cache.namespaceGrace`
 seconds (a day by default) have passed since then. A tree that is written
-again in the meantime starts its grace over, and the current namespace of
-every scope is never collected. Pages cached outside WordPress keep linking
-the content-hashed stylesheets they were rendered with, so a site that serves
-`tailwind.output: "link"` pages through a CDN or long browser cache should
-raise the grace to the longest time such a copy can live:
+again in the meantime starts its grace over, and neither the current namespace
+of a scope nor a namespace the early-serve map still serves an activated
+artifact from is collected; the grace of the latter starts once the next
+activation moves its map entry elsewhere. Pages cached outside WordPress keep
+linking the content-hashed stylesheets they were rendered with, so a site that
+serves `tailwind.output: "link"` pages through a CDN or long browser cache
+should raise the grace to the longest time such a copy can live:
 
 ```json title="blockstudio.json"
 {
