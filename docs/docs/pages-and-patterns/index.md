@@ -86,6 +86,12 @@ Standard HTML elements are automatically converted to the corresponding WordPres
 | `<code>` | `core/code` |
 | `<pre>` | `core/preformatted` |
 
+Lists keep their structure. A `<ul>` or `<ol>` inside an `<li>` becomes a
+`core/list` inner block of that `core/list-item`, the shape the editor saves,
+so lists nest to any depth. A `class` on a list or an item becomes its
+`className`, which is how a block style such as `is-style-checks` is set from a
+page file; `<block name="core/list" className="...">` does the same.
+
 ### Media
 
 | HTML | Block |
