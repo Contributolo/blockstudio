@@ -59,8 +59,10 @@ add_filter( 'blockstudio/parser/element_mapping', function( $mapping ) {
 ```
 
 If `<p>` maps to a registered non-core Blockstudio block with a `content`
-richtext attribute, simple inner text is copied to that attribute. Nested block
-tags or mapped child elements keep the normal inner-block parsing behavior.
+richtext attribute, its inner HTML is copied to that attribute, including inline
+tags such as `code` and `img` that are also element-mapped. A paragraph whose
+only child is an image becomes the block `<img>` maps to. Nested block tags or
+block-level HTML keep the normal inner-block parsing behavior.
 
 ## Pages
 

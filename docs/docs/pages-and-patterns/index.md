@@ -281,11 +281,15 @@ With this filter active, every `<h1>` in your templates will produce a `custom/h
 
 This is useful when your theme or plugin provides custom block types that should replace the defaults across all page and pattern templates.
 
-For simple `<p>` mappings, Blockstudio can route inner text directly into a
+For simple `<p>` mappings, Blockstudio can route inner HTML directly into a
 registered non-core Blockstudio block's `content` richtext attribute. The target
 block must declare an attribute with `id: "content"` and `type: "richtext"`.
-Nested block tags, mapped child elements, and block-level HTML continue to parse
-as inner blocks.
+Inline formatting (`a`, `b`, `br`, `code`, `del`, `em`, `i`, `img`, `ins`,
+`mark`, `s`, `small`, `span`, `strong`, `sub`, `sup`, `u`) stays in the routed
+value even when the same tag is element-mapped, as `code` and `img` are by
+default. A paragraph whose only child is an image becomes the block `<img>` maps
+to, which is what Markdown produces for a standalone image. Nested block tags
+and block-level HTML continue to parse as inner blocks.
 
 Mapping values may also be callables when the target block depends on element
 attributes:

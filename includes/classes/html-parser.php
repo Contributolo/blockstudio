@@ -42,6 +42,7 @@ class Html_Parser {
 	use More_Renderer;
 	use Accordion_Renderer;
 	use Query_Renderer;
+	use Shortcode_Renderer;
 
 	/**
 	 * Parse HTML content to serialized WordPress blocks.

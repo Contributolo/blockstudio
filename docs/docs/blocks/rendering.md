@@ -532,6 +532,9 @@ handles raw HTML elements (`<p>`, `<div>`, `<h1>`, etc.), mapping them to
 their corresponding WordPress core blocks.
 
 When an element mapping points `<p>` to a registered non-core Blockstudio block
-that declares a `content` richtext attribute, simple inner text is routed into
-that `content` attribute automatically. Nested block tags, mapped child
-elements, or block-level HTML still fall back to normal inner-block parsing.
+that declares a `content` richtext attribute, inner HTML is routed into that
+`content` attribute automatically, including inline tags such as `code` and
+`img` that are element-mapped at block level. A paragraph whose only child is an
+image becomes the block `<img>` maps to. Nested block tags or block-level HTML
+still fall back to normal inner-block parsing. `<block name="core/shortcode">`
+keeps its shortcode text as the block's content.

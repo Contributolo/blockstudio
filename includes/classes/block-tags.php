@@ -84,6 +84,7 @@ class Block_Tags {
 			'core/accordion-panel'   => array( $parser, 'render_accordion_panel' ),
 			'core/query'             => array( $parser, 'render_query' ),
 			'core/comments'          => array( $parser, 'render_comments' ),
+			'core/shortcode'         => array( $parser, 'render_shortcode' ),
 		);
 
 		$renderers = apply_filters( 'blockstudio/block_tags/builders', $renderers, $parser );
@@ -1308,14 +1309,13 @@ class Block_Tags {
 	/**
 	 * Whether a mapped element's inner HTML should become a content attribute.
 	 *
-	 * @param string                        $html_tag          HTML tag name.
-	 * @param string                        $block_name        Target block name.
-	 * @param array                         $attrs             Parsed attributes.
-	 * @param string                        $inner             Inner HTML.
-	 * @param array                         $registered_blocks Registered Blockstudio blocks.
-	 * @param array<string,string|callable> $map               HTML tag map.
-	 * @param array<string,string>          $aliases           Custom tag aliases.
-	 * @param array<string,array<string>>   $prefixes          Prefix namespace map.
+	 * @param string                      $html_tag          HTML tag name.
+	 * @param string                      $block_name        Target block name.
+	 * @param array                       $attrs             Parsed attributes.
+	 * @param string                      $inner             Inner HTML.
+	 * @param array                       $registered_blocks Registered Blockstudio blocks.
+	 * @param array<string,string>        $aliases           Custom tag aliases.
+	 * @param array<string,array<string>> $prefixes          Prefix namespace map.
 	 *
 	 * @return bool True when content should be routed.
 	 */
@@ -1325,7 +1325,6 @@ class Block_Tags {
 		array $attrs,
 		string $inner,
 		array $registered_blocks,
-		array $map,
 		array $aliases,
 		array $prefixes
 	): bool {
@@ -1343,7 +1342,7 @@ class Block_Tags {
 			return false;
 		}
 
-		return ! self::inner_content_has_nested_block_tags( $inner, $map, $aliases, $prefixes, $registered_blocks );
+		return ! self::inner_content_has_nested_block_tags( $inner, $aliases, $prefixes );
 	}
 
 	/**
@@ -1384,20 +1383,21 @@ class Block_Tags {
 	/**
 	 * Whether routed richtext content contains nested block-level structures.
 	 *
-	 * @param string                        $inner             Inner HTML.
-	 * @param array<string,string|callable> $map               HTML tag map.
-	 * @param array<string,string>          $aliases           Custom tag aliases.
-	 * @param array<string,array<string>>   $prefixes          Prefix namespace map.
-	 * @param array                         $registered_blocks Registered Blockstudio blocks.
+	 * Inline formatting stays part of the richtext value even when the same
+	 * tag is element-mapped at block level, as `code` and `img` are by
+	 * default: a custom block keeps no raw inner HTML, so treating
+	 * `<p>Run <code>x</code></p>` as nested blocks stored an empty paragraph.
 	 *
-	 * @return bool True when nested blocks or mapped elements are present.
+	 * @param string                      $inner    Inner HTML.
+	 * @param array<string,string>        $aliases  Custom tag aliases.
+	 * @param array<string,array<string>> $prefixes Prefix namespace map.
+	 *
+	 * @return bool True when nested blocks or block-level elements are present.
 	 */
 	private static function inner_content_has_nested_block_tags(
 		string $inner,
-		array $map,
 		array $aliases,
-		array $prefixes,
-		array $registered_blocks
+		array $prefixes
 	): bool {
 		if (
 			false !== strpos( $inner, '<bs:' )
@@ -1420,6 +1420,7 @@ class Block_Tags {
 			'del'    => true,
 			'em'     => true,
 			'i'      => true,
+			'img'    => true,
 			'ins'    => true,
 			'mark'   => true,
 			's'      => true,
@@ -1432,18 +1433,47 @@ class Block_Tags {
 		);
 
 		foreach ( $matches[1] as $tag ) {
-			$tag = strtolower( $tag );
-
-			if ( isset( $map[ $tag ] ) ) {
-				return true;
-			}
-
-			if ( ! isset( $inline_tags[ $tag ] ) ) {
+			if ( ! isset( $inline_tags[ strtolower( $tag ) ] ) ) {
 				return true;
 			}
 		}
 
 		return false;
+	}
+
+	/**
+	 * Parse a paragraph whose only child is an image as the image itself.
+	 *
+	 * Markdown renders a standalone image as `<p><img></p>`, which is an image,
+	 * not a paragraph that happens to hold one, so it goes through the `img`
+	 * mapping. Core paragraphs keep their inner HTML and are left alone.
+	 *
+	 * @param string                        $html_tag   HTML tag name.
+	 * @param string                        $block_name Target block name.
+	 * @param array                         $attrs      Parsed attributes.
+	 * @param string                        $inner      Inner HTML.
+	 * @param array<string,string|callable> $map        HTML tag map.
+	 *
+	 * @return array|null Blocks for the image, or null when the rule does not apply.
+	 */
+	private static function parse_image_only_paragraph( string $html_tag, string $block_name, array $attrs, string $inner, array $map ): ?array {
+		if (
+			'p' !== $html_tag
+			|| str_starts_with( $block_name, 'core/' )
+			|| isset( $attrs['content'] )
+			|| ! isset( $map['img'] )
+		) {
+			return null;
+		}
+
+		$inner = trim( $inner );
+		if ( ! preg_match( '/^<img[\s\/>]/i', $inner ) || self::find_closing_angle( $inner, 4 ) !== strlen( $inner ) - 1 ) {
+			return null;
+		}
+
+		$blocks = self::parse_all_elements( $inner );
+
+		return 1 === count( $blocks ) ? $blocks : null;
 	}
 
 	/**
@@ -1672,9 +1702,17 @@ class Block_Tags {
 							$attrs['content'] = trim( $inner );
 							$inner_for_block  = '';
 						}
-					} elseif ( self::should_route_inner_content_to_attribute( $html_tag, $block_name, $attrs, $inner, $registered_blocks, $map, $aliases, $prefixes ) ) {
-						$attrs['content'] = trim( $inner );
-						$inner_for_block  = '';
+					} else {
+						$image_blocks = self::parse_image_only_paragraph( $html_tag, $block_name, $attrs, $inner, $map );
+						if ( null !== $image_blocks ) {
+							array_push( $blocks, ...$image_blocks );
+							continue;
+						}
+
+						if ( self::should_route_inner_content_to_attribute( $html_tag, $block_name, $attrs, $inner, $registered_blocks, $aliases, $prefixes ) ) {
+							$attrs['content'] = trim( $inner );
+							$inner_for_block  = '';
+						}
 					}
 
 					// Ordered list.
