@@ -1265,6 +1265,11 @@ class Block_Tags {
 		'h6'         => 'core/heading',
 		'div'        => 'core/group',
 		'section'    => 'core/group',
+		'main'       => 'core/group',
+		'header'     => 'core/group',
+		'footer'     => 'core/group',
+		'article'    => 'core/group',
+		'aside'      => 'core/group',
 		'blockquote' => 'core/quote',
 		'hr'         => 'core/separator',
 		'img'        => 'core/image',
@@ -1286,14 +1291,32 @@ class Block_Tags {
 	 * @var array<string, bool>
 	 */
 	private static array $html_container_tags = array(
+		'article'    => true,
+		'aside'      => true,
 		'blockquote' => true,
 		'details'    => true,
 		'div'        => true,
 		'figure'     => true,
+		'footer'     => true,
+		'header'     => true,
+		'main'       => true,
 		'ol'         => true,
 		'section'    => true,
 		'table'      => true,
 		'ul'         => true,
+	);
+
+	/**
+	 * Sectioning elements a core/group keeps as its own element.
+	 *
+	 * @var array<string, bool>
+	 */
+	private static array $group_element_tags = array(
+		'article' => true,
+		'aside'   => true,
+		'footer'  => true,
+		'header'  => true,
+		'main'    => true,
 	);
 
 	/**
@@ -1747,6 +1770,10 @@ class Block_Tags {
 							$attrs['content'] = trim( $inner );
 							$inner_for_block  = '';
 						}
+					}
+
+					if ( 'core/group' === $block_name && isset( self::$group_element_tags[ $html_tag ] ) && ! isset( $attrs['tagName'] ) ) {
+						$attrs['tagName'] = $html_tag;
 					}
 
 					// Ordered list.

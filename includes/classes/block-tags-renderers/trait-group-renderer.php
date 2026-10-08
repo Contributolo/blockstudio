@@ -22,6 +22,19 @@ trait Group_Renderer {
 	 */
 	public function render_group( array $attrs, string $inner_content ): array {
 		$inner_blocks = Block_Tags::parse_inner_blocks( $inner_content );
+		$tag          = 'div';
+
+		// The element core/group saves, as the editor's HTML element setting
+		// offers it; anything else stays a div.
+		if ( isset( $attrs['tagName'] ) ) {
+			$tag_name = is_string( $attrs['tagName'] ) ? strtolower( trim( $attrs['tagName'] ) ) : '';
+			if ( in_array( $tag_name, array( 'header', 'main', 'section', 'article', 'aside', 'footer' ), true ) ) {
+				$tag              = $tag_name;
+				$attrs['tagName'] = $tag_name;
+			} elseif ( 'div' !== $tag_name ) {
+				unset( $attrs['tagName'] );
+			}
+		}
 
 		// Handle layout attribute (for row/stack variants).
 		$class = 'wp-block-group';
@@ -37,17 +50,17 @@ trait Group_Renderer {
 			}
 		}
 
-		$content = array( '<div class="' . $class . '">' );
+		$content = array( '<' . $tag . ' class="' . $class . '">' );
 		foreach ( $inner_blocks as $block ) {
 			$content[] = null;
 		}
-		$content[] = '</div>';
+		$content[] = '</' . $tag . '>';
 
 		return array(
 			'blockName'    => 'core/group',
 			'attrs'        => $attrs,
 			'innerBlocks'  => $inner_blocks,
-			'innerHTML'    => '<div class="' . $class . '"></div>',
+			'innerHTML'    => '<' . $tag . ' class="' . $class . '"></' . $tag . '>',
 			'innerContent' => $content,
 		);
 	}

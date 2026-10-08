@@ -106,6 +106,7 @@ page file; `<block name="core/list" className="...">` does the same.
 | HTML | Block |
 |------|-------|
 | `<div>`, `<section>` | `core/group` |
+| `<main>`, `<header>`, `<footer>`, `<article>`, `<aside>` | `core/group` that keeps the element as its `tagName` |
 | `<hr>` | `core/separator` |
 | `<details>` | `core/details` |
 | `<table>` | `core/table` |

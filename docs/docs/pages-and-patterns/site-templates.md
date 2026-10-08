@@ -168,9 +168,13 @@ Site Template sources use the same parser as pages and patterns:
 </div>
 ```
 
-You can use:
+The `<main>` element becomes a `core/group` block that renders as `<main>`,
+and its children, including the `core/post-content` block tag, become its
+inner blocks. You can use:
 
-- standard HTML elements such as `<h1>`, `<p>`, `<ul>`, and `<div>`
+- standard HTML elements such as `<h1>`, `<p>`, `<ul>`, `<div>`, and the
+  sectioning elements `<main>`, `<header>`, `<footer>`, `<article>`, and
+  `<aside>`
 - `<block name="namespace/block">`
 - `<bs:namespace-block>`
 - configured block tag prefixes
