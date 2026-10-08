@@ -55,6 +55,7 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 == Changelog ==
 
 = 7.7.0 =
+* New: the PHPStan block tag rule checks prefix and alias tags, page sources below `pages/` including the HTML elements a project maps to blocks (declared in `phpstan.blockTags.elements`), page layouts, bundled UI blocks, and optionally other project PHP, tries every hyphen of a `<bs:>` tag the way the runtime does, accepts the global attributes Blockstudio forwards, and reports an undeclared `class` with its own identifier
 * New: `wp bs prerender map status` and `wp bs prerender map prune` (and `Static_Prerender_Early_Serve::map_report()` and `prune_map()`) report and remove early-serve map entries whose site no longer exists or whose directory is gone, `wp bs prerender status` includes the report, deleting a multisite site removes its entries, and cache cleanup never collects the namespace an activated artifact is served from
 * New: graph builds rendered over HTTP record each route's dependencies, the loaded template, block templates and assets, files added through `blockstudio/render/dependencies`, and a synced page's source and layout files, so `build_plan()` re-renders exactly the routes whose files changed
 * New: `cache.namespaceGrace` sets how long a retired cache namespace is kept, counted from the first cleanup sweep that finds it retired instead of from its newest file, so stylesheets that CDN-cached pages still link survive an identity rotation for as long as the site needs

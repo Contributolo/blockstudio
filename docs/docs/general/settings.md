@@ -618,6 +618,7 @@ the generated hook runs and how it stays in sync.
 | `roots`         | array   | `["."]`   | Theme roots analyzed by the canonical command                          |
 | `excludePaths`  | array   | `[]`      | Additional scanner exclusions relative to each configured root         |
 | `maxFiles`      | integer | `10000`   | Maximum number of files inspected by the theme scanner                 |
+| `blockTags`     | object  | `{}`      | Element mappings, tag aliases, and `scanPhp` for the [block tag rule](/docs/dev/phpstan#block-tag-validation) |
 
 These settings drive the canonical `blockstudio-phpstan` command. See
 [PHPStan](/docs/dev/phpstan) for presets, layers, and adoption.

@@ -117,6 +117,11 @@ class Settings {
 			'roots'         => array( '.' ),
 			'excludePaths'  => array(),
 			'maxFiles'      => 10000,
+			'blockTags'     => array(
+				'elements' => array(),
+				'aliases'  => array(),
+				'scanPhp'  => false,
+			),
 		),
 		'themeDefaults' => array(
 			'titleTag'                 => false,
@@ -512,6 +517,8 @@ class Settings {
 	private function report_unknown_keys( array $value, array $known, string $path, string $filename ): void {
 		$freeform = array(
 			'blockTags/prefixes',
+			'phpstan/blockTags/elements',
+			'phpstan/blockTags/aliases',
 			'blockEditor/blocks/categories/rename',
 			'blockEditor/patterns/categories/rename',
 			'editor/assets',

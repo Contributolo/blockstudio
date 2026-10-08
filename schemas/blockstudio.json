@@ -231,6 +231,91 @@
           "default": 10000,
           "description": "Maximum number of files inspected by the theme scanner.",
           "example": 10000
+        },
+        "blockTags": {
+          "type": "object",
+          "description": "How the block tag rule reads this project's tags. The runtime registers aliases and element mappings through PHP filters that static analysis cannot evaluate, so the analysis reads them from here.",
+          "properties": {
+            "elements": {
+              "type": "object",
+              "default": {},
+              "propertyNames": {
+                "pattern": "^[a-z][a-z0-9]*$"
+              },
+              "additionalProperties": {
+                "oneOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[a-z0-9-]+/[a-z0-9-]+$"
+                  },
+                  {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "string",
+                          "pattern": "^[a-z0-9-]+/[a-z0-9-]+$"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "attribute": {
+                              "type": "string",
+                              "minLength": 1,
+                              "description": "Element attribute whose presence selects this block."
+                            },
+                            "block": {
+                              "type": "string",
+                              "pattern": "^[a-z0-9-]+/[a-z0-9-]+$",
+                              "description": "Block name."
+                            }
+                          },
+                          "required": [
+                            "block"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              "description": "HTML elements that page sources map to blocks, mirroring the blockstudio/parser/element_mapping filter. A value is a block name, or a list of rules tried in order: the first rule whose attribute the element carries wins, and a plain block name always matches.",
+              "example": {
+                "section": "theme/section",
+                "div": [
+                  {
+                    "attribute": "width",
+                    "block": "theme/row"
+                  },
+                  "theme/div"
+                ]
+              }
+            },
+            "aliases": {
+              "type": "object",
+              "default": {},
+              "propertyNames": {
+                "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)+$"
+              },
+              "additionalProperties": {
+                "type": "string",
+                "pattern": "^[a-z0-9-]+/[a-z0-9-]+$"
+              },
+              "description": "Alias tags registered through the blockstudio/block_tags/tag_aliases filter, mapped to block names.",
+              "example": {
+                "theme-button": "bsui/button"
+              }
+            },
+            "scanPhp": {
+              "type": "boolean",
+              "default": false,
+              "description": "Also check block tags written in project PHP outside block templates and page sources, such as component markup in modules. Unknown blocks are not reported there.",
+              "example": true
+            }
+          },
+          "additionalProperties": false
         }
       },
       "additionalProperties": false

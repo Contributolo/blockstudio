@@ -725,6 +725,50 @@ class SettingsTest extends TestCase {
 		}
 	}
 
+	public function test_phpstan_block_tag_maps_are_not_reported_as_unknown_settings(): void {
+		$path = (string) tempnam( sys_get_temp_dir(), 'blockstudio-settings-block-tags' );
+		$this->add_filter( 'blockstudio/settings/path', static fn(): string => $path );
+
+		try {
+			file_put_contents(
+				$path,
+				(string) wp_json_encode(
+					array(
+						'phpstan' => array(
+							'blockTags' => array(
+								'elements' => array(
+									'section' => 'theme/section',
+									'div'     => array(
+										array(
+											'attribute' => 'width',
+											'block'     => 'theme/row',
+										),
+										'theme/div',
+									),
+								),
+								'aliases'  => array( 'theme-button' => 'bsui/button' ),
+								'scanPhp'  => true,
+							),
+						),
+					)
+				)
+			);
+			Settings::reload();
+
+			$this->assertSame( array(), Settings::errors() );
+			$this->assertTrue( Settings::get_bool( 'phpstan/blockTags/scanPhp' ) );
+
+			file_put_contents( $path, '{"phpstan":{"blockTags":{"element":{}}}}' );
+			Settings::reload();
+
+			$this->assertSame( 1, count( Settings::errors() ) );
+			$this->assertStringContainsString( 'phpstan/blockTags/element', Settings::errors()[0] );
+		} finally {
+			unlink( $path );
+			Settings::reload();
+		}
+	}
+
 	public function test_invalid_json_reports_an_error_and_file_changes_reload_automatically(): void {
 		$path = wp_tempnam( 'blockstudio-settings-reload' );
 		$this->assertIsString( $path );

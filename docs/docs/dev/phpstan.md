@@ -118,8 +118,13 @@ Blade templates are scanned the same way.
 
 ### Block tag validation
 
-Both `<block>` and `<bs:>` tag syntaxes are validated across PHP, Twig, and
-Blade templates.
+Block tags are validated where Blockstudio reads them: `<bs:>` and `<block>`
+tags, the prefix tags configured in `blockTags.prefixes` (such as `<acme-card>`,
+resolved in namespace order like the runtime), and alias tags, in PHP, Twig, and
+Blade block templates and in page layouts. Page sources below `pages/`
+(`index.php`, `index.html`, `index.twig`, `index.blade.php`) are checked as
+well, including the HTML elements the project maps to blocks. Bundled UI blocks
+are known when `ui.enabled` is on.
 
 ```html
 <bs:mytheme-hero title="Hello" />
@@ -128,12 +133,52 @@ Blade templates.
 <!-- Error: unknown block -->
 <bs:mytheme-hero title="Hi" badattr="" />
 <!-- Error: unknown attribute -->
+<bs:mytheme-hero class="wide" />
+<!-- Error: class is dropped unless the block declares a class field -->
+<bs:mytheme-hero id="intro" aria-label="Intro" data-x="1" />
+<!-- OK: forwarded to the root element -->
 <block name="core/separator" />
 <!-- OK (core blocks always valid) -->
 ```
 
-Attributes with `data-*` and `html-*` prefixes are pass-through and never
-checked.
+An attribute is accepted when the block declares it as a field (including
+custom fields and the fields a block-typed field forwards under its
+`idStructure`), or when Blockstudio forwards it to the block's root element:
+`data-*`, `aria-*`, `id`, `style`, `role`, `title`, `lang`, `dir`, `hidden`,
+and `tabindex`. In templates every `html-*` attribute passes through; in page
+sources an `html-` prefix only names one of the forwarded attributes. Anything
+else, an undeclared `class` above all, is reported, because Blockstudio stores
+it and never renders it.
+
+The runtime registers element mappings and tag aliases in PHP filters, which
+static analysis cannot evaluate, so the analysis reads them from
+`blockstudio.json`. `scanPhp` also checks tags in other project PHP, such as
+component markup in modules, without reporting unknown blocks there:
+
+```json title="blockstudio.json"
+{
+  "phpstan": {
+    "blockTags": {
+      "elements": {
+        "section": "theme/section",
+        "h2": "theme/heading",
+        "div": [
+          { "attribute": "width", "block": "theme/row" },
+          "theme/div"
+        ]
+      },
+      "aliases": { "theme-button": "bsui/button" },
+      "scanPhp": true
+    }
+  }
+}
+```
+
+An element maps to a block name or to rules tried in order: the first rule
+whose attribute the element carries wins, and a plain block name always
+matches. Elements a project does not map keep their core block and are not
+checked. Diagnostics use `blockstudio.blockTag.unknown`,
+`blockstudio.blockTag.attribute`, and `blockstudio.blockTag.class`.
 
 ### Database record typing
 
