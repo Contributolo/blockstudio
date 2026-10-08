@@ -13,6 +13,11 @@
       ],
       "description": "The name of the block to extend."
     },
+    "priority": {
+      "type": "number",
+      "default": 0,
+      "description": "Order in which the extension's fields render in the block inspector. Extensions with a higher priority render later. Same as blockstudio.extend.priority."
+    },
     "blockstudio": {
       "type": [
         "object",
@@ -21,14 +26,27 @@
       "description": "Blockstudio specific settings.",
       "properties": {
         "extend": {
-          "type": "object",
-          "description": "The extend block definition.",
+          "type": [
+            "boolean",
+            "object"
+          ],
+          "description": "Marks the file as an extension. Either true, or an object that can set the priority.",
           "properties": {
             "priority": {
               "type": "number",
-              "description": "In what spot the extension should be rendered in the sidebar."
+              "description": "Order in which the extension's fields render in the block inspector. Extensions with a higher priority render later."
             }
           }
+        },
+        "group": {
+          "type": "string",
+          "default": "settings",
+          "description": "Block inspector group the extension's fields render in, such as settings, styles, or advanced.",
+          "examples": [
+            "settings",
+            "styles",
+            "advanced"
+          ]
         },
         "attributes": {
           "type": "array",

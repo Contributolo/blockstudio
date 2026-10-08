@@ -66,7 +66,7 @@ This will add a `customColor` field to every core block, allowing you to set the
 
 ### File Name
 
-Since there is no rendering template, an extension doesn't need a matching `index` file and thus doesn't need to be named `block.json`. This allows storing all extensions conveniently in a single folder.
+Since there is no rendering template, an extension doesn't need a matching `index` file and thus doesn't need to be named `block.json`. This allows storing all extensions conveniently in a single folder. Several files may extend the same blocks, for example two files with `"name": "core/*"`; each registers its own fields.
 
 ### Schema
 
@@ -108,7 +108,20 @@ By default, extensions will render in its own tab in the block inspector. If you
 
 ### Priority
 
-The `priority` property allows you to define the order in which extensions are rendered. Extensions with a higher priority will be rendered later.
+The `priority` property allows you to define the order in which extensions are rendered. Extensions with a higher priority will be rendered later. Set it at the top level of the file, as in the setup example, or inside `extend`:
+
+```json title="core.json"
+{
+  "$schema": "https://blockstudio.dev/schema/extend",
+  "name": "core/*",
+  "blockstudio": {
+    "extend": { "priority": 10 },
+    "attributes": []
+  }
+}
+```
+
+When both are set, `blockstudio.extend.priority` wins.
 
 ## Attributes
 

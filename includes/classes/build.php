@@ -1269,6 +1269,32 @@ class Build {
 	}
 
 	/**
+	 * Normalize an extension's extend setting.
+	 *
+	 * The editor and admin read the order from blockstudio.extend.priority,
+	 * while extensions written as the documentation showed set `extend` to
+	 * true and `priority` at the top level of the file. Both forms resolve to
+	 * the same setting.
+	 *
+	 * @param mixed $extend   The blockstudio.extend value.
+	 * @param mixed $priority The top-level priority value.
+	 *
+	 * @return mixed The extend setting.
+	 */
+	private static function extend_settings( mixed $extend, mixed $priority ): mixed {
+		if ( ! $extend || ! is_numeric( $priority ) ) {
+			return $extend;
+		}
+
+		$settings = is_array( $extend ) ? $extend : array();
+		if ( ! isset( $settings['priority'] ) ) {
+			$settings['priority'] = 0 + $priority;
+		}
+
+		return $settings;
+	}
+
+	/**
 	 * Register native WordPress blocks from discovery results.
 	 *
 	 * @param array $registerable Registerable block payload.
@@ -2558,7 +2584,7 @@ class Build {
 				$blockstudio_settings['pluginDependencies'] ?? array()
 			),
 			'editor'             => $block->blockstudio['editor'] ?? false,
-			'extend'             => $block->blockstudio['extend'] ?? false,
+			'extend'             => self::extend_settings( $block->blockstudio['extend'] ?? false, $block_json['priority'] ?? null ),
 			'group'              => $block->blockstudio['group'] ?? false,
 			'icon'               => $block->blockstudio['icon'] ?? null,
 			'interactivity'      => $block->blockstudio['interactivity'] ?? false,

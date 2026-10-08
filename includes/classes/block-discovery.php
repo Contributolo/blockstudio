@@ -297,9 +297,17 @@ class Block_Discovery {
 			$data['value'] = $this->get_file_contents( $file_path );
 		}
 
+		// An extension's name lists the blocks it extends, so several extension
+		// files can share one; each keeps its own entry instead of replacing the
+		// previous one.
+		$key = $name;
+		if ( $classification['is_extend'] && ! $is_editor && isset( $this->registerable[ $key ] ) ) {
+			$key = $name . '#' . $logical_path;
+		}
+
 		// Store the data using $name as the key (original behavior).
 		// Note: $name_file is only used for the data's 'name' field, not the store key.
-		$this->store[ $name ] = $data;
+		$this->store[ $key ] = $data;
 
 		// Track overrides (needed for both editor and non-editor modes).
 		if ( $classification['is_override'] ) {
@@ -313,7 +321,7 @@ class Block_Discovery {
 
 		// Track items that need registration.
 		if ( ( $classification['is_block'] || $classification['is_override'] || $classification['is_extend'] || $classification['is_native'] ) && ! $is_editor ) {
-			$this->registerable[ $name ] = array(
+			$this->registerable[ $key ] = array(
 				'data'           => $data,
 				'block_json'     => $block_json,
 				'classification' => $classification,
@@ -322,7 +330,7 @@ class Block_Discovery {
 		}
 
 		// Store block_json for later use.
-		$this->block_json_data[ $name ] = $block_json;
+		$this->block_json_data[ $key ] = $block_json;
 	}
 
 	/**
