@@ -43,7 +43,10 @@ The extension knows that Blockstudio defines `$a`, `$attributes`, `$b`,
 `$block`, `$c`, `$context`, `$content`, `$isEditor`, `$isPreview`, and the
 island variables before it includes a template, so direct reads such as
 `$a['title']` are not reported as possibly undefined, and `$a` is typed from
-the `block.json` beside the template. Do not add a
+the `block.json` beside the template. The shape survives narrowing, so
+`$a['label'] ?? ''`, `isset( $a['cta']['target'] )` and
+`$a['cta']['title'] !== null` keep the declared field types; a template that
+assigns `$a` itself keeps the type it assigned. Do not add a
 `/** @var array<string, mixed> $a */` docblock: it replaces that shape with an
 open array.
 
