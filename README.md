@@ -37,7 +37,7 @@ Blockstudio removes all of that. You write a JSON config and a PHP template. The
 
 ## Features
 
-- **26 field types** - text, repeater, tabs, code, classes, color, files, and more, all configured in JSON with conditions, validation, and defaults
+- **27 field types** - text, repeater, tabs, code, classes, color, files, and more, all configured in JSON with conditions, validation, and defaults
 - **PHP, Twig, and Blade** - write templates in your preferred language with the same `$a` variable across all three
 - **File-based pages** - create WordPress pages from HTML templates with explicit API or CLI syncing, keyed block merging, and editing controls
 - **Site Editor templates** - define WordPress templates and template parts from PHP, Twig, Blade, or HTML while preserving Site Editor customizations

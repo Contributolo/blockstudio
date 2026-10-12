@@ -15,7 +15,7 @@ Create custom WordPress blocks by dropping a `block.json` and a PHP template int
 
 = Features =
 
-* **26 field types** including text, repeater, tabs, classes, color, files, and more
+* **27 field types** including text, repeater, tabs, classes, color, files, and more
 * **PHP, Twig, and Blade templates** with the same `$a` variable across all languages
 * **File-based pages** that explicitly sync file templates into native WordPress block content
 * **File-based patterns** registered from template files without any PHP registration code
@@ -74,6 +74,7 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 * Fix: a `<p>` mapped to a block with a `content` richtext field keeps inline HTML such as `code` and `img` even when those tags are element-mapped, a paragraph whose only child is an image becomes the block `<img>` maps to instead of an empty paragraph, and `core/shortcode` block tags keep their shortcode text
 * Fix: the `useBlockProps` marker is rewritten only where it is an attribute of a start tag, so RichText content, echoed field values, and attribute values that mention useBlockProps render verbatim instead of turning into `useblockprops="true"` and breaking the markup
 * Fix: static prerendering bypasses search results only below the search base at the site's home path, such as `/search/term/`, instead of every path containing `/search/` or `/preview/`, so pages such as `/docs/blocks/preview/` and `/registry/cli/search/` are prerendered and served early instead of always rendering live
+* Docs: the ACF migration guide describes current ACF blocks (block.json registration with an explicit `register_block_type()`, field groups or inline `acf.fields`, Block Bindings as ACF's route to core blocks) instead of the deprecated `acf_register_block_type()`, and the readme counts 27 field types
 
 = 7.6.14 =
 * Fix: content and metadata changes refresh populated block choices without rebuilding block discovery or compiled assets, and a burst of writes such as a translation sync coalesces into one refresh per thirty seconds, adjustable with `blockstudio/cache/populate_debounce`
