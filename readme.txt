@@ -73,6 +73,7 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 * Fix: static prerendering decides its request, content, admin, and cron hooks once the active theme has loaded, and runtime settings resolved before that are resolved again with the theme's filters, so a theme filter such as one that switches static prerendering off on local installs takes effect
 * Fix: a `<p>` mapped to a block with a `content` richtext field keeps inline HTML such as `code` and `img` even when those tags are element-mapped, a paragraph whose only child is an image becomes the block `<img>` maps to instead of an empty paragraph, and `core/shortcode` block tags keep their shortcode text
 * Fix: the `useBlockProps` marker is rewritten only where it is an attribute of a start tag, so RichText content, echoed field values, and attribute values that mention useBlockProps render verbatim instead of turning into `useblockprops="true"` and breaking the markup
+* Fix: static prerendering bypasses search results only below the search base at the site's home path, such as `/search/term/`, instead of every path containing `/search/` or `/preview/`, so pages such as `/docs/blocks/preview/` and `/registry/cli/search/` are prerendered and served early instead of always rendering live
 
 = 7.6.14 =
 * Fix: content and metadata changes refresh populated block choices without rebuilding block discovery or compiled assets, and a burst of writes such as a translation sync coalesces into one refresh per thirty seconds, adjustable with `blockstudio/cache/populate_debounce`

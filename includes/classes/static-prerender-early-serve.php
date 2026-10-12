@@ -538,7 +538,7 @@ function blockstudio_early_serve_static_prerender(): void {
 			return;
 		}
 	}
-	if ( str_contains( \$path, '/feed/' ) || '/feed' === substr( rtrim( \$path, '/' ), -5 ) || str_contains( \$path, '/search/' ) || str_contains( \$path, '/preview/' ) ) {
+	if ( str_contains( \$path, '/feed/' ) || '/feed' === substr( rtrim( \$path, '/' ), -5 ) ) {
 		return;
 	}
 

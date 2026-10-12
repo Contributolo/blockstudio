@@ -13,9 +13,12 @@ meta_description: "Serve anonymous pages as static HTML, optionally before WordP
 Static prerendering is an opt-in anonymous HTML cache. A cacheable response must
 be a complete HTML document and may opt out with
 `<!-- blockstudio:no-cache -->`. Blockstudio bypasses non-GET requests, query
-strings, WordPress admin, REST, Ajax, cron, feeds, search, preview and canvas
-headers, nonce-bearing requests, declared dynamic paths, password/comment
-cookies, and logged-in requests by default.
+strings, WordPress admin, REST, Ajax, cron, feeds, search results below the
+search base at the site's home path (such as `/search/term/`), preview and
+canvas headers, nonce-bearing requests, declared dynamic paths, password/comment
+cookies, and logged-in requests by default. A page whose path only contains a
+`search` or `preview` segment deeper down, such as `/docs/blocks/preview/`, is
+cached like any other page.
 
 ```json title="blockstudio.json"
 {
@@ -206,7 +209,8 @@ Early Serve falls back to the identity-keyed runtime store before booting
 WordPress. This supports generated or long-tail routes outside a deliberately
 bounded deployment graph. The fallback uses the activated graph identity and
 the same host, path normalization, TTL, cookie, header, query-string, dynamic
-path, feed, and search bypass rules as mapped routes.
+path, and feed bypass rules as mapped routes, and it only finds documents the
+runtime stored, which never include search results.
 
 ## Warming, maintenance, and observability
 

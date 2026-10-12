@@ -116,6 +116,58 @@ class StaticPrerenderRuntimeTest extends TestCase {
 		Runtime_Settings::reset();
 	}
 
+	public function test_search_and_preview_bypass_by_segment_not_substring(): void {
+		$urls = static fn(): array => array(
+			home_url( '/search/term/' ),
+			home_url( '/docs/blocks/preview/' ),
+			home_url( '/registry/cli/search/' ),
+			home_url( '/preview/' ),
+			home_url( '/feed/' ),
+			home_url( '/docs/feed/' ),
+		);
+		add_filter( 'blockstudio/static_prerender/public_urls', $urls );
+
+		$this->assertSame(
+			array(
+				home_url( '/docs/blocks/preview/' ),
+				home_url( '/preview/' ),
+				home_url( '/registry/cli/search/' ),
+			),
+			Static_Prerender_Runtime::public_urls()
+		);
+
+		$request = static fn( string $uri ): bool => Static_Prerender_Runtime::should_bypass_request(
+			array(
+				'REQUEST_METHOD' => 'GET',
+				'REQUEST_URI'    => wp_parse_url( home_url( $uri ), PHP_URL_PATH ),
+				'HTTP_HOST'      => 'example.test',
+			),
+			array()
+		);
+		$this->assertTrue( $request( '/search/term/' ) );
+		$this->assertFalse( $request( '/docs/blocks/preview/' ) );
+		$this->assertFalse( $request( '/registry/cli/search/' ) );
+
+		remove_filter( 'blockstudio/static_prerender/public_urls', $urls );
+	}
+
+	public function test_search_bypass_follows_the_search_base(): void {
+		global $wp_rewrite;
+		$original                = $wp_rewrite->search_base;
+		$wp_rewrite->search_base = 'find';
+		Static_Prerender_Runtime::reset_request_cache();
+		$urls = static fn(): array => array( home_url( '/find/term/' ), home_url( '/search/term/' ) );
+		add_filter( 'blockstudio/static_prerender/public_urls', $urls );
+
+		try {
+			$this->assertSame( array( home_url( '/search/term/' ) ), Static_Prerender_Runtime::public_urls() );
+		} finally {
+			remove_filter( 'blockstudio/static_prerender/public_urls', $urls );
+			$wp_rewrite->search_base = $original;
+			Static_Prerender_Runtime::reset_request_cache();
+		}
+	}
+
 	public function test_filtered_public_urls_still_enforce_dynamic_and_control_boundaries(): void {
 		$dynamic = static fn(): array => array( '/private' );
 		$urls    = static fn(): array => array(

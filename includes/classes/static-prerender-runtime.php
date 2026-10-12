@@ -132,6 +132,13 @@ final class Static_Prerender_Runtime {
 	private static array $dependencies = array();
 
 	/**
+	 * Search result path prefixes by blog ID.
+	 *
+	 * @var array<int,string>
+	 */
+	private static array $search_path_prefixes = array();
+
+	/**
 	 * Register runtime hooks.
 	 *
 	 * @return void
@@ -1604,13 +1611,14 @@ final class Static_Prerender_Runtime {
 	 * @return void
 	 */
 	public static function reset_request_cache(): void {
-		self::$buffer_key         = null;
-		self::$buffer_url         = null;
-		self::$response_status    = null;
-		self::$warm_queue         = null;
-		self::$index_record_cache = array();
-		self::$dependency_report  = null;
-		self::$dependencies       = array();
+		self::$buffer_key           = null;
+		self::$buffer_url           = null;
+		self::$response_status      = null;
+		self::$warm_queue           = null;
+		self::$index_record_cache   = array();
+		self::$dependency_report    = null;
+		self::$dependencies         = array();
+		self::$search_path_prefixes = array();
 		remove_filter( 'template_include', array( self::class, 'record_template_dependency' ), PHP_INT_MAX );
 		Static_Prerender_Identity::reset();
 		Static_Prerender_Content_Hasher::reset();
@@ -2490,10 +2498,40 @@ final class Static_Prerender_Runtime {
 			}
 		}
 
-		return str_contains( $path, '/feed/' )
-			|| '/feed' === substr( rtrim( $path, '/' ), -5 )
-			|| str_contains( $path, '/search/' )
-			|| str_contains( $path, '/preview/' );
+		if ( str_contains( $path, '/feed/' ) || '/feed' === substr( rtrim( $path, '/' ), -5 ) ) {
+			return true;
+		}
+
+		return str_starts_with( $path, self::search_path_prefix() );
+	}
+
+	/**
+	 * Return the path prefix of WordPress search result pages.
+	 *
+	 * Search results live below the search base at the site's home path,
+	 * such as `/search/term/` or `/sub-site/search/term/`; a page whose path
+	 * merely contains a `search` segment deeper down is ordinary content.
+	 *
+	 * @return string Lowercase prefix with leading and trailing slashes.
+	 */
+	private static function search_path_prefix(): string {
+		$blog_id = function_exists( 'get_current_blog_id' ) ? get_current_blog_id() : 0;
+		if ( isset( self::$search_path_prefixes[ $blog_id ] ) ) {
+			return self::$search_path_prefixes[ $blog_id ];
+		}
+
+		global $wp_rewrite;
+		$base = 'search';
+		if ( $wp_rewrite instanceof \WP_Rewrite && is_string( $wp_rewrite->search_base ) && '' !== trim( $wp_rewrite->search_base, '/' ) ) {
+			$base = trim( $wp_rewrite->search_base, '/' );
+		}
+
+		$home = function_exists( 'home_url' ) ? wp_parse_url( home_url( '/' ), PHP_URL_PATH ) : '/';
+		$home = trim( is_string( $home ) ? $home : '', '/' );
+
+		self::$search_path_prefixes[ $blog_id ] = strtolower( '/' . ( '' === $home ? '' : $home . '/' ) . $base . '/' );
+
+		return self::$search_path_prefixes[ $blog_id ];
 	}
 
 	/**

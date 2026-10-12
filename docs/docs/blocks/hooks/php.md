@@ -1179,7 +1179,8 @@ add_filter('blockstudio/static_prerender/public_urls', function(array $urls) {
 What the filter returns is not the final inventory. The result is passed through
 a cacheability pass that drops anything matching a configured dynamic path, and
 anything bypassed by default: `/wp-admin`, `/wp-json`, `/wp-login.php`,
-`/xmlrpc.php`, and any path containing `/feed/`, `/search/` or `/preview/`. A URL
+`/xmlrpc.php`, any path containing `/feed/`, and search results below the
+search base at the site's home path (`/search/` by default). A URL
 you add can therefore be discarded without a warning. If a route you expect is
 missing from the built inventory, check it against those rules before assuming
 the filter did not run.
