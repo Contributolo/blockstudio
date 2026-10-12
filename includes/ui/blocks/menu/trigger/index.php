@@ -2,13 +2,19 @@
 	data-wp-interactive="bsui/menu"
 	data-wp-on--click="actions.toggle"
 	data-wp-on--keydown="actions.handleTriggerKeyDown"
-	data-wp-bind--id="context.triggerId"
-	data-wp-bind--aria-expanded="state.ariaExpanded"
-	data-wp-bind--aria-controls="context.popupId"
 	data-bsui-menu-trigger
-	aria-haspopup="menu"
-	aria-expanded="false"
 	style="display:inline"
 >
-	<?php echo $a['trigger'] ?? ''; ?>
+	<?php
+	echo \Blockstudio\Ui::trigger(
+		(string) ( $a['trigger'] ?? '' ),
+		array(
+			'aria-haspopup'               => 'menu',
+			'aria-expanded'               => 'false',
+			'data-wp-bind--id'            => 'bsui/menu::context.triggerId',
+			'data-wp-bind--aria-expanded' => 'bsui/menu::state.ariaExpanded',
+			'data-wp-bind--aria-controls' => 'bsui/menu::context.popupId',
+		)
+	);
+	?>
 </div>

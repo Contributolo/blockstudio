@@ -8,11 +8,13 @@ $default     = ! empty( $a['defaultValue'] ) ? $a['defaultValue'] : '';
 $value       = ! empty( $a['value'] ) ? $a['value'] : '';
 $on_change   = ! empty( $a['onChange'] ) ? $a['onChange'] : '';
 $in_form     = ! empty( $context['bsui/form'] );
+$complete    = (string) ( $a['autocomplete'] ?? '' );
 ?>
 <input
 	data-bsui-focus
 	type="<?php echo esc_attr( $type ); ?>"
 	<?php if ( '' !== $name ) : ?>name="<?php echo esc_attr( $name ); ?>"<?php endif; ?>
+	<?php if ( '' !== $complete ) : ?>autocomplete="<?php echo esc_attr( $complete ); ?>"<?php endif; ?>
 	<?php if ( '' !== $placeholder ) : ?>placeholder="<?php echo esc_attr( $placeholder ); ?>"<?php endif; ?>
 	<?php if ( '' !== $default ) : ?>value="<?php echo esc_attr( $default ); ?>"<?php endif; ?>
 	<?php if ( $disabled ) echo 'disabled'; ?>

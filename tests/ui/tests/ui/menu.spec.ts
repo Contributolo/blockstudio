@@ -4,8 +4,8 @@ const PAGE = '/menu-test/';
 
 async function openMenu(page: Page) {
   const root = page.locator('[data-bsui-menu-root]');
-  const trigger = root.locator('[data-bsui-menu-trigger]');
-  const triggerButton = trigger.locator('button');
+  const trigger = root.locator('[data-bsui-menu-trigger] button');
+  const triggerButton = trigger;
   const popup = root.locator('[role="menu"]');
 
   await triggerButton.click();
@@ -28,14 +28,14 @@ test.describe('bsui/menu', () => {
   });
 
   test('trigger has aria-haspopup=menu', async ({ page }) => {
-    const trigger = page.locator('[data-bsui-menu-trigger]');
+    const trigger = page.locator('[data-bsui-menu-trigger] button');
     await expect(trigger).toHaveAttribute('aria-haspopup', 'menu');
   });
 
   test('clicking trigger opens menu', async ({ page }) => {
     const root = page.locator('[data-bsui-menu-root]');
-    const trigger = root.locator('[data-bsui-menu-trigger]');
-    const triggerButton = trigger.locator('button');
+    const trigger = root.locator('[data-bsui-menu-trigger] button');
+    const triggerButton = trigger;
     const popup = root.locator('[role="menu"]');
 
     await triggerButton.click();

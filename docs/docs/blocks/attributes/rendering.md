@@ -14,14 +14,14 @@ meta_description: "Access attribute values in your block templates."
 Inside template files, all attributes can be accessed using the `$attributes` or `$a` variables and the respective ID of the field.
 
 
-#### PHP
+## PHP
 
 ```php title="index.php"
 <h1><?php echo $attributes['message']; ?></h1>
 <h1><?php echo $a['message']; ?></h1>
 ```
 
-#### Twig
+## Twig
 
 ```twig title="index.twig"
 <h1>{{ attributes.message }}</h1>
@@ -53,7 +53,7 @@ nested value wins.
 Attribute values return `false` if the field is empty or no option has been selected.
 
 
-#### PHP
+### PHP
 
 ```php title="index.php"
 <?php if ($a['message']) : ?>
@@ -61,7 +61,7 @@ Attribute values return `false` if the field is empty or no option has been sele
 <?php endif; ?>
 ```
 
-#### Twig
+### Twig
 
 ```twig title="index.twig"
 {% if a.message %}

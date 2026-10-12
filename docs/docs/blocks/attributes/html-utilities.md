@@ -41,7 +41,7 @@ Let's imagine a block with the following attributes:
 The `bs_render_attributes` function renders attributes as data attributes:
 
 
-#### PHP
+### PHP
 
 ```php title="index.php"
 <h1 <?php bs_render_attributes($a); ?>>
@@ -49,7 +49,7 @@ The `bs_render_attributes` function renders attributes as data attributes:
 </h1>
 ```
 
-#### Twig
+### Twig
 
 ```twig title="index.twig"
 <h1 {{ fn('bs_render_attributes', a) }}>
@@ -107,7 +107,7 @@ Use `bs_attributes` to get the string without echoing:
 The `bs_render_variables` function renders attributes as CSS variables:
 
 
-#### PHP
+### PHP
 
 ```php title="index.php"
 <h1 style="<?php bs_render_variables($a); ?>">
@@ -115,7 +115,7 @@ The `bs_render_variables` function renders attributes as CSS variables:
 </h1>
 ```
 
-#### Twig
+### Twig
 
 ```twig title="index.twig"
 <h1 style="{{ fn('bs_render_variables', a) }}">

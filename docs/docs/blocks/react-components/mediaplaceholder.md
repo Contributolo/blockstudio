@@ -37,7 +37,7 @@ To use `MediaPlaceholder` in its most basic form, you need to add the appropriat
 ```
 
 
-#### PHP
+### PHP
 
 ```php title="index.php"
 <MediaPlaceholder attribute="media" />
@@ -46,7 +46,7 @@ To use `MediaPlaceholder` in its most basic form, you need to add the appropriat
 } ?>
 ```
 
-#### Twig
+### Twig
 
 ```twig title="index.twig"
 <MediaPlaceholder attribute="media" />

@@ -779,7 +779,7 @@ wp bs cron run my-theme/newsletter cleanup
 
 ## Side by side
 
-| | Todo App | Newsletter |
+| Aspect | Todo App | Newsletter |
 |---|---------|-----------|
 | **Auth model** | `userScoped: true` | Public create, admin read |
 | **Storage** | SQLite (portable) | MySQL table (production) |

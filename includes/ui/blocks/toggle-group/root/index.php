@@ -16,7 +16,7 @@ if ( '' !== $default_value ) {
 	) ) ); ?>'
 	data-bsui-toggle-group-root
 	role="group"
-	aria-orientation="<?php echo esc_attr( $orientation ); ?>"
+	data-orientation="<?php echo esc_attr( $orientation ); ?>"
 	data-wp-on--keydown="actions.handleKeyDown"
 >
 	<InnerBlocks

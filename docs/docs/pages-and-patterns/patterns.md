@@ -101,7 +101,7 @@ $paths = Blockstudio\Patterns::get_registered_paths();
 
 ## Comparison with Pages
 
-| | Pages | Patterns |
+| Aspect | Pages | Patterns |
 |---|-------|----------|
 | Storage | Synced to database as posts | Registered in memory |
 | Config | `page.json` | `pattern.json` |

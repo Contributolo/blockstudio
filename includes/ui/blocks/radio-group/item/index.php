@@ -6,6 +6,7 @@ $default_value  = $context['bsui/radio-group']['defaultValue'] ?? '';
 $is_checked     = $value !== '' && $value === $default_value;
 $is_disabled    = $disabled || $root_disabled;
 $bind_text      = ! empty( $a['bindText'] ) ? $a['bindText'] : '';
+$control        = wp_unique_id( 'bsui-radio-' );
 ?>
 <span data-bsui-radio>
 	<div
@@ -14,6 +15,7 @@ $bind_text      = ! empty( $a['bindText'] ) ? $a['bindText'] : '';
 		style="display:contents"
 	>
 		<button
+			id="<?php echo esc_attr( $control ); ?>"
 			data-bsui-focus
 			data-wp-on--click="actions.select"
 			data-wp-bind--aria-checked="state.ariaChecked"
@@ -26,8 +28,8 @@ $bind_text      = ! empty( $a['bindText'] ) ? $a['bindText'] : '';
 		></button>
 	</div>
 	<?php if ( $bind_text ) : ?>
-	<?php echo bs_block( array( 'name' => 'bsui/label', 'data' => array( 'text' => (string) ( $a['label'] ?? '' ), 'bindText' => $bind_text ) ) ); ?>
+	<?php echo bs_block( array( 'name' => 'bsui/label', 'data' => array( 'text' => (string) ( $a['label'] ?? '' ), 'bindText' => $bind_text, 'for' => $control ) ) ); ?>
 	<?php else : ?>
-	<?php echo bs_block( array( 'name' => 'bsui/label', 'data' => array( 'text' => (string) ( $a['label'] ?? '' ) ) ) ); ?>
+	<?php echo bs_block( array( 'name' => 'bsui/label', 'data' => array( 'text' => (string) ( $a['label'] ?? '' ), 'for' => $control ) ) ); ?>
 	<?php endif; ?>
 </span>

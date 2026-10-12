@@ -814,7 +814,7 @@ register_post_meta( 'page', 'hero_title', array(
 
 ### Keys vs. bindings
 
-| | Keys | Bindings |
+| Aspect | Keys | Bindings |
 | --- | --- | --- |
 | Content stored in | Block markup (`post_content`) | Post meta (`wp_postmeta`) |
 | Survives template sync | Yes (merged by key) | Yes (data lives in meta) |

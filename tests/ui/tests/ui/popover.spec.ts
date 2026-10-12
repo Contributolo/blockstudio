@@ -16,7 +16,7 @@ test.describe( 'bsui/popover', () => {
 
 	test( 'trigger has aria-haspopup=dialog', async ( { page } ) => {
 		const root = page.locator( '[data-bsui-popover-root]' );
-		const trigger = root.locator( '[data-bsui-popover-trigger]' );
+		const trigger = root.locator( '[data-bsui-popover-trigger] button' );
 		await expect( trigger ).toHaveAttribute(
 			'aria-haspopup',
 			'dialog'
@@ -27,7 +27,7 @@ test.describe( 'bsui/popover', () => {
 		page,
 	} ) => {
 		const root = page.locator( '[data-bsui-popover-root]' );
-		const trigger = root.locator( '[data-bsui-popover-trigger]' );
+		const trigger = root.locator( '[data-bsui-popover-trigger] button' );
 		await expect( trigger ).toHaveAttribute(
 			'aria-expanded',
 			'false'
@@ -36,8 +36,8 @@ test.describe( 'bsui/popover', () => {
 
 	test( 'clicking trigger opens popover', async ( { page } ) => {
 		const root = page.locator( '[data-bsui-popover-root]' );
-		const trigger = root.locator( '[data-bsui-popover-trigger]' );
-		const triggerButton = trigger.locator( 'button' );
+		const trigger = root.locator( '[data-bsui-popover-trigger] button' );
+		const triggerButton = trigger;
 		const popup = root.locator( '[role="dialog"]' );
 
 		await triggerButton.click();
@@ -50,8 +50,8 @@ test.describe( 'bsui/popover', () => {
 
 	test( 'clicking trigger again closes popover', async ( { page } ) => {
 		const root = page.locator( '[data-bsui-popover-root]' );
-		const trigger = root.locator( '[data-bsui-popover-trigger]' );
-		const triggerButton = trigger.locator( 'button' );
+		const trigger = root.locator( '[data-bsui-popover-trigger] button' );
+		const triggerButton = trigger;
 		const popup = root.locator( '[role="dialog"]' );
 
 		await triggerButton.click();
@@ -65,8 +65,8 @@ test.describe( 'bsui/popover', () => {
 		page,
 	} ) => {
 		const root = page.locator( '[data-bsui-popover-root]' );
-		const trigger = root.locator( '[data-bsui-popover-trigger]' );
-		const triggerButton = trigger.locator( 'button' );
+		const trigger = root.locator( '[data-bsui-popover-trigger] button' );
+		const triggerButton = trigger;
 		const popup = root.locator( '[role="dialog"]' );
 
 		await triggerButton.click();
@@ -79,8 +79,8 @@ test.describe( 'bsui/popover', () => {
 
 	test( 'clicking outside closes popover', async ( { page } ) => {
 		const root = page.locator( '[data-bsui-popover-root]' );
-		const trigger = root.locator( '[data-bsui-popover-trigger]' );
-		const triggerButton = trigger.locator( 'button' );
+		const trigger = root.locator( '[data-bsui-popover-trigger] button' );
+		const triggerButton = trigger;
 		const popup = root.locator( '[role="dialog"]' );
 
 		await triggerButton.click();
@@ -92,8 +92,8 @@ test.describe( 'bsui/popover', () => {
 
 	test( 'close button closes popover', async ( { page } ) => {
 		const root = page.locator( '[data-bsui-popover-root]' );
-		const trigger = root.locator( '[data-bsui-popover-trigger]' );
-		const triggerButton = trigger.locator( 'button' );
+		const trigger = root.locator( '[data-bsui-popover-trigger] button' );
+		const triggerButton = trigger;
 		const popup = root.locator( '[role="dialog"]' );
 
 		await triggerButton.click();
@@ -106,8 +106,8 @@ test.describe( 'bsui/popover', () => {
 
 	test( 'popover content renders correctly', async ( { page } ) => {
 		const root = page.locator( '[data-bsui-popover-root]' );
-		const trigger = root.locator( '[data-bsui-popover-trigger]' );
-		const triggerButton = trigger.locator( 'button' );
+		const trigger = root.locator( '[data-bsui-popover-trigger] button' );
+		const triggerButton = trigger;
 		const popup = root.locator( '[role="dialog"]' );
 
 		await triggerButton.click();

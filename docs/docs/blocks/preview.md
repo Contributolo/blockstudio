@@ -46,13 +46,13 @@ It is also possible to provide structured data in the `example` key, so any cust
 ```
 
 
-#### PHP
+### PHP
 
 ```php title="index.php"
 <h1><?php echo $a['title']; ?></h1>
 ```
 
-#### Twig
+### Twig
 
 ```twig title="index.twig"
 <h1>{{ a.title }}</h1>

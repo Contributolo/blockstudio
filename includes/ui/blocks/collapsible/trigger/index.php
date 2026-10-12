@@ -5,11 +5,17 @@ $open     = ! empty( $context['bsui/collapsible']['defaultOpen'] ?? false );
 <div
 	data-wp-interactive="bsui/collapsible"
 	data-wp-on--click="actions.toggle"
-	data-wp-bind--aria-expanded="state.ariaExpanded"
 	data-bsui-collapsible-trigger
-	aria-expanded="<?php echo $open ? 'true' : 'false'; ?>"
 	<?php if ( $disabled ) echo 'disabled'; ?>
 	style="display:inline"
 >
-	<?php echo $a['trigger'] ?? ''; ?>
+	<?php
+	echo \Blockstudio\Ui::trigger(
+		(string) ( $a['trigger'] ?? '' ),
+		array(
+			'aria-expanded'               => $open ? 'true' : 'false',
+			'data-wp-bind--aria-expanded' => 'bsui/collapsible::state.ariaExpanded',
+		)
+	);
+	?>
 </div>

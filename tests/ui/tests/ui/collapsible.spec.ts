@@ -30,7 +30,7 @@ test.describe( 'bsui/collapsible', () => {
 		const trigger = page
 			.locator( '[data-bsui-collapsible-root]' )
 			.first()
-			.locator( '[data-bsui-collapsible-trigger]' );
+			.locator( '[data-bsui-collapsible-trigger] button' );
 		await expect( trigger ).toHaveAttribute(
 			'aria-expanded',
 			'false'
@@ -41,7 +41,7 @@ test.describe( 'bsui/collapsible', () => {
 		const trigger = page
 			.locator( '[data-bsui-collapsible-root]' )
 			.nth( 1 )
-			.locator( '[data-bsui-collapsible-trigger]' );
+			.locator( '[data-bsui-collapsible-trigger] button' );
 		await expect( trigger ).toHaveAttribute(
 			'aria-expanded',
 			'true'
@@ -50,7 +50,7 @@ test.describe( 'bsui/collapsible', () => {
 
 	test( 'clicking trigger opens panel', async ( { page } ) => {
 		const root = page.locator( '[data-bsui-collapsible-root]' ).first();
-		const triggerWrapper = root.locator( '[data-bsui-collapsible-trigger]' );
+		const triggerWrapper = root.locator( '[data-bsui-collapsible-trigger] button' );
 		const trigger = triggerWrapper.locator( 'button' );
 		const panel = root.locator( '[data-wp-bind--hidden]' );
 
@@ -64,7 +64,7 @@ test.describe( 'bsui/collapsible', () => {
 
 	test( 'clicking trigger again closes panel', async ( { page } ) => {
 		const root = page.locator( '[data-bsui-collapsible-root]' ).first();
-		const triggerWrapper = root.locator( '[data-bsui-collapsible-trigger]' );
+		const triggerWrapper = root.locator( '[data-bsui-collapsible-trigger] button' );
 		const trigger = triggerWrapper.locator( 'button' );
 		const panel = root.locator( '[data-wp-bind--hidden]' );
 
@@ -83,7 +83,7 @@ test.describe( 'bsui/collapsible', () => {
 		page,
 	} ) => {
 		const root = page.locator( '[data-bsui-collapsible-root]' ).nth( 1 );
-		const triggerWrapper = root.locator( '[data-bsui-collapsible-trigger]' );
+		const triggerWrapper = root.locator( '[data-bsui-collapsible-trigger] button' );
 		const trigger = triggerWrapper.locator( 'button' );
 		const panel = root.locator( '[data-wp-bind--hidden]' );
 
@@ -122,7 +122,7 @@ test.describe( 'bsui/collapsible', () => {
 		page,
 	} ) => {
 		const root = page.locator( '[data-bsui-collapsible-root]' ).nth( 2 );
-		const triggerWrapper = root.locator( '[data-bsui-collapsible-trigger]' );
+		const triggerWrapper = root.locator( '[data-bsui-collapsible-trigger] button' );
 		await expect( triggerWrapper ).toHaveAttribute( 'disabled', '' );
 	} );
 
@@ -130,7 +130,7 @@ test.describe( 'bsui/collapsible', () => {
 		page,
 	} ) => {
 		const root = page.locator( '[data-bsui-collapsible-root]' ).nth( 2 );
-		const triggerWrapper = root.locator( '[data-bsui-collapsible-trigger]' );
+		const triggerWrapper = root.locator( '[data-bsui-collapsible-trigger] button' );
 		const trigger = triggerWrapper.locator( 'button' );
 		const panel = root.locator( '[data-wp-bind--hidden]' );
 

@@ -14,7 +14,7 @@ test.describe( 'bsui/dialog', () => {
 	} );
 
 	test( 'trigger has aria-haspopup=dialog', async ( { page } ) => {
-		const trigger = page.locator( '[data-bsui-dialog-trigger]' );
+		const trigger = page.locator( '[data-bsui-dialog-trigger] button' );
 		await expect( trigger ).toHaveAttribute(
 			'aria-haspopup',
 			'dialog'
@@ -22,8 +22,8 @@ test.describe( 'bsui/dialog', () => {
 	} );
 
 	test( 'clicking trigger opens dialog', async ( { page } ) => {
-		const trigger = page.locator( '[data-bsui-dialog-trigger]' );
-		const triggerButton = trigger.locator( 'button' );
+		const trigger = page.locator( '[data-bsui-dialog-trigger] button' );
+		const triggerButton = trigger;
 		const popup = page.locator( '[role="dialog"]' );
 
 		await triggerButton.click();
@@ -38,8 +38,8 @@ test.describe( 'bsui/dialog', () => {
 	test( 'backdrop hidden attribute removed when dialog opens', async ( {
 		page,
 	} ) => {
-		const trigger = page.locator( '[data-bsui-dialog-trigger]' );
-		const triggerButton = trigger.locator( 'button' );
+		const trigger = page.locator( '[data-bsui-dialog-trigger] button' );
+		const triggerButton = trigger;
 		const backdrop = page.locator( '[data-bsui-dialog-backdrop]' );
 
 		await expect( backdrop ).toHaveAttribute( 'hidden', '' );
@@ -49,8 +49,8 @@ test.describe( 'bsui/dialog', () => {
 	} );
 
 	test( 'Escape closes dialog', async ( { page } ) => {
-		const trigger = page.locator( '[data-bsui-dialog-trigger]' );
-		const triggerButton = trigger.locator( 'button' );
+		const trigger = page.locator( '[data-bsui-dialog-trigger] button' );
+		const triggerButton = trigger;
 		const popup = page.locator( '[role="dialog"]' );
 
 		await triggerButton.click();
@@ -61,8 +61,8 @@ test.describe( 'bsui/dialog', () => {
 	} );
 
 	test( 'focus returns to trigger on Escape', async ( { page } ) => {
-		const trigger = page.locator( '[data-bsui-dialog-trigger]' );
-		const triggerButton = trigger.locator( 'button' );
+		const trigger = page.locator( '[data-bsui-dialog-trigger] button' );
+		const triggerButton = trigger;
 
 		await triggerButton.click();
 		await page.keyboard.press( 'Escape' );
@@ -70,8 +70,8 @@ test.describe( 'bsui/dialog', () => {
 	} );
 
 	test( 'close button closes dialog', async ( { page } ) => {
-		const trigger = page.locator( '[data-bsui-dialog-trigger]' );
-		const triggerButton = trigger.locator( 'button' );
+		const trigger = page.locator( '[data-bsui-dialog-trigger] button' );
+		const triggerButton = trigger;
 		const popup = page.locator( '[role="dialog"]' );
 
 		await triggerButton.click();
@@ -83,8 +83,8 @@ test.describe( 'bsui/dialog', () => {
 	} );
 
 	test( 'clicking backdrop closes dialog', async ( { page } ) => {
-		const trigger = page.locator( '[data-bsui-dialog-trigger]' );
-		const triggerButton = trigger.locator( 'button' );
+		const trigger = page.locator( '[data-bsui-dialog-trigger] button' );
+		const triggerButton = trigger;
 		const popup = page.locator( '[role="dialog"]' );
 		const backdrop = page.locator( '[data-bsui-dialog-backdrop]' );
 
@@ -96,8 +96,8 @@ test.describe( 'bsui/dialog', () => {
 	} );
 
 	test( 'scroll is locked when dialog is open', async ( { page } ) => {
-		const trigger = page.locator( '[data-bsui-dialog-trigger]' );
-		const triggerButton = trigger.locator( 'button' );
+		const trigger = page.locator( '[data-bsui-dialog-trigger] button' );
+		const triggerButton = trigger;
 
 		await triggerButton.click();
 
@@ -110,8 +110,8 @@ test.describe( 'bsui/dialog', () => {
 	test( 'scroll is restored when dialog closes via close button', async ( {
 		page,
 	} ) => {
-		const trigger = page.locator( '[data-bsui-dialog-trigger]' );
-		const triggerButton = trigger.locator( 'button' );
+		const trigger = page.locator( '[data-bsui-dialog-trigger] button' );
+		const triggerButton = trigger;
 		const popup = page.locator( '[role="dialog"]' );
 
 		await triggerButton.click();
@@ -129,8 +129,8 @@ test.describe( 'bsui/dialog', () => {
 	} );
 
 	test( 'dialog content renders', async ( { page } ) => {
-		const trigger = page.locator( '[data-bsui-dialog-trigger]' );
-		const triggerButton = trigger.locator( 'button' );
+		const trigger = page.locator( '[data-bsui-dialog-trigger] button' );
+		const triggerButton = trigger;
 		const popup = page.locator( '[role="dialog"]' );
 
 		await triggerButton.click();
@@ -138,8 +138,8 @@ test.describe( 'bsui/dialog', () => {
 	} );
 
 	test( 'focus trap: Tab wraps within dialog', async ( { page } ) => {
-		const trigger = page.locator( '[data-bsui-dialog-trigger]' );
-		const triggerButton = trigger.locator( 'button' );
+		const trigger = page.locator( '[data-bsui-dialog-trigger] button' );
+		const triggerButton = trigger;
 		const popup = page.locator( '[role="dialog"]' );
 
 		await triggerButton.click();

@@ -78,6 +78,12 @@
 			{
 				"id": "value",
 				"type": "text"
+			},
+			{
+				"id": "autocomplete",
+				"type": "text",
+				"label": "Autocomplete",
+				"help": "Autofill hint such as email, name or current-password."
 			}
 		]
 	}

@@ -40,7 +40,7 @@ The same principle works for individual items in the **files** attribute type. Y
 In your templates, you can check if an attribute is disabled:
 
 
-#### PHP
+### PHP
 
 ```php title="index.php"
 <?php if (!empty($a['_disabled']) && in_array('title', $a['_disabled'])) : ?>
@@ -50,7 +50,7 @@ In your templates, you can check if an attribute is disabled:
 <?php endif; ?>
 ```
 
-#### Twig
+### Twig
 
 ```twig title="index.twig"
 {% if '_disabled' in a|keys and 'title' in a._disabled %}

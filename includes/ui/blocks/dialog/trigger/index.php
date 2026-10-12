@@ -2,8 +2,12 @@
 	data-wp-interactive="bsui/dialog"
 	data-wp-on--click="actions.open"
 	data-bsui-dialog-trigger
-	aria-haspopup="dialog"
 	style="display:inline"
 >
-	<?php echo $a['trigger'] ?? ''; ?>
+	<?php
+	echo \Blockstudio\Ui::trigger(
+		(string) ( $a['trigger'] ?? '' ),
+		array( 'aria-haspopup' => 'dialog' )
+	);
+	?>
 </div>

@@ -39,6 +39,24 @@
 			{
 				"id": "value",
 				"type": "text"
+			},
+			{
+				"id": "inputId",
+				"type": "text",
+				"label": "Input ID",
+				"help": "ID of the password input, for a label's for attribute."
+			},
+			{
+				"id": "ariaLabel",
+				"type": "text",
+				"label": "Accessible Label",
+				"help": "Names the input when no visible label points to it."
+			},
+			{
+				"id": "autocomplete",
+				"type": "text",
+				"label": "Autocomplete",
+				"help": "For example current-password or new-password."
 			}
 		]
 	}

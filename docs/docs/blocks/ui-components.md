@@ -220,7 +220,7 @@ Three conventions run through every component:
 
 - Visibility is the `hidden` attribute. Stylesheets style the open state through `:not([hidden])`, so setting `hidden` always wins and nothing needs a display override to close.
 - Focus is one ring. Focusable parts carry `data-bsui-focus`, and a single global rule draws a 2px `:focus-visible` outline in `--bs-ui-focus-ring`, falling back to `--bs-ui-ring`. Components repoint the ring instead of redrawing it; an invalid field, for example, sets `--bs-ui-focus-ring` to the destructive color.
-- Motion respects the user. A global `prefers-reduced-motion` rule collapses component animations and transitions to 1ms.
+- Motion respects the user. A global `prefers-reduced-motion` rule collapses component animations and transitions to 1ms, and the looping spinner and skeleton stop.
 
 ## Composition first
 
@@ -253,10 +253,11 @@ The button's `size` attribute takes `default`, `sm`, `lg`, `icon`, or `icon-sm`.
 
 The components carry their accessibility with them, so a composed page starts from correct semantics rather than retrofitting them:
 
-- Overlays are announced. Dialog popups render `role="dialog"` with `aria-modal="true"`, triggers carry `aria-haspopup`, and disclosure patterns bind `aria-expanded` to their open state.
+- Overlays are announced. Dialog popups render `role="dialog"` with `aria-modal="true"`. Triggers wrap a nested button, and `aria-haspopup` and `aria-expanded` go on that button rather than on the wrapper, with `aria-expanded` bound to the open state.
 - Selection widgets use the real patterns. The select renders a `role="listbox"` with `role="option"` children, tracks the active option through `aria-activedescendant`, and reflects choices through `aria-selected`. The checkbox is a `role="checkbox"` button whose `aria-checked` supports `mixed` for the indeterminate state.
 - Keyboards work everywhere. Listboxes and menus support arrow keys, Home, End, Enter, Space, and type-ahead matching; modals trap Tab inside themselves and return focus to their trigger on close.
-- Labels are real labels. The label primitive renders a `label` element and accepts a `for` attribute, and the decorative `bsui/space` block is `aria-hidden`.
+- Labels are real labels. The label primitive renders a `label` element and accepts a `for` attribute. The checkbox, switch, and radio items point their label at their control, so the label names it and a click on the label toggles it. `bsui/input` forwards `id` and `aria-*` attributes to its `input` and takes an `autocomplete` hint; `bsui/password-input` takes `inputId`, `ariaLabel`, and `autocomplete` for its input, and its visibility toggle reports `aria-pressed`. The decorative `bsui/space` block is `aria-hidden`.
+- Structure stays valid. Breadcrumb, pagination, navigation menu, and table render their items directly inside `ol`, `ul`, `table`, `tbody`, and `tr`, with no wrapper element between a list and its items or a table and its rows.
 
 None of this requires configuration; it is how the templates are written.
 

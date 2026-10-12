@@ -16,14 +16,14 @@ The `$attributes` or `$a` variables only give you access to data registered in t
 ## Rendering
 
 
-#### PHP
+### PHP
 
 ```php title="index.php"
 <h1>The block is aligned: <?php echo $block['align']; ?></h1>
 <h1>The block is aligned: <?php echo $b['align']; ?></h1>
 ```
 
-#### Twig
+### Twig
 
 ```twig title="index.twig"
 <h1>The block is aligned: {{ block.align }}</h1>

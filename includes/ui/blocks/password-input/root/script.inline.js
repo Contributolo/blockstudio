@@ -5,6 +5,9 @@ store( 'bsui/password-input', {
 		get inputType() {
 			return getContext().visible ? 'text' : 'password';
 		},
+		get ariaPressed() {
+			return getContext().visible ? 'true' : 'false';
+		},
 	},
 	actions: {
 		toggle() {

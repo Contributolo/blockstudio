@@ -4,6 +4,7 @@ $on_change = ! empty( $a['onChange'] ) ? $a['onChange'] : '';
 $bind_text = ! empty( $a['bindText'] ) ? $a['bindText'] : '';
 $disabled  = ! empty( $a['disabled'] );
 $initial   = ! empty( $a['defaultChecked'] ) ? 'true' : 'false';
+$control   = wp_unique_id( 'bsui-checkbox-' );
 ?>
 <span
 	data-bsui-checkbox
@@ -17,6 +18,7 @@ $initial   = ! empty( $a['defaultChecked'] ) ? 'true' : 'false';
 >
 	<button
 		type="button"
+		id="<?php echo esc_attr( $control ); ?>"
 		data-bsui-focus
 		role="checkbox"
 		aria-checked="<?php echo esc_attr( ! empty( $a['indeterminate'] ) ? 'mixed' : $initial ); ?>"
@@ -33,8 +35,8 @@ $initial   = ! empty( $a['defaultChecked'] ) ? 'true' : 'false';
 	<input type="hidden" name="<?php echo esc_attr( $checkbox_name ); ?>" data-wp-bind--value="state.formValue" />
 	<?php endif; ?>
 	<?php if ( $bind_text ) : ?>
-	<?php echo bs_block( array( 'name' => 'bsui/label', 'data' => array( 'text' => (string) ( $a['label'] ?? '' ), 'bindText' => $bind_text ) ) ); ?>
+	<?php echo bs_block( array( 'name' => 'bsui/label', 'data' => array( 'text' => (string) ( $a['label'] ?? '' ), 'bindText' => $bind_text, 'for' => $control ) ) ); ?>
 	<?php else : ?>
-	<?php echo bs_block( array( 'name' => 'bsui/label', 'data' => array( 'text' => (string) ( $a['label'] ?? '' ) ) ) ); ?>
+	<?php echo bs_block( array( 'name' => 'bsui/label', 'data' => array( 'text' => (string) ( $a['label'] ?? '' ), 'for' => $control ) ) ); ?>
 	<?php endif; ?>
 </span>

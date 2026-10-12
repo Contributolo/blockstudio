@@ -18,7 +18,7 @@ Beside static styles and scripts as files, Blockstudio also supports dynamic ass
 At the most basic level, you can manually render the code field content in your template.
 
 
-#### PHP
+### PHP
 
 ```php title="index.php"
 <div useBlockProps>
@@ -27,7 +27,7 @@ At the most basic level, you can manually render the code field content in your 
 <style><?php echo $attributes['css']; ?></style>
 ```
 
-#### Twig
+### Twig
 
 ```twig title="index.twig"
 <div useBlockProps>

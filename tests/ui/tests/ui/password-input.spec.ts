@@ -18,7 +18,7 @@ test.describe( 'bsui/password-input', () => {
 	test( 'clicking toggle shows password', async ( { page } ) => {
 		const root = page.locator( '[data-bsui-password-input]' );
 		const input = root.locator( 'input' );
-		const toggle = root.locator( 'button[aria-label="Toggle password visibility"]' );
+		const toggle = root.locator( 'button[aria-label="Show password"]' );
 
 		await toggle.click();
 		await page.waitForTimeout( 200 );
@@ -29,7 +29,7 @@ test.describe( 'bsui/password-input', () => {
 	test( 'clicking toggle again hides password', async ( { page } ) => {
 		const root = page.locator( '[data-bsui-password-input]' );
 		const input = root.locator( 'input' );
-		const toggle = root.locator( 'button[aria-label="Toggle password visibility"]' );
+		const toggle = root.locator( 'button[aria-label="Show password"]' );
 
 		await toggle.click();
 		await page.waitForTimeout( 200 );
@@ -53,13 +53,13 @@ test.describe( 'bsui/password-input', () => {
 		const root = page.locator( '[data-bsui-password-input]' );
 		const toggle = root.locator( 'button' );
 
-		await expect( toggle ).toHaveAttribute( 'aria-label', 'Toggle password visibility' );
+		await expect( toggle ).toHaveAttribute( 'aria-label', 'Show password' );
 	} );
 
 	test( 'input type attribute changes between password/text on toggle', async ( { page } ) => {
 		const root = page.locator( '[data-bsui-password-input]' );
 		const input = root.locator( 'input' );
-		const toggle = root.locator( 'button[aria-label="Toggle password visibility"]' );
+		const toggle = root.locator( 'button[aria-label="Show password"]' );
 
 		await expect( input ).toHaveAttribute( 'type', 'password' );
 

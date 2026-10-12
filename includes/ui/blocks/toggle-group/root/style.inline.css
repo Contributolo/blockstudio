@@ -13,7 +13,7 @@
 	display: contents;
 }
 
-[data-bsui-toggle-group-root][aria-orientation="vertical"] {
+[data-bsui-toggle-group-root][data-orientation="vertical"] {
 	flex-direction: column;
 }
 

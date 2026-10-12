@@ -16,7 +16,7 @@ Since block templates are just normal PHP files, you can use any PHP code you wa
 Blockstudio provides four different ways to access the current post ID in the editor and the frontend.
 
 
-#### PHP
+## PHP
 
 ```php title="index.php"
 echo $post_id;
@@ -25,7 +25,7 @@ echo $block['postId'];
 echo $b['postId'];
 ```
 
-#### Twig
+## Twig
 
 ```twig title="index.twig"
 {{ post_id }}

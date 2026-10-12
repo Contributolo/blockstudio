@@ -1682,7 +1682,7 @@ Beside static styles and scripts as files, Blockstudio also supports dynamic ass
 
 At the most basic level, you can manually render the code field content in your template.
 
-#### PHP
+### PHP
 
 ```php
 <div useBlockProps>
@@ -1691,7 +1691,7 @@ At the most basic level, you can manually render the code field content in your 
 <style><?php echo $attributes['css']; ?></style>
 ```
 
-#### Twig
+### Twig
 
 ```twig
 <div useBlockProps>
@@ -2147,7 +2147,7 @@ Custom field type values are stored directly. They do not pass through native
 
 Object values are available like any other Blockstudio attribute.
 
-#### PHP
+### PHP
 
 ```php
 <div class="<?php echo esc_attr('mt-' . ($a['margin']['top'] ?? '')); ?>">
@@ -2155,7 +2155,7 @@ Object values are available like any other Blockstudio attribute.
 </div>
 ```
 
-#### Twig
+### Twig
 
 ```twig
 <div class="mt-{{ a.margin.top }}">
@@ -2163,7 +2163,7 @@ Object values are available like any other Blockstudio attribute.
 </div>
 ```
 
-#### Blade
+### Blade
 
 ```blade
 <div class="mt-{{ $a['margin']['top'] ?? '' }}">
@@ -2650,14 +2650,14 @@ the render filter when computing or overriding template values for a request.
 
 Inside template files, all attributes can be accessed using the `$attributes` or `$a` variables and the respective ID of the field.
 
-#### PHP
+## PHP
 
 ```php
 <h1><?php echo $attributes['message']; ?></h1>
 <h1><?php echo $a['message']; ?></h1>
 ```
 
-#### Twig
+## Twig
 
 ```twig
 <h1>{{ attributes.message }}</h1>
@@ -2688,7 +2688,7 @@ nested value wins.
 
 Attribute values return `false` if the field is empty or no option has been selected.
 
-#### PHP
+### PHP
 
 ```php
 <?php if ($a['message']) : ?>
@@ -2696,7 +2696,7 @@ Attribute values return `false` if the field is empty or no option has been sele
 <?php endif; ?>
 ```
 
-#### Twig
+### Twig
 
 ```twig
 {% if a.message %}
@@ -2901,14 +2901,14 @@ The `$attributes` or `$a` variables only give you access to data registered in t
 
 ## Rendering
 
-#### PHP
+### PHP
 
 ```php
 <h1>The block is aligned: <?php echo $block['align']; ?></h1>
 <h1>The block is aligned: <?php echo $b['align']; ?></h1>
 ```
 
-#### Twig
+### Twig
 
 ```twig
 <h1>The block is aligned: {{ block.align }}</h1>
@@ -3012,7 +3012,7 @@ Let's imagine a block with the following attributes:
 
 The `bs_render_attributes` function renders attributes as data attributes:
 
-#### PHP
+### PHP
 
 ```php
 <h1 <?php bs_render_attributes($a); ?>>
@@ -3020,7 +3020,7 @@ The `bs_render_attributes` function renders attributes as data attributes:
 </h1>
 ```
 
-#### Twig
+### Twig
 
 ```twig
 <h1 {{ fn('bs_render_attributes', a) }}>
@@ -3076,7 +3076,7 @@ Use `bs_attributes` to get the string without echoing:
 
 The `bs_render_variables` function renders attributes as CSS variables:
 
-#### PHP
+### PHP
 
 ```php
 <h1 style="<?php bs_render_variables($a); ?>">
@@ -3084,7 +3084,7 @@ The `bs_render_variables` function renders attributes as CSS variables:
 </h1>
 ```
 
-#### Twig
+### Twig
 
 ```twig
 <h1 style="{{ fn('bs_render_variables', a) }}">
@@ -3829,7 +3829,7 @@ The same principle works for individual items in the files attribute type. You c
 
 In your templates, you can check if an attribute is disabled:
 
-#### PHP
+### PHP
 
 ```php
 <?php if (!empty($a['_disabled']) && in_array('title', $a['_disabled'])) : ?>
@@ -3839,7 +3839,7 @@ In your templates, you can check if an attribute is disabled:
 <?php endif; ?>
 ```
 
-#### Twig
+### Twig
 
 ```twig
 {% if '_disabled' in a|keys and 'title' in a._disabled %}
@@ -4716,7 +4716,7 @@ To use `MediaPlaceholder` in its most basic form, you need to add the appropriat
 }
 ```
 
-#### PHP
+### PHP
 
 ```php
 <MediaPlaceholder attribute="media" />
@@ -4725,7 +4725,7 @@ To use `MediaPlaceholder` in its most basic form, you need to add the appropriat
 } ?>
 ```
 
-#### Twig
+### Twig
 
 ```twig
 <MediaPlaceholder attribute="media" />
@@ -5042,13 +5042,13 @@ It is also possible to provide structured data in the `example` key, so any cust
 }
 ```
 
-#### PHP
+### PHP
 
 ```php
 <h1><?php echo $a['title']; ?></h1>
 ```
 
-#### Twig
+### Twig
 
 ```twig
 <h1>{{ a.title }}</h1>
@@ -5195,7 +5195,7 @@ Sometimes it is necessary to show content in your blocks exclusively when it is 
 
 ## Editor
 
-#### PHP
+### PHP
 
 ```php
 <?php if ($isEditor) : ?>
@@ -5205,7 +5205,7 @@ Sometimes it is necessary to show content in your blocks exclusively when it is 
 <?php endif; ?>
 ```
 
-#### Twig
+### Twig
 
 ```twig
 {% if isEditor %}
@@ -5219,7 +5219,7 @@ Sometimes it is necessary to show content in your blocks exclusively when it is 
 
 Blockstudio adds another environment variable that will come in handy for block developers. `$isPreview` allows you to conditionally render content inside the block preview window when hovering over a block inside the block inserter.
 
-#### PHP
+### PHP
 
 ```php
 <?php if ($isPreview) : ?>
@@ -5229,7 +5229,7 @@ Blockstudio adds another environment variable that will come in handy for block 
 <?php endif; ?>
 ```
 
-#### Twig
+### Twig
 
 ```twig
 {% if isPreview %}
@@ -5243,7 +5243,7 @@ Blockstudio adds another environment variable that will come in handy for block 
 
 When blocks are used inside a loop (for example, a Query block), the block is executed once for each iteration of the loop. Blockstudio provides handy shortcuts for accessing the current loop and outer context.
 
-#### PHP
+## PHP
 
 ```php
 <div>
@@ -5261,7 +5261,7 @@ When blocks are used inside a loop (for example, a Query block), the block is ex
 </div>
 ```
 
-#### Twig
+## Twig
 
 ```twig
 <div>
@@ -5329,7 +5329,7 @@ Since block templates are just normal PHP files, you can use any PHP code you wa
 
 Blockstudio provides four different ways to access the current post ID in the editor and the frontend.
 
-#### PHP
+## PHP
 
 ```php
 echo $post_id;
@@ -5338,7 +5338,7 @@ echo $block['postId'];
 echo $b['postId'];
 ```
 
-#### Twig
+## Twig
 
 ```twig
 {{ post_id }}
@@ -6233,7 +6233,7 @@ Three conventions run through every component:
 
 - Visibility is the `hidden` attribute. Stylesheets style the open state through `:not([hidden])`, so setting `hidden` always wins and nothing needs a display override to close.
 - Focus is one ring. Focusable parts carry `data-bsui-focus`, and a single global rule draws a 2px `:focus-visible` outline in `--bs-ui-focus-ring`, falling back to `--bs-ui-ring`. Components repoint the ring instead of redrawing it; an invalid field, for example, sets `--bs-ui-focus-ring` to the destructive color.
-- Motion respects the user. A global `prefers-reduced-motion` rule collapses component animations and transitions to 1ms.
+- Motion respects the user. A global `prefers-reduced-motion` rule collapses component animations and transitions to 1ms, and the looping spinner and skeleton stop.
 
 ## Composition first
 
@@ -6266,10 +6266,11 @@ The button's `size` attribute takes `default`, `sm`, `lg`, `icon`, or `icon-sm`.
 
 The components carry their accessibility with them, so a composed page starts from correct semantics rather than retrofitting them:
 
-- Overlays are announced. Dialog popups render `role="dialog"` with `aria-modal="true"`, triggers carry `aria-haspopup`, and disclosure patterns bind `aria-expanded` to their open state.
+- Overlays are announced. Dialog popups render `role="dialog"` with `aria-modal="true"`. Triggers wrap a nested button, and `aria-haspopup` and `aria-expanded` go on that button rather than on the wrapper, with `aria-expanded` bound to the open state.
 - Selection widgets use the real patterns. The select renders a `role="listbox"` with `role="option"` children, tracks the active option through `aria-activedescendant`, and reflects choices through `aria-selected`. The checkbox is a `role="checkbox"` button whose `aria-checked` supports `mixed` for the indeterminate state.
 - Keyboards work everywhere. Listboxes and menus support arrow keys, Home, End, Enter, Space, and type-ahead matching; modals trap Tab inside themselves and return focus to their trigger on close.
-- Labels are real labels. The label primitive renders a `label` element and accepts a `for` attribute, and the decorative `bsui/space` block is `aria-hidden`.
+- Labels are real labels. The label primitive renders a `label` element and accepts a `for` attribute. The checkbox, switch, and radio items point their label at their control, so the label names it and a click on the label toggles it. `bsui/input` forwards `id` and `aria-*` attributes to its `input` and takes an `autocomplete` hint; `bsui/password-input` takes `inputId`, `ariaLabel`, and `autocomplete` for its input, and its visibility toggle reports `aria-pressed`. The decorative `bsui/space` block is `aria-hidden`.
+- Structure stays valid. Breadcrumb, pagination, navigation menu, and table render their items directly inside `ol`, `ul`, `table`, `tbody`, and `tr`, with no wrapper element between a list and its items or a table and its rows.
 
 None of this requires configuration; it is how the templates are written.
 
@@ -10838,7 +10839,7 @@ register_post_meta( 'page', 'hero_title', array(
 
 ### Keys vs. bindings
 
-| | Keys | Bindings |
+| Aspect | Keys | Bindings |
 | --- | --- | --- |
 | Content stored in | Block markup (`post_content`) | Post meta (`wp_postmeta`) |
 | Survives template sync | Yes (merged by key) | Yes (data lives in meta) |
@@ -11069,7 +11070,7 @@ $paths = Blockstudio\Patterns::get_registered_paths();
 
 ## Comparison with Pages
 
-| | Pages | Patterns |
+| Aspect | Pages | Patterns |
 |---|-------|----------|
 | Storage | Synced to database as posts | Registered in memory |
 | Config | `page.json` | `pattern.json` |

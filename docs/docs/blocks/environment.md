@@ -16,7 +16,7 @@ Sometimes it is necessary to show content in your blocks exclusively when it is 
 ## Editor
 
 
-#### PHP
+### PHP
 
 ```php title="index.php"
 <?php if ($isEditor) : ?>
@@ -26,7 +26,7 @@ Sometimes it is necessary to show content in your blocks exclusively when it is 
 <?php endif; ?>
 ```
 
-#### Twig
+### Twig
 
 ```twig title="index.twig"
 {% if isEditor %}
@@ -41,7 +41,7 @@ Sometimes it is necessary to show content in your blocks exclusively when it is 
 Blockstudio adds another environment variable that will come in handy for block developers. `$isPreview` allows you to conditionally render content inside the block preview window when hovering over a block inside the block inserter.
 
 
-#### PHP
+### PHP
 
 ```php title="index.php"
 <?php if ($isPreview) : ?>
@@ -51,7 +51,7 @@ Blockstudio adds another environment variable that will come in handy for block 
 <?php endif; ?>
 ```
 
-#### Twig
+### Twig
 
 ```twig title="index.twig"
 {% if isPreview %}

@@ -14,7 +14,7 @@ meta_description: "Access loop and post context data in your block templates."
 When blocks are used inside a loop (for example, a Query block), the block is executed once for each iteration of the loop. Blockstudio provides handy shortcuts for accessing the current loop and outer context.
 
 
-#### PHP
+## PHP
 
 ```php title="index.php"
 <div>
@@ -32,7 +32,7 @@ When blocks are used inside a loop (for example, a Query block), the block is ex
 </div>
 ```
 
-#### Twig
+## Twig
 
 ```twig title="index.twig"
 <div>

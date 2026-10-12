@@ -12,13 +12,12 @@ $striped  = ! empty( $a['striped'] );
 	data-bsui-table-root
 	<?php if ( $striped ) echo 'data-striped'; ?>
 >
-	<table>
-		<InnerBlocks
-			allowedBlocks='<?php echo esc_attr( wp_json_encode( array( 'bsui/table-header', 'bsui/table-body' ) ) ); ?>'
-			template='<?php echo esc_attr( wp_json_encode( array(
-				array( 'bsui/table-header', array() ),
-				array( 'bsui/table-body', array() ),
-			) ) ); ?>'
-		/>
-	</table>
+	<InnerBlocks
+		tag="table"
+		allowedBlocks='<?php echo esc_attr( wp_json_encode( array( 'bsui/table-header', 'bsui/table-body' ) ) ); ?>'
+		template='<?php echo esc_attr( wp_json_encode( array(
+			array( 'bsui/table-header', array() ),
+			array( 'bsui/table-body', array() ),
+		) ) ); ?>'
+	/>
 </div>

@@ -282,6 +282,48 @@ class Ui {
 	}
 
 	/**
+	 * Put trigger attributes on the control inside a trigger's content.
+	 *
+	 * Bundled UI triggers wrap a nested block, usually a button, in an inline
+	 * element that handles the click. ARIA state such as `aria-expanded`
+	 * belongs on the control the user focuses, not on that wrapper, so the
+	 * attributes go on the first `button`, `a`, or `role="button"` element of
+	 * the content. Attributes the control already carries are kept.
+	 *
+	 * @param string               $html       Rendered trigger content.
+	 * @param array<string,string> $attributes Attribute names and values.
+	 *
+	 * @return string Trigger content with the attributes applied.
+	 */
+	public static function trigger( string $html, array $attributes ): string {
+		if ( '' === $html || array() === $attributes || ! class_exists( 'WP_HTML_Tag_Processor' ) ) {
+			return $html;
+		}
+
+		$processor = new \WP_HTML_Tag_Processor( $html );
+		while ( $processor->next_tag() ) {
+			if ( $processor->is_tag_closer() ) {
+				continue;
+			}
+
+			$tag = $processor->get_tag();
+			if ( 'BUTTON' !== $tag && 'A' !== $tag && 'button' !== $processor->get_attribute( 'role' ) ) {
+				continue;
+			}
+
+			foreach ( $attributes as $name => $value ) {
+				if ( null === $processor->get_attribute( $name ) ) {
+					$processor->set_attribute( $name, $value );
+				}
+			}
+
+			return $processor->get_updated_html();
+		}
+
+		return $html;
+	}
+
+	/**
 	 * Return bundled UI global assets for a selected document.
 	 *
 	 * @param array<string> $block_names Selected block names.
