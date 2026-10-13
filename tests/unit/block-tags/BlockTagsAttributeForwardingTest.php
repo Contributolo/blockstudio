@@ -179,6 +179,29 @@ class BlockTagsAttributeForwardingTest extends TestCase {
 		$this->assertSame( 'probe', $root['class'] );
 	}
 
+	public function test_component_tag_attributes_are_escaped_once(): void {
+		$block = array(
+			'blockName'    => 'blockstudio/type-editor-utility-layout',
+			'attrs'        => array(
+				'blockstudio' => array(
+					'editor' => '<div useBlockProps class="probe"><InnerBlocks class="<?php echo esc_attr( "[&>div]:h-12 a&b" ); ?>" /><RichText attribute="missing" tag="p" title="Tom &amp; Jerry" /></div>',
+				),
+			),
+			'innerBlocks'  => array(),
+			'innerHTML'    => '',
+			'innerContent' => array(),
+		);
+
+		$html = render_block( $block );
+
+		$this->assertStringContainsString( 'class="[&amp;&gt;div]:h-12 a&amp;b"', $html );
+		$this->assertStringNotContainsString( '&amp;amp;', $html );
+
+		$processor = new WP_HTML_Tag_Processor( $html );
+		$this->assertTrue( $processor->next_tag( array( 'class_name' => 'a&b' ) ) );
+		$this->assertSame( '[&>div]:h-12 a&b', $processor->get_attribute( 'class' ) );
+	}
+
 	public function test_block_tags_forward_the_same_global_attributes(): void {
 		$root = $this->root_attributes(
 			Block_Tags::render( '<bs:blockstudio-type-block-tags-default id="hero" style="color:red" role="note" aria-label="Card" lang="de" />' )

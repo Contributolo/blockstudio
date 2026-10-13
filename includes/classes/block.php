@@ -441,6 +441,8 @@ class Block {
 			$element_tag =
 				$attribute_map['tag'] ?? ( 'InnerBlocks' === $type ? 'div' : 'p' );
 
+			// Attribute values come from the template source, where they are
+			// already escaped (esc_attr), so existing entities stay as they are.
 			$attr = '';
 			foreach ( $attribute_map as $name => $value ) {
 				if ( true === $value ) {
@@ -449,7 +451,7 @@ class Block {
 					$attr .= sprintf(
 						'%s="%s" ',
 						$name,
-						htmlspecialchars( $value )
+						htmlspecialchars( $value, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, null, false )
 					);
 				}
 			}
