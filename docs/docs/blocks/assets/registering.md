@@ -129,6 +129,34 @@ Block editor assets are enqueued only in the block editor. The `block-editor-` p
 > `.interface-complementary-area` and `.interface-navigable-region`.
 
 
+## Load Order
+
+Blockstudio does not register block assets with `wp_enqueue_style()`. It adds
+the `<link>` and `<style>` tags to the buffered page right before the closing
+`</head>` tag. Block CSS therefore comes after every stylesheet that WordPress
+printed in the head, including theme and plugin styles enqueued with
+`wp_enqueue_style()`, whatever priority or dependencies they use.
+
+For rules with the same specificity, the block stylesheet wins over a theme
+stylesheet. To change that, either raise the specificity of the theme rule, or
+append the theme stylesheet to the head Blockstudio generates with the
+[`blockstudio/render/head`](/docs/blocks/hooks/php#head) filter. Content added
+by the filter is placed after the block assets. Dequeue the stylesheet from
+WordPress as well, so it is not loaded twice.
+
+```php title="functions.php"
+add_action('wp_enqueue_scripts', function() {
+  wp_dequeue_style('theme-overrides');
+}, 100);
+
+add_filter('blockstudio/render/head', function($head) {
+  return $head . '<link rel="stylesheet" href="' . esc_url(get_theme_file_uri('overrides.css')) . '">';
+});
+```
+
+Use [`blockstudio/buffer/output`](/docs/blocks/hooks/php#output) if you need to
+rearrange the final document in a different way.
+
 ## Disable Enqueuing
 
 Automatic asset enqueuing can be disabled using the `assets/enqueue` setting. This is useful if you want to handle all asset enqueuing by yourself.

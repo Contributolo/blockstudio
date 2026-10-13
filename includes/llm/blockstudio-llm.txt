@@ -95,7 +95,7 @@ route: /docs/blocks/assets/registering
 file: docs/docs/blocks/assets/registering.md
 purpose: Automatically enqueue CSS and JavaScript files for your blocks.
 settings: assets/enqueue
-hooks: blockstudio/settings
+hooks: blockstudio/buffer/output, blockstudio/render/head, blockstudio/settings
 php: bs_get_scoped_class()
 
 ### Processing Assets
