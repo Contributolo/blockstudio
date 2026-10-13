@@ -5586,9 +5586,12 @@ Embed any block using HTML tag syntax. Two formats are supported:
 <block name="acme/hero" title="Welcome" />
 ```
 
-Both render the same block. The `<bs:>` syntax uses the first hyphen as the
-namespace separator (`acme-hero` becomes `acme/hero`). The `<block>` syntax
-takes the full block name as a `name` attribute.
+Both render the same block. The `<bs:>` syntax turns a hyphen into the
+namespace separator (`acme-hero` becomes `acme/hero`). Hyphens are tried from
+left to right and the first registered candidate wins, so namespaces that
+contain hyphens also resolve: `<bs:acme-ui-button>` tries `acme/ui-button`,
+then `acme-ui/button`. The `<block>` syntax takes the full block name as a
+`name` attribute.
 
 Both Blockstudio blocks and core WordPress blocks work. Blockstudio blocks
 render through the full pipeline (templates, Tailwind, assets). Core blocks
@@ -5808,7 +5811,9 @@ Filters: `blockstudio/block_tags/allow` and `blockstudio/block_tags/deny`.
 
 Attributes prefixed with `data-` pass through to the rendered block's root
 element. Attributes prefixed with `html-` also pass through, with the prefix
-stripped. Works with both syntaxes.
+stripped. Works with both syntaxes. A passthrough attribute replaces the root
+element's existing value rather than merging with it, so `html-class` replaces
+the block's own classes.
 
 ```html
 <bs:mytheme-card
@@ -6910,42 +6915,37 @@ functions.
 
 Signature: `bs.fn(functionName, params?, blockName?) -> Promise`
 
-### Inline scripts (recommended)
+### Passing the block name
 
-Inline scripts (`script-inline.js` or `script.inline.js`) automatically know
-which block they belong to. Blockstudio adds a `data-block` attribute to the
-script tag, so `bs.fn()` resolves the block name without you passing it:
-
-```js
-const result = await bs.fn('subscribe', { email: 'user@example.com' });
-console.log(result.success); // true
-```
-
-This works because inline scripts run synchronously and `document.currentScript`
-points to their `<script data-block="my-theme/newsletter">` tag. No manual
-wiring needed.
-
-### Module scripts
-
-Module scripts and external JS files don't have `document.currentScript` at
-call time. Pass the block name as the third argument:
+`bs.fn()` falls back to the `data-block` attribute of `document.currentScript`
+when you omit the third argument. Blockstudio prints both `script.js` and
+inline scripts (`script-inline.js` or `script.inline.js`) as
+`<script type="module">` tags, and module scripts have no
+`document.currentScript`, so in block scripts pass the block name as the third
+argument:
 
 ```js
 const posts = await bs.fn('load_more', { offset: 10 }, 'my-theme/blog-feed');
 ```
 
+Without it, the call throws `bs.fn: block name required`.
+
 ### Error handling
 
-RPC functions that throw or return a `WP_Error` result in a rejected promise
-on the client. Handle errors like any async call:
+`bs.fn()` resolves with the parsed JSON body whatever the HTTP status. When
+a function returns a `WP_Error`, the promise resolves with an object holding
+its `code`, `message`, and `data`, so check for `code`:
 
 ```js
-try {
-  const result = await bs.fn('subscribe', { email });
-} catch (error) {
-  console.error('RPC failed:', error);
+const result = await bs.fn('subscribe', { email }, 'my-theme/newsletter');
+
+if (result.code) {
+  console.error('RPC failed:', result.message);
 }
 ```
+
+The promise rejects only when the request itself fails or the response is not
+JSON.
 
 ## With the Interactivity API
 
@@ -6964,8 +6964,8 @@ store('myTheme/newsletter', {
       ctx.error = '';
 
       try {
-        ctx.result = await bs.fn('subscribe', { email: ctx.email });
-        ctx.success = true;
+        ctx.result = await bs.fn('subscribe', { email: ctx.email }, 'my-theme/newsletter');
+        ctx.success = !ctx.result.code;
       } catch (e) {
         ctx.error = 'Something went wrong.';
       }
@@ -7521,6 +7521,29 @@ await bs.mutate({
 On success, the optimistic data is replaced with the server response. On
 failure, the state rolls back to a snapshot taken before the mutation. The
 cache key is automatically invalidated after every successful mutation.
+
+Failure means that the promise returned by `fn` rejects. `bs.db()` and
+`bs.fn()` resolve with the error body on a validation error, a missing record,
+or a failed permission check, so throw when the result carries a `code` if
+those cases should roll back too:
+
+```js
+const ok = (request) =>
+  request.then((result) => {
+    if (result?.code) {
+      throw result;
+    }
+    return result;
+  });
+
+await bs.mutate({
+  state: $data,
+  key: 'todos',
+  action: 'delete',
+  id: todoId,
+  fn: () => ok(bs.db('my-theme/app', 'todos').delete(todoId)),
+});
+```
 
 For create operations, a temporary `id` (like `__temp_1`) is assigned to the
 optimistic item. When the server responds, the temporary item is patched with
@@ -9310,11 +9333,11 @@ Each subfolder contains a JSON config file (`page.json`, `pattern.json`, `templa
 
 ## Template Engines
 
-Templates can be written in PHP, Twig, or Blade:
+Templates can be written as plain markup in `index.php`, or in Twig or Blade:
 
 | File | Engine | Requirement |
 |------|--------|-------------|
-| `index.php` | PHP | None |
+| `index.php` | None (read as-is, PHP code is not executed) | None |
 | `index.twig` | Twig | Timber |
 | `index.blade.php` | Blade | jenssegers/blade |
 
@@ -9648,11 +9671,11 @@ Each subfolder contains a JSON config file (`page.json`, `pattern.json`, `templa
 
 ## Template Engines
 
-Templates can be written in PHP, Twig, or Blade:
+Templates can be written as plain markup in `index.php`, or in Twig or Blade:
 
 | File | Engine | Requirement |
 |------|--------|-------------|
-| `index.php` | PHP | None |
+| `index.php` | None (read as-is, PHP code is not executed) | None |
 | `index.twig` | Twig | Timber |
 | `index.blade.php` | Blade | jenssegers/blade |
 
@@ -9991,7 +10014,7 @@ When a page folder has a `page.json`, Blockstudio looks for a sibling source fil
 
 | File | Use |
 | --- | --- |
-| `index.php` | PHP or HTML-like block markup |
+| `index.php` | HTML-like block markup, read as-is (PHP code is not executed) |
 | `index.blade.php` | Blade template content |
 | `index.twig` | Twig template content |
 | `index.md` | Markdown content |
@@ -10375,7 +10398,8 @@ The command discovers the complete source inventory, creates or updates changed
 posts, prunes confirmed orphans, refreshes collection routing and compiled
 `templateFor` configuration, and reports what changed. Add `--authoritative` to
 replace managed content instead of preserving keyed editor content, and
-`--full` to force a full comparison:
+`--full` to report the pass as a full reconciliation regardless of the stored
+source identity:
 
 ```bash
 wp bs pages sync --authoritative --full
@@ -10437,8 +10461,10 @@ deterministic `sourceIdentity`.
 file definition instead of preserving keyed editor content. Leave it `false`
 for a normal explicit synchronization. `plan_valid: false`, `full: true`,
 `broad: true`, a missing previous source identity, or a changed sync-engine
-fingerprint broadens the pass. Git rename records are identity hints only. They
-never replace complete inventory comparison.
+fingerprint marks the pass as a full reconciliation (`fullReconciliation` in
+the report). Every pass compares the complete inventory either way. Git rename
+records are identity hints only. They never replace complete inventory
+comparison.
 
 Equal fingerprints with unchanged runtime paths perform no post or postmeta
 writes and do not fire update hooks. When an unchanged source moves into a new
@@ -10643,7 +10669,7 @@ The new testimonials section and button appear on sync. The client's edits to th
 
 #### One-time scaffold
 
-Create a page with a starting structure, then hand it off entirely. Set `sync` to `false` so the template is only used for the initial creation. After that, the client owns the page completely.
+Create a page with a starting structure, then hand it off entirely. Set `sync` to `false` so normal synchronization never creates or updates the page, and create it once with `Blockstudio\Pages::force_sync('blog')`. After that, the client owns the page completely.
 
 ```json
 {
@@ -10658,7 +10684,7 @@ Create a page with a starting structure, then hand it off entirely. Set `sync` t
 <p>Welcome to our blog. Start writing!</p>
 ```
 
-The page is created once. After that, the client can add, remove, and rearrange blocks freely. Template changes are ignored.
+`wp bs pages sync` skips this page, so `force_sync()` creates it once. After that, the client can add, remove, and rearrange blocks freely. Template changes are ignored.
 
 ## Block Bindings
 
@@ -10697,7 +10723,7 @@ register_post_meta( 'page', 'hero_title', array(
 
 ### Keys vs. bindings
 
-| | Keys | Bindings |
+| Aspect | Keys | Bindings |
 | --- | --- | --- |
 | Content stored in | Block markup (`post_content`) | Post meta (`wp_postmeta`) |
 | Survives template sync | Yes (merged by key) | Yes (data lives in meta) |
@@ -10771,9 +10797,8 @@ $pages = Blockstudio\Pages::pages();
 // Get pages from one collection.
 $docs = Blockstudio\Pages::pages('docs');
 
-// Answer whether the current request resolves inside a collection.
-// Layout files use it to branch between an archive and a single view.
-$inDocs = Blockstudio\Pages::in_collection('docs');
+// Get the pages of one collection, sorted (same result as pages('docs')).
+$docs = Blockstudio\Pages::in_collection('docs');
 
 // Get a nested page tree.
 $tree = Blockstudio\Pages::tree('docs');
@@ -10928,7 +10953,7 @@ $paths = Blockstudio\Patterns::get_registered_paths();
 
 ## Comparison with Pages
 
-| | Pages | Patterns |
+| Aspect | Pages | Patterns |
 |---|-------|----------|
 | Storage | Synced to database as posts | Registered in memory |
 | Config | `page.json` | `pattern.json` |
@@ -10985,7 +11010,7 @@ Each folder has a manifest plus one source file.
 
 | File | Engine |
 | --- | --- |
-| `index.php` | PHP or HTML-like block markup |
+| `index.php` | HTML-like block markup, read as-is (PHP code is not executed) |
 | `index.blade.php` | Blade |
 | `index.twig` | Twig |
 | `index.html` | HTML-like block markup |
@@ -12729,7 +12754,10 @@ path, feed, and search bypass rules as mapped routes.
 
 The warm queue is durable, URL-coalescing, single-flight, and recovers timed-out
 claims. Content and site changes force a replacement job even when the current
-signature is unchanged; interval passes enqueue only stale work.
+signature is unchanged; interval passes enqueue only stale work. Each pass,
+scheduled or through `wp bs prerender warm`, renders up to `warm.concurrency`
+jobs. `graph` mode turns the per-URL warmer off, because graph artifacts are
+built and activated as one unit.
 
 ```bash
 wp bs prerender warm
@@ -13492,7 +13520,9 @@ created, updated, unchanged, removed, and failed pages. Equal fingerprints
 produce no post or post-meta writes.
 
 Use `--authoritative` to replace managed content instead of preserving keyed
-editor content, and `--full` to force a full comparison:
+editor content, and `--full` to report the pass as a full reconciliation
+regardless of the stored source identity. Every pass compares the complete
+inventory either way:
 
 ```bash
 wp bs pages sync --authoritative --full
@@ -13814,9 +13844,13 @@ itself; these commands drive it.
 wp bs prerender warm
 ```
 
-Processes the durable warm queue: stale or invalidated URLs are re-rendered and
-republished. Content and site changes enqueue replacement jobs automatically;
-this command works the queue down.
+Enqueues stale public URLs, then re-renders up to `warm.concurrency` jobs from
+the durable warm queue and prints a JSON summary with `queued`, `processed`,
+`warmed`, `skipped`, and `failed` counts. Content and site changes enqueue
+replacement jobs automatically. Run the command again, or let the scheduled
+warmer run, to work a larger queue down; a URL that fails to render stays
+stale and is enqueued again on the next run. In `graph` mode the per-URL
+warmer is off and the command enqueues nothing.
 
 ### Report cache state
 
@@ -14089,15 +14123,19 @@ When a PHP file lives next to a `block.json`, the extension validates every
 
 ```php
 <?php
-/* @var array<string, mixed> $a /
+/* @var array{title: string, subtitle: string} $a /
 
 echo $a['title'];     // OK
 echo $a['subtitle'];  // OK
 echo $a['typo'];      // Error: Field "typo" does not exist in block.json
 ```
 
-Add `/* @var array<string, mixed> $a /` at the top of each PHP template so
-PHPStan knows `$a` exists. The extension handles the rest.
+PHPStan does not see the render function that defines `$a`, so declare it at
+the top of each PHP template with the exact shape the extension infers from
+`block.json`. At level `max`, which the canonical command uses, a looser
+`/* @var array<string, mixed> $a /` is reported as `varTag.nativeType` and
+widens every field to `mixed`. That diagnostic prints the inferred shape, so it
+is the quickest way to find the annotation to copy.
 
 Field keys follow Blockstudio's runtime flattening rules. `tabs` and anonymous
 `group` containers without an `id` are presentation-only, so their child fields
@@ -14371,6 +14409,11 @@ own:
 vendor/bin/blockstudio-phpstan --root . -- --no-progress
 ```
 
+The presets include the extension themselves. Do not add
+`phpstan/extension-installer` to a project that runs the canonical command:
+with the installer present, `extension.neon` is loaded twice and PHPStan stops
+with "This file is included multiple times" before analysing anything.
+
 The command defaults PHPStan to a `1G` memory limit so Composer-managed
 WordPress projects do not inherit a typical `128M` CLI ceiling. Pass an
 explicit PHPStan option after `--` to override it, such as
@@ -14390,6 +14433,9 @@ vendor/bin/blockstudio-phpstan -- --no-progress --generate-baseline=phpstan-base
 ```neon
 includes:
     - phpstan-baseline.neon
+
+parameters:
+    level: max
 ```
 
 ```json
@@ -14399,6 +14445,11 @@ includes:
   }
 }
 ```
+
+Keep the `level` line for the `base` and `theme` presets. The canonical command
+only sets level `max` for them when no project configuration is included, and
+without a level PHPStan stops with "No rules detected". The `extreme-theme`
+preset sets level `max` itself.
 
 Relative paths resolve from `blockstudio.json`. The canonical command and the
 managed commit hook both pick the file up, so the hook gates new findings without
@@ -14578,6 +14629,11 @@ diagnostics deterministically. Keep roots narrow, exclude fixture/generated
 trees, and set a file limit for large repositories. JavaScript and Tailwind can
 be disabled independently. Live rendering never runs unless its preset is
 selected.
+
+Theme, JavaScript, and Tailwind diagnostics are reported through PHPStan's
+result cache. After changing only a `block.json` or a script, a warm
+cache can report the previous result. Pass
+`--debug` after `--` to bypass the cache when verifying such changes.
 
 ## Project contract for coding agents
 

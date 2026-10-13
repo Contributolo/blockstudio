@@ -57,11 +57,11 @@ Each subfolder contains a JSON config file (`page.json`, `pattern.json`, `templa
 
 ## Template Engines
 
-Templates can be written in PHP, Twig, or Blade:
+Templates can be written as plain markup in `index.php`, or in Twig or Blade:
 
 | File | Engine | Requirement |
 |------|--------|-------------|
-| `index.php` | PHP | None |
+| `index.php` | None (read as-is, PHP code is not executed) | None |
 | `index.twig` | Twig | [Timber](https://timber.github.io/docs/) |
 | `index.blade.php` | Blade | [jenssegers/blade](https://github.com/jenssegers/blade) |
 

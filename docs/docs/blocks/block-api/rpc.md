@@ -121,42 +121,37 @@ functions.
 
 **Signature:** `bs.fn(functionName, params?, blockName?) -> Promise`
 
-### Inline scripts (recommended)
+### Passing the block name
 
-Inline scripts (`script-inline.js` or `script.inline.js`) automatically know
-which block they belong to. Blockstudio adds a `data-block` attribute to the
-script tag, so `bs.fn()` resolves the block name without you passing it:
+`bs.fn()` falls back to the `data-block` attribute of `document.currentScript`
+when you omit the third argument. Blockstudio prints both `script.js` and
+inline scripts (`script-inline.js` or `script.inline.js`) as
+`<script type="module">` tags, and module scripts have no
+`document.currentScript`, so in block scripts pass the block name as the third
+argument:
 
-```js title="script-inline.js"
-const result = await bs.fn('subscribe', { email: 'user@example.com' });
-console.log(result.success); // true
-```
-
-This works because inline scripts run synchronously and `document.currentScript`
-points to their `<script data-block="my-theme/newsletter">` tag. No manual
-wiring needed.
-
-### Module scripts
-
-Module scripts and external JS files don't have `document.currentScript` at
-call time. Pass the block name as the third argument:
-
-```js title="script.js"
+```js title="script.inline.js"
 const posts = await bs.fn('load_more', { offset: 10 }, 'my-theme/blog-feed');
 ```
 
+Without it, the call throws `bs.fn: block name required`.
+
 ### Error handling
 
-RPC functions that throw or return a `WP_Error` result in a rejected promise
-on the client. Handle errors like any async call:
+`bs.fn()` resolves with the parsed JSON body whatever the HTTP status. When
+a function returns a `WP_Error`, the promise resolves with an object holding
+its `code`, `message`, and `data`, so check for `code`:
 
 ```js
-try {
-  const result = await bs.fn('subscribe', { email });
-} catch (error) {
-  console.error('RPC failed:', error);
+const result = await bs.fn('subscribe', { email }, 'my-theme/newsletter');
+
+if (result.code) {
+  console.error('RPC failed:', result.message);
 }
 ```
+
+The promise rejects only when the request itself fails or the response is not
+JSON.
 
 ## With the Interactivity API
 
@@ -175,8 +170,8 @@ store('myTheme/newsletter', {
       ctx.error = '';
 
       try {
-        ctx.result = await bs.fn('subscribe', { email: ctx.email });
-        ctx.success = true;
+        ctx.result = await bs.fn('subscribe', { email: ctx.email }, 'my-theme/newsletter');
+        ctx.success = !ctx.result.code;
       } catch (e) {
         ctx.error = 'Something went wrong.';
       }

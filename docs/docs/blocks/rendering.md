@@ -205,9 +205,12 @@ Embed any block using HTML tag syntax. Two formats are supported:
 <block name="acme/hero" title="Welcome" />
 ```
 
-Both render the same block. The `<bs:>` syntax uses the first hyphen as the
-namespace separator (`acme-hero` becomes `acme/hero`). The `<block>` syntax
-takes the full block name as a `name` attribute.
+Both render the same block. The `<bs:>` syntax turns a hyphen into the
+namespace separator (`acme-hero` becomes `acme/hero`). Hyphens are tried from
+left to right and the first registered candidate wins, so namespaces that
+contain hyphens also resolve: `<bs:acme-ui-button>` tries `acme/ui-button`,
+then `acme-ui/button`. The `<block>` syntax takes the full block name as a
+`name` attribute.
 
 Both Blockstudio blocks and core WordPress blocks work. Blockstudio blocks
 render through the full pipeline (templates, Tailwind, assets). Core blocks
@@ -427,7 +430,9 @@ Filters: `blockstudio/block_tags/allow` and `blockstudio/block_tags/deny`.
 
 Attributes prefixed with `data-` pass through to the rendered block's root
 element. Attributes prefixed with `html-` also pass through, with the prefix
-stripped. Works with both syntaxes.
+stripped. Works with both syntaxes. A passthrough attribute replaces the root
+element's existing value rather than merging with it, so `html-class` replaces
+the block's own classes.
 
 ```html
 <bs:mytheme-card

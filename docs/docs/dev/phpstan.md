@@ -33,15 +33,19 @@ When a PHP file lives next to a `block.json`, the extension validates every
 
 ```php title="blockstudio/hero/index.php"
 <?php
-/** @var array<string, mixed> $a */
+/** @var array{title: string, subtitle: string} $a */
 
 echo $a['title'];     // OK
 echo $a['subtitle'];  // OK
 echo $a['typo'];      // Error: Field "typo" does not exist in block.json
 ```
 
-Add `/** @var array<string, mixed> $a */` at the top of each PHP template so
-PHPStan knows `$a` exists. The extension handles the rest.
+PHPStan does not see the render function that defines `$a`, so declare it at
+the top of each PHP template with the exact shape the extension infers from
+`block.json`. At level `max`, which the canonical command uses, a looser
+`/** @var array<string, mixed> $a */` is reported as `varTag.nativeType` and
+widens every field to `mixed`. That diagnostic prints the inferred shape, so it
+is the quickest way to find the annotation to copy.
 
 Field keys follow Blockstudio's runtime flattening rules. `tabs` and anonymous
 `group` containers without an `id` are presentation-only, so their child fields
@@ -315,6 +319,11 @@ own:
 vendor/bin/blockstudio-phpstan --root . -- --no-progress
 ```
 
+The presets include the extension themselves. Do not add
+`phpstan/extension-installer` to a project that runs the canonical command:
+with the installer present, `extension.neon` is loaded twice and PHPStan stops
+with "This file is included multiple times" before analysing anything.
+
 The command defaults PHPStan to a `1G` memory limit so Composer-managed
 WordPress projects do not inherit a typical `128M` CLI ceiling. Pass an
 explicit PHPStan option after `--` to override it, such as
@@ -334,6 +343,9 @@ vendor/bin/blockstudio-phpstan -- --no-progress --generate-baseline=phpstan-base
 ```neon title="phpstan.neon"
 includes:
     - phpstan-baseline.neon
+
+parameters:
+    level: max
 ```
 
 ```json title="blockstudio.json"
@@ -343,6 +355,11 @@ includes:
   }
 }
 ```
+
+Keep the `level` line for the `base` and `theme` presets. The canonical command
+only sets level `max` for them when no project configuration is included, and
+without a level PHPStan stops with "No rules detected". The `extreme-theme`
+preset sets level `max` itself.
 
 Relative paths resolve from `blockstudio.json`. The canonical command and the
 managed commit hook both pick the file up, so the hook gates new findings without
@@ -522,6 +539,11 @@ diagnostics deterministically. Keep roots narrow, exclude fixture/generated
 trees, and set a file limit for large repositories. JavaScript and Tailwind can
 be disabled independently. Live rendering never runs unless its preset is
 selected.
+
+Theme, JavaScript, and Tailwind diagnostics are reported through PHPStan's
+result cache. After changing only a `block.json` or a script, a warm
+cache can report the previous result. Pass
+`--debug` after `--` to bypass the cache when verifying such changes.
 
 ## Project contract for coding agents
 
