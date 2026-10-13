@@ -545,7 +545,7 @@ performs its owned cleanup once; later requests remain inert.
 
 | Option                     | Type    | Compat default | Speed/strict default | Description                                      |
 | -------------------------- | ------- | -------------- | -------------------- | ------------------------------------------------ |
-| `profile`                  | string  | `"compat"`     | —                    | `compat`, `speed`, or `strict`                   |
+| `profile`                  | string  | `"compat"`     | Not applicable       | `compat`, `speed`, or `strict`                   |
 | `wordpress.headNoise`      | boolean | `false`        | `true`               | Remove generic head discovery and emoji output   |
 | `wordpress.embeds`         | boolean | `false`        | `true`               | Remove oEmbed discovery and host scripts         |
 | `wordpress.xmlrpc`         | boolean | `false`        | `true`               | Disable XML-RPC and pingbacks                    |
