@@ -627,6 +627,6 @@ These settings drive the canonical `blockstudio-phpstan` command. See
 See [AI Integration](/docs/dev/ai) for the documentation index and the full
 generated text.
 
-> **[UI Components](/docs/blocks/ui-components)**
+> **[UI Components](/ui)**
 >
 > Enable and compose the bundled headless UI components introduced in Blockstudio 7.3.
