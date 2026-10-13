@@ -12,7 +12,7 @@ meta_description: "Build a working CRUD screen from one block folder with the bu
 
 Most WordPress projects eventually need a screen that is more application than page: a list of records, a button that opens a form, some feedback when a save goes through. The usual answer is a JavaScript framework, a set of REST controllers, and a component library, all maintained next to the theme.
 
-Blockstudio already ships each of those pieces. [`db.php`](/docs/blocks/block-api/database) gives a block storage, validation, and CRUD endpoints. [`rpc.php`](/docs/blocks/block-api/rpc) adds custom server actions. The [bundled UI components](/docs/blocks/ui-components) provide the dialog, form fields, buttons, badges, and toast. An [Interactivity API](/docs/blocks/interactivity) store connects them. This guide builds one screen end to end in a single block folder:
+Blockstudio already ships each of those pieces. [`db.php`](/docs/blocks/block-api/database) gives a block storage, validation, and CRUD endpoints. [`rpc.php`](/docs/blocks/block-api/rpc) adds custom server actions. The [bundled UI components](/ui) provide the dialog, form fields, buttons, badges, and toast. An [Interactivity API](/docs/blocks/interactivity) store connects them. This guide builds one screen end to end in a single block folder:
 
 - A table of projects, rendered on the server and kept in sync on the client.
 - A **New project** dialog with a form that validates against the schema.
@@ -455,11 +455,11 @@ The screen's own CSS reads the library tokens, so the table matches the componen
 }
 ```
 
-The `z-index` of `40` keeps the toast region under the dialog backdrop, which sits at `50`. To retheme the whole screen, override tokens as described under [theming](/docs/blocks/ui-components#theming); the components and the table follow.
+The `z-index` of `40` keeps the toast region under the dialog backdrop, which sits at `50`. To retheme the whole screen, override tokens as described under [styling](/ui#styling); the components and the table follow.
 
 ## Next steps
 
-- [UI Components](/docs/blocks/ui-components): the design system, tokens, and the full component set.
+- [UI Components](/ui): the design system, tokens, and the full component set.
 - [UI Composition](/ui/composition): compound families, trigger forwarding, and the layering model behind the dialog.
 - [Database](/docs/blocks/block-api/database): storage modes, access control, `bs.db()`, and `bs.mutate()`.
 - [RPC](/docs/blocks/block-api/rpc): access control, HTTP methods, and cross-block calls.
