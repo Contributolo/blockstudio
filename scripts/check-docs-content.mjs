@@ -9,7 +9,7 @@ const contentRoot = resolve(repositoryRoot, 'docs');
 const problems = [];
 const expectedDocuments = {
   docs: 72,
-  guides: 9,
+  guides: 20,
   registry: 14,
   blog: 8,
   ui: 2,
