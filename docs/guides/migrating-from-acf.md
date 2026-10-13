@@ -10,23 +10,33 @@ meta_description: "A practical guide for moving your custom blocks from Advanced
 
 # Migrating from ACF Blocks
 
-If you have been building custom WordPress blocks with ACF (Advanced Custom Fields), migrating to Blockstudio is straightforward. The concepts are similar: you define fields, write a template, and the block appears in the editor. The difference is that Blockstudio removes the PHP registration boilerplate and moves everything into JSON and template files.
+If you have been building custom WordPress blocks with ACF (Advanced Custom Fields), migrating to Blockstudio is straightforward. The concepts are similar: you define fields, write a template, and the block appears in the editor. The differences are that Blockstudio discovers block folders on its own, declares fields in its own schema inside `block.json`, and hands every template its field values as one `$a` array.
 
 This guide walks through the migration step by step, with side-by-side comparisons of ACF and Blockstudio patterns.
 
 ## The core difference
 
-ACF blocks require PHP code to register the block, define fields, and connect a render template. Blockstudio replaces all of that with file-based auto-discovery: create a folder with a `block.json` and an `index.php`, and the block is registered automatically.
+Since ACF 6.0, an ACF block is a `block.json` with an `acf` key that names its render template, and every block folder is registered with its own `register_block_type()` call. The fields come from a field group attached to the block with a Block location rule (built in the admin, synced through Local JSON, or registered with `acf_add_local_field_group()`), or, since ACF PRO 6.8.1, from an inline `acf.fields` array in the same `block.json`. Blockstudio replaces the registration call with file-based auto-discovery: create a folder with a `block.json` and an `index.php`, and the block is registered automatically.
 
 **ACF:**
 
-```php
-acf_register_block_type([
-  'name'            => 'hero',
-  'title'           => 'Hero',
-  'render_template' => 'blocks/hero/template.php',
-]);
+```json title="blocks/hero/block.json"
+{
+  "name": "acf/hero",
+  "title": "Hero",
+  "acf": {
+    "renderTemplate": "template.php"
+  }
+}
+```
 
+```php title="functions.php"
+add_action( 'init', function () {
+  register_block_type( __DIR__ . '/blocks/hero' );
+} );
+```
+
+```php
 acf_add_local_field_group([
   'key'      => 'group_hero',
   'title'    => 'Hero Fields',
@@ -69,13 +79,13 @@ $image = get_field('image');
 </div>
 ```
 
-No registration function. No field group. No render callback. The folder structure is the registration.
+No registration call and no render callback: the folder structure is the registration, and the fields live in `block.json` next to the template. The template reads `$a` instead of calling `get_field()`.
 
 ## Block registration
 
 ### ACF
 
-ACF blocks are registered with `acf_register_block_type()` in PHP, typically in `functions.php` or a plugin file. Each block needs a name, title, render template path, and optionally supports, icon, and category.
+Current ACF blocks are registered from a `block.json` with an `acf` key (`renderTemplate` or `renderCallback`, plus options such as `blockVersion`), loaded by an explicit `register_block_type()` call per block folder, typically on `init` in `functions.php` or a plugin file. Older blocks may still use `acf_register_block_type()`, which ACF has documented as deprecated since ACF 6.0; it keeps working, so migrate those blocks the same way.
 
 ### Blockstudio
 
@@ -128,7 +138,7 @@ Blockstudio provides several variables in every template:
 | `$block` | `$b` | Block metadata (name, title, dir, url, postId) |
 | `$context` | `$c` | Parent block context |
 | `$content` | | InnerBlocks content |
-| `$post_id` / `$postId` | | Current post ID (works in editor and frontend) |
+| `$post_id` | | Current post ID (works in editor and frontend; `post_id` or `postId` in Twig) |
 
 ## Field type mapping
 
@@ -310,7 +320,7 @@ The `color` type integrates with the WordPress color palette. The `gradient` typ
 
 ## Repeaters
 
-ACF's repeater field maps directly to Blockstudio's `repeater` type. The main difference is syntax: ACF uses `have_rows()` / `the_row()` / `get_sub_field()`, while Blockstudio returns a plain PHP array.
+ACF's repeater field maps directly to Blockstudio's `repeater` type. ACF templates usually loop with `have_rows()` / `the_row()` / `get_sub_field()` (`get_field()` on a repeater also returns an array of rows); Blockstudio only has the plain PHP array, already in `$a`.
 
 **ACF:**
 
@@ -433,7 +443,7 @@ Blockstudio also supports global conditions based on post type, post ID, user ro
 
 ## InnerBlocks
 
-Both ACF and Blockstudio support InnerBlocks for nesting other blocks inside your custom block. The syntax in Blockstudio templates is more concise.
+Both ACF and Blockstudio support InnerBlocks for nesting other blocks inside your custom block, with the same `<InnerBlocks />` tag and the same `allowedBlocks`, `template` and `templateLock` attributes, so this part of a template usually carries over unchanged.
 
 **Blockstudio:**
 
@@ -454,9 +464,9 @@ The `<InnerBlocks />` tag is replaced with the React component in the editor and
 
 ## Post meta storage
 
-Both ACF Blocks and Blockstudio store field values as block attributes in the post content by default, not in post meta. This means field values are not queryable with `WP_Query` or accessible via the REST API unless you opt in to meta storage.
+Both ACF Blocks and Blockstudio store field values as block attributes in the post content by default, not in post meta. This means field values are not queryable with `WP_Query` unless you opt in to meta storage.
 
-ACF added opt-in post meta storage for blocks in ACF 6.3 via `usePostMeta: true`. Blockstudio has a similar opt-in mechanism using the `storage` property on individual fields:
+ACF added opt-in post meta storage for blocks in ACF PRO 6.3 via `usePostMeta: true`, for one top-level block per page. Blockstudio has an opt-in mechanism per field, using the `storage` property:
 
 ```json
 {
@@ -485,7 +495,7 @@ For site-wide values (like ACF options pages), use option storage:
 
 ## Extending existing blocks
 
-ACF lets you add fields to existing blocks using field groups with block location rules. Blockstudio has a dedicated extension system using `extend.json` files.
+ACF's Block location rule attaches field groups to ACF blocks only; it does not add fields to core or third-party blocks. ACF's route to core blocks such as Heading, Paragraph, Image and Button is the WordPress Block Bindings API, which connects existing block attributes to ACF field values. Blockstudio can add new fields and controls to any registered block through extension files.
 
 Create an extension file in your blockstudio directory:
 
@@ -511,11 +521,11 @@ The `set` property automatically applies the field value to the block's HTML. Us
 ## Migration checklist
 
 1. **Create the block folder** in `theme/blockstudio/{block-name}/` with `block.json` and `index.php`.
-2. **Move field definitions** from `acf_add_local_field_group()` to the `blockstudio.attributes` array in `block.json`. Change `name` to `id`, remove `key`, and adjust type names as needed.
+2. **Move field definitions** from the block's field group (Local JSON, `acf_add_local_field_group()`, or an inline `acf.fields` array) to the `blockstudio.attributes` array in `block.json`. Change `name` to `id`, remove `key`, and adjust type names as needed.
 3. **Update template access** from `get_field('name')` to `$a['name']`. Replace `have_rows()` loops with `foreach ($a['repeater'] as $item)`.
 4. **Replace `get_sub_field()`** with direct array access: `$item['fieldId']`.
 5. **Add `useBlockProps`** to the outermost element in your template for proper editor integration.
 6. **Move conditional logic** from ACF's `conditional_logic` to Blockstudio's `conditions`, referencing field IDs instead of field keys.
 7. **Add storage** for any fields that were previously queried via `get_post_meta()` or used in `WP_Query`.
-8. **Remove ACF registration code** (`acf_register_block_type`, `acf_add_local_field_group`, and any location rules for the migrated blocks).
+8. **Remove ACF registration code**: the `register_block_type()` calls and `acf` keys of the migrated blocks (or their `acf_register_block_type()` calls), and their field groups, whether they live in Local JSON, `acf_add_local_field_group()`, an inline `acf.fields` array, or the admin.
 9. **Test in the editor** to verify fields appear correctly, then check the frontend output.
