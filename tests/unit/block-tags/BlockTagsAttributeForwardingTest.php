@@ -157,6 +157,28 @@ class BlockTagsAttributeForwardingTest extends TestCase {
 		$this->assertSame( 'bs-block-tags', $root['class'] );
 	}
 
+	public function test_forwarding_survives_a_template_that_reassigns_locals(): void {
+		// PHP templates run in the render method's scope; this one clobbers
+		// $name and $blocks, which root forwarding used to read afterwards.
+		$block = array(
+			'blockName'    => 'blockstudio/type-editor-utility-layout',
+			'attrs'        => array(
+				'blockstudio' => array(
+					'attributes' => array( 'data-probe' => 'kept' ),
+					'editor'     => '<?php $name = "Shadowed"; $blocks = array(); ?><div class="probe">x</div>',
+				),
+			),
+			'innerBlocks'  => array(),
+			'innerHTML'    => '',
+			'innerContent' => array(),
+		);
+
+		$root = $this->root_attributes( render_block( $block ) );
+
+		$this->assertSame( 'kept', $root['data-probe'] );
+		$this->assertSame( 'probe', $root['class'] );
+	}
+
 	public function test_block_tags_forward_the_same_global_attributes(): void {
 		$root = $this->root_attributes(
 			Block_Tags::render( '<bs:blockstudio-type-block-tags-default id="hero" style="color:red" role="note" aria-label="Card" lang="de" />' )

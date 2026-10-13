@@ -2295,15 +2295,23 @@ class Block {
 
 		$perf_phase = Perf::active() ? microtime( true ) : 0;
 
+		$definitions    = ( is_array( $blocks[ $name ]->attributes ?? null ) ? $blocks[ $name ]->attributes : array() ) + $extension_attributes;
 		$attribute_data = self::transform(
 			$attributes,
 			$block,
 			$name,
 			$editor,
 			$is_preview,
-			$blocks[ $name ]->attributes + $extension_attributes
+			$definitions
 		);
-		$assets         = Assets::render_code_field_assets( $attribute_data, 'assetsAsset' );
+
+		// PHP templates are included in this scope and may reassign any local
+		// variable, such as $name, so root forwarding keeps its own copy.
+		$bs_root_forwarding = array(
+			'attributes'  => $authored_attributes,
+			'definitions' => $definitions,
+		);
+		$assets             = Assets::render_code_field_assets( $attribute_data, 'assetsAsset' );
 
 		if ( $perf_phase ) {
 			Perf::track( 'phase:transform', ( microtime( true ) - $perf_phase ) * 1000 );
@@ -2538,11 +2546,11 @@ class Block {
 			);
 		}
 
-		if ( is_string( $result ) && '' !== $result && array() !== $authored_attributes ) {
+		if ( is_string( $result ) && '' !== $result && array() !== $bs_root_forwarding['attributes'] ) {
 			$result = self::forward_root_attributes(
 				$result,
-				$authored_attributes,
-				$blocks[ $name ]->attributes + $extension_attributes
+				$bs_root_forwarding['attributes'],
+				$bs_root_forwarding['definitions']
 			);
 		}
 
