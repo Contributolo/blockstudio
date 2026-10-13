@@ -147,7 +147,7 @@ export const Attribute = ({
               },
             })}
             icon={moreHorizontal}
-            label="More"
+            label={__('More')}
           >
             {({ onClose }) => (
               <>
@@ -239,7 +239,7 @@ export const Attribute = ({
             })}
           >
             <CodeMirror
-              placeholder="Value"
+              placeholder={__('Value')}
               value={pair.value || ''}
               onChange={(val) => handleAttributeChange(index, 'value', val)}
               basicSetup={{

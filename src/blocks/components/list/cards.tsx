@@ -16,6 +16,7 @@ import {
   BlockstudioFieldsListMove,
   BlockstudioFieldsRepeaterAddRemove,
 } from '@/types/types';
+import { __ } from '@/utils/__';
 import { css } from '@/utils/css';
 
 const grid = 8;
@@ -42,6 +43,13 @@ const getFallbackLabel = (data: CardData): string => {
   }
 
   return data?.value || '';
+};
+
+const getMediaTypeLabel = (mediaType: string): string => {
+  if (mediaType === 'image') return __('Image');
+  if (mediaType === 'file') return __('File');
+
+  return mediaType;
 };
 
 const getItemStyle = (isDragging: boolean, draggableStyle: object) => ({
@@ -257,7 +265,7 @@ export const Card = forwardRef<
                     lineHeight: 0,
                   })}
                 >
-                  <Label>{media}</Label>
+                  <Label>{getMediaTypeLabel(media)}</Label>
                 </div>
               )}
             </div>

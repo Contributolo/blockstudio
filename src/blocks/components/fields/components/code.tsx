@@ -19,6 +19,7 @@ import { usePopout } from '@/blocks/hooks/use-popout';
 import { getEditorDocument } from '@/blocks/utils/get-editor-document';
 import { style } from '@/const/index';
 import { BlockstudioAttribute } from '@/types/block';
+import { __ } from '@/utils/__';
 import { css } from '@/utils/css';
 
 const cssVariablesCompletion = (
@@ -70,7 +71,7 @@ export const CodeActions = ({
         {
           icon: external,
           onClick: isOpen ? close : open,
-          label: 'Open in popup',
+          label: __('Open in popup'),
         },
       ]
     : [];
