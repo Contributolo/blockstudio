@@ -724,8 +724,10 @@ class Block {
 						PREG_SET_ORDER
 					);
 
+					// The wrapper attributes are escaped markup, while the DOM
+					// takes raw values and escapes them again on save.
 					foreach ( $attributes as $attribute ) {
-						$element->setAttribute( $attribute[1], $attribute[2] );
+						$element->setAttribute( $attribute[1], html_entity_decode( $attribute[2], ENT_QUOTES | ENT_HTML5, 'UTF-8' ) );
 					}
 
 					// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only feature toggle, no state change.

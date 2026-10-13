@@ -184,7 +184,7 @@ class BlockTagsAttributeForwardingTest extends TestCase {
 			'blockName'    => 'blockstudio/type-editor-utility-layout',
 			'attrs'        => array(
 				'blockstudio' => array(
-					'editor' => '<div useBlockProps class="probe"><InnerBlocks class="<?php echo esc_attr( "[&>div]:h-12 a&b" ); ?>" /><RichText attribute="missing" tag="p" title="Tom &amp; Jerry" /></div>',
+					'editor' => '<div useBlockProps class="<?php echo esc_attr( "probe [&>p]:m-0" ); ?>"><InnerBlocks class="<?php echo esc_attr( "[&>div]:h-12 a&b" ); ?>" /><RichText attribute="missing" tag="p" title="Tom &amp; Jerry" /></div>',
 				),
 			),
 			'innerBlocks'  => array(),
@@ -195,9 +195,11 @@ class BlockTagsAttributeForwardingTest extends TestCase {
 		$html = render_block( $block );
 
 		$this->assertStringContainsString( 'class="[&amp;&gt;div]:h-12 a&amp;b"', $html );
+		$this->assertStringContainsString( '[&amp;&gt;p]:m-0', $html );
 		$this->assertStringNotContainsString( '&amp;amp;', $html );
 
 		$processor = new WP_HTML_Tag_Processor( $html );
+		$this->assertTrue( $processor->next_tag( array( 'class_name' => '[&>p]:m-0' ) ), 'useBlockProps root keeps its class: ' . $html );
 		$this->assertTrue( $processor->next_tag( array( 'class_name' => 'a&b' ) ) );
 		$this->assertSame( '[&>div]:h-12 a&b', $processor->get_attribute( 'class' ) );
 	}
