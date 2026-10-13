@@ -37,6 +37,9 @@ GET /registry.json          -> returns the registry manifest
 GET /blocks/{name}/{file}   -> returns the block file content
 ```
 
+`{file}` can contain slashes when a block lists files in subdirectories
+(`src/script.js`), so the file route has to match nested paths.
+
 The CLI doesn't care how these endpoints are implemented. It makes plain
 `GET` requests and expects the response body to be the file content.
 
@@ -47,16 +50,12 @@ const express = require('express');
 const path = require('path');
 
 const app = express();
-const BLOCKS_DIR = path.join(__dirname, 'blocks');
 
 app.get('/registry.json', (req, res) => {
   res.sendFile(path.join(__dirname, 'registry.json'));
 });
 
-app.get('/blocks/:block/:file', (req, res) => {
-  const filePath = path.join(BLOCKS_DIR, req.params.block, req.params.file);
-  res.sendFile(filePath);
-});
+app.use('/blocks', express.static(path.join(__dirname, 'blocks')));
 
 app.listen(3000);
 ```

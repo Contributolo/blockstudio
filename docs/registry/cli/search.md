@@ -14,8 +14,9 @@ meta_description: "Search for blocks across all configured registries."
 npx blockstudio search <query>
 ```
 
-Searches all configured registries for blocks matching the query. Matches
-against block names, titles, and descriptions.
+Searches all configured registries for blocks matching the query. The match
+is a case-insensitive substring test against block names, titles, and
+descriptions. Categories are not searched.
 
 ## Arguments
 
@@ -36,7 +37,7 @@ Results are ranked by match quality:
 ## Output
 
 Results show the registry and block name, with title and description when
-available:
+available. When nothing matches, the CLI prints `No blocks matching "<query>".`
 
 ```
 Results for "tab"
@@ -51,6 +52,6 @@ Results for "tab"
 
 ```bash
 npx blockstudio search hero
-npx blockstudio search layout
+npx blockstudio search tab
 npx blockstudio search "keyboard navigation"
 ```

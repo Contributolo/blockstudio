@@ -139,7 +139,8 @@ The CLI resolves environment variables at runtime. If a referenced variable
 is not set, the CLI exits with an error naming the missing variable and the
 header it was used in.
 
-Set the variable in your shell, `.env` file, or CI environment:
+Set the variable in your shell or CI environment. The CLI reads the process
+environment only; it does not load `.env` files on its own:
 
 ```bash
 export REGISTRY_TOKEN=ghp_abc123

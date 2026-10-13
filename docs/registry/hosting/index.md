@@ -62,9 +62,11 @@ The `registry.json` points at the `blocks/` directory as its `baseUrl`:
 The hosting must support direct file access via URL. The CLI fetches files by
 constructing URLs from `{baseUrl}/{block.name}/{file}`.
 
-There's no authentication mechanism built in. If you need private registries,
-you'll need to handle access control at the hosting layer (e.g. private GitHub
-repos with tokens, or a server that checks credentials).
+The CLI has no login flow of its own. For private registries, handle access
+control at the hosting layer (e.g. private GitHub repos with tokens, or a
+server that checks credentials) and have consumers send the credentials as
+custom headers through the object format in
+[`blocks.json`](/registry/configuration/blocks-json#authentication).
 
 ## Testing your registry
 
@@ -76,4 +78,7 @@ npx serve .
 ```
 
 Then point your `blocks.json` at `http://localhost:3000/registry.json` and
-run `npx blockstudio list` to verify everything resolves.
+run `npx blockstudio list` to verify everything resolves. `list` only fetches
+`registry.json`. To test `add`, set `baseUrl` to
+`http://localhost:3000/blocks` while testing, because the CLI downloads block
+files from `baseUrl`.
