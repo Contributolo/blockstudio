@@ -15,7 +15,7 @@ Create custom WordPress blocks by dropping a `block.json` and a PHP template int
 
 = Features =
 
-* **26 field types** including text, repeater, tabs, classes, color, files, and more
+* **27 field types** including text, repeater, tabs, classes, color, files, and more
 * **PHP, Twig, and Blade templates** with the same `$a` variable across all languages
 * **File-based pages** that explicitly sync file templates into native WordPress block content
 * **File-based patterns** registered from template files without any PHP registration code
