@@ -111,6 +111,26 @@ class StaticPrerenderMarkdownNegotiationTest extends TestCase {
 		$this->assertSame( '', $this->serve_through_dropin( $site['host'], $site['home_path'], 'text/plain, text/markdown;q=0.9' ) );
 	}
 
+	public function test_negotiated_markdown_responses_vary_on_accept(): void {
+		$method = new ReflectionMethod( Pages::class, 'markdown_response_headers' );
+		$method->setAccessible( true );
+
+		$negotiated = $method->invoke( null, true, 'https://example.test/docs/page/' );
+		$this->assertSame(
+			array(
+				'Content-Type: text/markdown; charset=utf-8'               => true,
+				'X-Robots-Tag: noindex'                                    => true,
+				'Vary: Accept'                                             => false,
+				'Link: <https://example.test/docs/page/>; rel="canonical"' => false,
+			),
+			$negotiated
+		);
+
+		$extension = $method->invoke( null, false, '' );
+		$this->assertArrayNotHasKey( 'Vary: Accept', $extension );
+		$this->assertSame( true, $extension['Content-Type: text/markdown; charset=utf-8'] );
+	}
+
 	public function test_served_documents_vary_on_accept_and_old_drop_ins_are_replaced(): void {
 		$source = Static_Prerender_Early_Serve::dropin_source();
 		$this->assertStringContainsString( "header( 'Vary: Accept', false );", $source );

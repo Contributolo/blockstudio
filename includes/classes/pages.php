@@ -1799,16 +1799,41 @@ class Pages {
 
 		nocache_headers();
 		status_header( 200 );
-		header( 'Content-Type: text/markdown; charset=utf-8' );
-		header( 'X-Robots-Tag: noindex', true );
-
-		$canonical = self::canonical_url_for_markdown_post( $post );
-		if ( '' !== $canonical ) {
-			header( 'Link: <' . esc_url_raw( $canonical ) . '>; rel="canonical"', false );
+		foreach ( self::markdown_response_headers( $wants_accept, self::canonical_url_for_markdown_post( $post ) ) as $line => $replace ) {
+			header( $line, $replace );
 		}
 
 		echo $markdown; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		exit;
+	}
+
+	/**
+	 * Headers of a raw Markdown response, mapped to whether each replaces an
+	 * earlier header of the same name.
+	 *
+	 * A response negotiated through `Accept` is one of two representations of
+	 * the page URL, so it varies on `Accept` like the HTML does.
+	 *
+	 * @param bool   $negotiated Whether the request asked through `Accept`.
+	 * @param string $canonical  Canonical HTML URL, or an empty string.
+	 *
+	 * @return array<string,bool> Header lines.
+	 */
+	private static function markdown_response_headers( bool $negotiated, string $canonical ): array {
+		$headers = array(
+			'Content-Type: text/markdown; charset=utf-8' => true,
+			'X-Robots-Tag: noindex'                      => true,
+		);
+
+		if ( $negotiated ) {
+			$headers['Vary: Accept'] = false;
+		}
+
+		if ( '' !== $canonical ) {
+			$headers[ 'Link: <' . esc_url_raw( $canonical ) . '>; rel="canonical"' ] = false;
+		}
+
+		return $headers;
 	}
 
 	/**
