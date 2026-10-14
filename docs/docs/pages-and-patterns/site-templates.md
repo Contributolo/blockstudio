@@ -58,7 +58,7 @@ Each folder has a manifest plus one source file.
 
 | File | Engine |
 | --- | --- |
-| `index.php` | PHP or HTML-like block markup |
+| `index.php` | HTML-like block markup, read as-is (PHP code is not executed) |
 | `index.blade.php` | Blade |
 | `index.twig` | Twig |
 | `index.html` | HTML-like block markup |

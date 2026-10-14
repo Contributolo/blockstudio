@@ -608,6 +608,93 @@ purpose: Build complete applications as blocks with database, RPC, cron, and the
 php: Blockstudio\Db, Db::get()
 cli: wp bs cron run, wp bs db create, wp bs db list, wp bs rpc call
 
+### Composing Templates with Block Tags
+route: /guides/block-tags
+file: docs/guides/block-tags.md
+purpose: Write blocks as HTML tags inside templates and page sources, add project prefixes for shorter names, and migrate shorthands back to the portable canonical spelling.
+settings: blockTags, ui
+hooks: blockstudio/block_tags/allow, blockstudio/block_tags/deny, blockstudio/block_tags/prefixes, blockstudio/block_tags/render, blockstudio/block_tags/tag_aliases
+php: bs_render_block()
+
+### Building a Documentation Site
+route: /guides/documentation-site
+file: docs/guides/documentation-site.md
+purpose: Build a documentation section from Markdown files with a page collection, its own post type and URL base, a loader for generated pages, and a layout with sidebar navigation.
+hooks: blockstudio/pages/allow_external_loader_path, blockstudio/pages/orphan_action, blockstudio/pages/serve_markdown
+php: Blockstudio\Pages, Pages::children(), Pages::collection(), Pages::current_page(), Pages::force_sync(), Pages::get_page(), Pages::pages(), Pages::tree()
+cli: wp bs pages sync
+
+### Site Editor Templates and Parts from Files
+route: /guides/site-editor-templates
+file: docs/guides/site-editor-templates.md
+purpose: Author block theme templates and template parts as Blockstudio folders with a manifest and HTML-like markup, compiled to native block markup while the Site Editor keeps its customize and reset workflow.
+settings: content
+hooks: blockstudio/site_templates/parser, blockstudio/site_templates/part_paths, blockstudio/site_templates/template_content, blockstudio/site_templates/template_paths
+php: Blockstudio\Site_Templates, Site_Templates::errors(), Site_Templates::get_part(), Site_Templates::selection_errors(), Site_Templates::templates()
+
+### Building an App Screen with the Bundled UI
+route: /guides/ui-app-screen
+file: docs/guides/ui-app-screen.md
+purpose: Build a working CRUD screen from one block folder with the bundled bsui components, a db.php data model, an RPC action, and an Interactivity API store.
+settings: ui
+php: Blockstudio\Db, Db::get(), Db::update()
+cli: wp bs db create, wp bs db list, wp bs pages sync, wp bs rpc call
+
+### Building a Custom Field Type
+route: /guides/custom-field-types
+file: docs/guides/custom-field-types.md
+purpose: Register a namespaced editor control with a structured value, store it in post meta with a REST schema, and use it inside repeaters and templates like a built-in field.
+hooks: blockstudio/field_types, blockstudio/price
+php: bs_block(), bs_register_field_type(), bs_unregister_field_type()
+
+### Moving Database Content into Files with Content Sync
+route: /guides/content-sync
+file: docs/guides/content-sync.md
+purpose: Pull selected posts, terms, and metadata into portable files, review them in git, and push them to another environment with stable IDs, declared references, and safe pruning.
+settings: content/enabled, content/id, content/media
+hooks: blockstudio/content/orphan_action
+cli: wp bs content pull, wp bs content push, wp bs content status
+
+### Checked Templates with PHPStan and a Generated AGENTS.md
+route: /guides/analysis-and-agents
+file: docs/guides/analysis-and-agents.md
+purpose: Catch missing fields and unescaped output before they ship, gate commits on the result, and give coding agents a contract generated from your own project.
+settings: githooks/commit, phpstan/configuration
+php: $a, Settings::get()
+cli: vendor/bin/blockstudio-agents, vendor/bin/blockstudio-githooks, vendor/bin/blockstudio-phpstan, wp bs tailwind compile
+
+### Serving WordPress as Static HTML
+route: /guides/static-prerendering
+file: docs/guides/static-prerendering.md
+purpose: Turn on Blockstudio's static prerender, verify what it caches, keep logged-in markup safe, and put a CDN in front of it.
+settings: $schema, performance
+php: Static_Prerender_Early_Serve::install_artifact_entry(), Static_Prerender_Runtime::build_plan(), bs_block()
+cli: wp bs prerender purge, wp bs prerender status, wp bs prerender warm, wp bs teardown
+
+### Personalized Fragments on Cached Pages
+route: /guides/block-islands
+file: docs/guides/block-islands.md
+purpose: Keep pages fully cached and still greet signed-in visitors or show a live cart count, using dynamic block islands and their signed fragment endpoint.
+settings: cache
+hooks: blockstudio/islands/max_per_request, blockstudio/islands/signature, blockstudio/islands/signature_payload, blockstudio/islands/verify_signature
+php: bs_block()
+
+### Deploying a Blockstudio Site
+route: /guides/deploying
+file: docs/guides/deploying.md
+purpose: Ship a Blockstudio theme from CI. Install Composer dependencies, reconcile file-backed pages with a JSON report, refresh the static cache, and know which maintenance commands belong in a release.
+settings: assets/output, cache/path
+hooks: blockstudio/cache/watch_debounce, blockstudio/pages/orphan_action
+php: Blockstudio\Pages, Pages::reconcile(), Pages::store_successful_source_identity()
+cli: wp bs cache cleanup, wp bs cache clear, wp bs cache status, wp bs pages sync, wp bs prerender purge, wp bs prerender status, wp bs prerender warm, wp bs teardown
+
+### Publishing a Block Registry on GitHub
+route: /guides/block-registry
+file: docs/guides/block-registry.md
+purpose: Share blocks across projects from a GitHub repository. Structure the repo, write registry.json, serve it through raw URLs, and install blocks with the registry CLI.
+settings: $schema
+cli: npx blockstudio add, npx blockstudio init, npx blockstudio list, npx blockstudio remove, npx blockstudio search
+
 ## Registry / Introduction
 
 ### General

@@ -275,7 +275,9 @@ Key patterns:
 ### Client logic
 
 `bs.mutate()` handles all writes with optimistic updates and automatic rollback.
-The UI updates instantly; if the server call fails, the state reverts.
+The UI updates instantly; if the server call rejects, the state reverts.
+A validation or permission error resolves with an error body instead of
+rejecting, as described under [Mutate](/docs/blocks/block-api/database#mutate).
 
 ```js title="script.inline.js"
 import { store, getContext } from '@wordpress/interactivity';

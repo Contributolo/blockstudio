@@ -56,7 +56,7 @@ Each value in `registries` is either a string URL or an object:
 - String registry values must be valid URLs.
 - Object registry values must have a valid `url` field.
 - `${ENV_VAR}` references in headers are resolved at runtime. Missing variables produce an error naming the variable and header.
-- The `registries` object can be empty, but `add`, `list`, and `search` commands will error with a message telling you to add one.
+- The `registries` object can be empty. `add` then exits with `No registries configured in blocks.json. Add a registry first.`, `list` prints `No registries configured.`, and `search` prints `No blocks matching "<query>".`
 
 ## Config discovery
 

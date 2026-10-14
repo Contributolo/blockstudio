@@ -26,11 +26,17 @@ When run in a terminal, `init` walks through an interactive setup:
 
 If `blocks.json` already exists, you're asked whether to overwrite it.
 
+## Non-interactive mode
+
+With `--yes`, or when stdin is not a terminal, `init` writes `blocks.json`
+straight away with an empty `registries` object. An existing `blocks.json` is
+overwritten without asking.
+
 ## Options
 
 | Option | Description |
 |--------|-------------|
-| `-d, --directory <path>` | Block install directory. Default: `blockstudio`. |
+| `-d, --directory <path>` | Block install directory. Default: `blockstudio`. Only used in non-interactive mode; the interactive prompt ignores it. |
 | `-y, --yes` | Skip all prompts and use defaults. |
 
 ## Examples
@@ -49,7 +55,7 @@ npx blockstudio init --yes --directory my-blocks
 
 ## Output
 
-Creates a `blocks.json` file:
+Prints `Created <path>/blocks.json` and writes:
 
 ```json
 {

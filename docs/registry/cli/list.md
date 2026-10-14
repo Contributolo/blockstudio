@@ -29,18 +29,19 @@ The table shows each block's name, title, category, and type, grouped by
 registry.
 
 ```
-ui (3 blocks)
+acme (4 blocks)
 
-  Name       Title      Category    Type
-  tabs       Tabs       layout      blockstudio
-  tab-item   Tab Item   layout      blockstudio
-  hero       Hero       layout      blockstudio
-
-starter (1 block)
-
-  Name       Title          Category    Type
-  hero       Starter Hero   layout      blockstudio
+  Name      Title     Category      Type
+  hero      Hero      layout        blockstudio
+  card      Card      components    blockstudio
+  tabs      Tabs      layout        blockstudio
+  tab-item  Tab Item  layout        blockstudio
 ```
+
+Each configured registry gets its own section. If no registries are
+configured, `list` prints `No registries configured.` An unknown namespace
+exits with `Registry "<name>" not found. Available: ...`, and a registry
+that cannot be fetched stops the output with an error.
 
 ## Examples
 

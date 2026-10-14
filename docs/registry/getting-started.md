@@ -15,6 +15,13 @@ meta_description: "Set up the Blockstudio Registry CLI in your project and insta
 - Node.js 18+
 - A WordPress theme or plugin where you want to install blocks
 
+The `blockstudio` package on npm is at version 0.0.1. That release is a
+placeholder: it only has an `add` command, which prints `Adding block:
+<name>` and exits without fetching anything, and it rejects `init`, `list`,
+`search`, `remove`, `--yes` and `--dry-run` as unknown. The commands on these
+pages describe the registry CLI in the Blockstudio repository
+(`packages/registry`).
+
 ## Initialize your project
 
 Run `init` in the root of your theme or plugin:
@@ -72,7 +79,9 @@ If the block exists in only one registry, you can skip the namespace:
 npx blockstudio add tabs
 ```
 
-If it exists in multiple registries, the CLI prompts you to choose.
+If it exists in multiple registries, the CLI prompts you to choose in a
+terminal. Without a terminal, it stops with an error that lists the matching
+registries, and `--yes` picks the first one in `blocks.json` order.
 
 ## Add multiple blocks
 
@@ -99,7 +108,8 @@ npx blockstudio search hero
 ```
 
 `list` shows all blocks from all registries (or a specific one). `search`
-does a fuzzy match across block names, titles, and descriptions.
+does a case-insensitive substring match against block names, titles, and
+descriptions.
 
 ## Remove a block
 
@@ -112,9 +122,12 @@ confirm. Pass `--yes` to skip the prompt.
 
 ## CI and automation
 
-All commands support `--yes` to skip interactive prompts. In non-TTY
-environments (piped output, CI runners), the CLI automatically falls back to
-non-interactive mode.
+`init`, `add`, and `remove` accept `--yes` to skip interactive prompts.
+`list` and `search` never prompt and reject `--yes` as an unknown option.
+When stdin is not a terminal (CI runners, piped input), the CLI falls back to
+non-interactive mode: `init` overwrites an existing `blocks.json`, `add`
+stops with an error when a block folder already exists or a block name is
+ambiguous, and `remove` deletes without asking.
 
 ```bash
 npx blockstudio init --yes --directory blockstudio

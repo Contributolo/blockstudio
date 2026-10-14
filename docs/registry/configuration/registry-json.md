@@ -43,7 +43,9 @@ in a registry, their metadata, dependencies, and file manifests.
 
 ### `name`
 
-**Required.** The registry identifier. Used in CLI output and error messages.
+**Required.** The registry identifier. The CLI validates it but does not
+display it: commands and output use the key the consumer chose for the
+registry in `blocks.json`.
 
 ### `description`
 
@@ -138,6 +140,9 @@ And writes it to:
 
 The directory structure inside the block folder is preserved. If a file path
 contains subdirectories, they are created automatically.
+
+Files are always fetched from the `baseUrl` inside `registry.json`, not from
+a location relative to the registry URL in `blocks.json`.
 
 ## Validation
 

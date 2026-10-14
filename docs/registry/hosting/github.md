@@ -92,7 +92,12 @@ To pin to a specific version, use a tag or commit SHA instead of `main`:
 }
 ```
 
-This prevents breaking changes from affecting existing projects.
+This prevents breaking changes from affecting existing projects, as long as
+the `registry.json` at that tag also uses the tag in its `baseUrl`. The CLI
+downloads block files from `baseUrl`, so a tagged `registry.json` whose
+`baseUrl` still points at `main` installs the files from `main`. The same
+applies to a commit SHA: it pins the block list, while the files come from
+whatever ref that commit's `baseUrl` names.
 
 ## GitHub Pages
 

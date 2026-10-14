@@ -216,7 +216,10 @@ runtime stored, which never include search results.
 
 The warm queue is durable, URL-coalescing, single-flight, and recovers timed-out
 claims. Content and site changes force a replacement job even when the current
-signature is unchanged; interval passes enqueue only stale work.
+signature is unchanged; interval passes enqueue only stale work. Each pass,
+scheduled or through `wp bs prerender warm`, renders up to `warm.concurrency`
+jobs. `graph` mode turns the per-URL warmer off, because graph artifacts are
+built and activated as one unit.
 
 ```bash
 wp bs prerender warm

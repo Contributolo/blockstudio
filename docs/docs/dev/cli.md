@@ -59,7 +59,9 @@ created, updated, unchanged, removed, and failed pages. Equal fingerprints
 produce no post or post-meta writes.
 
 Use `--authoritative` to replace managed content instead of preserving keyed
-editor content, and `--full` to force a full comparison:
+editor content, and `--full` to report the pass as a full reconciliation
+regardless of the stored source identity. Every pass compares the complete
+inventory either way:
 
 ```bash
 wp bs pages sync --authoritative --full
@@ -390,9 +392,13 @@ itself; these commands drive it.
 wp bs prerender warm
 ```
 
-Processes the durable warm queue: stale or invalidated URLs are re-rendered and
-republished. Content and site changes enqueue replacement jobs automatically;
-this command works the queue down.
+Enqueues stale public URLs, then re-renders up to `warm.concurrency` jobs from
+the durable warm queue and prints a JSON summary with `queued`, `processed`,
+`warmed`, `skipped`, and `failed` counts. Content and site changes enqueue
+replacement jobs automatically. Run the command again, or let the scheduled
+warmer run, to work a larger queue down; a URL that fails to render stays
+stale and is enqueued again on the next run. In `graph` mode the per-URL
+warmer is off and the command enqueues nothing.
 
 ### Report cache state
 

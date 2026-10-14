@@ -60,7 +60,7 @@ When a page folder has a `page.json`, Blockstudio looks for a sibling source fil
 
 | File | Use |
 | --- | --- |
-| `index.php` | PHP or HTML-like block markup |
+| `index.php` | HTML-like block markup, read as-is (PHP code is not executed) |
 | `index.blade.php` | Blade template content |
 | `index.twig` | Twig template content |
 | `index.md` | Markdown content |
@@ -492,7 +492,8 @@ The command discovers the complete source inventory, creates or updates changed
 posts, prunes confirmed orphans, refreshes collection routing and compiled
 `templateFor` configuration, and reports what changed. Add `--authoritative` to
 replace managed content instead of preserving keyed editor content, and
-`--full` to force a full comparison:
+`--full` to report the pass as a full reconciliation regardless of the stored
+source identity:
 
 ```bash
 wp bs pages sync --authoritative --full
@@ -554,8 +555,10 @@ deterministic `sourceIdentity`.
 file definition instead of preserving keyed editor content. Leave it `false`
 for a normal explicit synchronization. `plan_valid: false`, `full: true`,
 `broad: true`, a missing previous source identity, or a changed sync-engine
-fingerprint broadens the pass. Git rename records are identity hints only. They
-never replace complete inventory comparison.
+fingerprint marks the pass as a full reconciliation (`fullReconciliation` in
+the report). Every pass compares the complete inventory either way. Git rename
+records are identity hints only. They never replace complete inventory
+comparison.
 
 Equal fingerprints with unchanged runtime paths perform no post or postmeta
 writes and do not fire update hooks. When an unchanged source moves into a new
@@ -760,7 +763,7 @@ The new testimonials section and button appear on sync. The client's edits to th
 
 #### One-time scaffold
 
-Create a page with a starting structure, then hand it off entirely. Set `sync` to `false` so the template is only used for the initial creation. After that, the client owns the page completely.
+Create a page with a starting structure, then hand it off entirely. Set `sync` to `false` so normal synchronization never creates or updates the page, and create it once with `Blockstudio\Pages::force_sync('blog')`. After that, the client owns the page completely.
 
 ```json title="page.json"
 {
@@ -775,7 +778,7 @@ Create a page with a starting structure, then hand it off entirely. Set `sync` t
 <p>Welcome to our blog. Start writing!</p>
 ```
 
-The page is created once. After that, the client can add, remove, and rearrange blocks freely. Template changes are ignored.
+`wp bs pages sync` skips this page, so `force_sync()` creates it once. After that, the client can add, remove, and rearrange blocks freely. Template changes are ignored.
 
 ## Block Bindings
 
@@ -888,9 +891,8 @@ $pages = Blockstudio\Pages::pages();
 // Get pages from one collection.
 $docs = Blockstudio\Pages::pages('docs');
 
-// Answer whether the current request resolves inside a collection.
-// Layout files use it to branch between an archive and a single view.
-$inDocs = Blockstudio\Pages::in_collection('docs');
+// Get the pages of one collection, sorted (same result as pages('docs')).
+$docs = Blockstudio\Pages::in_collection('docs');
 
 // Get a nested page tree.
 $tree = Blockstudio\Pages::tree('docs');

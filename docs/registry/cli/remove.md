@@ -31,7 +31,9 @@ Deletes an installed block folder from your project's block directory.
 ## Behavior
 
 In interactive mode, the CLI asks for confirmation before deleting. In
-non-interactive mode (piped output, CI), it proceeds without prompting.
+non-interactive mode (stdin is not a terminal, as in CI), it proceeds
+without prompting. A block folder that does not exist exits with
+`Block "<name>" is not installed.`
 
 The command removes the entire block folder. It does not remove blocks that
 were installed as dependencies. If you installed `tabs` which pulled in

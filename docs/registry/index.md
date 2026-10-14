@@ -42,7 +42,7 @@ the registry and downloads exactly those files.
 
 ## WordPress admin
 
-If your project has a `blocks.json` with registries configured, the same
+If the active theme has a `blocks.json` with registries configured, the same
 registries also appear in **Tools > Blockstudio > Registry** inside wp-admin.
 
 That admin browser lets you inspect the available blocks and import them

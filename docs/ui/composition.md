@@ -10,7 +10,7 @@ meta_description: "How the bundled UI components compose into working interfaces
 
 # UI Composition
 
-The [bundled UI components](/docs/blocks/ui-components) are designed to be assembled, not used one at a time. A select opens inside a dialog, a form validates inside a drawer, a menu sits in a table row. This page explains the machinery that makes those seams work: how compound families are structured, how triggers forward button props, what the Interactivity API does underneath, and the layering model that keeps stacked surfaces coherent.
+The [bundled UI components](/ui) are designed to be assembled, not used one at a time. A select opens inside a dialog, a form validates inside a drawer, a menu sits in a table row. This page explains the machinery that makes those seams work: how compound families are structured, how triggers forward button props, what the Interactivity API does underneath, and the layering model that keeps stacked surfaces coherent.
 
 ## Compound families
 

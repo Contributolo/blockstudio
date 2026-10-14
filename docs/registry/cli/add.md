@@ -47,7 +47,17 @@ npx blockstudio add tabs
 If the block is found in exactly one registry, it's used automatically. If
 found in multiple, the CLI shows an interactive select prompt to choose.
 
-With `--yes`, the first matching registry is used.
+With `--yes`, the first matching registry in `blocks.json` order is used.
+Without a terminal, and with `--dry-run`, an ambiguous name stops the command
+with an error that lists the registries:
+
+```
+Block "hero" found in multiple registries: acme, starter. Specify one: blockstudio add acme/hero
+```
+
+Before resolving any block, `add` fetches every configured registry. If one
+of them is unreachable or invalid, the command fails, even for a block with
+an explicit namespace.
 
 ## Dependencies
 
@@ -70,6 +80,17 @@ If a block folder already exists in the target directory:
 - **Interactive mode**: prompts you to confirm the overwrite
 - **`--yes` flag**: overwrites without asking
 - **`--dry-run` flag**: reports what would be overwritten
+- **Non-interactive mode without `--yes`**: stops before downloading, with
+  `Block "<name>" already exists at <path>. Use --yes to overwrite.`
+
+The check covers dependencies too, so adding `tabs` when `tab-item` is
+already installed needs `--yes`.
+
+## Multiple blocks
+
+Blocks passed in one command are processed in order. If one of them fails,
+the command stops there, and blocks installed earlier in the same run stay
+on disk.
 
 ## Examples
 

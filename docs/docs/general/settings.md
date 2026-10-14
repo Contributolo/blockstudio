@@ -381,7 +381,7 @@ performs its owned cleanup once; later requests remain inert.
 
 | Option                     | Type    | Compat default | Speed/strict default | Description                                      |
 | -------------------------- | ------- | -------------- | -------------------- | ------------------------------------------------ |
-| `profile`                  | string  | `"compat"`     | —                    | `compat`, `speed`, or `strict`                   |
+| `profile`                  | string  | `"compat"`     | Not applicable       | `compat`, `speed`, or `strict`                   |
 | `wordpress.headNoise`      | boolean | `false`        | `true`               | Remove generic head discovery and emoji output   |
 | `wordpress.embeds`         | boolean | `false`        | `true`               | Remove oEmbed discovery and host scripts         |
 | `wordpress.xmlrpc`         | boolean | `false`        | `true`               | Disable XML-RPC and pingbacks                    |
@@ -632,6 +632,6 @@ These settings drive the canonical `blockstudio-phpstan` command. See
 See [AI Integration](/docs/dev/ai) for the documentation index and the full
 generated text.
 
-> **[UI Components](/docs/blocks/ui-components)**
+> **[UI Components](/ui)**
 >
 > Enable and compose the bundled headless UI components introduced in Blockstudio 7.3.

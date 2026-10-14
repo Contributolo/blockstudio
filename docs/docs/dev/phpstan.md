@@ -367,6 +367,11 @@ own:
 vendor/bin/blockstudio-phpstan --root . -- --no-progress
 ```
 
+The presets include the extension themselves. Do not add
+`phpstan/extension-installer` to a project that runs the canonical command:
+with the installer present, `extension.neon` is loaded twice and PHPStan stops
+with "This file is included multiple times" before analysing anything.
+
 The command defaults PHPStan to a `1G` memory limit so Composer-managed
 WordPress projects do not inherit a typical `128M` CLI ceiling. Pass an
 explicit PHPStan option after `--` to override it, such as
@@ -386,6 +391,9 @@ vendor/bin/blockstudio-phpstan -- --no-progress --generate-baseline=phpstan-base
 ```neon title="phpstan.neon"
 includes:
     - phpstan-baseline.neon
+
+parameters:
+    level: max
 ```
 
 ```json title="blockstudio.json"
@@ -395,6 +403,11 @@ includes:
   }
 }
 ```
+
+Keep the `level` line for the `base` and `theme` presets. The canonical command
+only sets level `max` for them when no project configuration is included, and
+without a level PHPStan stops with "No rules detected". The `extreme-theme`
+preset sets level `max` itself.
 
 Relative paths resolve from `blockstudio.json`. The canonical command and the
 managed commit hook both pick the file up, so the hook gates new findings without
@@ -574,6 +587,11 @@ diagnostics deterministically. Keep roots narrow, exclude fixture/generated
 trees, and set a file limit for large repositories. JavaScript and Tailwind can
 be disabled independently. Live rendering never runs unless its preset is
 selected.
+
+Theme, JavaScript, and Tailwind diagnostics are reported through PHPStan's
+result cache. After changing only a `block.json` or a script, a warm
+cache can report the previous result. Pass
+`--debug` after `--` to bypass the cache when verifying such changes.
 
 ## Project contract for coding agents
 

@@ -369,6 +369,29 @@ On success, the optimistic data is replaced with the server response. On
 failure, the state rolls back to a snapshot taken before the mutation. The
 cache key is automatically invalidated after every successful mutation.
 
+Failure means that the promise returned by `fn` rejects. `bs.db()` and
+`bs.fn()` resolve with the error body on a validation error, a missing record,
+or a failed permission check, so throw when the result carries a `code` if
+those cases should roll back too:
+
+```js
+const ok = (request) =>
+  request.then((result) => {
+    if (result?.code) {
+      throw result;
+    }
+    return result;
+  });
+
+await bs.mutate({
+  state: $data,
+  key: 'todos',
+  action: 'delete',
+  id: todoId,
+  fn: () => ok(bs.db('my-theme/app', 'todos').delete(todoId)),
+});
+```
+
 For create operations, a temporary `id` (like `__temp_1`) is assigned to the
 optimistic item. When the server responds, the temporary item is patched with
 the real data including the server-assigned `id`.

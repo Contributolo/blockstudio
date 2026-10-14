@@ -9,6 +9,17 @@
     "block-context",
     "field-patterns",
     "block-library",
-    "full-stack-blocks"
+    "full-stack-blocks",
+    "block-tags",
+    "documentation-site",
+    "site-editor-templates",
+    "ui-app-screen",
+    "custom-field-types",
+    "content-sync",
+    "analysis-and-agents",
+    "static-prerendering",
+    "block-islands",
+    "deploying",
+    "block-registry"
   ]
 }
