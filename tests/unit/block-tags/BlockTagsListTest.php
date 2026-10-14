@@ -86,6 +86,20 @@ class BlockTagsListTest extends TestCase {
 		$this->assertSame( '<li>Test</li>', $items[1]['innerHTML'] );
 	}
 
+	public function test_multiple_nested_lists_keep_their_order_and_surrounding_text(): void {
+		$this->assertSame(
+			'<ul class="wp-block-list outer"><li class="done">Before<ul class="wp-block-list first"><li>One</li></ul> between<ol class="wp-block-list second"><li>Two</li></ol> after</li><li>Last</li></ul>',
+			self::rendered( '<ul class="outer"><li class="done">Before<ul class="first"><li>One</li></ul> between<ol class="second"><li>Two</li></ol> after</li><li>Last</li></ul>' )
+		);
+	}
+
+	public function test_list_classes_are_decoded_and_escaped_once(): void {
+		$this->assertSame(
+			'<ul class="wp-block-list [&amp;&gt;li]:mb-2"><li>One</li></ul>',
+			self::rendered( '<ul class="[&amp;&gt;li]:mb-2 wp-block-list"><li>One</li></ul>' )
+		);
+	}
+
 	public function test_block_syntax_takes_a_class_name(): void {
 		$this->assertSame(
 			'<!-- wp:list {"ordered":false,"className":"is-style-checks"} --><ul class="wp-block-list is-style-checks"><!-- wp:list-item --><li>One</li><!-- /wp:list-item --></ul><!-- /wp:list -->',

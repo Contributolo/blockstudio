@@ -2,9 +2,9 @@ import {
   useBlockProps,
   RichText as WordPressRichText,
 } from '@wordpress/block-editor';
-import { useDispatch, useSelect } from '@wordpress/data';
+import { useSelect } from '@wordpress/data';
+import { cloneDeep, get, set } from 'lodash-es';
 import styleToObject from 'style-to-object';
-import { selectors } from '@/blocks/store/selectors';
 import {
   Any,
   BlockstudioBlock,
@@ -26,12 +26,11 @@ export const RichText = ({
   data: { attribute: string; tag?: string; [key: string]: Any };
   hasOwnBlockProps: boolean;
 }) => {
-  const { setRichText } = useDispatch('blockstudio/blocks');
-  const richTextEntries = useSelect(
-    (select) =>
-      (select('blockstudio/blocks') as typeof selectors).getRichText()?.[
-        clientId
-      ] as Record<string, string> | undefined,
+  const currentAttributes = useSelect(
+    (select: Any) =>
+      select('core/block-editor').getBlockAttributes(clientId) as
+        | BlockstudioBlockAttributes
+        | undefined,
     [clientId],
   );
 
@@ -64,25 +63,26 @@ export const RichText = ({
   if (!hasAttr) return null;
 
   const setter = (value: string) => {
-    const obj = {
-      [clientId]: {
-        ...(richTextEntries || {}),
-        [data.attribute]: value,
-      },
-    };
+    const source = currentAttributes ?? attributes;
+    const values = cloneDeep(source.blockstudio?.attributes ?? {});
+    set(values, data.attribute, value);
     setAttributes({
-      ...attributes,
-      ...{
-        [`BLOCKSTUDIO_RICH_TEXT-${data.attribute}-${clientId}`]: value,
+      blockstudio: {
+        ...source.blockstudio,
+        attributes: values,
       },
-    });
-    setRichText(obj);
+    } as BlockstudioBlockAttributes);
   };
 
   return (
     <WordPressRichText
       {...props}
-      value={richTextEntries?.[data?.attribute] || ''}
+      value={
+        get(
+          (currentAttributes ?? attributes).blockstudio?.attributes,
+          data.attribute,
+        ) || ''
+      }
       onChange={(value: string) => setter(value)}
     />
   );

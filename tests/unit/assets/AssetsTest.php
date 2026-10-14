@@ -393,6 +393,56 @@ class AssetsTest extends TestCase {
 		$this->assertNotSame( $first, Assets::get_asset_version( $path ) );
 	}
 
+	public function test_nested_scss_edit_recompiles_and_invalidates_the_runtime_watch(): void {
+		$path = $this->create_temporary_asset( 'global.scss', '@import "scss/wysiwyg"; .example { @include wysiwyg; }' );
+		$directory = dirname( $path );
+		wp_mkdir_p( $directory . '/scss' );
+		wp_mkdir_p( $directory . '/mixins' );
+		file_put_contents( $directory . '/scss/_wysiwyg.scss', '@import "../mixins/wysiwyg";' );
+		$nested = $directory . '/mixins/_wysiwyg.scss';
+		file_put_contents( $nested, '@mixin wysiwyg { color: red; }' );
+		$dependencies = Assets::get_asset_dependency_paths( $path );
+		$this->assertSame( array( $directory . '/scss/_wysiwyg.scss', $nested ), $dependencies );
+		$watch = \Blockstudio\Build_Cache::create_watch_snapshot( array_merge( array( $path ), $dependencies ) );
+		$first = Assets::process( $path, '' );
+		$this->assertStringContainsString( 'red', file_get_contents( $first ) );
+
+		file_put_contents( $nested, '@mixin wysiwyg { color: blue; }' );
+		touch( $nested, time() + 2 );
+		clearstatcache( true, $nested );
+		$second = Assets::process( $path, '' );
+		$this->assertNotSame( $first, $second );
+		$this->assertStringContainsString( 'blue', file_get_contents( $second ) );
+		$this->assertFalse( \Blockstudio\Build_Cache::is_watch_valid( $watch ) );
+	}
+
+	public function test_scss_dependency_graph_deduplicates_cycles_and_shared_imports(): void {
+		$path = $this->create_temporary_asset( 'style.scss', '@import "a", "b"; @use "sass:math"; @import "https://example.com/external.css";' );
+		$directory = dirname( $path );
+		file_put_contents( $directory . '/_a.scss', '@forward "shared";' );
+		file_put_contents( $directory . '/_b.scss', '@use "shared";' );
+		file_put_contents( $directory . '/_shared.scss', '@import "style"; $color: red;' );
+		$this->assertSame(
+			array( $directory . '/_a.scss', $directory . '/_b.scss', $directory . '/_shared.scss' ),
+			Assets::get_asset_dependency_paths( $path )
+		);
+	}
+
+	public function test_scss_prelude_and_import_paths_include_transitive_dependencies(): void {
+		$path = $this->create_temporary_asset( 'style.scss', '.example { color: $color; }' );
+		$directory = dirname( $path ) . '/vendor';
+		wp_mkdir_p( $directory . '/tokens' );
+		file_put_contents( $directory . '/_theme.scss', '@import "tokens";' );
+		file_put_contents( $directory . '/tokens/_index.scss', '@import "colors";' );
+		file_put_contents( $directory . '/tokens/_colors.scss', '$color: red;' );
+		$this->add_filter( 'blockstudio/assets/process/scss/import_paths', static fn() => array( $directory ) );
+		$this->add_filter( 'blockstudio/assets/process/scss/prelude', static fn() => '@import "theme";' );
+		$this->assertSame(
+			array( $directory . '/_theme.scss', $directory . '/tokens/_index.scss', $directory . '/tokens/_colors.scss' ),
+			Assets::get_asset_dependency_paths( $path )
+		);
+	}
+
 	public function test_get_asset_version_changes_when_minify_setting_changes(): void {
 		$path = $this->create_temporary_asset( 'script.js', 'console.log("asset");' );
 

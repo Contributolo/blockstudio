@@ -24,10 +24,6 @@ jobs:
           node-version: 20
           cache: npm
 
-      - name: Configure npm registries
-        run: |
-          echo "@fortawesome:registry=https://npm.fontawesome.com/" >> .npmrc
-          echo "//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_TOKEN }}" >> .npmrc
 
       - run: scripts/ci/npm-ci.sh
 
@@ -85,10 +81,6 @@ jobs:
         with:
           php-version: '8.4'
 
-      - name: Configure npm registries
-        run: |
-          echo "@fortawesome:registry=https://npm.fontawesome.com/" >> .npmrc
-          echo "//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_TOKEN }}" >> .npmrc
 
       - run: scripts/ci/npm-ci.sh
       - run: composer install --no-interaction
@@ -119,10 +111,6 @@ jobs:
         with:
           php-version: '8.4'
 
-      - name: Configure npm registries
-        run: |
-          echo "@fortawesome:registry=https://npm.fontawesome.com/" >> .npmrc
-          echo "//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_TOKEN }}" >> .npmrc
 
       - run: scripts/ci/npm-ci.sh
       - run: composer install --no-interaction
@@ -175,10 +163,6 @@ jobs:
         with:
           php-version: '8.4'
 
-      - name: Configure npm registries
-        run: |
-          echo "@fortawesome:registry=https://npm.fontawesome.com/" >> .npmrc
-          echo "//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_TOKEN }}" >> .npmrc
 
       - run: scripts/ci/npm-ci.sh
       - run: composer install --no-interaction
@@ -227,10 +211,6 @@ jobs:
         with:
           php-version: '8.4'
 
-      - name: Configure npm registries
-        run: |
-          echo "@fortawesome:registry=https://npm.fontawesome.com/" >> .npmrc
-          echo "//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_TOKEN }}" >> .npmrc
 
       - run: scripts/ci/npm-ci.sh
       - run: composer install --no-interaction

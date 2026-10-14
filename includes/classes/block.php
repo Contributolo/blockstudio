@@ -2177,7 +2177,7 @@ class Block {
 			: get_the_ID();
 		$object_id = isset( $_GET['postId'] )
 			? intval( $_GET['postId'] )
-			: get_queried_object_id();
+			: ( $is_editor ? $post_id : get_queried_object_id() );
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 		$name =

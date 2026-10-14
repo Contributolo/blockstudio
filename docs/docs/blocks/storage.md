@@ -85,12 +85,19 @@ Add the `storage` property to any field definition:
 
 1. **Registration**: When WordPress loads, Blockstudio registers meta keys and settings based on your field configurations
 2. **Editing**: Values are managed as block attributes in the editor (always stored in block)
-3. **Saving**: When the post is saved, values are synced to configured storage locations
+3. **Saving**: Post meta is synced when the post is saved. Site options are synced when the post is published or a published post's field value changes.
 
+Autosaves and revisions do not sync either storage location. Draft, pending, private, and scheduled posts can update their own post meta, but do not change live site options. A scheduled post syncs options when WordPress publishes it.
 
-> **Note**
->
-> Values are synced on every post save. If you update a value in the block editor and save, all storage locations are updated automatically.
+### Saving Site Options
+
+Options are shared across the entire site. Publishing a new block writes the option fields supplied in its saved attributes. Later saves compare each field with the previous saved version of that block and write only changed values. Saving a post's title, or an unchanged older copy of the block on another post, does not overwrite a newer option value.
+
+A field omitted from the saved attributes leaves its option untouched. This also protects existing options when a new field is added to `block.json`. An explicit `null` deletes an option; empty strings, `false`, `0`, and empty arrays are saved as values. Removing a block does not delete its options.
+
+Use one designated published block to manage each shared option. If multiple blocks deliberately change the same option, the last changed value saved wins. Storage does not load the current option into every block: each block retains its own field values in post content.
+
+For file-based pages, a persistent block `key` lets Blockstudio recognize the same block after it moves in the document. Blocks without a key are matched by block name and position.
 
 
 ## Accessing Stored Values

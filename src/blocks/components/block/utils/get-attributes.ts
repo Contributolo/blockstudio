@@ -93,5 +93,9 @@ export const getAttributes = (value: string, elementName: string) => {
     }
   });
 
+  if (attributes.templateLock === 'false') {
+    attributes.templateLock = false;
+  }
+
   return attributes;
 };

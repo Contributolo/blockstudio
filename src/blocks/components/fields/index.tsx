@@ -1,4 +1,4 @@
-import { useDispatch, useSelect } from '@wordpress/data';
+import { useDispatch } from '@wordpress/data';
 import { useEffect, useMemo, useRef } from '@wordpress/element';
 import { seen, unseen } from '@wordpress/icons';
 import { set, unset, result, isNumber, cloneDeep, get } from 'lodash-es';
@@ -36,7 +36,7 @@ import {
 } from '@/blocks/components/fields/registry';
 import { LabelAction } from '@/blocks/components/label';
 import { Styles } from '@/blocks/components/styles';
-import { selectors } from '@/blocks/store/selectors';
+import { useBlockAttributes } from '@/blocks/hooks/use-block-attributes';
 import { createBlocks } from '@/blocks/utils/create-blocks';
 import { dispatch } from '@/blocks/utils/dispatch';
 import { getDefaults } from '@/blocks/utils/get-defaults';
@@ -54,89 +54,6 @@ import {
 import { css } from '@/utils/css';
 import { isNumeric } from '@/utils/is-numeric';
 
-const escapeRegExp = (value: string) =>
-  value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
-const getRemovedRepeaterInfo = (id: string) => {
-  const match = id.match(/^(.*)\[(\d+)\]$/);
-
-  if (!match) {
-    return null;
-  }
-
-  return {
-    repeaterPath: match[1],
-    index: Number(match[2]),
-  };
-};
-
-const remapRichTextAfterRepeaterRemove = (
-  entries: Record<string, string>,
-  repeaterPath: string,
-  removedIndex: number,
-): Record<string, string> => {
-  const nextEntries: Record<string, string> = {};
-  const pattern = new RegExp(
-    `^${escapeRegExp(repeaterPath)}\\[(\\d+)\\](\\..+)$`,
-  );
-
-  Object.entries(entries).forEach(([key, value]) => {
-    const match = key.match(pattern);
-
-    if (!match) {
-      nextEntries[key] = value;
-      return;
-    }
-
-    const index = Number(match[1]);
-
-    if (index < removedIndex) {
-      nextEntries[key] = value;
-      return;
-    }
-
-    if (index > removedIndex) {
-      nextEntries[`${repeaterPath}[${index - 1}]${match[2]}`] = value;
-    }
-  });
-
-  return nextEntries;
-};
-
-const remapRichTextAfterRepeaterSort = (
-  entries: Record<string, string>,
-  repeaterPath: string,
-  order: number[],
-): Record<string, string> => {
-  const nextEntries: Record<string, string> = {};
-  const pattern = new RegExp(
-    `^${escapeRegExp(repeaterPath)}\\[(\\d+)\\](\\..+)$`,
-  );
-  const reorderedIndexes = new Map(
-    order.map((previousIndex, nextIndex) => [previousIndex, nextIndex]),
-  );
-
-  Object.entries(entries).forEach(([key, value]) => {
-    const match = key.match(pattern);
-
-    if (!match) {
-      nextEntries[key] = value;
-      return;
-    }
-
-    const nextIndex = reorderedIndexes.get(Number(match[1]));
-
-    if (nextIndex === undefined) {
-      nextEntries[key] = value;
-      return;
-    }
-
-    nextEntries[`${repeaterPath}[${nextIndex}]${match[2]}`] = value;
-  });
-
-  return nextEntries;
-};
-
 export const Fields = ({
   attributes,
   block,
@@ -144,7 +61,7 @@ export const Fields = ({
   config = false,
   extensions,
   portal,
-  setAttributes,
+  setAttributes: inheritedSetAttributes,
 }: {
   attributes: BlockstudioBlockAttributes;
   block: BlockstudioBlock;
@@ -156,19 +73,13 @@ export const Fields = ({
 }) => {
   if (config && !block?.name) return null;
 
+  const setAttributes = useBlockAttributes(clientId, inheritedSetAttributes);
+
   const {
     __unstableMarkNextChangeAsNotPersistent: markNextChangeAsNotPersistent,
   } = useDispatch('core/block-editor') as unknown as {
     __unstableMarkNextChangeAsNotPersistent: () => void;
   };
-  const { setRichText } = useDispatch('blockstudio/blocks');
-  const richTextEntries = useSelect(
-    (select) =>
-      (select('blockstudio/blocks') as typeof selectors).getRichText()?.[
-        clientId
-      ] as Record<string, string> | undefined,
-    [clientId],
-  );
 
   const defaultsRepeaters = useRef(false);
   const defaultValue = useRef(false);
@@ -504,16 +415,6 @@ export const Fields = ({
         })),
       );
 
-      if (richTextEntries) {
-        setRichText({
-          [clientId]: remapRichTextAfterRepeaterSort(
-            richTextEntries,
-            id,
-            normalizedOrder,
-          ),
-        });
-      }
-
       setRepeater(newAttributes, getRepeaterKey(id));
     };
 
@@ -581,18 +482,6 @@ export const Fields = ({
       const key = `blockstudio.attributes.${id}`;
       const newAttributes = JSON.parse(JSON.stringify(attributes));
       unset(newAttributes, key);
-
-      const removedRepeaterInfo = getRemovedRepeaterInfo(id);
-
-      if (removedRepeaterInfo && richTextEntries) {
-        setRichText({
-          [clientId]: remapRichTextAfterRepeaterRemove(
-            richTextEntries,
-            removedRepeaterInfo.repeaterPath,
-            removedRepeaterInfo.index,
-          ),
-        });
-      }
 
       const outerRepeater = key.replace(/\[\d+\]$/, '');
 

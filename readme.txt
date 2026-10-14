@@ -55,6 +55,14 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 == Changelog ==
 
 = 7.7.0 =
+* Fix: saving or editing multi-selected blocks preserves each block's own content, keys, metadata, and locks instead of copying attributes between selected blocks (#98)
+* Fix: RichText and sidebar field edits participate in Gutenberg undo and redo, with RichText values saved directly in block attributes (#98)
+* Fix: `InnerBlocks templateLock="false"` unlocks nested content as documented while other template lock values remain unchanged (#98)
+* Fix: preloaded editor renders receive the edited post's ID and post type, so post metadata is available on the first render (#98)
+* Fix: option storage updates only supplied, changed fields on published saves; drafts, missing fields, and unchanged stale copies no longer overwrite live site options (#98)
+* Fix: editor blocks no longer insert hidden render markers between their root elements, preserving adjacent-sibling theme styles and inserter preview isolation (#102)
+* Fix: SCSS asset versions and runtime watches include transitive imports, so editing a nested partial recompiles its dependent stylesheets (#96)
+* Fix: contributor installations use the public Font Awesome package without registry credentials (#103)
 * New: `Virtual_Routes::register()` serves whole documents for URLs without a post, with 404 preemption, canonical redirect suppression, rendering inside Blockstudio's output buffer, a document title, and static prerender URL registration, and `Assets::BUFFER_PRIORITY` documents the template_redirect priority the output buffer opens at
 * New: the PHPStan block tag rule checks prefix and alias tags, page sources below `pages/` including the HTML elements a project maps to blocks (declared in `phpstan.blockTags.elements`), page layouts, bundled UI blocks, and optionally other project PHP, tries every hyphen of a `<bs:>` tag the way the runtime does, accepts the global attributes Blockstudio forwards, and reports an undeclared `class` with its own identifier
 * New: `wp bs prerender map status` and `wp bs prerender map prune` (and `Static_Prerender_Early_Serve::map_report()` and `prune_map()`) report and remove early-serve map entries whose site no longer exists or whose directory is gone, `wp bs prerender status` includes the report, deleting a multisite site removes its entries, and cache cleanup never collects the namespace an activated artifact is served from

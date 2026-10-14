@@ -1,0 +1,15 @@
+{
+  "$schema": "https://blockstudio.dev/schema/block",
+  "name": "blockstudio/editor-audit",
+  "title": "Editor audit",
+  "category": "blockstudio-test-native",
+  "attributes": {
+    "__BLOCKSTUDIO_KEY": { "type": "string" }
+  },
+  "blockstudio": {
+    "attributes": [
+      { "id": "richtext", "type": "richtext" },
+      { "id": "text", "type": "text", "label": "Audit text" }
+    ]
+  }
+}

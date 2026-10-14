@@ -2005,27 +2005,45 @@ class Assets {
 	 * @return array
 	 */
 	private static function get_scss_dependencies( string $scss, string $path ): array {
-		if ( '' === $scss ) {
-			return array();
-		}
-
-		preg_match_all(
-			'/@(import|use|forward)\s+([\'"])(.*?)(?<!\\\\)\2/',
-			$scss,
-			$matches
-		);
-
 		$dependencies = array();
+		$real_path    = realpath( $path );
+		$visited      = array( wp_normalize_path( false === $real_path ? $path : $real_path ) => true );
+		$sources      = array( array( $scss, $path ) );
 
-		foreach ( $matches[3] as $import ) {
-			$dependency = self::resolve_scss_dependency( $import, $path );
+		for ( $index = 0; isset( $sources[ $index ] ); ++$index ) {
+			list( $source, $source_path ) = $sources[ $index ];
+			preg_match_all(
+				'/@(import|use|forward)\s+(([\'"])(.*?)(?<!\\\\)\3(?:\s*,\s*([\'"]).*?(?<!\\\\)\5)*)/',
+				$source,
+				$statements
+			);
 
-			if ( null !== $dependency ) {
-				$dependencies[] = $dependency;
+			foreach ( $statements[2] as $statement ) {
+				preg_match_all( '/([\'"])(.*?)(?<!\\\\)\1/', $statement, $imports );
+				foreach ( $imports[2] as $import ) {
+					$dependency = self::resolve_scss_dependency( $import, $source_path );
+					if ( null === $dependency ) {
+						continue;
+					}
+
+					$real_path  = realpath( $dependency );
+					$dependency = wp_normalize_path( false === $real_path ? $dependency : $real_path );
+					if ( isset( $visited[ $dependency ] ) ) {
+						continue;
+					}
+
+					$visited[ $dependency ] = true;
+					$dependencies[]         = $dependency;
+					// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reading local SCSS dependencies.
+					$content = file_get_contents( $dependency );
+					if ( is_string( $content ) ) {
+						$sources[] = array( $content, $dependency );
+					}
+				}
 			}
 		}
 
-		return array_values( array_unique( $dependencies ) );
+		return $dependencies;
 	}
 
 	/**

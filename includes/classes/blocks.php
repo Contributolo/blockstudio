@@ -104,6 +104,7 @@ class Blocks {
 			$blocks,
 			$block_names,
 			$parser,
+			$post,
 			&$visited_refs
 		) {
 			if (
@@ -136,15 +137,36 @@ class Blocks {
 					$this->get_media_ids_from_block( $block, $blocks[ $block['blockName'] ] ?? null )
 				);
 
-				// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Setting mode for rendering.
+				// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Scope preload render context to the edited post.
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput -- Preserve the original request value for restoration only.
+				$previous_mode = $_GET['blockstudioMode'] ?? null;
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput -- Preserve the original request value for restoration only.
+				$previous_post_id        = $_GET['postId'] ?? null;
 				$_GET['blockstudioMode'] = 'editor';
+				if ( $post instanceof \WP_Post ) {
+					$_GET['postId'] = $post->ID;
+				}
 
-				$blockstudio_blocks[] = array(
-					'rendered'   => render_block( $block ),
-					'blockName'  => $block['blockName'],
-					'attributes' => $block['attrs'],
-					'mode'       => 'editor',
-				);
+				try {
+					$blockstudio_blocks[] = array(
+						'rendered'   => render_block( $block ),
+						'blockName'  => $block['blockName'],
+						'attributes' => $block['attrs'],
+						'mode'       => 'editor',
+					);
+				} finally {
+					if ( null === $previous_mode ) {
+						unset( $_GET['blockstudioMode'] );
+					} else {
+						$_GET['blockstudioMode'] = $previous_mode;
+					}
+					if ( null === $previous_post_id ) {
+						unset( $_GET['postId'] );
+					} else {
+						$_GET['postId'] = $previous_post_id;
+					}
+				}
+				// phpcs:enable WordPress.Security.NonceVerification.Recommended
 			}
 			if ( count( $block['innerBlocks'] ) > 0 ) {
 				foreach ( $block['innerBlocks'] as $inner_block ) {

@@ -165,6 +165,42 @@ class BlocksEditorAssetsTest extends TestCase {
 		$this->assertSame( array( 'Reusable preload' ), $rendered_text_values );
 	}
 
+	public function test_preload_resolves_the_edited_posts_meta_and_restores_request_context(): void {
+		wp_set_current_user( 1 );
+		if ( ! function_exists( 'get_current_screen' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/class-wp-screen.php';
+			require_once ABSPATH . 'wp-admin/includes/screen.php';
+		}
+		set_current_screen( 'post' );
+		$this->post_id = wp_insert_post( array(
+			'post_title' => 'Post context preload', 'post_status' => 'draft', 'post_type' => 'page',
+			'post_content' => '<!-- wp:blockstudio/editor-audit /-->',
+			'meta_input' => array( '_editor_audit' => 'Preloaded metadata' ),
+		), true );
+		$this->assertIsInt( $this->post_id );
+		$GLOBALS['post'] = get_post( $this->post_id );
+		$previous_get = $_GET;
+		$_GET['postId'] = 987654;
+		$_GET['blockstudioMode'] = 'preview';
+		$contexts = array();
+		$this->add_filter( 'blockstudio/blocks/render', static function ( $html, $data, $editor ) use ( &$contexts ) {
+			if ( 'blockstudio/editor-audit' === $data->name ) {
+				$contexts[] = array( $data->blockstudio['data']['block']['postId'], $data->blockstudio['data']['block']['postType'], $editor );
+			}
+			return $html;
+		}, 10, 3 );
+		try {
+			$this->reset_editor_asset_state();
+			do_action( 'enqueue_block_editor_assets' );
+			$this->assertSame( array( array( $this->post_id, 'page', true ) ), $contexts );
+			$this->assertStringContainsString( 'Preloaded metadata', wp_scripts()->get_data( 'blockstudio-blocks', 'data' ) );
+			$this->assertSame( 987654, $_GET['postId'] );
+			$this->assertSame( 'preview', $_GET['blockstudioMode'] );
+		} finally {
+			$_GET = $previous_get;
+		}
+	}
+
 	/**
 	 * Media used by reusable Blockstudio blocks should hydrate the editor media store.
 	 *

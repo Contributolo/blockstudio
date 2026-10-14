@@ -11,6 +11,8 @@ meta_description: "Add editable text fields directly in your block templates."
 
 # RichText
 
+RichText edits are stored immediately in the block's attributes and participate in Gutenberg's undo and redo history, including RichText inside repeater rows. Saving while several blocks are selected preserves each block's own content and attributes.
+
 The `RichText` component allows rendering an editable input inside the editor and a static HTML Element in the frontend. It is based on the [RichText](https://developer.wordpress.org/block-editor/reference-guides/richtext/) component WordPress provides.
 
 ## Basic Usage

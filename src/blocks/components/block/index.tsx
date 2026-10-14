@@ -7,7 +7,7 @@ import { useSelect } from '@wordpress/data';
 import { useEffect, useMemo, useRef, useState } from '@wordpress/element';
 import parse from 'html-react-parser';
 import { DomElement } from 'htmlparser2';
-import { cloneDeep } from 'lodash-es';
+import { cloneDeep, unset } from 'lodash-es';
 import { MediaPlaceholder } from '@/blocks/components/block/media-placeholder';
 import { checkForBlockProps } from '@/blocks/components/block/utils/check-for-block-props';
 import { getAttributes } from '@/blocks/components/block/utils/get-attributes';
@@ -52,10 +52,10 @@ const getDocumentFrameElement = (): Element | null => {
 
 const isPreviewFrameElement = (frameElement: Element | null): boolean =>
   !!frameElement &&
-  (
-    frameElement.classList.contains('block-editor-block-preview__content-iframe') ||
-    !!frameElement.closest('.block-editor-block-preview')
-  );
+  (frameElement.classList.contains(
+    'block-editor-block-preview__content-iframe',
+  ) ||
+    !!frameElement.closest('.block-editor-block-preview'));
 
 const getDocumentRenderMode = (): 'editor' | 'preview' => {
   const frameElement = getDocumentFrameElement();
@@ -98,7 +98,10 @@ export const Block = ({
     rendered: string;
   } | null;
 }) => {
+  const richTextPaths = useRef(new Set<string>());
+
   function computeRender(rendered: string): RenderState {
+    richTextPaths.current.clear();
     const transform = (input: string) => {
       input = input.replace(
         getRegex('InnerBlocks'),
@@ -107,6 +110,7 @@ export const Block = ({
       input = input.replace(getRegex('RichText', 'gs'), (match) => {
         const innerAttributes = getAttributes(match, 'RichText');
         const attrKey = innerAttributes.attribute as string;
+        richTextPaths.current.add(attrKey);
         attributeMap[attrKey] = innerAttributes;
         const cssClass = attrKey.replace(/[\[\].]/g, '_');
 
@@ -150,7 +154,8 @@ export const Block = ({
             node.attribs &&
             node.attribs.id === 'blockstudio-replace-richtext'
           ) {
-            const attrKey = node.attribs['data-attribute'] || node.attribs.class;
+            const attrKey =
+              node.attribs['data-attribute'] || node.attribs.class;
             return (
               <RichText
                 {...{
@@ -169,7 +174,8 @@ export const Block = ({
             node.attribs &&
             node.attribs.id === 'blockstudio-replace-dropzone'
           ) {
-            const attrKey = node.attribs['data-attribute'] || node.attribs.class;
+            const attrKey =
+              node.attribs['data-attribute'] || node.attribs.class;
             return (
               <MediaPlaceholder
                 {...{ attributes, block, setAttributes }}
@@ -218,7 +224,6 @@ export const Block = ({
 
   const firstRenderDone = useRef<boolean | null>(null);
   const renderedModeRef = useRef<'editor' | 'preview' | null>(null);
-  const ref = useRef<HTMLDivElement | null>(null);
   const attributesRef = useRef(attributes);
   const renderRequestId = useRef(0);
   const [disableLoading, setDisableLoading] = useState(
@@ -226,6 +231,10 @@ export const Block = ({
   );
   const [isInPreview, setIsInPreview] = useState(false);
   const blockProps = useBlockProps();
+  const isBlockPreview = useSelect(
+    (select: Any) => !!select('core/block-editor').getSettings().isPreviewMode,
+    [],
+  );
   const postId =
     useSelect((select: Any) => select('core/editor')?.getCurrentPostId(), []) ||
     false;
@@ -285,7 +294,7 @@ export const Block = ({
       return { markup: null, hasMarkup: false, hasBlockProps: null };
     }
 
-    const mode = getDocumentRenderMode();
+    const mode = isBlockPreview ? 'preview' : getDocumentRenderMode();
     const preloaded = renderCache.claimPreloaded(
       block.name,
       clientId,
@@ -333,22 +342,22 @@ export const Block = ({
   };
 
   const getRenderMode = (): 'editor' | 'preview' => {
+    if (isBlockPreview) {
+      return 'preview';
+    }
     const frameElement = getDocumentFrameElement();
     if (frameElement?.getAttribute('name') === 'editor-canvas') {
       return 'editor';
     }
 
-    return ref.current?.closest('.block-editor-block-preview__content-iframe')
-      ? 'preview'
-      : getDocumentRenderMode();
+    return getDocumentRenderMode();
   };
 
   const getPostParams = (mode: 'editor' | 'preview' = getRenderMode()) => ({
     blockstudioMode: mode,
     postId,
     contextPostId: attributes.blockstudio?.contextBlock?.postId || postId,
-    contextPostType:
-      attributes.blockstudio?.contextBlock?.postType || postType,
+    contextPostType: attributes.blockstudio?.contextBlock?.postType || postType,
   });
 
   const renderForMode = (mode: 'editor' | 'preview') => {
@@ -438,46 +447,52 @@ export const Block = ({
   const debouncedFetchSingleRef = useRef(debouncedFetchSingle);
   debouncedFetchSingleRef.current = debouncedFetchSingle;
 
-  useEffect(function onMount() {
-    const mode = getRenderMode();
-    setIsInPreview(mode === 'preview');
+  useEffect(
+    function onMount() {
+      const mode = getRenderMode();
+      setIsInPreview(mode === 'preview');
 
-    if (disableLoading) return;
+      if (disableLoading) return;
 
-    if (
-      firstRenderDone.current &&
-      renderState.hasMarkup &&
-      renderedModeRef.current === mode
-    ) {
-      loaded();
-      return;
-    }
-
-    renderForMode(mode);
-  }, [disableLoading]);
-
-  useEffect(function onPreviewModeDetected() {
-    if (disableLoading) return;
-
-    const syncPreviewMode = () => {
-      if (getDocumentRenderMode() !== 'preview') {
+      if (
+        firstRenderDone.current &&
+        renderState.hasMarkup &&
+        renderedModeRef.current === mode
+      ) {
+        loaded();
         return;
       }
 
-      setIsInPreview(true);
-      renderForMode('preview');
-    };
+      renderForMode(mode);
+    },
+    [disableLoading, isBlockPreview],
+  );
 
-    syncPreviewMode();
+  useEffect(
+    function onPreviewModeDetected() {
+      if (disableLoading) return;
 
-    const observer = new MutationObserver(syncPreviewMode);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class'],
-    });
+      const syncPreviewMode = () => {
+        if (getRenderMode() !== 'preview') {
+          return;
+        }
 
-    return () => observer.disconnect();
-  }, [disableLoading]);
+        setIsInPreview(true);
+        renderForMode('preview');
+      };
+
+      syncPreviewMode();
+
+      const observer = new MutationObserver(syncPreviewMode);
+      observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class'],
+      });
+
+      return () => observer.disconnect();
+    },
+    [disableLoading, isBlockPreview],
+  );
 
   useEffect(
     function onAttributeOrContextChange() {
@@ -489,18 +504,24 @@ export const Block = ({
       });
 
       const mode = getRenderMode();
-      const previousHash = computeHash(block.name, attributesRef.current, mode);
+      const previousAttributes = cloneDeep(attributesRef.current);
+      // RichText already renders from the editor store; typing must not replace its DOM.
+      richTextPaths.current.forEach((path) => {
+        unset(previousAttributes, `blockstudio.attributes.${path}`);
+        unset(newAttributes, `blockstudio.attributes.${path}`);
+      });
+      const previousHash = computeHash(block.name, previousAttributes, mode);
       const nextHash = computeHash(block.name, newAttributes, mode);
 
       if (previousHash === nextHash) {
-        attributesRef.current = newAttributes as BlockstudioBlockAttributes;
+        attributesRef.current = attributes;
         return;
       }
-      attributesRef.current = newAttributes as BlockstudioBlockAttributes;
+      attributesRef.current = attributes;
 
       if (!firstRenderDone.current) return;
 
-      const cached = renderCache.get(nextHash);
+      const cached = renderCache.get(computeHash(block.name, attributes, mode));
 
       if (cached) {
         renderRequestId.current += 1;
@@ -528,16 +549,19 @@ export const Block = ({
     [memoizedRenderContext],
   );
 
-  useEffect(function onRefreshEvent() {
-    const refresh = () => debouncedFetchSingleRef.current();
-    document.addEventListener(`blockstudio/${block.name}/refresh`, refresh);
+  useEffect(
+    function onRefreshEvent() {
+      const refresh = () => debouncedFetchSingleRef.current();
+      document.addEventListener(`blockstudio/${block.name}/refresh`, refresh);
 
-    return () =>
-      document.removeEventListener(
-        `blockstudio/${block.name}/refresh`,
-        refresh,
-      );
-  }, [block.name, disableLoading]);
+      return () =>
+        document.removeEventListener(
+          `blockstudio/${block.name}/refresh`,
+          refresh,
+        );
+    },
+    [block.name, disableLoading],
+  );
 
   useEffect(
     function onMarkupChange() {
@@ -553,11 +577,6 @@ export const Block = ({
 
   return (
     <>
-      <span
-        ref={ref}
-        data-blockstudio-render-marker=""
-        style={{ display: 'none' }}
-      />
       {disableLoading ? (
         <div
           {...blockProps}

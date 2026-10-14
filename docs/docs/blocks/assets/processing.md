@@ -55,7 +55,7 @@ When using SCSS, it is possible to import other SCSS files. Imports are relative
 
 Additionally, custom import paths can be defined using the `blockstudio/assets/process/scss/import_paths` filter, so files can be imported from other directories without specifying any folder structure.
 
-Please note that the `.scss` extension needs to be present for imports to work properly.
+Imports can omit the `.scss` extension and resolve partials such as `_tokens.scss` or a directory's `_index.scss`.
 
 ```php title="functions.php"
 add_filter('blockstudio/assets/process/scss/import_paths', function($paths) {
@@ -83,7 +83,9 @@ add_filter('blockstudio/assets/process/scss/prelude', function($prelude, $path, 
 Combined with `blockstudio/assets/process/scss/import_paths`, this makes the
 referenced Sass surface available to every compiled file.
 
-Block assets will be recompiled when any of the imported files change.
+Block assets are recompiled when a dependency's modification time changes, including files imported by other partials. Blockstudio follows local `@import`, `@use`, and `@forward` dependencies, including prelude dependencies and configured import paths. Shared dependencies are tracked once, and cycles cannot loop during discovery. These files are also included in the runtime cache watch list.
+
+For example, editing `mixins/_wysiwyg.scss` recompiles `global-styles.scss` when it imports `scss/_wysiwyg.scss`, which in turn imports that mixin. Changes do not require touching the entry file. Sass built-in modules and remote imports are excluded from the local dependency graph.
 
 ## ES Modules
 
