@@ -106,6 +106,7 @@ class Admin_Page {
 			$asset['version'] ?? BLOCKSTUDIO_VERSION,
 			true
 		);
+		wp_set_script_translations( 'blockstudio-admin-page', 'blockstudio' );
 
 		if ( file_exists( $style_file ) ) {
 			wp_enqueue_style(

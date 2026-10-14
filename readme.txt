@@ -55,6 +55,9 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 == Changelog ==
 
 = 7.7.0 =
+* Fix: installed JavaScript translations load for the block editor and admin overview, including attribute controls, code popup actions, and media-type badges
+* Docs: custom populate examples use the supported single-argument, named-dataset filter format
+* Docs: explain frontend block stylesheet order and how to load theme overrides after block assets
 * Fix: saving or editing multi-selected blocks preserves each block's own content, keys, metadata, and locks instead of copying attributes between selected blocks (#98)
 * Fix: RichText and sidebar field edits participate in Gutenberg undo and redo, with RichText values saved directly in block attributes (#98)
 * Fix: `InnerBlocks templateLock="false"` unlocks nested content as documented while other template lock values remain unchanged (#98)

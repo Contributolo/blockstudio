@@ -81,6 +81,7 @@ class Blocks {
 			$block_scripts['version'],
 			true
 		);
+		wp_set_script_translations( 'blockstudio-blocks', 'blockstudio' );
 
 		if ( Admin::is_capturing_assets() ) {
 			return;

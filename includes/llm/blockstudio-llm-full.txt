@@ -164,6 +164,15 @@ Create a `style.css` file in the same folder:
 
 Blockstudio will automatically enqueue this stylesheet when the block is used.
 
+## Translations
+
+Blockstudio's editor controls and admin overview load JavaScript translations
+for the `blockstudio` text domain through WordPress. Install a matching
+language pack or generate script translation JSON files with your translation
+tool in `wp-content/languages/plugins/`. Strings without an available
+translation remain in English. This translates Blockstudio's own interface,
+not the content or field labels you define in your blocks.
+
 ## Next Steps
 
 Your block is now ready to use in the WordPress editor. Continue exploring the documentation to learn about:

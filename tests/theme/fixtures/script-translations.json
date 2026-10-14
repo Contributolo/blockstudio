@@ -1,0 +1,18 @@
+{
+  "domain": "blockstudio",
+  "locale_data": {
+    "messages": {
+      "": {
+        "domain": "blockstudio",
+        "lang": "de_DE",
+        "plural-forms": "nplurals=2; plural=(n != 1);"
+      },
+      "Overview": ["Uebersicht"],
+      "More": ["Mehr"],
+      "Value": ["Wert"],
+      "Open in popup": ["Im Popup oeffnen"],
+      "Image": ["Bild"],
+      "File": ["Datei"]
+    }
+  }
+}

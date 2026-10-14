@@ -18,6 +18,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+add_filter(
+	'load_script_translation_file',
+	static function ( $file, $handle, $domain ) {
+		// A request-only fixture leaves the locale and other browser tests unchanged.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Fixed test fixture, no state changes.
+		if ( '1' === sanitize_text_field( wp_unslash( $_GET['blockstudioTestTranslations'] ?? '' ) ) && 'blockstudio' === $domain && in_array( $handle, array( 'blockstudio-blocks', 'blockstudio-admin-page' ), true ) ) {
+			return __DIR__ . '/fixtures/script-translations.json';
+		}
+
+		return $file;
+	},
+	10,
+	3
+);
+
 // Load Composer autoloader.
 if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require_once __DIR__ . '/vendor/autoload.php';
