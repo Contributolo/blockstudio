@@ -3,7 +3,7 @@ Contributors: dnnsjsk
 Requires at least: 6.7
 Tested up to: 7.0.0
 Requires PHP: 8.2
-Stable tag: 7.6.14
+Stable tag: 7.7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,40 +55,56 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 == Changelog ==
 
 = 7.7.0 =
-* Fix: installed JavaScript translations load for the block editor and admin overview, including attribute controls, code popup actions, and media-type badges
-* Docs: custom populate examples use the supported single-argument, named-dataset filter format
-* Docs: explain frontend block stylesheet order and how to load theme overrides after block assets
-* Fix: saving or editing multi-selected blocks preserves each block's own content, keys, metadata, and locks instead of copying attributes between selected blocks (#98)
-* Fix: RichText and sidebar field edits participate in Gutenberg undo and redo, with RichText values saved directly in block attributes (#98)
-* Fix: `InnerBlocks templateLock="false"` unlocks nested content as documented while other template lock values remain unchanged (#98)
-* Fix: preloaded editor renders receive the edited post's ID and post type, so post metadata is available on the first render (#98)
-* Fix: option storage updates only supplied, changed fields on published saves; drafts, missing fields, and unchanged stale copies no longer overwrite live site options (#98)
-* Fix: editor blocks no longer insert hidden render markers between their root elements, preserving adjacent-sibling theme styles and inserter preview isolation (#102)
-* Fix: editor preloads and render caches keep inherited block context separate, and field or context changes during an initial render no longer leave stale previews
-* Fix: SCSS asset versions and runtime watches include transitive imports, so editing a nested partial recompiles its dependent stylesheets (#96)
-* Fix: contributor installations use the public Font Awesome package without registry credentials (#103)
-* New: `Virtual_Routes::register()` serves whole documents for URLs without a post, with 404 preemption, canonical redirect suppression, rendering inside Blockstudio's output buffer, a document title, and static prerender URL registration, and `Assets::BUFFER_PRIORITY` documents the template_redirect priority the output buffer opens at
-* New: the PHPStan block tag rule checks prefix and alias tags, page sources below `pages/` including the HTML elements a project maps to blocks (declared in `phpstan.blockTags.elements`), page layouts, bundled UI blocks, and optionally other project PHP, tries every hyphen of a `<bs:>` tag the way the runtime does, accepts the global attributes Blockstudio forwards, and reports an undeclared `class` with its own identifier
-* New: `wp bs prerender map status` and `wp bs prerender map prune` (and `Static_Prerender_Early_Serve::map_report()` and `prune_map()`) report and remove early-serve map entries whose site no longer exists or whose directory is gone, `wp bs prerender status` includes the report, deleting a multisite site removes its entries, and cache cleanup never collects the namespace an activated artifact is served from
-* New: graph builds rendered over HTTP record each route's dependencies, the loaded template, block templates and assets, files added through `blockstudio/render/dependencies`, and a synced page's source and layout files, so `build_plan()` re-renders exactly the routes whose files changed
-* New: `cache.namespaceGrace` sets how long a retired cache namespace is kept, counted from the first cleanup sweep that finds it retired instead of from its newest file, so stylesheets that CDN-cached pages still link survive an identity rotation for as long as the site needs
-* Fix: Blade page, pattern, and Site Template sources render with `illuminate/view` 8 through 12 through the new `Blockstudio\Blade_Renderer`, instead of failing with `jenssegers/blade` 2 on `illuminate/view` 10 and later, and the Blade documentation uses it
-* Fix: the PHPStan extension treats `$a`, `$block`, `$context` and the other template variables as defined in block templates, so direct reads such as `$a['title']` no longer report "Variable $a might not be defined"; it requires PHPStan 2.1.47 or newer
-* Fix: block template variables keep their `block.json` types under PHPStan 2.3, where reads on the left of `??` or inside `isset()` such as `$a['label'] ?? ''` came out as `mixed`, and a template that assigns `$a` itself keeps the type it assigned
-* Fix: `<main>`, `<header>`, `<footer>`, `<article>`, and `<aside>` in page, pattern, and Site Template sources become `core/group` blocks that keep their element instead of raw HTML blocks whose block tags never render, and `core/group` block tags honor `tagName`
-* Fix: extension files that share a `name`, such as two `core/*` extensions, all register instead of only the last one, a top-level `priority` orders extensions in the editor as documented, the extension schema accepts `"extend": true` and `group`, and the PHPStan extension rule accepts a list of target blocks as `name`
-* Fix: a request with `Accept: text/markdown` bypasses the static prerender store and the early-serve drop-in, so Markdown-backed pages answer it with their source Markdown instead of cached HTML; prerendered responses, the HTML of Markdown-backed pages, and Markdown answered through `Accept` send `Vary: Accept`, and the drop-in format moves to version 5
-* Fix: page and pattern lists keep nested lists as `core/list` inner blocks of their item instead of flattening them, a `class` on a list or item becomes its `className`, and items with attributes are no longer dropped (#97); flat lists without a class serialize exactly as before
-* Fix: block tag and page attribute values are decoded once, so `&amp;` no longer renders as `&amp;amp;`, self-closing block tags accept `>` inside quoted values, Blockstudio blocks put the global attributes they do not declare (`id`, `style`, `role`, `title`, `lang`, `dir`, `hidden`, `tabindex`, `aria-*`, and on page-synced blocks `data-*`) on their root element, `wp bs pages sync` reports the attributes a page stores but never renders, and with `WP_DEBUG` on a block tag attribute that is dropped triggers `_doing_it_wrong()`
-* Fix: attributes written on `<InnerBlocks>`, `<RichText>`, and the `useBlockProps` element in a template are no longer escaped a second time, so a value the template escaped with `esc_attr()`, such as the class `[&>div]:h-12`, reaches the page as written instead of as `[&amp;amp;&amp;gt;div]:h-12`
-* Fix: the static prerender shared signature hashes the sources of bundled UI assets instead of their compiled `_dist` files, so a build's first render no longer moves it between `build_plan()` and `artifact_entry()`, and every early-serve map write drops the map from the opcode cache, so a process that activates an artifact reads back the entry it installed even with `opcache.enable_cli` on
-* Fix: cache namespace collection never deletes the live namespace of another cache scope, such as the current Tailwind stylesheets, once its files are a day old
-* Fix: static prerendering decides its request, content, admin, and cron hooks once the active theme has loaded, and runtime settings resolved before that are resolved again with the theme's filters, so a theme filter such as one that switches static prerendering off on local installs takes effect
-* Fix: a `<p>` mapped to a block with a `content` richtext field keeps inline HTML such as `code` and `img` even when those tags are element-mapped, a paragraph whose only child is an image becomes the block `<img>` maps to instead of an empty paragraph, and `core/shortcode` block tags keep their shortcode text
-* Fix: the `useBlockProps` marker is rewritten only where it is an attribute of a start tag, so RichText content, echoed field values, and attribute values that mention useBlockProps render verbatim instead of turning into `useblockprops="true"` and breaking the markup
-* Fix: static prerendering bypasses search results only below the search base at the site's home path, such as `/search/term/`, instead of every path containing `/search/` or `/preview/`, so pages such as `/docs/blocks/preview/` and `/registry/cli/search/` are prerendered and served early instead of always rendering live
-* Docs: the ACF migration guide describes current ACF blocks (block.json registration with an explicit `register_block_type()`, field groups or inline `acf.fields`, Block Bindings as ACF's route to core blocks) instead of the deprecated `acf_register_block_type()`, and the readme counts 27 field types
-* Fix: bundled UI accessibility: dialog, alert dialog, drawer, popover, collapsible, and menu triggers put `aria-haspopup` and `aria-expanded` on their button instead of the wrapping `div`; checkbox, switch, and radio labels name and toggle their control; breadcrumb, pagination, navigation menu, and table no longer insert a `div` between a list and its items or a table and its rows; the toggle group drops `aria-orientation` from its `role="group"`; the password toggle reports `aria-pressed` and gets a 24px target; `bsui/input` and `bsui/password-input` take `autocomplete` (and the password input `inputId` and `ariaLabel`); the carousel viewport is focusable; the spinner and skeleton stop for reduced motion; and the documentation drops skipped heading levels and empty table headers
+* New: virtual routes serve complete documents without creating WordPress posts, with block assets, Tailwind, document titles, and static prerender support
+* New: PHPStan validates prefix tags, aliases, mapped page elements, page layouts, and bundled UI blocks
+* New: `wp bs prerender map status` and `wp bs prerender map prune` report and remove unused early-serve map entries
+* New: HTTP graph builds track each page's source dependencies for targeted rebuilds
+* New: `cache.namespaceGrace` controls how long retired cache namespaces remain available to cached pages
+* Fix: multi-selected edits and saves preserve each block's own content, keys, metadata, and locks (#98)
+* Fix: RichText and sidebar field edits work with Gutenberg undo and redo (#98)
+* Fix: `InnerBlocks templateLock="false"` unlocks nested content as documented (#98)
+* Fix: editor preloads receive the edited post's ID and post type (#98)
+* Fix: option storage writes only supplied, changed fields on published saves (#98)
+* Fix: editor block roots remain adjacent for theme sibling selectors (#102)
+* Fix: inherited block context stays separate in editor preloads and render caches
+* Fix: attribute or context changes during an initial render no longer leave stale previews
+* Fix: editing a nested SCSS partial recompiles all dependent stylesheets (#96)
+* Fix: contributor installations no longer require Font Awesome registry credentials (#103)
+* Fix: installed JavaScript translations load in the editor and admin overview
+* Fix: attribute controls, code popup actions, and media badges are translatable
+* Fix: Blade page, pattern, and Site Template sources support `illuminate/view` 8 through 12
+* Fix: PHPStan recognises the variables Blockstudio defines in block templates
+* Fix: template field types survive null coalescing and `isset()` under PHPStan 2.3
+* Fix: sectioning elements in file sources become group blocks that preserve their HTML element
+* Fix: all extension files register when they share a target block name
+* Fix: extension priority, group fields, and target lists follow the documented schema
+* Fix: Markdown requests bypass prerendered HTML and responses vary on the Accept header
+* Fix: page and pattern lists preserve nesting and list or item classes (#97)
+* Fix: block tag and page attribute values are decoded and escaped only once
+* Fix: self-closing block tags accept greater-than signs inside quoted attributes
+* Fix: undeclared global HTML attributes reach the rendered block's root element
+* New: `wp bs pages sync` reports stored attributes that are not rendered
+* Fix: InnerBlocks, RichText, and useBlockProps attributes are not escaped twice
+* Fix: block content that mentions useBlockProps is rendered unchanged
+* Fix: mapped richtext paragraphs preserve inline HTML
+* Fix: image-only mapped paragraphs resolve to the mapped image block
+* Fix: shortcode block tags preserve their shortcode text
+* Fix: prerender build identities remain stable during the first render
+* Fix: early-serve map updates invalidate cached opcode data
+* Fix: active cache namespaces and deployed prerender artifacts are never collected as retired
+* Fix: static prerendering honours filters registered by the active theme
+* Fix: valid pages whose paths contain search or preview remain eligible for prerendering
+* Fix: dialog, drawer, popover, collapsible, and menu triggers expose their ARIA state on the button
+* Fix: checkbox, switch, and radio labels name and toggle their controls
+* Fix: breadcrumb, pagination, navigation menu, and table output use valid HTML structure
+* Fix: toggle groups no longer expose unsupported orientation attributes
+* Fix: password toggles expose their pressed state and have a larger click target
+* New: UI inputs support autocomplete, and password inputs accept an ID and accessible label
+* Fix: carousel viewports can receive keyboard focus
+* Fix: spinners and skeletons respect reduced-motion preferences
+* Docs: custom populate examples use the supported named-dataset filter format
+* Docs: explain frontend block stylesheet order and theme overrides
+* Docs: update the ACF migration guide and add guides for pages, templates, deployment, and tooling
 
 = 7.6.14 =
 * Fix: content and metadata changes refresh populated block choices without rebuilding block discovery or compiled assets, and a burst of writes such as a translation sync coalesces into one refresh per thirty seconds, adjustable with `blockstudio/cache/populate_debounce`

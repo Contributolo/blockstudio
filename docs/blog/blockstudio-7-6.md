@@ -5,7 +5,7 @@ version: '7.6.0'
 author: Dennis
 path: 'blockstudio-7-6'
 date: "2026-07-27"
-order: 1
+order: 2
 section: 'Blog'
 meta_title: 'Blockstudio 7.6'
 meta_description: 'Ask a project what it contains, render any part of it on demand, and move production behaviour into blockstudio.json.'

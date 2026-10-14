@@ -21,6 +21,14 @@ names at analysis time, catching bugs before they reach runtime.
 composer require --dev blockstudio/phpstan
 ```
 
+The 7.7 template typing and expanded block tag checks require
+`blockstudio/phpstan` 0.1.9 or newer and PHPStan 2.1.47 or newer. Update the
+package separately from the plugin:
+
+```bash
+composer require --dev blockstudio/phpstan:^0.1.9
+```
+
 The extension auto-discovers via PHPStan's extension installer. No manual
 configuration needed.
 

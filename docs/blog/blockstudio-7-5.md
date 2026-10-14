@@ -4,7 +4,7 @@ description: Custom field types, file-backed Site Editor templates, block island
 date: "2026-07-23"
 author: Dennis
 path: "blockstudio-7-5"
-order: 2
+order: 3
 section: "Blog"
 meta_title: "Blockstudio 7.5"
 meta_description: "Custom field types, file-backed Site Editor templates, block islands, logical discovery sources, Storh storage, and faster warm rendering."

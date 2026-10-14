@@ -11,7 +11,7 @@ const expectedDocuments = {
   docs: 72,
   guides: 20,
   registry: 14,
-  blog: 8,
+  blog: 9,
   ui: 2,
 };
 const draftCollections = new Set(['drafts']);
