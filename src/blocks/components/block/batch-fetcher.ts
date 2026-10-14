@@ -1,6 +1,6 @@
 import apiFetch from '@wordpress/api-fetch';
-import { computeHash, renderCache } from './render-cache';
 import { Any } from '@/types/types';
+import { computeHash, renderCache } from './render-cache';
 
 interface RenderRequest {
   clientId: string;
@@ -63,6 +63,7 @@ const flush = () => {
             req.name,
             req.attributes,
             req.post.blockstudioMode,
+            req.context,
           );
           renderCache.set(hash, html, req.name);
           req.resolve(html);

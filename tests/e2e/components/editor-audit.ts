@@ -2,15 +2,12 @@ import { expect, Frame, Page, test } from '@playwright/test';
 import {
   getEditorCanvas,
   getSharedPage,
-  openSidebar,
   resetPageState,
   save,
 } from '../utils/playwright-utils';
 
 let page: Page;
 let canvas: Frame;
-
-test.describe.configure({ mode: 'serial' });
 
 const values = async () =>
   page.evaluate(() =>
@@ -54,10 +51,18 @@ test.beforeEach(async ({ browser }) => {
     ]);
   });
   await expect(canvas.locator('.editor-audit')).toHaveCount(2);
-  await openSidebar(page);
   await expect(
     canvas.locator('[aria-label="Audit rich text"]').first(),
   ).toHaveText('First content');
+  await canvas.locator('[aria-label="Audit rich text"]').first().click();
+  const settings = page.getByRole('button', { name: 'Settings', exact: true });
+  if ((await settings.getAttribute('aria-pressed')) !== 'true') {
+    await settings.click();
+  }
+  await page.getByRole('tab', { name: 'Block', exact: true }).click();
+  await expect(page.locator('[data-id="text"] input').first()).toHaveValue(
+    'First field',
+  );
 });
 
 test.afterEach(async () => {
@@ -69,14 +74,22 @@ test.afterEach(async () => {
 });
 
 test('multi-selected save preserves each blocks content and identity across reload', async () => {
-  await canvas
-    .locator('[aria-label="Audit rich text"]')
-    .first()
-    .fill('Edited first content');
-  await canvas
-    .locator('[aria-label="Audit rich text"]')
-    .nth(1)
-    .fill('Edited second content');
+  for (const [index, content] of [
+    'Edited first content',
+    'Edited second content',
+  ].entries()) {
+    const richtext = canvas
+      .locator('[aria-label="Audit rich text"]')
+      .nth(index);
+    await richtext.click();
+    await page.keyboard.press('ControlOrMeta+A');
+    await page.keyboard.press('Backspace');
+    await page.keyboard.type(content);
+    await expect(richtext).toHaveText(content);
+  }
+  await expect
+    .poll(async () => (await values()).map((block: any) => block.richtext))
+    .toEqual(['Edited first content', 'Edited second content']);
   const expected = await values();
   await page.evaluate(() => {
     const wp = (window as any).wp;
@@ -119,9 +132,31 @@ test('sidebar changes target only their own block during multi-selection', async
       .dispatch('core/block-editor')
       .multiSelect(blocks[0].clientId, blocks[1].clientId);
   });
-  // Retain the inspector's input to exercise its handler while core broadcasts selection.
-  await page.keyboard.press('ControlOrMeta+A');
-  await page.keyboard.type('Changed field');
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () =>
+          (window as any).wp.data
+            .select('core/block-editor')
+            .getMultiSelectedBlockClientIds().length,
+      ),
+    )
+    .toBe(2);
+  await input.evaluate((element) => {
+    element.addEventListener(
+      'input',
+      () => {
+        (window as any).__auditMultiSelection = (window as any).wp.data
+          .select('core/block-editor')
+          .getMultiSelectedBlockClientIds().length;
+      },
+      { once: true, capture: true },
+    );
+  });
+  await input.fill('Changed field');
+  expect(await page.evaluate(() => (window as any).__auditMultiSelection)).toBe(
+    2,
+  );
   await expect
     .poll(async () => (await values()).map((block: any) => block.text))
     .toEqual(['Changed field', 'Second field']);
@@ -159,7 +194,9 @@ test('templateLock false permits paragraphs inside a locked parent', async () =>
   );
   const first = canvas.locator('.editor-audit').first();
   const paragraph = first
-    .locator('[data-type="core/paragraph"] [contenteditable="true"]')
+    .locator(
+      '[data-type="core/paragraph"][contenteditable="true"], [data-type="core/paragraph"] [contenteditable="true"]',
+    )
     .first();
   await paragraph.click();
   await page.keyboard.press('End');
@@ -186,4 +223,80 @@ test('canvas block roots remain adjacent without hidden render markers', async (
         root.nextElementSibling?.classList.contains('editor-audit'),
       ),
   ).toBe(true);
+});
+
+test('identical children keep their own inherited context across cached renders', async () => {
+  const parentName = 'blockstudio/component-innerblocks-context';
+  await page.evaluate((name) => {
+    const wp = (window as any).wp;
+    wp.data.dispatch('core/block-editor').resetBlocks([
+      wp.blocks.createBlock(name, {
+        blockstudio: { attributes: { text: 'First provider' } },
+      }),
+    ]);
+  }, parentName);
+  const parents = canvas.locator(`[data-type="${parentName}"]`);
+  const child = '#blockstudio-component-innerblocks-context-child > p';
+  await expect(parents.first().locator(child)).toHaveText(
+    'Text: First provider',
+  );
+  await page.evaluate((name) => {
+    const wp = (window as any).wp;
+    wp.data.dispatch('core/block-editor').insertBlocks(
+      wp.blocks.createBlock(name, {
+        blockstudio: { attributes: { text: 'Second provider' } },
+      }),
+    );
+  }, parentName);
+  await expect(parents).toHaveCount(2);
+  await expect(parents.nth(1).locator(child)).toHaveText(
+    'Text: Second provider',
+  );
+  await expect(parents.first().locator(child)).toHaveText(
+    'Text: First provider',
+  );
+  await page.evaluate(() => {
+    const wp = (window as any).wp;
+    wp.data
+      .dispatch('core/block-editor')
+      .selectBlock(wp.data.select('core/block-editor').getBlocks()[0].clientId);
+  });
+  const input = page.locator('[data-id="text"] input').first();
+  await expect(input).toHaveValue('First provider');
+  await input.fill('Changed first provider');
+  await page.evaluate(() => {
+    const wp = (window as any).wp;
+    const parent = wp.data.select('core/block-editor').getBlocks()[0];
+    wp.data
+      .dispatch('core/block-editor')
+      .selectBlock(parent.innerBlocks[0].clientId);
+  });
+  await expect(parents.first().locator(child)).toHaveText(
+    'Text: Changed first provider',
+  );
+  await expect(parents.nth(1).locator(child)).toHaveText(
+    'Text: Second provider',
+  );
+  await save(page);
+  const requests: string[] = [];
+  const recordRequest = (request: { url(): string }) => {
+    if (request.url().includes('/gutenberg/block/render'))
+      requests.push(request.url());
+  };
+  page.on('request', recordRequest);
+  try {
+    await page.reload();
+    canvas = await getEditorCanvas(page);
+    const preloadedParents = canvas.locator(`[data-type="${parentName}"]`);
+    await expect(preloadedParents.first().locator(child)).toHaveText(
+      'Text: Changed first provider',
+    );
+    await expect(preloadedParents.nth(1).locator(child)).toHaveText(
+      'Text: Second provider',
+    );
+    await page.waitForLoadState('networkidle');
+    expect(requests).toEqual([]);
+  } finally {
+    page.off('request', recordRequest);
+  }
 });

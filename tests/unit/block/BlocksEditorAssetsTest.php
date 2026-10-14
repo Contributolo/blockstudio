@@ -201,6 +201,40 @@ class BlocksEditorAssetsTest extends TestCase {
 		}
 	}
 
+	public function test_preloads_render_and_record_each_childs_inherited_context(): void {
+		wp_set_current_user( 1 );
+		if ( ! function_exists( 'get_current_screen' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/class-wp-screen.php';
+			require_once ABSPATH . 'wp-admin/includes/screen.php';
+		}
+		set_current_screen( 'post' );
+		$parents = array();
+		foreach ( array( 'First provider', 'Second provider' ) as $text ) {
+			$parents[] = array(
+				'blockName' => 'blockstudio/component-innerblocks-context',
+				'attrs' => array( 'blockstudio' => array( 'attributes' => array( 'text' => $text ) ) ),
+				'innerHTML' => '', 'innerContent' => array( null ),
+				'innerBlocks' => array( array(
+					'blockName' => 'blockstudio/component-innerblocks-context-child', 'attrs' => array(),
+					'innerBlocks' => array(), 'innerHTML' => '', 'innerContent' => array(),
+				) ),
+			);
+		}
+		$this->post_id = wp_insert_post( array( 'post_title' => 'Inherited preload contexts', 'post_type' => 'page', 'post_status' => 'draft', 'post_content' => serialize_blocks( $parents ) ), true );
+		$this->assertIsInt( $this->post_id );
+		$GLOBALS['post'] = get_post( $this->post_id );
+		$this->reset_editor_asset_state();
+		do_action( 'enqueue_block_editor_assets' );
+		$this->assertSame( 1, preg_match( '/^var blockstudio = (.+);$/m', wp_scripts()->get_data( 'blockstudio-blocks', 'data' ), $matches ) );
+		$preloads = json_decode( $matches[1], true )['blockstudioBlocks'];
+		$children = array_values( array_filter( $preloads, static fn( $entry ) => 'blockstudio/component-innerblocks-context-child' === $entry['blockName'] ) );
+		$this->assertCount( 2, $children );
+		foreach ( array( 'First provider', 'Second provider' ) as $index => $text ) {
+			$this->assertSame( $text, $children[ $index ]['context']['blockstudio/component-innerblocks-context']['attributes']['text'] );
+			$this->assertStringContainsString( 'Text: ' . $text, $children[ $index ]['rendered'] );
+		}
+	}
+
 	/**
 	 * Media used by reusable Blockstudio blocks should hydrate the editor media store.
 	 *

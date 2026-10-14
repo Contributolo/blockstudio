@@ -141,6 +141,8 @@ under the hood, Blockstudio provides a more convenient API.
 Instead of having to define all attributes that should be passed in the context
 separately, you can simply subscribe to all attributes of a parent block.
 
+Each child receives its own parent's values, including on the editor's first preloaded render. Updating a provider's fields updates its children in the editor, even while a previous render is still loading. Identical child blocks under different providers keep separate context-aware cached renders.
+
 Let's say you have a container block setup like so:
 
 ```json title="container/block.json"

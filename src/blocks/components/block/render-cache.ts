@@ -5,7 +5,7 @@ import type { PreloadEntry } from '../../../canvas/types';
 const cache = new Map<string, string>();
 const cacheByBlock = new Map<string, Set<string>>();
 const preloadQueues = new Map<string, string[]>();
-const claimedByClient = new Map<string, string | undefined>();
+const claimedByClient = new Map<string, { hash?: string; rendered: string }>();
 
 const getClientClaimKey = (clientId: string, mode: string): string =>
   `${mode}:${clientId}`;
@@ -48,9 +48,7 @@ const getRegisteredAttributeDefaults = (
     window as unknown as {
       wp?: {
         blocks?: {
-          getBlockType?: (
-            name: string,
-          ) => {
+          getBlockType?: (name: string) => {
             attributes?: Record<string, { default?: unknown }>;
           };
         };
@@ -80,7 +78,9 @@ const sortedStringify = (value: unknown): string => {
   }
   const obj = value as Record<string, unknown>;
   const keys = Object.keys(obj).sort();
-  const pairs = keys.map((k) => JSON.stringify(k) + ':' + sortedStringify(obj[k]));
+  const pairs = keys.map(
+    (k) => JSON.stringify(k) + ':' + sortedStringify(obj[k]),
+  );
   return '{' + pairs.join(',') + '}';
 };
 
@@ -88,6 +88,7 @@ export const computeHash = (
   blockName: string,
   attributes: unknown,
   mode: string = 'editor',
+  context?: Record<string, unknown>,
 ): string => {
   let cloned = cloneDeep(attributes) as Record<string, unknown> | unknown[];
   if (Array.isArray(cloned)) {
@@ -177,7 +178,27 @@ export const computeHash = (
     clonedRecord as Parameters<typeof replaceEmptyStringsWithFalse>[0],
   );
 
-  return sortedStringify({ blockName, attrs, mode })
+  const blocks = (typeof window === 'undefined'
+    ? undefined
+    : window.blockstudioAdmin?.data?.blocksNative) as unknown as
+    | Record<string, { usesContext?: string[] }>
+    | undefined;
+  const cacheContext: Record<string, unknown> = {};
+  for (const name of blocks?.[blockName]?.usesContext ?? []) {
+    const value = context?.[name];
+    if (value === undefined) continue;
+    cacheContext[name] =
+      blocks?.[name] && value && typeof value === 'object'
+        ? computeHash(name, { blockstudio: value }, mode)
+        : value;
+  }
+
+  return sortedStringify({
+    blockName,
+    attrs,
+    mode,
+    ...(Object.keys(cacheContext).length ? { context: cacheContext } : {}),
+  })
     .replaceAll('{', '_')
     .replaceAll('}', '_')
     .replaceAll('[', '_')
@@ -207,30 +228,41 @@ export const renderCache = {
     clientId?: string,
     attributes?: unknown,
     mode: string = 'editor',
+    context?: Record<string, unknown>,
   ): string | undefined {
     const clientClaimKey = clientId
       ? getClientClaimKey(clientId, mode)
       : undefined;
 
-    if (clientClaimKey && claimedByClient.has(clientClaimKey)) {
-      return claimedByClient.get(clientClaimKey);
+    const hash = attributes
+      ? computeHash(blockName, attributes, mode, context)
+      : undefined;
+    const claimed = clientClaimKey
+      ? claimedByClient.get(clientClaimKey)
+      : undefined;
+    if (claimed && claimed.hash === hash) {
+      return claimed.rendered;
     }
 
     if (attributes) {
-      const cached = this.get(computeHash(blockName, attributes, mode));
+      const cached = this.get(hash as string);
       if (cached) {
         if (clientClaimKey) {
-          claimedByClient.set(clientClaimKey, cached);
+          claimedByClient.set(clientClaimKey, { hash, rendered: cached });
         }
         return cached;
       }
     }
 
+    if (attributes && hash !== computeHash(blockName, attributes, mode)) {
+      return undefined;
+    }
+
     const queue = preloadQueues.get(getQueueKey(blockName, mode));
     if (!queue || queue.length === 0) return undefined;
     const rendered = queue.shift();
-    if (clientClaimKey) {
-      claimedByClient.set(clientClaimKey, rendered);
+    if (clientClaimKey && rendered) {
+      claimedByClient.set(clientClaimKey, { hash, rendered });
     }
     return rendered;
   },
@@ -263,6 +295,7 @@ export const renderCache = {
           data.blockName,
           data.attributes,
           data.mode || 'editor',
+          data.context,
         );
         this.set(hash, data.rendered, data.blockName);
         return;

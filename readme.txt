@@ -61,6 +61,7 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 * Fix: preloaded editor renders receive the edited post's ID and post type, so post metadata is available on the first render (#98)
 * Fix: option storage updates only supplied, changed fields on published saves; drafts, missing fields, and unchanged stale copies no longer overwrite live site options (#98)
 * Fix: editor blocks no longer insert hidden render markers between their root elements, preserving adjacent-sibling theme styles and inserter preview isolation (#102)
+* Fix: editor preloads and render caches keep inherited block context separate, and field or context changes during an initial render no longer leave stale previews
 * Fix: SCSS asset versions and runtime watches include transitive imports, so editing a nested partial recompiles its dependent stylesheets (#96)
 * Fix: contributor installations use the public Font Awesome package without registry credentials (#103)
 * New: `Virtual_Routes::register()` serves whole documents for URLs without a post, with 404 preemption, canonical redirect suppression, rendering inside Blockstudio's output buffer, a document title, and static prerender URL registration, and `Assets::BUFFER_PRIORITY` documents the template_redirect priority the output buffer opens at

@@ -4,7 +4,13 @@ import { useBlockProps } from '@wordpress/block-editor';
 import { Spinner } from '@wordpress/components';
 import { useDebounce } from '@wordpress/compose';
 import { useSelect } from '@wordpress/data';
-import { useEffect, useMemo, useRef, useState } from '@wordpress/element';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from '@wordpress/element';
 import parse from 'html-react-parser';
 import { DomElement } from 'htmlparser2';
 import { cloneDeep, unset } from 'lodash-es';
@@ -300,10 +306,16 @@ export const Block = ({
       clientId,
       attributes,
       mode,
+      memoizedRenderContext,
     );
 
     if (preloaded) {
-      const hash = computeHash(block.name, attributes, mode);
+      const hash = computeHash(
+        block.name,
+        attributes,
+        mode,
+        memoizedRenderContext,
+      );
       renderCache.set(hash, preloaded, block.name);
       firstRenderDone.current = true;
       renderedModeRef.current = mode;
@@ -362,7 +374,12 @@ export const Block = ({
 
   const renderForMode = (mode: 'editor' | 'preview') => {
     const requestId = ++renderRequestId.current;
-    const hash = computeHash(block.name, attributes, mode);
+    const hash = computeHash(
+      block.name,
+      attributes,
+      mode,
+      memoizedRenderContext,
+    );
     const cached = renderCache.get(hash);
 
     if (cached) {
@@ -429,7 +446,12 @@ export const Block = ({
         }
 
         const res = response as { rendered: string };
-        const hash = computeHash(block.name, attributes, renderMode);
+        const hash = computeHash(
+          block.name,
+          attributes,
+          renderMode,
+          memoizedRenderContext,
+        );
         renderCache.set(hash, res.rendered, block.name);
         updateRender(res.rendered, renderMode);
         loaded();
@@ -443,7 +465,13 @@ export const Block = ({
       });
   };
 
-  const debouncedFetchSingle = useDebounce(fetchSingle, 500);
+  const fetchSingleRef = useRef(fetchSingle);
+  fetchSingleRef.current = fetchSingle;
+  // Selection and parent renders must not cancel a queued field/context refresh.
+  const debouncedFetchSingle = useDebounce(
+    useCallback(() => fetchSingleRef.current(), []),
+    500,
+  );
   const debouncedFetchSingleRef = useRef(debouncedFetchSingle);
   debouncedFetchSingleRef.current = debouncedFetchSingle;
 
@@ -510,8 +538,18 @@ export const Block = ({
         unset(previousAttributes, `blockstudio.attributes.${path}`);
         unset(newAttributes, `blockstudio.attributes.${path}`);
       });
-      const previousHash = computeHash(block.name, previousAttributes, mode);
-      const nextHash = computeHash(block.name, newAttributes, mode);
+      const previousHash = computeHash(
+        block.name,
+        previousAttributes,
+        mode,
+        memoizedRenderContext,
+      );
+      const nextHash = computeHash(
+        block.name,
+        newAttributes,
+        mode,
+        memoizedRenderContext,
+      );
 
       if (previousHash === nextHash) {
         attributesRef.current = attributes;
@@ -519,9 +557,11 @@ export const Block = ({
       }
       attributesRef.current = attributes;
 
-      if (!firstRenderDone.current) return;
+      if (disableLoading) return;
 
-      const cached = renderCache.get(computeHash(block.name, attributes, mode));
+      const cached = renderCache.get(
+        computeHash(block.name, attributes, mode, memoizedRenderContext),
+      );
 
       if (cached) {
         renderRequestId.current += 1;
@@ -530,6 +570,7 @@ export const Block = ({
         return;
       }
 
+      renderRequestId.current += 1;
       debouncedFetchSingle();
     },
     [attributes],
@@ -542,7 +583,8 @@ export const Block = ({
         return;
       }
       prevContextRef.current = contextStr;
-      if (firstRenderDone.current) {
+      if (!disableLoading) {
+        renderRequestId.current += 1;
         debouncedFetchSingle();
       }
     },

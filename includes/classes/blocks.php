@@ -97,7 +97,10 @@ class Blocks {
 		$parsed_blocks = $parser->parse( $content );
 		$visited_refs  = array();
 
-		$block_renderer = function ( $block ) use (
+		$block_renderer = function (
+			$block,
+			array $context = array()
+		) use (
 			&$block_renderer,
 			&$blockstudio_blocks,
 			&$media_ids,
@@ -125,7 +128,7 @@ class Blocks {
 						$referenced_blocks = $parser->parse( $referenced_block->post_content );
 
 						foreach ( $referenced_blocks as $referenced_inner_block ) {
-							$block_renderer( $referenced_inner_block );
+							$block_renderer( $referenced_inner_block, $context );
 						}
 					}
 				}
@@ -148,11 +151,14 @@ class Blocks {
 				}
 
 				try {
-					$blockstudio_blocks[] = array(
-						'rendered'   => render_block( $block ),
+					$render_block                                  = $block;
+					$render_block['attrs']['_BLOCKSTUDIO_CONTEXT'] = $context;
+					$blockstudio_blocks[]                          = array(
+						'rendered'   => render_block( $render_block ),
 						'blockName'  => $block['blockName'],
 						'attributes' => $block['attrs'],
 						'mode'       => 'editor',
+						'context'    => $context,
 					);
 				} finally {
 					if ( null === $previous_mode ) {
@@ -167,16 +173,25 @@ class Blocks {
 					}
 				}
 				// phpcs:enable WordPress.Security.NonceVerification.Recommended
+				$context[ $block['blockName'] ] = $block['attrs']['blockstudio'] ?? array(
+					'attributes' => $block['attrs'],
+				);
 			}
 			if ( count( $block['innerBlocks'] ) > 0 ) {
 				foreach ( $block['innerBlocks'] as $inner_block ) {
-					$block_renderer( $inner_block );
+					$block_renderer( $inner_block, $context );
 				}
 			}
 		};
 
 		foreach ( $parsed_blocks as $block ) {
-			$block_renderer( $block );
+			$block_renderer(
+				$block,
+				$post instanceof \WP_Post ? array(
+					'postId'   => $post->ID,
+					'postType' => $post->post_type,
+				) : array()
+			);
 		}
 
 		$localize_array = array(

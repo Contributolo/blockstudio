@@ -16,4 +16,5 @@ export interface PreloadEntry {
   blockName: string;
   attributes?: unknown;
   mode?: string;
+  context?: Record<string, unknown>;
 }
