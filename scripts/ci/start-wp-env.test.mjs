@@ -6,7 +6,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
-const script = fileURLToPath(new URL('./start-loading-mode.sh', import.meta.url));
+const script = fileURLToPath(new URL('./start-wp-env.sh', import.meta.url));
 
 function runSetup(scenario, mode = 'mu-plugin') {
 	const directory = mkdtempSync(join(tmpdir(), 'blockstudio-loading-'));
@@ -27,7 +27,7 @@ case "$SCENARIO" in
 esac
 `, { mode: 0o755 });
 	try {
-		const result = spawnSync('bash', [script, mode], {
+		const result = spawnSync('bash', mode === null ? [script] : [script, mode], {
 			encoding: 'utf8',
 			env: { ...process.env, PATH: `${directory}:${process.env.PATH}`, CALLS: calls, SCENARIO: scenario },
 		});
@@ -38,19 +38,33 @@ esac
 	}
 }
 
-test('successful setup runs once for every supported loading mode', () => {
-	for (const mode of ['plugin', 'mu-plugin', 'composer-theme', 'composer-plugin']) {
+test('successful setup runs once for every supported WordPress environment', () => {
+	const environments = {
+		main: 'wp-env:start',
+		empty: 'wp-env:empty:start',
+		plugin: 'wp-env:implementations:plugin:start',
+		'mu-plugin': 'wp-env:implementations:mu-plugin:start',
+		'composer-theme': 'wp-env:implementations:composer-theme:start',
+		'composer-plugin': 'wp-env:implementations:composer-plugin:start',
+	};
+	for (const [mode, command] of Object.entries(environments)) {
 		const result = runSetup('success', mode);
 		assert.equal(result.status, 0);
-		assert.deepEqual(result.commands, [`run wp-env:implementations:${mode}:start`]);
+		assert.deepEqual(result.commands, [`run ${command}`]);
 	}
+});
+
+test('the default environment starts the main WordPress instance', () => {
+	const result = runSetup('success', null);
+	assert.equal(result.status, 0);
+	assert.deepEqual(result.commands, ['run wp-env:start']);
 });
 
 test('cold database setup gets one retry', () => {
 	const result = runSetup('database');
 	assert.equal(result.status, 0);
 	assert.equal(result.commands.length, 2);
-	assert.match(result.stderr, /Retrying loading-mode setup once/);
+	assert.match(result.stderr, /Retrying wp-env setup once/);
 });
 
 test('persistent database errors remain failures after one retry', () => {
@@ -65,7 +79,7 @@ test('unrelated failures are not retried or hidden', () => {
 	assert.equal(result.commands.length, 1);
 });
 
-test('unknown loading modes fail before invoking npm', () => {
+test('unknown environments fail before invoking npm', () => {
 	const result = runSetup('success', 'unknown');
 	assert.equal(result.status, 64);
 	assert.deepEqual(result.commands, []);

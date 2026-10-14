@@ -30,8 +30,8 @@ jobs:
       - name: JavaScript, docs, schema, and product-neutrality checks
         run: npm run check
 
-      - name: Loading-mode setup regression tests
-        run: node --test scripts/ci/start-loading-mode.test.mjs
+      - name: WordPress setup regression tests
+        run: node --test scripts/ci/start-wp-env.test.mjs
 
   phpcs:
     name: PHPCS
@@ -89,7 +89,7 @@ jobs:
       - run: composer install --no-interaction
 
       - name: Start ${{ matrix.mode }} implementation
-        run: bash scripts/ci/start-loading-mode.sh ${{ matrix.mode }}
+        run: bash scripts/ci/start-wp-env.sh ${{ matrix.mode }}
 
       - name: Verify ${{ matrix.mode }} implementation
         run: npm run wp-env:implementations:${{ matrix.mode }}:verify
@@ -120,7 +120,7 @@ jobs:
       - run: composer install --no-interaction --working-dir=tests/theme
 
       - name: Start wp-env
-        run: npm run wp-env:start
+        run: bash scripts/ci/start-wp-env.sh
 
       - name: Run unit tests
         run: |
@@ -175,7 +175,7 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Start wp-env
-        run: npm run wp-env:start
+        run: bash scripts/ci/start-wp-env.sh
 
       - name: Install SEO plugins for E2E
         run: |
@@ -222,7 +222,7 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Start empty wp-env
-        run: npm run wp-env:empty:start
+        run: bash scripts/ci/start-wp-env.sh empty
 
       - name: Run empty theme E2E tests
         run: npm run test:e2e:empty
