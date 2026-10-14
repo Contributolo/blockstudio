@@ -259,21 +259,19 @@ The `position` option (`before` or `after`) controls where populated options app
 
 ## Custom Data
 
-Create reusable datasets with the `blockstudio/blocks/populate` filter:
+Create reusable datasets with the `blockstudio/blocks/attributes/populate` filter. The filter receives a single argument, an array of all custom datasets keyed by name. Add your dataset under a key and return the array:
 
 ```php title="functions.php"
-add_filter('blockstudio/blocks/attributes/populate', function($options, $attribute, $block) {
-  if ($attribute['populate']['custom'] === 'customData') {
-    return [
-      ['value' => '1', 'label' => 'Option 1'],
-      ['value' => '2', 'label' => 'Option 2'],
-    ];
-  }
+add_filter('blockstudio/blocks/attributes/populate', function($options) {
+  $options['customData'] = [
+    ['value' => '1', 'label' => 'Option 1'],
+    ['value' => '2', 'label' => 'Option 2'],
+  ];
   return $options;
-}, 10, 3);
+});
 ```
 
-Then use it in your block:
+Then reference the key in your block:
 
 ```json title="block.json"
 {

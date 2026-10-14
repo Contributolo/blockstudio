@@ -193,7 +193,7 @@ route: /docs/blocks/attributes/populating-options
 file: docs/docs/blocks/attributes/populating-options.md
 purpose: Dynamically populate field options from queries, functions, or external sources.
 settings: users
-hooks: blockstudio/blocks/attributes/populate, blockstudio/blocks/populate
+hooks: blockstudio/blocks/attributes/populate
 
 ### Disabling Attributes
 route: /docs/blocks/attributes/disabling
