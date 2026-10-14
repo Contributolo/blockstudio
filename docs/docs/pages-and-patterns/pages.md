@@ -516,6 +516,26 @@ that previously passed a `force` argument to that method must call
 
 To prevent a page from being overwritten after manual edits, set `"sync": false` in `page.json`.
 
+### Post Field Ownership
+
+`postStatus` sets the initial status. Subsequent syncs preserve existing draft,
+pending, private, published, and scheduled statuses, including with
+`--authoritative`. A draft is not republished just because its file says
+`postStatus: "publish"`. The existing orphan-recovery behavior is unchanged:
+an explicit sync restores a trashed managed post when its source is present.
+Lock the page or disable sync to prevent that restoration.
+
+The file continues to own the title, slug, post type, parent, and configured
+menu order. Editing those in WordPress does not change the source definition.
+The next explicit sync reapplies the file values and names the affected fields
+in `pages.<name>.overwritten`, with a warning in CLI table output. WordPress's
+native permissions still apply, including its empty slug for pending posts
+when the syncing user cannot publish them.
+
+Use `blockstudio/pages/update_post_data` for an integration that explicitly
+owns a different status policy. Keyed blocks preserve editor-owned block
+content; keys do not change ownership of the post's title or slug.
+
 For collection pages, fingerprints cover the manifest, loader, page source,
 layout file, metadata, and related source paths. The next explicit
 synchronization applies changes to those inputs.
@@ -547,9 +567,25 @@ $report = Blockstudio\Pages::reconcile([
 ]);
 ```
 
-The report contains `discovered`, `created`, `updated`, `unchanged`, `removed`,
+The report contains `discovered`, `created`, `updated`, `unchanged`, `locked`,
+`preserved`, `removed`, `removedPages`,
 `failed`, `fullReconciliation`, per-page results, discovery errors, and a
 deterministic `sourceIdentity`.
+
+Locked pages have `status: "locked"` and are counted separately from unchanged
+pages. `removedPages` lists each removed page's `name`, `key`, `postId`, and
+actual `action` (`trash` or `delete`); kept or already-trashed posts are not
+counted as newly removed. CLI table output also names created, updated,
+locked, removed, and content-preserved pages with their post IDs.
+
+After parsing and keyed merging, an identical final post does not call
+`wp_update_post()`, change `post_modified`, create a revision, or fire post
+update hooks. Its result is `unchanged`. When the source's content differs
+from the editor-owned keyed content, `preserved: true` identifies that decision
+and the top-level `preserved` count includes it. The new source fingerprint
+and managed metadata are still recorded so the next unchanged sync is a no-op.
+`preserved` is an additional flag, not an exclusive status: a page may preserve
+keyed content while still updating a file-owned title or adding another block.
 
 `authoritative: true` may clear a Page Sync lock and replaces content from the
 file definition instead of preserving keyed editor content. Leave it `false`

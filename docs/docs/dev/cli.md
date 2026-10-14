@@ -55,8 +55,18 @@ wp bs pages sync
 ```
 
 The command reconciles the complete desired inventory and reports discovered,
-created, updated, unchanged, removed, and failed pages. Equal fingerprints
+created, updated, unchanged, locked, preserved, removed, and failed pages. Equal fingerprints
 produce no post or post-meta writes.
+
+Table output names changed, locked, content-preserved, and removed pages with
+their post IDs. JSON includes `pages.<name>.preserved`,
+`pages.<name>.overwritten`, and `removedPages` entries with the page name, key,
+post ID, and cleanup action. An identical post after keyed merging is reported
+as unchanged without creating a revision or advancing its modified timestamp.
+
+Existing publication statuses are preserved; file-owned title and slug
+replacements are printed as warnings. See
+[Post Field Ownership](/docs/pages-and-patterns/pages#post-field-ownership).
 
 Use `--authoritative` to replace managed content instead of preserving keyed
 editor content, and `--full` to report the pass as a full reconciliation

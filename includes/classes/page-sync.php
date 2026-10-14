@@ -40,6 +40,34 @@ class Page_Sync {
 	private array $dropped_attributes = array();
 
 	/**
+	 * Whether the last reconciliation changed a post row.
+	 *
+	 * @var bool
+	 */
+	private bool $post_updated = false;
+
+	/**
+	 * Whether keyed editor content differed from the source.
+	 *
+	 * @var bool
+	 */
+	private bool $preserved = false;
+
+	/**
+	 * File-owned post fields replaced during reconciliation.
+	 *
+	 * @var string[]
+	 */
+	private array $overwritten = array();
+
+	/**
+	 * Removed pages from the last missing-source cleanup.
+	 *
+	 * @var array
+	 */
+	private array $removed_pages = array();
+
+	/**
 	 * Constructor.
 	 *
 	 * @param Html_Parser|null $parser Optional parser instance.
@@ -67,10 +95,13 @@ class Page_Sync {
 	 * @param array $page_data Desired page data from discovery.
 	 * @param array $args      Optional existing post, fingerprints, and authority flags.
 	 *
-	 * @return array{status:string,post_id:int,error:WP_Error|null,locked:bool,dropped_attributes:array<string,string[]>}
+	 * @return array{status:string,post_id:int,error:WP_Error|null,locked:bool,dropped_attributes:array<string,string[]>,preserved:bool,overwritten:string[]}
 	 */
 	public function reconcile( array $page_data, array $args = array() ): array {
 		$this->dropped_attributes = array();
+		$this->post_updated       = false;
+		$this->preserved          = false;
+		$this->overwritten        = array();
 		$page_data                = $this->prepare_page_data( $page_data );
 		$sync_enabled             = $page_data['sync'] ?? true;
 		$existing                 = isset( $args['existing'] ) && $args['existing'] instanceof WP_Post
@@ -89,6 +120,15 @@ class Page_Sync {
 		$engine_fingerprint = isset( $args['engine_fingerprint'] ) && is_string( $args['engine_fingerprint'] ) ? $args['engine_fingerprint'] : self::engine_fingerprint();
 
 		if ( $existing ) {
+			$is_locked = (bool) get_post_meta( $existing->ID, '_blockstudio_page_locked', true );
+			if ( $is_locked && empty( $args['authoritative'] ) ) {
+				$this->update_runtime_post_meta( $existing->ID, $page_data );
+				return $this->reconcile_result( 'unchanged', $existing->ID, null, true );
+			}
+			if ( $is_locked ) {
+				delete_post_meta( $existing->ID, '_blockstudio_page_locked' );
+			}
+
 			$stored_fingerprint = (string) get_post_meta( $existing->ID, '_blockstudio_page_fingerprint', true );
 			$stored_engine      = (string) get_post_meta( $existing->ID, '_blockstudio_page_engine_fingerprint', true );
 			$equal              = '' !== $stored_fingerprint
@@ -107,25 +147,17 @@ class Page_Sync {
 				return $this->reconcile_result( 'unchanged', $post_id );
 			}
 
-			$is_locked = (bool) get_post_meta( $existing->ID, '_blockstudio_page_locked', true );
-			if ( $is_locked && empty( $args['authoritative'] ) ) {
-				$this->update_runtime_post_meta( $existing->ID, $page_data );
-				return $this->reconcile_result( 'unchanged', $existing->ID, null, true );
-			}
-			if ( $is_locked ) {
-				delete_post_meta( $existing->ID, '_blockstudio_page_locked' );
-			}
-
 			if ( ! empty( $args['authoritative'] ) || ! empty( $args['always_update'] ) ) {
 				$content = $this->get_parsed_content( $page_data );
 			} else {
 				$new_blocks = $this->get_parsed_blocks( $page_data );
 
 				if ( $this->blocks_have_keys( $new_blocks ) ) {
-					$old_blocks = parse_blocks( $existing->post_content );
-					$merger     = new Block_Merger();
-					$merged     = $merger->merge( $new_blocks, $old_blocks );
-					$content    = serialize_blocks( $merged );
+					$old_blocks      = parse_blocks( $existing->post_content );
+					$merger          = new Block_Merger();
+					$merged          = $merger->merge( $new_blocks, $old_blocks );
+					$content         = serialize_blocks( $merged );
+					$this->preserved = serialize_blocks( $new_blocks ) !== $content;
 				} else {
 					$content = serialize_blocks( $new_blocks );
 				}
@@ -135,7 +167,7 @@ class Page_Sync {
 
 			if ( is_int( $result ) && $result > 0 ) {
 				$post_id = $this->prune_duplicate_posts( $page_data, $result, $fingerprint, $engine_fingerprint );
-				return $this->reconcile_result( 'updated', $post_id );
+				return $this->reconcile_result( $this->post_updated ? 'updated' : 'unchanged', $post_id );
 			}
 
 			return $this->reconcile_result( 'failed', $existing->ID, $result instanceof WP_Error ? $result : null );
@@ -271,9 +303,10 @@ class Page_Sync {
 	 * @return int Number of posts removed from the active inventory.
 	 */
 	public function prune_missing( array $active_keys, array $active_sources, ?array $managed_posts = null ): int {
-		$active_keys    = array_fill_keys( array_map( 'strval', $active_keys ), true );
-		$active_sources = array_fill_keys( array_map( 'strval', $active_sources ), true );
-		$removed        = 0;
+		$this->removed_pages = array();
+		$active_keys         = array_fill_keys( array_map( 'strval', $active_keys ), true );
+		$active_sources      = array_fill_keys( array_map( 'strval', $active_sources ), true );
+		$removed             = 0;
 
 		foreach ( $managed_posts ?? $this->managed_posts() as $post ) {
 			if ( ! $post instanceof WP_Post ) {
@@ -292,12 +325,28 @@ class Page_Sync {
 			}
 
 			update_post_meta( $post->ID, '_blockstudio_page_stale', true );
+			$removed_page = array(
+				'name'   => (string) get_post_meta( $post->ID, '_blockstudio_page_name', true ),
+				'key'    => $key,
+				'postId' => $post->ID,
+			);
 			if ( $this->prune_orphan( $post ) ) {
 				++$removed;
+				$removed_page['action'] = get_post( $post->ID ) ? 'trash' : 'delete';
+				$this->removed_pages[]  = $removed_page;
 			}
 		}
 
 		return $removed;
+	}
+
+	/**
+	 * Return pages removed by the last prune_missing() call.
+	 *
+	 * @return array Removed page names, keys, post IDs, and actions.
+	 */
+	public function removed_pages(): array {
+		return $this->removed_pages;
 	}
 
 	/**
@@ -308,7 +357,7 @@ class Page_Sync {
 	 * @param WP_Error|null $error   Optional error.
 	 * @param bool          $locked  Whether a changed page was kept locked.
 	 *
-	 * @return array{status:string,post_id:int,error:WP_Error|null,locked:bool,dropped_attributes:array<string,string[]>}
+	 * @return array{status:string,post_id:int,error:WP_Error|null,locked:bool,dropped_attributes:array<string,string[]>,preserved:bool,overwritten:string[]}
 	 */
 	private function reconcile_result( string $status, int $post_id, ?WP_Error $error = null, bool $locked = false ): array {
 		return array(
@@ -317,6 +366,8 @@ class Page_Sync {
 			'error'              => $error,
 			'locked'             => $locked,
 			'dropped_attributes' => $this->dropped_attributes,
+			'preserved'          => $this->preserved,
+			'overwritten'        => $this->overwritten,
 		);
 	}
 
@@ -794,8 +845,11 @@ class Page_Sync {
 			'post_name'    => $page_data['slug'],
 			'post_content' => $content,
 			'post_type'    => $page_data['postType'],
-			'post_status'  => $page_data['postStatus'],
+			'post_status'  => 'trash' === $post->post_status ? $page_data['postStatus'] : $post->post_status,
 		);
+		if ( 'pending' === $post->post_status && ! current_user_can( 'publish_post', $post->ID ) ) {
+			$post_data['post_name'] = '';
+		}
 
 		if ( isset( $page_data['order'] ) && is_numeric( $page_data['order'] ) ) {
 			$post_data['menu_order'] = (int) $page_data['order'];
@@ -870,6 +924,15 @@ class Page_Sync {
 		}
 
 		$post_data = $this->build_update_post_data( $post, $page_data, $content );
+		if ( empty( $post_data['ID'] ) ) {
+			return new WP_Error( 'invalid_post', 'The filtered page update has no post ID.' );
+		}
+		$changed = $this->changed_post_fields( $post, $post_data );
+
+		if ( array() === $changed ) {
+			$this->update_post_meta( $post->ID, $page_data, $file_mtime, $fingerprint, $engine_fingerprint );
+			return $post->ID;
+		}
 
 		$result = wp_update_post( wp_slash( $post_data ), true );
 
@@ -878,6 +941,8 @@ class Page_Sync {
 		}
 
 		$this->update_post_meta( $post->ID, $page_data, $file_mtime, $fingerprint, $engine_fingerprint );
+		$this->post_updated = true;
+		$this->overwritten  = array_values( array_diff( $changed, array( 'post_content' ) ) );
 
 		/**
 		 * Fires after a page post is updated.
@@ -888,6 +953,27 @@ class Page_Sync {
 		do_action( 'blockstudio/pages/post_updated', $post->ID, $page_data );
 
 		return $post->ID;
+	}
+
+	/**
+	 * Compare the final filtered update with the stored row before writing it.
+	 *
+	 * @param WP_Post $post Existing post.
+	 * @param array   $data Filtered update data.
+	 * @return string[] Changed fields. Unknown update directives require a write.
+	 */
+	private function changed_post_fields( WP_Post $post, array $data ): array {
+		$changed = array();
+		$stored  = $post->to_array();
+		foreach ( $data as $field => $value ) {
+			if ( 'ID' === $field ) {
+				continue;
+			}
+			if ( ! array_key_exists( $field, $stored ) || ! is_scalar( $value ) || (string) $stored[ $field ] !== (string) $value ) {
+				$changed[] = $field;
+			}
+		}
+		return $changed;
 	}
 
 	/**

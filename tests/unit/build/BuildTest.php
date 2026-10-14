@@ -664,6 +664,125 @@ class BuildTest extends TestCase {
 		}
 	}
 
+	public function test_core_attributes_survive_field_collisions_and_scoped_fields_remain_available(): void {
+		$directory       = sys_get_temp_dir() . '/bs-core-attributes-' . uniqid();
+		$block_directory = $directory . '/collision';
+		wp_mkdir_p( $block_directory );
+		$name     = 'blockstudio-test/core-attributes';
+		$reserved = array( 'align', 'anchor', 'className', 'style', 'lock', 'metadata', 'backgroundColor', 'textColor', 'fontSize', 'fontFamily', 'layout' );
+		$fields   = array_map(
+			static fn( string $id ): array => array(
+				'id'      => $id,
+				'type'    => 'text',
+				'default' => 'field-value',
+			),
+			$reserved
+		);
+		$fields[] = array(
+			'id'   => 'variant',
+			'type' => 'text',
+		);
+		$fields[] = array(
+			'id'         => 'presentation',
+			'type'       => 'group',
+			'attributes' => array(
+				array(
+					'id'   => 'align',
+					'type' => 'text',
+				),
+			),
+		);
+		$fields[] = array(
+			'id'         => 'items',
+			'type'       => 'repeater',
+			'attributes' => array(
+				array(
+					'id'   => 'style',
+					'type' => 'text',
+				),
+			),
+		);
+		file_put_contents(
+			$block_directory . '/block.json',
+			wp_json_encode(
+				array(
+					'name'        => $name,
+					'title'       => 'Core attribute collision',
+					'supports'    => array(
+						'align'      => true,
+						'color'      => array( 'background' => true ),
+						'typography' => array(
+							'fontSize'   => true,
+							'fontFamily' => true,
+						),
+						'layout'     => true,
+					),
+					'attributes'  => array(
+						'align'     => array(
+							'type'    => 'string',
+							'default' => 'full',
+						),
+						'style'     => array( 'type' => 'object' ),
+						'className' => array(
+							'type'    => 'string',
+							'default' => 'native-default',
+						),
+					),
+					'blockstudio' => array( 'attributes' => $fields ),
+				)
+			)
+		);
+		file_put_contents( $block_directory . '/index.php', '<section useBlockProps>Safe</section>' );
+		$warnings = array();
+		$observer = static function ( string $message, string $level, array $context ) use ( &$warnings, $name ): void {
+			if ( ( $context['block'] ?? '' ) === $name && 'warning' === $level ) {
+				$warnings[] = $context['field'];
+			}
+		};
+		$filter   = static function ( array $field, array $block ) use ( $name ): array {
+			if ( $name === $block['name'] && 'variant' === ( $field['id'] ?? '' ) ) {
+				$field['id'] = 'align';
+			}
+			return $field;
+		};
+		add_action( 'blockstudio/error/logged', $observer, 10, 3 );
+		add_filter( 'blockstudio/blocks/attributes', $filter, 10, 2 );
+		try {
+			Build::init( array( 'dir' => $directory ) );
+			$block = Build::blocks()[ $name ] ?? null;
+			$this->assertInstanceOf( WP_Block_Type::class, $block );
+			register_block_type( $block );
+			$this->assertSame(
+				array(
+					'type'    => 'string',
+					'default' => 'full',
+				),
+				$block->attributes['align']
+			);
+			$this->assertSame( array( 'type' => 'object' ), $block->attributes['style'] );
+			$this->assertSame( 'native-default', $block->attributes['className']['default'] );
+			$this->assertArrayHasKey( 'presentation_align', $block->attributes );
+			$this->assertSame( 'style', $block->attributes['items']['attributes'][0]['id'] );
+			foreach ( $reserved as $id ) {
+				$this->assertContains( $id, $warnings );
+				$this->assertEmpty( $block->attributes[ $id ]['blockstudio'] ?? false );
+			}
+			$this->assertNotContains( 'align', array_column( $block->blockstudio['attributes'], 'id' ) );
+			$html = do_blocks( '<!-- wp:' . $name . ' {"style":{"color":{"background":"#ff0000"}}} /-->' );
+			$this->assertStringContainsString( 'alignfull', $html );
+			$this->assertStringContainsString( 'background-color:#ff0000', $html );
+			$this->assertStringNotContainsString( 'alignArray', $html );
+		} finally {
+			remove_action( 'blockstudio/error/logged', $observer, 10 );
+			remove_filter( 'blockstudio/blocks/attributes', $filter, 10 );
+			Files::delete_all_files( $directory );
+			Build::refresh_blocks();
+			if ( WP_Block_Type_Registry::get_instance()->is_registered( $name ) ) {
+				WP_Block_Type_Registry::get_instance()->unregister( $name );
+			}
+		}
+	}
+
 	// refresh_blocks()
 
 	public function test_refresh_blocks_does_not_break_registry(): void {

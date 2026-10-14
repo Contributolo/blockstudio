@@ -347,7 +347,7 @@ class PageReconciliationTest extends TestCase {
 	}
 
 	/**
-	 * An engine migration broadens exactly one write pass.
+	 * An engine migration reparses once without rewriting an identical post.
 	 *
 	 * @return void
 	 */
@@ -361,7 +361,9 @@ class PageReconciliationTest extends TestCase {
 		$second               = $this->reconcile();
 
 		$this->assertTrue( $second['fullReconciliation'] );
-		$this->assertSame( 1, $second['updated'] );
+		$this->assertSame( 0, $second['updated'] );
+		$this->assertSame( 1, $second['unchanged'] );
+		$this->assertSame( Page_Sync::engine_fingerprint(), get_post_meta( $first['pages']['alpha']['postId'], '_blockstudio_page_engine_fingerprint', true ) );
 		Pages::store_successful_source_identity( $second['sourceIdentity'] );
 
 		$third = $this->reconcile();
@@ -758,6 +760,152 @@ class PageReconciliationTest extends TestCase {
 				)
 			)
 		);
+	}
+
+	public function test_keyed_noop_preserves_post_row_hooks_and_revisions(): void {
+		$this->write_page( 'alpha', 'Alpha' );
+		$template = $this->pages_path . '/alpha/index.php';
+		file_put_contents( $template, '<block name="core/paragraph" key="intro">Intro v1</block>' );
+		$first       = Pages::reconcile();
+		$post_id     = $first['pages']['alpha']['postId'];
+		$before      = get_post( $post_id );
+		$fingerprint = get_post_meta( $post_id, '_blockstudio_page_fingerprint', true );
+		$revisions   = array_keys( wp_get_post_revisions( $post_id ) );
+		$writes      = 0;
+		$hook        = static function ( int $id ) use ( $post_id, &$writes ): void {
+			if ( $id === $post_id ) {
+				++$writes;
+			}
+		};
+		add_action( 'save_post', $hook );
+		add_action( 'blockstudio/pages/post_updated', $hook );
+		try {
+			file_put_contents( $template, '<block name="core/paragraph" key="intro">Intro v2</block>' );
+			$report = Pages::reconcile();
+			$after  = get_post( $post_id );
+			$this->assertSame( 0, $report['updated'] );
+			$this->assertSame( 1, $report['unchanged'] );
+			$this->assertSame( 1, $report['preserved'] );
+			$this->assertTrue( $report['pages']['alpha']['preserved'] );
+			$this->assertSame( $before->post_content, $after->post_content );
+			$this->assertSame( $before->post_modified, $after->post_modified );
+			$this->assertSame( $revisions, array_keys( wp_get_post_revisions( $post_id ) ) );
+			$this->assertSame( 0, $writes );
+			$this->assertNotSame( $fingerprint, get_post_meta( $post_id, '_blockstudio_page_fingerprint', true ) );
+			$again = Pages::reconcile();
+			$this->assertSame( 1, $again['unchanged'] );
+			$this->assertSame( 0, $writes );
+		} finally {
+			remove_action( 'save_post', $hook );
+			remove_action( 'blockstudio/pages/post_updated', $hook );
+		}
+	}
+
+	public function test_sync_keeps_editor_publication_status_and_names_overwritten_fields(): void {
+		$this->write_page( 'alpha', 'Alpha' );
+		$first   = Pages::reconcile();
+		$post_id = $first['pages']['alpha']['postId'];
+		foreach ( array( 'draft', 'pending', 'private', 'future' ) as $status ) {
+			wp_update_post(
+				array(
+					'ID'            => $post_id,
+					'post_title'    => 'Editor title',
+					'post_name'     => 'editor-slug',
+					'post_status'   => $status,
+					'post_date'     => gmdate( 'Y-m-d H:i:s', time() + DAY_IN_SECONDS ),
+					'post_date_gmt' => gmdate( 'Y-m-d H:i:s', time() + DAY_IN_SECONDS ),
+				)
+			);
+			$report = Pages::reconcile();
+			$this->assertSame( $status, get_post_status( $post_id ) );
+			$this->assertSame( 'Alpha', get_post_field( 'post_title', $post_id ) );
+			$this->assertSame( 'pending' === $status ? '' : 'alpha', get_post_field( 'post_name', $post_id ) );
+			$this->assertSame( 'pending' === $status ? array( 'post_title' ) : array( 'post_title', 'post_name' ), $report['pages']['alpha']['overwritten'] );
+			$again = Pages::reconcile( array( 'authoritative' => true ) );
+			$this->assertSame( 1, $again['unchanged'] );
+			$this->assertSame( $status, get_post_status( $post_id ) );
+		}
+	}
+
+	public function test_changed_locked_page_is_counted_and_named_separately(): void {
+		$this->write_page( 'alpha', 'Alpha' );
+		$first   = Pages::reconcile();
+		$post_id = $first['pages']['alpha']['postId'];
+		$before  = get_post_field( 'post_content', $post_id );
+		Pages::lock( 'alpha' );
+		file_put_contents( $this->pages_path . '/alpha/index.php', '<p>Changed source</p>' );
+		$report = Pages::reconcile();
+		$this->assertSame( 1, $report['locked'] );
+		$this->assertSame( 0, $report['unchanged'] );
+		$this->assertSame( 'locked', $report['pages']['alpha']['status'] );
+		$this->assertSame( $before, get_post_field( 'post_content', $post_id ) );
+		$this->assertSame( 1, Pages::reconcile( array( 'authoritative' => true ) )['updated'] );
+	}
+
+	public function test_rest_editor_save_does_not_republish_a_managed_draft(): void {
+		$this->write_page( 'alpha', 'Alpha' );
+		$first = Pages::reconcile();
+		$post_id = $first['pages']['alpha']['postId'];
+		$user = get_current_user_id();
+		wp_set_current_user( 1 );
+		try {
+			$request = new WP_REST_Request( 'POST', '/wp/v2/pages/' . $post_id );
+			$request->set_param( 'title', 'Editor Alpha' );
+			$request->set_param( 'slug', 'editor-alpha' );
+			$request->set_param( 'status', 'draft' );
+			$this->assertSame( 200, rest_do_request( $request )->get_status() );
+			$report = Pages::reconcile();
+			$this->assertSame( 'draft', get_post_status( $post_id ) );
+			$this->assertSame( array( 'post_title', 'post_name' ), $report['pages']['alpha']['overwritten'] );
+			$this->assertSame( 1, Pages::reconcile()['unchanged'] );
+		} finally {
+			wp_set_current_user( $user );
+		}
+	}
+
+	public function test_noop_detection_honors_filtered_post_fields(): void {
+		$this->write_page( 'alpha', 'Alpha' );
+		$first = Pages::reconcile();
+		$post_id = $first['pages']['alpha']['postId'];
+		$filter = static function ( array $data ): array {
+			$data['post_excerpt'] = 'Integration excerpt';
+			return $data;
+		};
+		add_filter( 'blockstudio/pages/update_post_data', $filter );
+		try {
+			file_put_contents( $this->pages_path . '/alpha/index.php', '<p>Changed body</p>' );
+			$report = Pages::reconcile();
+			$this->assertSame( 1, $report['updated'] );
+			$this->assertSame( 'Integration excerpt', get_post_field( 'post_excerpt', $post_id ) );
+		} finally {
+			remove_filter( 'blockstudio/pages/update_post_data', $filter );
+		}
+	}
+
+	public function test_removed_page_report_names_posts_and_actual_cleanup_actions(): void {
+		foreach ( array( 'alpha', 'beta', 'gamma' ) as $name ) {
+			$this->write_page( $name, $name );
+		}
+		$first  = Pages::reconcile();
+		$filter = static fn( string $action, WP_Post $post ): string => 'beta' === $post->post_name ? 'delete' : ( 'gamma' === $post->post_name ? 'keep' : $action );
+		add_filter( 'blockstudio/pages/orphan_action', $filter, 10, 2 );
+		try {
+			foreach ( array( 'alpha', 'beta', 'gamma' ) as $name ) {
+				$this->remove_directory( $this->pages_path . '/' . $name );
+			}
+			$report = Pages::reconcile();
+			$this->assertSame( 2, $report['removed'] );
+			$removed = array_column( $report['removedPages'], null, 'name' );
+			$this->assertSame( 'trash', $removed['alpha']['action'] );
+			$this->assertSame( 'delete', $removed['beta']['action'] );
+			$this->assertSame( $first['pages']['alpha']['postId'], $removed['alpha']['postId'] );
+			$this->assertSame( 'alpha', $removed['alpha']['key'] );
+			$this->assertArrayNotHasKey( 'gamma', $removed );
+			$this->assertNotNull( get_post( $first['pages']['gamma']['postId'] ) );
+			$this->assertSame( array(), Pages::reconcile()['removedPages'] );
+		} finally {
+			remove_filter( 'blockstudio/pages/orphan_action', $filter, 10 );
+		}
 	}
 
 	/**

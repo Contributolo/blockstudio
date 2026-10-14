@@ -77,6 +77,17 @@ Enable Content Sync in `blockstudio.json`:
 
 Page Sync managed posts are excluded by default. If `includePageSyncManaged` is enabled, Content Sync can sync their configured meta but Page Sync still owns their `post_content`.
 
+These projections contain `"bodyOwner": "page-sync"`. Pull reports the JSON
+write as metadata-only and adds a `skipped` body row, rather than presenting
+the post as having an empty body. It does not write or delete a sibling
+`.html` file. An existing review copy is preserved and ignored by push. The
+same ownership messages are included in dry-run output.
+
+On another environment, run Page Sync first. A projection with
+`bodyOwner: "page-sync"` must reference an existing Page Sync managed post;
+push refuses to create an empty stand-in or apply that body's review copy.
+Projections without the marker from older versions remain supported.
+
 Authors are ignored by default because users are not synced. Set `authors: "login"` to store the author's login in post files and resolve that login to an existing user on push. Missing users are a preflight error; Content Sync does not create users.
 
 ## Commands
@@ -129,6 +140,10 @@ content/
 ```
 
 Post `.json` files store identity, post fields, term relationships, declared meta, and meta encoding. The sibling `.html` file stores `post_content` as raw block markup and is omitted when the content is empty. Term `.json` files store identity, taxonomy, slug, name, description, parent UID, declared termmeta, and meta encoding.
+
+The other case with no `.html` file is a Page Sync owned body, identified by
+`bodyOwner` above. For ordinary posts whose body becomes empty, pull removes
+the old body file and names it in a separate `deleted` body row.
 
 ```json title="content/posts/team_member/jane.9b1c0e6e.json"
 {

@@ -85,10 +85,12 @@ class Content_Sync {
 					$uid = 'dry-run';
 				}
 
+				$managed     = $this->is_page_sync_managed( $post->ID );
 				$projection  = $this->project_post( $post, $uid );
 				$source      = $this->post_source_path( $post, $uid );
 				$body_path   = $this->body_path_for_source( $source );
-				$body        = $this->is_page_sync_managed( $post->ID ) ? '' : (string) $post->post_content;
+				$body        = $managed ? '' : (string) $post->post_content;
+				$message     = $this->relative_path( $source ) . ( $managed ? ' (metadata only; body owned by Page Sync).' : '' );
 				$fingerprint = $this->fingerprint_projection(
 					$projection,
 					$body
@@ -97,18 +99,26 @@ class Content_Sync {
 				$seen_sources[ $this->normalize_file_path( $source ) ] = $uid;
 
 				if ( $this->dry_run ) {
-					$rows[] = $this->row( 'would-write', 'post', (string) $post->ID, $uid, $this->relative_path( $source ) );
+					$rows[] = $this->row( 'would-write', 'post', (string) $post->ID, $uid, $message );
+					if ( $managed ) {
+						$rows[] = $this->row( 'skipped', 'body', (string) $post->ID, $uid, $this->relative_path( $body_path ) . ': Page Sync owns the body; existing files are preserved.' );
+					}
 					continue;
 				}
 
 				$json_status = $this->write_json_file_status( $source, $projection );
 				$body_status = 'unchanged';
 
-				if ( '' !== $body ) {
+				if ( $managed ) {
+					$rows[] = $this->row( 'skipped', 'body', (string) $post->ID, $uid, $this->relative_path( $body_path ) . ': Page Sync owns the body; existing files are preserved.' );
+				} elseif ( '' !== $body ) {
 					$body_status = $this->write_file_status( $body_path, $body );
 				} elseif ( file_exists( $body_path ) ) {
 					wp_delete_file( $body_path );
 					$body_status = file_exists( $body_path ) ? 'failed' : 'written';
+					if ( 'written' === $body_status ) {
+						$rows[] = $this->row( 'deleted', 'body', (string) $post->ID, $uid, $this->relative_path( $body_path ) . ': empty post body.' );
+					}
 				}
 
 				if ( 'failed' === $json_status || 'failed' === $body_status ) {
@@ -125,7 +135,7 @@ class Content_Sync {
 
 				$this->update_entity_state( 'post', $post->ID, $uid, $source, $fingerprint );
 				$changed = in_array( 'written', array( $json_status, $body_status ), true );
-				$rows[]  = $this->row( $changed ? 'written' : 'unchanged', 'post', (string) $post->ID, $uid, $this->relative_path( $source ) );
+				$rows[]  = $this->row( $changed ? 'written' : 'unchanged', 'post', (string) $post->ID, $uid, $message );
 			}
 		}
 
@@ -789,6 +799,9 @@ class Content_Sync {
 			}
 
 			$existing = $this->find_post_by_uid( $uid );
+			if ( isset( $data['bodyOwner'] ) && ( 'page-sync' !== $data['bodyOwner'] || ! $existing || ! $this->is_page_sync_managed( $existing->ID ) ) ) {
+				$errors[] = $this->row( 'error', 'post', '', $uid, 'bodyOwner must be page-sync and reference an existing Page Sync managed post. Run page sync before content push.' );
+			}
 
 			$slug_key = $this->post_slug_plan_key( $data );
 			if ( '' !== $slug_key ) {
@@ -1314,7 +1327,7 @@ class Content_Sync {
 
 				$body_file = $this->body_path_for_source( $file );
 				// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reading local content sync body file.
-				$body = file_exists( $body_file ) ? (string) file_get_contents( $body_file ) : '';
+				$body = 'page-sync' === ( $data['bodyOwner'] ?? '' ) ? '' : ( file_exists( $body_file ) ? (string) file_get_contents( $body_file ) : '' );
 
 				$items[] = array(
 					'source' => $file,
@@ -1438,6 +1451,9 @@ class Content_Sync {
 			'meta'         => $meta['meta'],
 			'metaEncoding' => $meta['encoding'],
 		);
+		if ( $this->is_page_sync_managed( $post->ID ) ) {
+			$data['bodyOwner'] = 'page-sync';
+		}
 
 		if ( 'login' === $this->config['authors'] ) {
 			$user = get_user_by( 'id', (int) $post->post_author );
@@ -2523,7 +2539,7 @@ class Content_Sync {
 	 * @return array
 	 */
 	private function shape_live_projection_for_file( array $live, array $file ): array {
-		foreach ( array( 'date', 'modified', 'author', 'terms' ) as $optional_key ) {
+		foreach ( array( 'date', 'modified', 'author', 'terms', 'bodyOwner' ) as $optional_key ) {
 			if ( ! array_key_exists( $optional_key, $file ) ) {
 				unset( $live[ $optional_key ] );
 			}

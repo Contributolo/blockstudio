@@ -114,6 +114,8 @@ class Cli {
 			'created'    => (int) $report['created'],
 			'updated'    => (int) $report['updated'],
 			'unchanged'  => (int) $report['unchanged'],
+			'locked'     => (int) $report['locked'],
+			'preserved'  => (int) $report['preserved'],
 			'removed'    => (int) $report['removed'],
 			'failed'     => (int) $report['failed'],
 			'dropped'    => (int) $report['droppedAttributes'],
@@ -125,16 +127,11 @@ class Cli {
 		} else {
 			\WP_CLI\Utils\format_items( 'table', array( $row ), array_keys( $row ) );
 
-			foreach ( $report['pages'] as $page => $page_report ) {
-				foreach ( $page_report['droppedAttributes'] ?? array() as $block_name => $keys ) {
-					\WP_CLI::warning(
-						sprintf(
-							'%1$s: the %2$s block drops %3$s, which it neither declares as a field nor forwards to its root element.',
-							$page,
-							$block_name,
-							implode( ', ', $keys )
-						)
-					);
+			foreach ( self::page_report_lines( $report ) as $line ) {
+				if ( 'warning' === $line['level'] ) {
+					\WP_CLI::warning( $line['message'] );
+				} else {
+					\WP_CLI::line( $line['message'] );
 				}
 			}
 		}
@@ -152,6 +149,43 @@ class Cli {
 		if ( 'json' !== $format ) {
 			\WP_CLI::success( 'File-backed pages synchronized.' );
 		}
+	}
+
+	/**
+	 * Format per-page sync details for CLI output.
+	 *
+	 * @param array $report Reconciliation report.
+	 * @return array<int, array{level:string,message:string}> Output lines.
+	 */
+	private static function page_report_lines( array $report ): array {
+		$lines = array();
+		foreach ( $report['pages'] as $page => $result ) {
+			if ( 'unchanged' !== $result['status'] || ! empty( $result['preserved'] ) ) {
+				$lines[] = array(
+					'level'   => 'line',
+					'message' => sprintf( '%1$s: %2$s (post %3$d)%4$s', $page, $result['status'], $result['postId'], ! empty( $result['preserved'] ) ? '; keyed editor content preserved' : '' ),
+				);
+			}
+			if ( ! empty( $result['overwritten'] ) ) {
+				$lines[] = array(
+					'level'   => 'warning',
+					'message' => $page . ': file-owned fields overwritten: ' . implode( ', ', $result['overwritten'] ),
+				);
+			}
+			foreach ( $result['droppedAttributes'] ?? array() as $block => $keys ) {
+				$lines[] = array(
+					'level'   => 'warning',
+					'message' => sprintf( '%1$s: the %2$s block drops %3$s, which it neither declares as a field nor forwards to its root element.', $page, $block, implode( ', ', $keys ) ),
+				);
+			}
+		}
+		foreach ( $report['removedPages'] ?? array() as $removed ) {
+			$lines[] = array(
+				'level'   => 'line',
+				'message' => sprintf( '%1$s: %2$s (post %3$d)', '' !== $removed['name'] ? $removed['name'] : $removed['key'], $removed['action'], $removed['postId'] ),
+			);
+		}
+		return $lines;
 	}
 
 	// Blocks.

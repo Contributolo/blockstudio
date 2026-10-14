@@ -358,7 +358,10 @@ the meta to include it again.
 
 - Posts managed by file-based pages are excluded by default. With
   `includePageSyncManaged: true`, Content Sync may sync their configured meta,
-  but Page Sync still owns their `post_content`.
+  but Page Sync still owns their `post_content`. Those JSON projections carry
+  `bodyOwner: "page-sync"`, and pull explicitly reports the skipped body.
+  Existing `.html` review copies are preserved and ignored by push. Sync the
+  pages on a target environment before pushing their metadata projections.
 - Authors are ignored by default because users are not synced. With
   `authors: "login"`, post files store the author's login and push resolves it
   to an existing user; a missing user is a preflight error.

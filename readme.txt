@@ -3,7 +3,7 @@ Contributors: dnnsjsk
 Requires at least: 6.7
 Tested up to: 7.0.0
 Requires PHP: 8.2
-Stable tag: 7.7.0
+Stable tag: 7.7.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,14 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 * [Getting Started](https://blockstudio.dev/docs/getting-started)
 
 == Changelog ==
+
+= 7.7.1 =
+* Fix: page sync skips post writes, update hooks, timestamps, and revisions when merged content and managed fields are unchanged (#104)
+* Fix: page sync preserves existing draft, pending, private, and scheduled statuses and reports overwritten file-owned fields (#105)
+* Fix: conflicting field IDs no longer replace WordPress-owned block attributes and are skipped with a diagnostic (#106)
+* Fix: editor wrapper classes added by other filters are preserved (#107)
+* Fix: Content Sync marks Page Sync body ownership, preserves existing review copies, and reports body skips or deletions (#108)
+* Fix: page sync names locked and removed pages in CLI and JSON reports (#109)
 
 = 7.7.0 =
 * New: virtual routes serve complete documents without creating WordPress posts, with block assets, Tailwind, document titles, and static prerender support

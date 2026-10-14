@@ -32,6 +32,34 @@ The `$attributes` or `$a` variables only give you access to data registered in t
 
 ## Setting Defaults
 
+### Reserved Field IDs
+
+WordPress-owned attributes must not be declared as Blockstudio fields with the
+same top-level ID. `anchor`, `className`, `style`, `lock`, and `metadata` are
+reserved, as are Blockstudio's internal `blockstudio`, `__BLOCKSTUDIO_KEY`,
+and `blockEditingMode` attributes.
+
+Enabled WordPress supports reserve their attribute names too: `align`,
+`backgroundColor`, `textColor`, `gradient`, `fontSize`, `fontFamily`, `layout`,
+`borderColor`, `shadow`, and `ariaLabel`, as applicable. A native declaration
+of one of those attributes also reserves that name. This avoids replacing,
+for example, core's string `align` with a select field's option object.
+
+Conflicting fields are skipped at registration and logged through
+`blockstudio/error/logged` (and the WordPress debug log when enabled), naming
+the block and field. Their editor controls, storage handlers, and render
+definitions are not registered. Rename the field to `headingAlign`, or put it
+inside a named group such as `presentation` to produce `presentation_align`.
+Repeater-row fields live inside their row and are not top-level collisions.
+An ordinary `align` field remains valid when alignment support is disabled
+and no native `align` attribute exists.
+
+When upgrading an existing block with a collision, rename its field and
+migrate any saved field values to the new ID. Blockstudio does not silently
+rename stored content or remove the WordPress support.
+
+### Native Attribute Defaults
+
 To set a default value for WordPress properties like `align`, add a `default` key inside the `attributes` key:
 
 ```json title="block.json"

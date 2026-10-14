@@ -73,6 +73,58 @@ test.afterEach(async () => {
   );
 });
 
+test('editor wrappers preserve classes from filters at every priority', async () => {
+  await page.evaluate(() => {
+    const wp = (window as any).wp;
+    for (const priority of [5, 10, 20]) {
+      wp.hooks.addFilter(
+        'editor.BlockListBlock',
+        `blockstudio-test/class-${priority}`,
+        wp.compose.createHigherOrderComponent(
+          (BlockListBlock: any) => (props: any) =>
+            wp.element.createElement(BlockListBlock, {
+              ...props,
+              className: [props.className, `regression-class-${priority}`]
+                .filter(Boolean)
+                .join(' '),
+            }),
+          'testWrapperClass',
+        ),
+        priority,
+      );
+    }
+    const blocks = wp.data.select('core/block-editor').getBlocks();
+    wp.data
+      .dispatch('core/block-editor')
+      .resetBlocks([
+        ...blocks,
+        wp.blocks.createBlock('core/paragraph', { content: 'Core control' }),
+      ]);
+  });
+  try {
+    for (const type of ['blockstudio/editor-audit', 'core/paragraph']) {
+      const block = canvas.locator(`[data-type="${type}"]`).first();
+      for (const priority of [5, 10, 20]) {
+        await expect(block).toHaveClass(
+          new RegExp(`\\bregression-class-${priority}\\b`),
+        );
+      }
+    }
+    await expect(
+      canvas.locator('[data-type="blockstudio/editor-audit"]').first(),
+    ).toHaveClass(/\bblockstudio-block\b/);
+  } finally {
+    await page.evaluate(() => {
+      for (const priority of [5, 10, 20]) {
+        (window as any).wp.hooks.removeFilter(
+          'editor.BlockListBlock',
+          `blockstudio-test/class-${priority}`,
+        );
+      }
+    });
+  }
+});
+
 test('multi-selected save preserves each blocks content and identity across reload', async () => {
   for (const [index, content] of [
     'Edited first content',

@@ -16,7 +16,14 @@ const customProps = createHigherOrderComponent((BlockListBlock) => {
       return <BlockListBlock {...props} />;
     }
 
-    return <BlockListBlock {...props} className="blockstudio-block" />;
+    return (
+      <BlockListBlock
+        {...props}
+        className={[props.className, 'blockstudio-block']
+          .filter(Boolean)
+          .join(' ')}
+      />
+    );
   };
 }, 'addCustomClassNameToEditorBlock');
 

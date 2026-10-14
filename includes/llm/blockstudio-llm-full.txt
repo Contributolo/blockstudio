@@ -2960,6 +2960,34 @@ The `$attributes` or `$a` variables only give you access to data registered in t
 
 ## Setting Defaults
 
+### Reserved Field IDs
+
+WordPress-owned attributes must not be declared as Blockstudio fields with the
+same top-level ID. `anchor`, `className`, `style`, `lock`, and `metadata` are
+reserved, as are Blockstudio's internal `blockstudio`, `__BLOCKSTUDIO_KEY`,
+and `blockEditingMode` attributes.
+
+Enabled WordPress supports reserve their attribute names too: `align`,
+`backgroundColor`, `textColor`, `gradient`, `fontSize`, `fontFamily`, `layout`,
+`borderColor`, `shadow`, and `ariaLabel`, as applicable. A native declaration
+of one of those attributes also reserves that name. This avoids replacing,
+for example, core's string `align` with a select field's option object.
+
+Conflicting fields are skipped at registration and logged through
+`blockstudio/error/logged` (and the WordPress debug log when enabled), naming
+the block and field. Their editor controls, storage handlers, and render
+definitions are not registered. Rename the field to `headingAlign`, or put it
+inside a named group such as `presentation` to produce `presentation_align`.
+Repeater-row fields live inside their row and are not top-level collisions.
+An ordinary `align` field remains valid when alignment support is disabled
+and no native `align` attribute exists.
+
+When upgrading an existing block with a collision, rename its field and
+migrate any saved field values to the new ID. Blockstudio does not silently
+rename stored content or remove the WordPress support.
+
+### Native Attribute Defaults
+
 To set a default value for WordPress properties like `align`, add a `default` key inside the `attributes` key:
 
 ```json
@@ -10618,6 +10646,26 @@ that previously passed a `force` argument to that method must call
 
 To prevent a page from being overwritten after manual edits, set `"sync": false` in `page.json`.
 
+### Post Field Ownership
+
+`postStatus` sets the initial status. Subsequent syncs preserve existing draft,
+pending, private, published, and scheduled statuses, including with
+`--authoritative`. A draft is not republished just because its file says
+`postStatus: "publish"`. The existing orphan-recovery behavior is unchanged:
+an explicit sync restores a trashed managed post when its source is present.
+Lock the page or disable sync to prevent that restoration.
+
+The file continues to own the title, slug, post type, parent, and configured
+menu order. Editing those in WordPress does not change the source definition.
+The next explicit sync reapplies the file values and names the affected fields
+in `pages.<name>.overwritten`, with a warning in CLI table output. WordPress's
+native permissions still apply, including its empty slug for pending posts
+when the syncing user cannot publish them.
+
+Use `blockstudio/pages/update_post_data` for an integration that explicitly
+owns a different status policy. Keyed blocks preserve editor-owned block
+content; keys do not change ownership of the post's title or slug.
+
 For collection pages, fingerprints cover the manifest, loader, page source,
 layout file, metadata, and related source paths. The next explicit
 synchronization applies changes to those inputs.
@@ -10649,9 +10697,25 @@ $report = Blockstudio\Pages::reconcile([
 ]);
 ```
 
-The report contains `discovered`, `created`, `updated`, `unchanged`, `removed`,
+The report contains `discovered`, `created`, `updated`, `unchanged`, `locked`,
+`preserved`, `removed`, `removedPages`,
 `failed`, `fullReconciliation`, per-page results, discovery errors, and a
 deterministic `sourceIdentity`.
+
+Locked pages have `status: "locked"` and are counted separately from unchanged
+pages. `removedPages` lists each removed page's `name`, `key`, `postId`, and
+actual `action` (`trash` or `delete`); kept or already-trashed posts are not
+counted as newly removed. CLI table output also names created, updated,
+locked, removed, and content-preserved pages with their post IDs.
+
+After parsing and keyed merging, an identical final post does not call
+`wp_update_post()`, change `post_modified`, create a revision, or fire post
+update hooks. Its result is `unchanged`. When the source's content differs
+from the editor-owned keyed content, `preserved: true` identifies that decision
+and the top-level `preserved` count includes it. The new source fingerprint
+and managed metadata are still recorded so the next unchanged sync is a no-op.
+`preserved` is an additional flag, not an exclusive status: a page may preserve
+keyed content while still updating a file-owned title or adding another block.
 
 `authoritative: true` may clear a Page Sync lock and replaces content from the
 file definition instead of preserving keyed editor content. Leave it `false`
@@ -12508,6 +12572,17 @@ Enable Content Sync in `blockstudio.json`:
 
 Page Sync managed posts are excluded by default. If `includePageSyncManaged` is enabled, Content Sync can sync their configured meta but Page Sync still owns their `post_content`.
 
+These projections contain `"bodyOwner": "page-sync"`. Pull reports the JSON
+write as metadata-only and adds a `skipped` body row, rather than presenting
+the post as having an empty body. It does not write or delete a sibling
+`.html` file. An existing review copy is preserved and ignored by push. The
+same ownership messages are included in dry-run output.
+
+On another environment, run Page Sync first. A projection with
+`bodyOwner: "page-sync"` must reference an existing Page Sync managed post;
+push refuses to create an empty stand-in or apply that body's review copy.
+Projections without the marker from older versions remain supported.
+
 Authors are ignored by default because users are not synced. Set `authors: "login"` to store the author's login in post files and resolve that login to an existing user on push. Missing users are a preflight error; Content Sync does not create users.
 
 ## Commands
@@ -12560,6 +12635,10 @@ content/
 ```
 
 Post `.json` files store identity, post fields, term relationships, declared meta, and meta encoding. The sibling `.html` file stores `post_content` as raw block markup and is omitted when the content is empty. Term `.json` files store identity, taxonomy, slug, name, description, parent UID, declared termmeta, and meta encoding.
+
+The other case with no `.html` file is a Page Sync owned body, identified by
+`bodyOwner` above. For ordinary posts whose body becomes empty, pull removes
+the old body file and names it in a separate `deleted` body row.
 
 ```json
 {
@@ -13832,8 +13911,18 @@ wp bs pages sync
 ```
 
 The command reconciles the complete desired inventory and reports discovered,
-created, updated, unchanged, removed, and failed pages. Equal fingerprints
+created, updated, unchanged, locked, preserved, removed, and failed pages. Equal fingerprints
 produce no post or post-meta writes.
+
+Table output names changed, locked, content-preserved, and removed pages with
+their post IDs. JSON includes `pages.<name>.preserved`,
+`pages.<name>.overwritten`, and `removedPages` entries with the page name, key,
+post ID, and cleanup action. An identical post after keyed merging is reported
+as unchanged without creating a revision or advancing its modified timestamp.
+
+Existing publication statuses are preserved; file-owned title and slug
+replacements are printed as warnings. See
+Post Field Ownership.
 
 Use `--authoritative` to replace managed content instead of preserving keyed
 editor content, and `--full` to report the pass as a full reconciliation

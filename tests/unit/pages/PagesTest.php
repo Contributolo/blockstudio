@@ -1509,7 +1509,8 @@ class PagesTest extends TestCase {
 			$this->assertSame( $post_id, $layout_changed );
 			$this->assertNotSame( $second, $third );
 			$this->assertInstanceOf( WP_Post::class, $updated_post );
-			$this->assertGreaterThan( $modified_before_layout, $updated_post->post_modified_gmt );
+			$this->assertSame( $modified_before_layout, $updated_post->post_modified_gmt );
+			$this->assertSame( $post->post_content, $updated_post->post_content );
 		} finally {
 			if ( is_int( $post_id ) && $post_id > 0 ) {
 				wp_delete_post( $post_id, true );

@@ -585,6 +585,54 @@ class ContentSyncTest extends TestCase {
 		$this->assertFileDoesNotExist( $this->content_root() );
 	}
 
+	public function test_managed_body_is_marked_reported_and_never_deleted_or_pushed(): void {
+		$post_id = $this->insert_post( array( 'post_content' => '<p>Page Sync owns this</p>' ) );
+		update_post_meta( $post_id, '_blockstudio_page_key', 'managed' );
+		$config                           = $this->config();
+		$config['includePageSyncManaged'] = true;
+		$sync                             = new Content_Sync( $config );
+		$rows                             = $sync->pull();
+		$file                             = $this->find_post_json_file();
+		$data                             = json_decode( file_get_contents( $file ), true );
+		$body                             = preg_replace( '/\.json$/', '.html', $file );
+		$this->assertSame( 'page-sync', $data['bodyOwner'] );
+		$this->assertFileDoesNotExist( $body );
+		$this->assertContains( 'body', wp_list_pluck( $rows, 'entity' ) );
+		$this->assertStringContainsString( 'metadata only', implode( ' ', wp_list_pluck( $rows, 'message' ) ) );
+		file_put_contents( $body, '<p>Keep this review copy</p>' );
+		foreach ( array( array( 'dry-run' => true ), array() ) as $args ) {
+			$rows = $sync->pull( $args );
+			$this->assertSame( '<p>Keep this review copy</p>', file_get_contents( $body ) );
+			$this->assertStringContainsString( 'existing files are preserved', implode( ' ', wp_list_pluck( $rows, 'message' ) ) );
+		}
+		$data['meta']['_my_subtitle'] = 'Updated metadata';
+		file_put_contents( $file, wp_json_encode( $data ) );
+		$rows = $sync->push();
+		$this->assertNotContains( 'error', wp_list_pluck( $rows, 'action' ) );
+		$this->assertSame( '<p>Page Sync owns this</p>', get_post_field( 'post_content', $post_id ) );
+		$this->assertSame( 'Updated metadata', get_post_meta( $post_id, '_my_subtitle', true ) );
+		wp_delete_post( $post_id, true );
+		$this->assertContains( 'error', wp_list_pluck( $sync->push(), 'action' ) );
+	}
+
+	public function test_empty_unmanaged_body_deletion_is_named_in_the_report(): void {
+		$post_id = $this->insert_post( array( 'post_content' => '<p>Body</p>' ) );
+		$sync    = new Content_Sync( $this->config() );
+		$sync->pull();
+		$body = preg_replace( '/\.json$/', '.html', $this->find_post_json_file() );
+		wp_update_post(
+			array(
+				'ID'           => $post_id,
+				'post_content' => '',
+			)
+		);
+		$rows = $sync->pull();
+		$this->assertFileDoesNotExist( $body );
+		$deleted = array_values( array_filter( $rows, static fn( array $row ): bool => 'deleted' === $row['action'] && 'body' === $row['entity'] ) );
+		$this->assertCount( 1, $deleted );
+		$this->assertStringContainsString( basename( $body ), $deleted[0]['message'] );
+	}
+
 	/**
 	 * Push reports slug conflicts before writing.
 	 *

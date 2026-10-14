@@ -162,6 +162,7 @@ php: $a, bs_data_attributes(), bs_get_group(), bs_icon(), bs_render_data_attribu
 route: /docs/blocks/attributes/block-attributes
 file: docs/docs/blocks/attributes/block-attributes.md
 purpose: Access standard WordPress block attributes like alignment and typography.
+hooks: blockstudio/error/logged
 php: $a, $b
 
 ### HTML Utilities

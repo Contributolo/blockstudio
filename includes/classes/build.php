@@ -2447,6 +2447,77 @@ class Build {
 	}
 
 	/**
+	 * Remove fields that would replace WordPress-owned top-level attributes.
+	 *
+	 * @param array  $fields Field definitions.
+	 * @param array  $reserved Reserved attribute names.
+	 * @param string $name Block name for diagnostics.
+	 * @param string $prefix Named-group prefix.
+	 * @return array Safe field definitions.
+	 */
+	private static function protect_core_attributes( array $fields, array $reserved, string $name, string $prefix = '' ): array {
+		foreach ( $fields as $index => &$field ) {
+			$type = $field['type'] ?? '';
+			if ( 'group' === $type ) {
+				$group_prefix        = $prefix . ( empty( $field['id'] ) ? '' : $field['id'] . '_' );
+				$field['attributes'] = self::protect_core_attributes( $field['attributes'] ?? array(), $reserved, $name, $group_prefix );
+				continue;
+			}
+			if ( 'tabs' === $type ) {
+				foreach ( $field['tabs'] ?? array() as $tab_index => $tab ) {
+					$field['tabs'][ $tab_index ]['attributes'] = self::protect_core_attributes( $tab['attributes'] ?? array(), $reserved, $name, $prefix );
+				}
+				continue;
+			}
+			$id = $prefix . ( $field['id'] ?? '' );
+			if ( isset( $reserved[ $id ] ) ) {
+				Error_Handler::warning(
+					'Field skipped because its ID is owned by WordPress. Rename the field or use a named group.',
+					array(
+						'block' => $name,
+						'field' => $id,
+					)
+				);
+				unset( $fields[ $index ] );
+			}
+		}
+		unset( $field );
+		return array_values( $fields );
+	}
+
+	/**
+	 * Get core attributes reserved by this block's supports and native schema.
+	 *
+	 * @param array $block_json Block definition.
+	 * @return array<string, bool> Reserved top-level attribute names.
+	 */
+	private static function core_attribute_names( array $block_json ): array {
+		$supports    = $block_json['supports'] ?? array();
+		$color       = $supports['color'] ?? false;
+		$names       = array( 'anchor', 'className', 'style', 'lock', 'metadata', 'blockstudio', '__BLOCKSTUDIO_KEY', 'blockEditingMode' );
+		$conditional = array(
+			'align'           => ! empty( $supports['align'] ),
+			'backgroundColor' => true === $color || ( is_array( $color ) && ( $color['background'] ?? true ) ),
+			'textColor'       => true === $color || ( is_array( $color ) && ( $color['text'] ?? true ) ),
+			'gradient'        => ! empty( $supports['color']['gradients'] ),
+			'fontSize'        => ! empty( $supports['typography']['fontSize'] ),
+			'fontFamily'      => ! empty( $supports['typography']['fontFamily'] ),
+			'layout'          => ! empty( $supports['layout'] ) || ! empty( $supports['__experimentalLayout'] ),
+			'borderColor'     => true === ( $supports['__experimentalBorder'] ?? false ) || ! empty( $supports['__experimentalBorder']['color'] ),
+			'shadow'          => ! empty( $supports['shadow'] ),
+			'ariaLabel'       => ! empty( $supports['ariaLabel'] ),
+		);
+		$native      = is_string( $block_json['name'] ?? null ) ? \WP_Block_Type_Registry::get_instance()->get_registered( $block_json['name'] ) : false;
+		foreach ( $conditional as $attribute => $enabled ) {
+			$native_attribute = $native->attributes[ $attribute ] ?? array();
+			if ( $enabled || isset( $block_json['attributes'][ $attribute ] ) || ( ! empty( $native_attribute ) && empty( $native_attribute['blockstudio'] ) ) ) {
+				$names[] = $attribute;
+			}
+		}
+		return array_fill_keys( $names, true );
+	}
+
+	/**
 	 * Register a block type with WordPress.
 	 *
 	 * @since 7.0.0
@@ -2483,6 +2554,8 @@ class Build {
 
 		if ( isset( $block_json['blockstudio']['attributes'] ) ) {
 			self::expand_custom_fields( $block_json['blockstudio']['attributes'], $block_lookup );
+			$reserved                                = self::core_attribute_names( $block_json );
+			$block_json['blockstudio']['attributes'] = self::protect_core_attributes( $block_json['blockstudio']['attributes'], $reserved, $name );
 			Field_Type_Registry::instance()->mark_used_fields( $block_json['blockstudio']['attributes'] );
 
 			if ( ! $is_override ) {
@@ -2491,6 +2564,7 @@ class Build {
 					$block_json['blockstudio']['attributes'],
 					$filtered_attributes
 				);
+				$filtered_attributes = self::protect_core_attributes( $filtered_attributes, $reserved, $name );
 			}
 
 			$attributes = ( new Attribute_Builder() )->build(
@@ -2513,7 +2587,7 @@ class Build {
 			),
 		);
 
-		$attributes['anchor'] = $is_extend
+		$attributes['anchor'] = $block_json['attributes']['anchor'] ?? ( $is_extend
 			? array(
 				'type'      => 'string',
 				'source'    => 'attribute',
@@ -2522,9 +2596,9 @@ class Build {
 			)
 			: array(
 				'type' => 'string',
-			);
+			) );
 
-		$attributes['className'] = array(
+		$attributes['className'] = $block_json['attributes']['className'] ?? array(
 			'type' => 'string',
 		);
 
@@ -2667,7 +2741,16 @@ class Build {
 
 			foreach ( $override_config as $key => $value ) {
 				if ( 'blockstudio' === $key ) {
-					$override_attributes = $value['attributes'] ?? array();
+					$override_attributes = self::protect_core_attributes(
+						$value['attributes'] ?? array(),
+						self::core_attribute_names(
+							array(
+								'name'     => $block->name,
+								'supports' => $override_config['supports'] ?? $block->supports,
+							)
+						),
+						$block->name
+					);
 					self::merge_attributes(
 						$block->blockstudio['attributes'],
 						$override_attributes

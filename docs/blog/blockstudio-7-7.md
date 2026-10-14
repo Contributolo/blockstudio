@@ -272,3 +272,13 @@ the new maintenance commands are available without changing existing page
 collections. Review the option-storage save rules above, update the separate
 PHPStan package if you use it, and keep running page synchronization explicitly
 as before.
+
+### 7.7.1 Follow-Up
+
+The 7.7.1 patch makes synchronization outcomes clearer and safer. A keyed merge
+that leaves a post unchanged no longer creates a revision or updates its
+modified timestamp. Existing publication statuses are preserved, file-owned
+title and slug replacements are reported, and locked or removed pages are
+named in the CLI report. Content Sync marks Page Sync owned bodies and keeps
+existing review copies. The patch also protects WordPress-owned attributes
+from conflicting field IDs and preserves editor classes added by other filters.

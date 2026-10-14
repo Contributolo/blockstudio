@@ -200,7 +200,10 @@ class Pages {
 				'created'            => 0,
 				'updated'            => 0,
 				'unchanged'          => 0,
+				'locked'             => 0,
+				'preserved'          => 0,
 				'removed'            => 0,
+				'removedPages'       => array(),
 				'failed'             => count( $registry->get_errors() ),
 				'fullReconciliation' => $full,
 				'sourceId'           => $source_identity['hash'],
@@ -227,12 +230,20 @@ class Pages {
 				);
 
 				$status = in_array( $result['status'], array( 'created', 'updated', 'unchanged', 'failed' ), true ) ? $result['status'] : 'failed';
+				if ( $result['locked'] ) {
+					$status = 'locked';
+				}
 				++$report[ $status ];
 				$report['pages'][ $name ] = array(
-					'status' => $status,
-					'postId' => $result['post_id'],
-					'locked' => $result['locked'],
+					'status'      => $status,
+					'postId'      => $result['post_id'],
+					'locked'      => $result['locked'],
+					'preserved'   => $result['preserved'],
+					'overwritten' => $result['overwritten'],
 				);
+				if ( $result['preserved'] ) {
+					++$report['preserved'];
+				}
 				if ( array() !== $result['dropped_attributes'] ) {
 					$report['pages'][ $name ]['droppedAttributes'] = $result['dropped_attributes'];
 					$report['droppedAttributes']                  += array_sum( array_map( 'count', $result['dropped_attributes'] ) );
@@ -259,11 +270,12 @@ class Pages {
 			}
 
 			if ( 0 === $report['failed'] && array() === $report['errors'] ) {
-				$report['removed'] = $sync->prune_missing(
+				$report['removed']      = $sync->prune_missing(
 					array_column( $desired, 'key' ),
 					array_column( $desired, 'source' ),
 					$managed
 				);
+				$report['removedPages'] = $sync->removed_pages();
 			}
 
 			if ( 0 === $report['failed'] && array() === $report['errors'] ) {
