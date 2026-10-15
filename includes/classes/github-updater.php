@@ -7,7 +7,7 @@
 
 namespace Blockstudio;
 
-use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
+use BlockstudioVendor\YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
 /**
  * Checks GitHub releases for plugin updates using plugin-update-checker.

@@ -1,0 +1,13 @@
+{
+    "dflydev/dot-access-data": "v3.0.3",
+    "league/commonmark": "2.8.2",
+    "league/config": "v1.2.0",
+    "nette/schema": "v1.3.5",
+    "nette/utils": "v4.1.4",
+    "psr/event-dispatcher": "1.0.0",
+    "symfony/deprecation-contracts": "v3.6.0",
+    "symfony/polyfill-ctype": "v1.33.0",
+    "symfony/polyfill-php80": "v1.37.0",
+    "symfony/yaml": "v7.4.13",
+    "yahnis-elsts/plugin-update-checker": "v5.6"
+}

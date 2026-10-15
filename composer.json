@@ -12,12 +12,14 @@
     ],
     "require": {
         "php": ">=8.2",
+        "ext-json": "*",
+        "ext-mbstring": "*"
+    },
+    "require-dev": {
         "yahnis-elsts/plugin-update-checker": "^5.6",
         "league/commonmark": "^2.7",
         "symfony/yaml": "^7.0",
-        "storh/storh": "0.0.3"
-    },
-    "require-dev": {
+        "storh/storh": "0.0.3",
         "squizlabs/php_codesniffer": "^3.7",
         "wp-coding-standards/wpcs": "^3.0",
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
@@ -35,15 +37,24 @@
             "lib/"
         ],
         "files": [
+            "lib/runtime-autoload.php",
             "lib/storh-autoload.php",
             "bootstrap.php"
         ]
     },
     "scripts": {
-        "scope": "vendor/bin/php-scoper add-prefix --output-dir=lib --force",
+        "scope": "@php scripts/build-dependencies.php",
+        "test:dependencies": "@php tests/distribution/dependencies.php",
         "cs": "phpcs",
         "cs:fix": "phpcbf",
         "test": "phpunit"
+    },
+    "extra": {
+        "blockstudio-scoped-packages": [
+            "yahnis-elsts/plugin-update-checker",
+            "league/commonmark",
+            "symfony/yaml"
+        ]
     },
     "config": {
         "allow-plugins": {

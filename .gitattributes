@@ -1,6 +1,9 @@
 # Auto detect text files and perform LF normalization
 * text=auto
 
+# Preserve upstream translation bytes for reproducible dependency builds.
+/lib/yahnis-elsts/plugin-update-checker/languages/*.po -text
+
 # Composer export-ignore (excluded from distribution archives)
 /.babelrc export-ignore
 /.claude/ export-ignore

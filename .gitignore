@@ -20,12 +20,16 @@ Desktop.ini
 # Dependencies
 node_modules/
 vendor/
+!/lib/yahnis-elsts/plugin-update-checker/vendor/
+!/lib/yahnis-elsts/plugin-update-checker/vendor/**
 
 # Temp
 .tmp-schemas/
 _references/
 
 # Build artifacts
+/build/
+/blockstudio.zip
 artifacts/
 .last-run.json
 *.tsbuildinfo

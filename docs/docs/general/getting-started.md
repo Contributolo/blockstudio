@@ -31,6 +31,12 @@ Composer installations receive updates through Composer. The built-in GitHub upd
 
 Upload the zip to your WordPress plugins directory and activate the plugin. Manual installations receive automatic update notifications in the WordPress dashboard via the built-in GitHub updater.
 
+Both installation methods bundle private copies of the Markdown, YAML, and
+updater libraries and their dependencies. They do not use or replace versions
+provided by another plugin or theme. Install your own Composer dependency if
+your application uses one of those libraries directly; Blockstudio's bundled
+copies are internal, not a public PHP API.
+
 ## Creating Your First Block
 
 ### 1. Create a Block Directory

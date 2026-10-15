@@ -48,6 +48,9 @@ jobs:
       - name: PHPCS
         run: composer cs
 
+      - name: Private dependency isolation
+        run: composer test:dependencies
+
   phpstan:
     name: PHPStan (Runtime)
     runs-on: [self-hosted, Linux, X64, inline0-blockstudio]

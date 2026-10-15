@@ -8,6 +8,8 @@
 namespace Blockstudio;
 
 use Throwable;
+use BlockstudioVendor\League\CommonMark\GithubFlavoredMarkdownConverter;
+use BlockstudioVendor\Symfony\Component\Yaml\Yaml;
 
 /**
  * Converts markdown content and parses YAML frontmatter.
@@ -49,19 +51,12 @@ class Page_Markdown {
 	 * @return array
 	 */
 	public static function parse_yaml( string $yaml ): array {
-		foreach (
-			array(
-				'BlockstudioVendor\\Symfony\\Component\\Yaml\\Yaml',
-				'Symfony\\Component\\Yaml\\Yaml',
-			) as $class_name
-		) {
-			if ( class_exists( $class_name ) ) {
-				try {
-					$parsed = $class_name::parse( $yaml );
-					return is_array( $parsed ) ? $parsed : array();
-				} catch ( Throwable ) {
-					return array();
-				}
+		if ( class_exists( Yaml::class ) ) {
+			try {
+				$parsed = Yaml::parse( $yaml );
+				return is_array( $parsed ) ? $parsed : array();
+			} catch ( Throwable ) {
+				return array();
 			}
 		}
 
@@ -76,25 +71,18 @@ class Page_Markdown {
 	 * @return string HTML.
 	 */
 	public static function to_html( string $markdown ): string {
-		foreach (
-			array(
-				'BlockstudioVendor\\League\\CommonMark\\GithubFlavoredMarkdownConverter',
-				'League\\CommonMark\\GithubFlavoredMarkdownConverter',
-			) as $class_name
-		) {
-			if ( class_exists( $class_name ) ) {
-				try {
-					$converter = new $class_name(
-						array(
-							'html_input'         => 'allow',
-							'allow_unsafe_links' => false,
-						)
-					);
+		if ( class_exists( GithubFlavoredMarkdownConverter::class ) ) {
+			try {
+				$converter = new GithubFlavoredMarkdownConverter(
+					array(
+						'html_input'         => 'allow',
+						'allow_unsafe_links' => false,
+					)
+				);
 
-					return self::add_heading_ids( (string) $converter->convert( $markdown ) );
-				} catch ( Throwable ) {
-					break;
-				}
+				return self::add_heading_ids( (string) $converter->convert( $markdown ) );
+			} catch ( Throwable ) {
+				return self::add_heading_ids( self::simple_markdown_to_html( $markdown ) );
 			}
 		}
 

@@ -3,7 +3,7 @@ Contributors: dnnsjsk
 Requires at least: 6.7
 Tested up to: 7.0.0
 Requires PHP: 8.2
-Stable tag: 7.7.1
+Stable tag: 7.7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,9 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 * [Getting Started](https://blockstudio.dev/docs/getting-started)
 
 == Changelog ==
+
+= 7.7.2 =
+* Fix: Markdown, YAML, and updater dependencies are isolated from other plugins and themes in ZIP and Composer installations
 
 = 7.7.1 =
 * Fix: page sync skips post writes, update hooks, timestamps, and revisions when merged content and managed fields are unchanged (#104)
