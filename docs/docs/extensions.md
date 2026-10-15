@@ -82,6 +82,20 @@ The `name` property of the configuration object defines which blocks should be e
 - **[blockNameA, blockNameB]**: An array of block names, e.g. `["core/paragraph", "core/heading"]`
 - **core/\***: A wildcard to extend all blocks of a certain type
 
+Any name that ends in an asterisk is a prefix wildcard, not only `core/*`. The
+following extension applies to every block whose name starts with `my-plugin/`,
+including blocks made with Blockstudio:
+
+```json title="extension.json"
+{
+  "name": "my-plugin/*",
+  "blockstudio": {
+    "extend": true,
+    "attributes": []
+  }
+}
+```
+
 ### Blockstudio Key
 
 Just like when using `block.json` for custom blocks, the `blockstudio` property has to be present in the configuration object with `extend` set to `true`.
