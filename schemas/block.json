@@ -5378,6 +5378,10 @@
                               "type": "number",
                               "description": "Maximum amount of rows."
                             },
+                            "minimized": {
+                              "type": "boolean",
+                              "description": "Collapse the existing rows when the editor opens. Rows added in the editor start expanded."
+                            },
                             "textButton": {
                               "type": "string",
                               "description": "Text for the add button."
@@ -6557,6 +6561,10 @@
                   "max": {
                     "type": "number",
                     "description": "Maximum amount of rows."
+                  },
+                  "minimized": {
+                    "type": "boolean",
+                    "description": "Collapse the existing rows when the editor opens. Rows added in the editor start expanded."
                   },
                   "textButton": {
                     "type": "string",
