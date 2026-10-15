@@ -64,5 +64,6 @@ class Devtools {
 			$asset['version'] ?? BLOCKSTUDIO_VERSION,
 			true
 		);
+		wp_set_script_translations( 'blockstudio-devtools', 'blockstudio', Translations::script_path( 'blockstudio-devtools' ) );
 	}
 }

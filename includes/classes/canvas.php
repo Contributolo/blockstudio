@@ -168,6 +168,7 @@ class Canvas {
 			$asset['version'] ?? BLOCKSTUDIO_VERSION,
 			true
 		);
+		wp_set_script_translations( 'blockstudio-canvas', 'blockstudio', Translations::script_path( 'blockstudio-canvas' ) );
 
 		Assets::$force_editor_screen = true;
 

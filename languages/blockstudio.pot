@@ -215,6 +215,7 @@ msgid "Attributes"
 msgstr ""
 
 #: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
 msgid "Blocks"
 msgstr ""
 
@@ -279,6 +280,7 @@ msgid "Template For"
 msgstr ""
 
 #: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
 msgid "Pages"
 msgstr ""
 
@@ -500,4 +502,29 @@ msgstr ""
 
 #: src/blocks/components/placeholder/index.tsx
 msgid "Click to load"
+msgstr ""
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr ""
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr ""
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr ""
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr ""
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr ""
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
 msgstr ""

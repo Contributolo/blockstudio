@@ -20,11 +20,11 @@ Blockstudio ships its translations in the `languages` folder. WordPress uses the
 | German | `de_DE` |
 | German (formal) | `de_DE_formal` |
 
-The translations cover the field controls in the block editor, the admin page, and the messages of the REST endpoints. Labels and help texts in your own `block.json` files belong to your theme or plugin and use its text domain.
+The translations cover the field controls in the block editor, the admin page, the canvas, the devtools overlay, and the messages of the REST endpoints. Labels and help texts in your own `block.json` files belong to your theme or plugin and use its text domain.
 
 ## Override a translation
 
-Translation files in `wp-content/languages/plugins` take precedence over the bundled ones, for the PHP strings (`blockstudio-de_DE.mo` or `blockstudio-de_DE.l10n.php`) as well as for the scripts (`blockstudio-de_DE-blockstudio-blocks.json` and `blockstudio-de_DE-blockstudio-admin-page.json`).
+Translation files in `wp-content/languages/plugins` take precedence over the bundled ones, for the PHP strings (`blockstudio-de_DE.mo` or `blockstudio-de_DE.l10n.php`) as well as for the scripts (one file per script handle, for example `blockstudio-de_DE-blockstudio-blocks.json`).
 
 ## Contribute a translation
 

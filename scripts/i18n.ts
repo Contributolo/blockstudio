@@ -22,6 +22,8 @@ const phpSources = ['blockstudio.php', 'bootstrap.php', 'includes'];
 const scripts = [
   { handle: 'blockstudio-blocks', entry: 'src/blocks/index.tsx' },
   { handle: 'blockstudio-admin-page', entry: 'src/admin/index.tsx' },
+  { handle: 'blockstudio-canvas', entry: 'src/canvas/index.tsx' },
+  { handle: 'blockstudio-devtools', entry: 'src/devtools/index.ts' },
 ];
 
 const potHeaders: [string, string][] = [
@@ -962,7 +964,7 @@ for (const name of poFiles) {
     if (!entry || !translated(entry, message, pluralCount(po.headers))) {
       continue;
     }
-    if (message.phpFormat) {
+    if (isPrintf(message.id)) {
       const placeholders = (value: string): string =>
         (value.match(/%(\d+\$)?[-+ 0#]*\d*(\.\d+)?[bcdeEfFgGosuxX]/g) ?? [])
           .sort()

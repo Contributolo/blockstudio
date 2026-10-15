@@ -11,6 +11,7 @@ import type { CanvasView } from './store';
 import { createUpdateQueue } from './update-queue';
 import type { QueueEntry } from './update-queue';
 import type { BlockItem, Page, PreloadEntry } from './types';
+import { __ } from '@/utils/__';
 
 interface CanvasProps {
   pages: Page[];
@@ -1182,7 +1183,7 @@ export const Canvas = ({
           {focusedSlug ? (
             <Button
               icon={closeSmall}
-              label="Close focus mode"
+              label={__('Close focus mode')}
               onClick={() => setFocusedSlug(null)}
               style={{
                 background: 'rgba(0, 0, 0, 0.6)',
@@ -1207,7 +1208,7 @@ export const Canvas = ({
                   }}
                 />
               )}
-              <DropdownMenu icon={moreHorizontal} label="Canvas options">
+              <DropdownMenu icon={moreHorizontal} label={__('Canvas options')}>
                 {() => (
                   <>
                     <MenuGroup>
@@ -1215,25 +1216,25 @@ export const Canvas = ({
                         icon={view === 'pages' ? check : undefined}
                         onClick={() => setView('pages')}
                       >
-                        Pages
+                        {__('Pages')}
                       </MenuItem>
                       <MenuItem
                         icon={view === 'blocks' ? check : undefined}
                         onClick={() => setView('blocks')}
                       >
-                        Blocks
+                        {__('Blocks')}
                       </MenuItem>
                     </MenuGroup>
                     <MenuGroup>
-                      <MenuItem onClick={fitToView}>Fit to view</MenuItem>
-                      <MenuItem onClick={zoomTo100}>Zoom to 100%</MenuItem>
+                      <MenuItem onClick={fitToView}>{__('Fit to view')}</MenuItem>
+                      <MenuItem onClick={zoomTo100}>{__('Zoom to 100%')}</MenuItem>
                     </MenuGroup>
                     <MenuGroup>
                       <MenuItem
                         icon={liveMode ? check : undefined}
                         onClick={() => setLiveMode(!liveMode)}
                       >
-                        Live mode
+                        {__('Live mode')}
                       </MenuItem>
                     </MenuGroup>
                   </>

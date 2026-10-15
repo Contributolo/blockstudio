@@ -81,8 +81,9 @@ class BundledTranslationsTest extends TestCase {
 			$base = substr( $po, 0, -3 );
 			$this->assertFileExists( $base . '.mo' );
 			$this->assertFileExists( $base . '.l10n.php' );
-			$this->assertFileExists( $base . '-blockstudio-blocks.json' );
-			$this->assertFileExists( $base . '-blockstudio-admin-page.json' );
+			foreach ( array( 'blocks', 'admin-page', 'canvas', 'devtools' ) as $handle ) {
+				$this->assertFileExists( $base . '-blockstudio-' . $handle . '.json' );
+			}
 		}
 	}
 }
