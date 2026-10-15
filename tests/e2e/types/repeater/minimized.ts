@@ -57,9 +57,10 @@ test.describe('repeater minimized', () => {
       .click();
     const confirmation = await dialog;
     expect(confirmation.message()).toBe('Do you want to delete this row?');
-    await confirmation.dismiss();
     await click;
-    await expect(row(2)).toBeVisible();
+    await expect(row(2)).toHaveCount(0);
+    await page.click('text=Add item');
+    await expect(rowInput(2)).toBeVisible();
   });
 
   test('an expanded row stays expanded after a reload', async () => {
