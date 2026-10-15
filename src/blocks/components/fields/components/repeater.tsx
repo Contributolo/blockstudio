@@ -352,10 +352,9 @@ const DragElement = ({
 
                   if (
                     window.confirm(
-                      __(
-                        item?.textRemove || 'Do you want to delete this row?',
-                        item?.textRemove,
-                      ),
+                      typeof item?.textRemove === 'string' && item.textRemove
+                        ? __(item.textRemove, true)
+                        : __('Do you want to delete this row?'),
                     )
                   ) {
                     remove(getId(index));
@@ -569,10 +568,7 @@ export const Repeater = ({
           })}
           disabled={!!(item?.max && item.max <= v?.length)}
         >
-          {__(
-            item?.textButton || 'Add row',
-            item?.textButton as unknown as boolean,
-          )}
+          {item?.textButton ? __(item.textButton, true) : __('Add row')}
         </Button>
       </Base>
     </RepeaterRegistryContext.Provider>

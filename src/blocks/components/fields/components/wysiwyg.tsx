@@ -40,6 +40,13 @@ const textAlignMap = {
   justify: alignJustify,
 };
 
+const textAlignLabels: Record<string, () => string> = {
+  left: () => __('Align left'),
+  center: () => __('Align center'),
+  right: () => __('Align right'),
+  justify: () => __('Align justify'),
+};
+
 export const WYSIWYG = ({
   item,
   onChange,
@@ -317,7 +324,7 @@ export const WYSIWYG = ({
                           align
                         ]
                       }
-                      label={__(`Align ${align}`)}
+                      label={textAlignLabels[align]?.() ?? align}
                       onClick={() => editor.commands.setTextAlign(align)}
                       isPressed={editor?.isActive({ textAlign: align })}
                     />
@@ -422,7 +429,7 @@ export const WYSIWYG = ({
             })}
             onClick={() => setCodeMode(!codeMode)}
           >
-            {__(`Switch to ${codeMode ? 'Visual' : 'Code'}`)}
+            {codeMode ? __('Switch to Visual') : __('Switch to Code')}
           </Button>
         </div>
       )}
