@@ -77,8 +77,7 @@ function compactMarkdown(content: string): string {
   );
   content = content.replace(/\{\/\*[\s\S]*?\*\/\}/g, '');
   content = content.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
-  content = content.replace(/\*\*([^*]+)\*\*/g, '$1');
-  content = content.replace(/\*([^*]+)\*/g, '$1');
+  // Asterisks can be wildcard paths or operators in code, not just emphasis.
   return content;
 }
 

@@ -66,6 +66,11 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 * Fix: repeater row preferences preserve other rows and tolerate unavailable or malformed browser storage
 * Fix: links inside Blockstudio blocks no longer navigate away from the editor when clicked (#116)
 * Fix: files fields accept scalar string references without crashing the editor and preserve fallback cards when removing or reordering values (#117)
+* Fix: the field-patterns guide no longer recommends unsupported tabs inside repeaters (#112)
+* Fix: extension documentation explains prefix wildcards for any block namespace (#118)
+* Fix: the RichText render filter example uses the correct two arguments (#119)
+* Fix: custom condition examples return values for editor comparisons instead of callbacks (#120)
+* Fix: generated LLM documentation preserves wildcard names and asterisks in code examples
 
 = 7.7.1 =
 * Fix: page sync skips post writes, update hooks, timestamps, and revisions when merged content and managed fields are unchanged (#104)

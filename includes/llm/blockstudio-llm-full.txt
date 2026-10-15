@@ -188,7 +188,7 @@ Your block is now ready to use in the WordPress editor. Continue exploring the d
 - Tailwind Integration - Using Tailwind CSS
 - Hooks - Extending functionality with filters and actions
 
-> Building a Block Library
+> **Building a Block Library**
 >
 > Go from a single block to a full library: design tokens, the section pattern, repeaters, images, and page composition.
 
@@ -386,7 +386,7 @@ Every source is loaded and merged, lowest priority first:
 1. Built-in defaults
 2. Settings saved through the admin UI (the `blockstudio_settings` option)
 3. `blockstudio.json` in the theme
-4. `blockstudio/settings/` filters
+4. `blockstudio/settings/*` filters
 
 `blockstudio.json` overrides only the keys it declares. It used to replace the
 saved settings entirely, so an unrelated admin-saved value stopped applying the
@@ -676,7 +676,7 @@ resolution rules.
 
 | Option    | Type    | Default | Description                                                       |
 | --------- | ------- | ------- | ----------------------------------------------------------------- |
-| `enabled` | boolean | `false` | Register the bundled `bsui/` UI components and `app/` demo apps |
+| `enabled` | boolean | `false` | Register the bundled `bsui/*` UI components and `app/*` demo apps |
 
 ### blockEditor
 
@@ -689,13 +689,13 @@ resolution rules.
 
 #### blockEditor.blocks
 
-Use `blockEditor.blocks` for project-wide block inserter policy. `allow` and `deny` accept block names and wildcard patterns such as `core/`.
+Use `blockEditor.blocks` for project-wide block inserter policy. `allow` and `deny` accept block names and wildcard patterns such as `core/*`.
 
 ```json
 {
   "blockEditor": {
     "blocks": {
-      "allow": ["core/", "my-theme/"],
+      "allow": ["core/*", "my-theme/*"],
       "deny": ["core/embed", "core/freeform"],
       "directory": false,
       "categories": {
@@ -815,7 +815,7 @@ PHPStan for presets, layers, and adoption.
 See AI Integration for the documentation index and the full
 generated text.
 
-> UI Components
+> **UI Components**
 >
 > Enable and compose the bundled headless UI components introduced in Blockstudio 7.3.
 
@@ -1077,7 +1077,7 @@ The Blockstudio schema is an (always up-to-date) copy of the WordPress core bloc
 
 ## Add to JSON
 
-Simply add a `$schema` key with a value of https://blockstudio.dev/schema/block to your block.json and your IDE should start to give you hints about Blockstudio specific properties.
+Simply add a `$schema` key with a value of **https://blockstudio.dev/schema/block** to your block.json and your IDE should start to give you hints about Blockstudio specific properties.
 
 ```json
 {
@@ -1103,7 +1103,7 @@ For workspace-wide settings, add to `.vscode/settings.json`:
 {
   "json.schemas": [
     {
-      "fileMatch": ["/block.json"],
+      "fileMatch": ["**/block.json"],
       "url": "https://blockstudio.dev/schema/block"
     }
   ]
@@ -1123,10 +1123,10 @@ PhpStorm and other JetBrains IDEs support JSON Schema via the `$schema` property
 
 ## Benefits
 
-- Autocomplete: Get suggestions for all available properties
-- Validation: Catch errors before runtime
-- Documentation: Hover over properties for inline documentation
-- Type Safety**: Ensure correct value types
+- **Autocomplete**: Get suggestions for all available properties
+- **Validation**: Catch errors before runtime
+- **Documentation**: Hover over properties for inline documentation
+- **Type Safety**: Ensure correct value types
 
 ### Overrides
 
@@ -1178,7 +1178,7 @@ Attributes can either be overridden by `id` or added additionally. For example, 
 
 When an attribute with the same `id` is found, the data will be merged with the original attribute. Attributes which are not found will be added to the block.
 
-> Warning
+> **Warning**
 >
 > When overriding attributes, you have to provide the `type` of the original attribute, even if it stays the same.
 
@@ -1503,24 +1503,24 @@ the registered field definitions.
 
 #### Registering Assets
 
-Blockstudio will automatically enqueue all files ending with `.css`, `.scss` and `.js` when your block is being used on a page. It is possible to define how assets are being enqueued by using one of the following file names. The `` is a wildcard that can be replaced with any string of your choice.
+Blockstudio will automatically enqueue all files ending with `.css`, `.scss` and `.js` when your block is being used on a page. It is possible to define how assets are being enqueued by using one of the following file names. The `*` is a wildcard that can be replaced with any string of your choice.
 
 Inside block CSS and SCSS files, `%selector%` expands to the block's scoped wrapper class. This lets you target the same element that receives `bs_get_scoped_class()`, even when the file is not a scoped asset.
 
 | Pattern           | Behavior                                                                              |
 | ----------------- | ------------------------------------------------------------------------------------- |
-| `.(s)css`        | Enqueues as a `<link>` tag in the editor and on the frontend                          |
-| `.inline.(s)css` | Enqueues contents in an inline `<style>` tag in the editor and on the frontend        |
-| `.editor.(s)css` | Enqueues as a `<link>` tag in the editor only                                         |
-| `.scoped.(s)css` | Enqueues scoped contents in an inline `<style>` tag in the editor and on the frontend |
-| `.js`            | Enqueues as a `<script>` tag in the editor and on the frontend                        |
-| `.inline.js`     | Enqueues contents in an inline `<script>` tag in the editor and on the frontend       |
-| `.editor.js`     | Enqueues as a `<script>` tag in the editor only                                       |
-| `.view.js`       | Enqueues as a `<script>` tag on the frontend only                                     |
+| `*.(s)css`        | Enqueues as a `<link>` tag in the editor and on the frontend                          |
+| `*.inline.(s)css` | Enqueues contents in an inline `<style>` tag in the editor and on the frontend        |
+| `*.editor.(s)css` | Enqueues as a `<link>` tag in the editor only                                         |
+| `*.scoped.(s)css` | Enqueues scoped contents in an inline `<style>` tag in the editor and on the frontend |
+| `*.js`            | Enqueues as a `<script>` tag in the editor and on the frontend                        |
+| `*.inline.js`     | Enqueues contents in an inline `<script>` tag in the editor and on the frontend       |
+| `*.editor.js`     | Enqueues as a `<script>` tag in the editor only                                       |
+| `*.view.js`       | Enqueues as a `<script>` tag on the frontend only                                     |
 
-> Note
+> **Note**
 >
-> The dash notation (`-inline.css`, `*-editor.css`, etc.) is still supported
+> The dash notation (`*-inline.css`, `*-editor.css`, etc.) is still supported
 > for backward compatibility but is deprecated. Use dot notation for new blocks.
 
 ## Inline
@@ -1608,7 +1608,7 @@ Block editor assets are enqueued only in the block editor. The `block-editor-` p
 - `block-editor-styles.(s)css`
 - `block-editor-scripts.js`
 
-> Note
+> **Note**
 >
 > If WordPress disables the editor iframe because a client-side block is
 > registered with `apiVersion` lower than 3, the editor canvas and WordPress
@@ -1767,11 +1767,11 @@ For example, editing `mixins/_wysiwyg.scss` recompiles `global-styles.scss` when
 
 All scripts (inline and default) in Blockstudio load with `type="module"` applied to them by default. This means that it is possible to make use of the import syntax for your blocks' scripts without any additional setup.
 
-> Note
+> **Note**
 >
 > For a more in-depth look into ES modules, visit the MDN web docs.
 
-Let's imagine the following code inside a script.js:
+Let's imagine the following code inside a **script.js**:
 
 ```javascript
 import { h, render } from "https://esm.sh/preact@10.15.1";
@@ -1791,7 +1791,7 @@ render(
 );
 ```
 
-The example above would create a component using Preact, importing all necessary components and functions from an ESM compatible CDN, in this case esm.sh. While there is nothing wrong with this approach, it has the disadvantage of needing to request the necessary assets from an external site, risking broken scripts if the CDN is down.
+The example above would create a component using Preact, importing all necessary components and functions from an ESM compatible CDN, in this case **esm.sh**. While there is nothing wrong with this approach, it has the disadvantage of needing to request the necessary assets from an external site, risking broken scripts if the CDN is down.
 
 Blockstudio includes a handy way to download ES Modules to the block, eliminating the need for external ESM CDNs during production.
 
@@ -1807,7 +1807,7 @@ import confetti from "npm:canvas-confetti@1.6.0";
 
 This syntax aligns with Deno's npm specifier convention.
 
-> Note
+> **Note**
 >
 > The legacy `blockstudio/` prefix (e.g., `blockstudio/preact@10.15.1`) is still supported for backward compatibility, but we recommend using the `npm:` prefix for new projects. See the migration guide for details.
 
@@ -1937,7 +1937,7 @@ When using code fields inside of extensions, the `asset` attribute is not necess
 ```json
 {
   "$schema": "https://blockstudio.dev/schema/extend",
-  "name": "core/",
+  "name": "core/*",
   "blockstudio": {
     "extend": true,
     "attributes": [
@@ -1952,7 +1952,7 @@ When using code fields inside of extensions, the `asset` attribute is not necess
 }
 ```
 
-No additional configuration is needed. The above will show a code field for every `core/` block in the sidebar and automatically render the content as an asset to the page.
+No additional configuration is needed. The above will show a code field for every `core/*` block in the sidebar and automatically render the content as an asset to the page.
 
 ## SCSS
 
@@ -2117,7 +2117,7 @@ Or in Twig:
 <p>{{ a.content }}</p>
 ```
 
-> Field Patterns Cookbook
+> **Field Patterns Cookbook**
 
 #### Custom Field Types
 
@@ -3064,11 +3064,11 @@ Loop through repeater items:
 {% endfor %}
 ```
 
-> Field Patterns Cookbook
+> **Field Patterns Cookbook**
 
 #### Block Attributes
 
-The `$attributes` or `$a` variables only give you access to data registered in the blockstudio property. To access standard WordPress block data like alignment or typography, use the `$block` or `$b` variables.
+The `$attributes` or `$a` variables only give you access to data registered in the **blockstudio** property. To access standard WordPress block data like alignment or typography, use the `$block` or `$b` variables.
 
 ## Rendering
 
@@ -3227,7 +3227,7 @@ The `bs_render_attributes` function renders attributes as data attributes:
 </h1>
 ```
 
-Output:
+**Output:**
 
 ```html
 <h1 data-message="Hello" data-color="#7C3AED">
@@ -3255,7 +3255,7 @@ Pass a second parameter to specify which attributes to render:
 </h1>
 ```
 
-Output:
+**Output:**
 
 ```html
 <h1 data-color="#7C3AED">
@@ -3291,7 +3291,7 @@ The `bs_render_variables` function renders attributes as CSS variables:
 </h1>
 ```
 
-Output:
+**Output:**
 
 ```html
 <h1 style="--message: Hello; --color: #7C3AED;">
@@ -3305,7 +3305,7 @@ Output:
 <h1 style="<?php bs_render_variables($a, ['color']); ?>">
 ```
 
-Output:
+**Output:**
 
 ```html
 <h1 style="--color: #7C3AED;">
@@ -3441,13 +3441,13 @@ By default, Blockstudio comes with 4 global conditions: post type, post ID, user
 }
 ```
 
-In the example above, the text attribute will only show in the editor if the post ID is 1386 AND the post type is post.
+In the example above, the text attribute will only show in the editor if the **post ID is 1386** AND the **post type is post**.
 
-Note that camelCase convention is used for the type keys: `postType`, `postId`, `userRole`, `userId`.
+Note that camelCase convention is used for the **type keys**: `postType`, `postId`, `userRole`, `userId`.
 
 ### OR Conditions
 
-To create or conditions, move each condition group into its own array:
+To create **or** conditions, move each condition group into its own array:
 
 ```json
 {
@@ -3484,21 +3484,25 @@ To create or conditions, move each condition group into its own array:
 }
 ```
 
-The text attribute will show if (post ID is 1386 AND post type is post) OR (post type is jobs).
+The text attribute will show if (**post ID is 1386** AND **post type is post**) OR (**post type is jobs**).
 
 ### Custom Conditions
 
-Custom conditions can be added using the `blockstudio/blocks/conditions` filter:
+Custom conditions can be added using the `blockstudio/blocks/conditions` filter.
+The filter runs in PHP when the editor loads and returns one value per condition
+type. Conditions are evaluated in the editor, which compares that value with the
+`value` of the condition using the operator.
 
 ```php
 add_filter('blockstudio/blocks/conditions', function($conditions) {
-  $conditions['purchasedProduct'] = function($condition) {
-    // Check if user purchased the product
-    return user_has_purchased($condition['value']);
-  };
+  // Check if the current user purchased the product.
+  $conditions['purchasedProduct'] = user_has_purchased(123) ? 'yes' : 'no';
   return $conditions;
 });
 ```
+
+Return a non-empty string for every state. A condition type whose value is empty
+or missing is skipped, so the field would stay visible.
 
 ```json
 {
@@ -3513,7 +3517,7 @@ add_filter('blockstudio/blocks/conditions', function($conditions) {
             {
               "type": "purchasedProduct",
               "operator": "==",
-              "value": "1"
+              "value": "yes"
             }
           ]
         ]
@@ -3525,7 +3529,7 @@ add_filter('blockstudio/blocks/conditions', function($conditions) {
 
 ## Block Conditions
 
-You can set conditions that depend on other attributes. Instead of setting a type key, use the id of the attribute you want to check against:
+You can set conditions that depend on other attributes. Instead of setting a **type** key, use the **id** of the attribute you want to check against:
 
 ```json
 {
@@ -3602,7 +3606,7 @@ By default, conditions for attributes inside repeaters depend on the attributes 
 }
 ```
 
-Since attribute IDs are scoped to the current repeater element, the text attribute inside the repeater will only show if the toggle inside the repeater is set to true.
+Since attribute IDs are scoped to the current repeater element, the text attribute inside the repeater will only show if the toggle **inside** the repeater is set to true.
 
 To check against the toggle outside the repeater, add `"context": "main"` to the condition:
 
@@ -3642,7 +3646,7 @@ To check against the toggle outside the repeater, add `"context": "main"` to the
 }
 ```
 
-> Field Patterns Cookbook
+> **Field Patterns Cookbook**
 
 #### Populating Options
 
@@ -3650,14 +3654,14 @@ Instead of supplying different field types like Posts, Users or Terms, Blockstud
 
 Data can be populated in four ways:
 
-- Query - Return results from a post, user or term query
-- Fetch - Return results from an external source
-- Function - Return results from a custom function
-- Custom - Return results from a custom dataset
+- **Query** - Return results from a post, user or term query
+- **Fetch** - Return results from an external source
+- **Function** - Return results from a custom function
+- **Custom** - Return results from a custom dataset
 
 ## Query
 
-When choosing query mode, Posts, Users or Terms can be populated.
+When choosing query mode, **Posts**, **Users** or **Terms** can be populated.
 
 ```json
 {
@@ -3886,9 +3890,9 @@ Combine static options with populated data:
 
 The `position` option (`before` or `after`) controls where populated options appear relative to static options.
 
-> Warning
+> **Warning**
 >
-> Mixing options and populate data is not supported when using fetch mode.
+> Mixing options and populate data is not supported when using **fetch** mode.
 
 ## Custom Data
 
@@ -3957,7 +3961,7 @@ The search term is appended to `urlSearch`.
 
 ## Dynamic Arguments
 
-Populate arguments can reference other block attributes using `{attributes.}`
+Populate arguments can reference other block attributes using `{attributes.*}`
 syntax. When the referenced attribute changes, the field re-fetches its options
 automatically.
 
@@ -3993,7 +3997,7 @@ automatically.
 ```
 
 This works with all populate types (`query`, `function`, `custom`). Any value
-in the populate configuration containing `{attributes.}` is resolved
+in the populate configuration containing `{attributes.*}` is resolved
 client-side with the current attribute value before the query runs.
 
 #### Disabling Attributes
@@ -4013,14 +4017,14 @@ When disabled:
 
 ## Use Cases
 
-- A/B Testing: Temporarily hide content without deleting it
-- Draft Content: Prepare content that isn't ready to display
-- Debugging: Isolate which attributes affect the output
-- Client Handoff: Disable complex options for simpler editing
+- **A/B Testing**: Temporarily hide content without deleting it
+- **Draft Content**: Prepare content that isn't ready to display
+- **Debugging**: Isolate which attributes affect the output
+- **Client Handoff**: Disable complex options for simpler editing
 
 ## Files Field
 
-The same principle works for individual items in the files attribute type. You can disable specific images or files while keeping others active.
+The same principle works for individual items in the **files** attribute type. You can disable specific images or files while keeping others active.
 
 ## Checking Disabled State
 
@@ -4056,10 +4060,10 @@ By default, all field values are stored as block attributes within the block com
 
 Block attributes are stored inside HTML comments in the post content, which means they're only accessible when parsing block content. By using additional storage locations, you can:
 
-- Query posts by field values using `meta_query`
-- Access values via REST API for headless setups
-- Share data with other plugins like SEO or caching plugins
-- Create global settings that persist across posts
+- **Query posts by field values** using `meta_query`
+- **Access values via REST API** for headless setups
+- **Share data with other plugins** like SEO or caching plugins
+- **Create global settings** that persist across posts
 
 ## Storage Types
 
@@ -4068,9 +4072,9 @@ Block attributes are stored inside HTML comments in the post content, which mean
 | `postMeta` | `wp_postmeta` table | Per post | Queryable post-specific data |
 | `option` | `wp_options` table | Global (site-wide) | Site settings, shared values |
 
-> Note
+> **Note**
 >
-> Block attribute storage (in the post content HTML comment) always happens automatically. The `storage` property adds additional storage locations - it doesn't replace block storage.
+> Block attribute storage (in the post content HTML comment) always happens automatically. The `storage` property adds **additional** storage locations - it doesn't replace block storage.
 
 ## Configuration
 
@@ -4120,9 +4124,9 @@ Add the `storage` property to any field definition:
 
 ## How It Works
 
-1. Registration: When WordPress loads, Blockstudio registers meta keys and settings based on your field configurations
-2. Editing: Values are managed as block attributes in the editor (always stored in block)
-3. Saving: Post meta is synced when the post is saved. Site options are synced when the post is published or a published post's field value changes.
+1. **Registration**: When WordPress loads, Blockstudio registers meta keys and settings based on your field configurations
+2. **Editing**: Values are managed as block attributes in the editor (always stored in block)
+3. **Saving**: Post meta is synced when the post is saved. Site options are synced when the post is published or a published post's field value changes.
 
 Autosaves and revisions do not sync either storage location. Draft, pending, private, and scheduled posts can update their own post meta, but do not change live site options. A scheduled post syncs options when WordPress publishes it.
 
@@ -4346,7 +4350,7 @@ When you don't specify a custom key, Blockstudio generates one automatically:
 
 The block name is sanitized (slashes replaced with underscores).
 
-> Warning
+> **Warning**
 >
 > Custom keys are recommended for production use. Default keys may change if you rename your block.
 
@@ -4393,7 +4397,7 @@ the wrapper in both the frontend and editor render paths. Classes added by a
 theme or a per-instance integration therefore appear in the editor canvas as
 well as the saved frontend markup.
 
-Output:
+**Output:**
 
 ```html
 <div class="my-class wp-block-your-block-name alignright">
@@ -4783,7 +4787,7 @@ To do so, simply add an `innerBlocks` key to the options array with the template
 }
 ```
 
-> Block Context and Communication
+> **Block Context and Communication**
 >
 > Learn how parent and child blocks share data using context.
 
@@ -4960,7 +4964,7 @@ Once a media file has been selected, the `MediaPlaceholder` component will not b
 
 ### accept
 
-A string passed to FormFileUpload that tells the browser which file types can be upload to the upload window the browser use e.g.: `image/` or `video/`. More information about this string is available in MDN documentation.
+A string passed to FormFileUpload that tells the browser which file types can be upload to the upload window the browser use e.g.: `image/*` or `video/*`. More information about this string is available in MDN documentation.
 
 ### allowedTypes
 
@@ -5140,9 +5144,9 @@ Attributes will automatically render the appropriate input in the sidebar. Since
 
 The Block Transforms API allows you to define ways in how to transform blocks. Blockstudio currently supports three different types:
 
-- block to block: transform a block into another block
-- enter: insert a block when the user enters text and presses `Enter`
-- prefix: insert a block when the user enters text and presses `Space`
+- **block to block**: transform a block into another block
+- **enter**: insert a block when the user enters text and presses `Enter`
+- **prefix**: insert a block when the user enters text and presses `Space`
 
 ## Block to Block
 
@@ -5366,7 +5370,7 @@ Blockstudio blocks are dynamic. The `save` function stores attribute data but no
 
 Blockstudio automatically detects supported SEO plugins and injects field content into their analysis pipeline. No configuration is needed.
 
-> Note
+> **Note**
 >
 > Frontend SEO is unaffected. Dynamic blocks render via `render_callback`, so search engine crawlers and server-side meta generation always see the full content.
 
@@ -5386,9 +5390,9 @@ SEOPress performs content analysis by rendering the actual frontend page via `wp
 
 ## Other Plugins
 
-All in One SEO (AIOSEO) runs its analysis in a Web Worker with no public API for third-party content injection.
+**All in One SEO (AIOSEO)** runs its analysis in a Web Worker with no public API for third-party content injection.
 
-The SEO Framework and Slim SEO focus on meta tag management and do not perform content analysis scoring.
+**The SEO Framework** and **Slim SEO** focus on meta tag management and do not perform content analysis scoring.
 
 ## Analyzed Content
 
@@ -5539,7 +5543,7 @@ Blockstudio handles `providesContext` automatically. You only need to add `usesC
 
 See InnerBlocks Context for more details.
 
-> Block Context and Communication
+> **Block Context and Communication**
 >
 > Practical patterns: card grids, pricing tables, and section wrappers where blocks need to share data.
 
@@ -5624,8 +5628,8 @@ With Gutenberg becoming the prominent instrument in creating easily editable web
 
 Blockstudio provides two approaches for rendering blocks programmatically:
 
-- PHP functions: `bs_render_block` and `bs_block` for rendering from PHP code
-- HTML tags: `<bs:block-name>` tags that get replaced with block output anywhere on the page
+- **PHP functions**: `bs_render_block` and `bs_block` for rendering from PHP code
+- **HTML tags**: `<bs:block-name>` tags that get replaced with block output anywhere on the page
 
 All Blockstudio specific features like inline styles, scripts, and scoped styles are supported.
 
@@ -5858,12 +5862,12 @@ block renderers.
 
 Block tags behave differently depending on where they appear:
 
-In block templates and post content, tags are replaced with rendered HTML
+**In block templates and post content**, tags are replaced with rendered HTML
 at runtime. The output is the final markup of the referenced block, embedded
 directly into the page. There is no WordPress block in the editor for these.
 They are purely a rendering mechanism.
 
-In Pages, Patterns, and Site Templates, tags are converted to
+**In Pages, Patterns, and Site Templates**, tags are converted to
 native WordPress blocks before the file source is synced or registered with
 WordPress. This means the blocks appear in the editor, can be edited where the
 target supports editing, and go through WordPress's full block lifecycle. The
@@ -6051,14 +6055,14 @@ Control which blocks can render via tags:
 {
   "blockTags": {
     "enabled": true,
-    "allow": ["mytheme/", "core/"],
-    "deny": ["mytheme/internal-"]
+    "allow": ["mytheme/*", "core/*"],
+    "deny": ["mytheme/internal-*"]
   }
 }
 ```
 
 `allow` restricts to only matching patterns. `deny` excludes matching patterns
-and takes precedence. Both support `` wildcards via `fnmatch()`. These apply
+and takes precedence. Both support `*` wildcards via `fnmatch()`. These apply
 to both syntaxes and both template-level and page-level rendering.
 
 Filters: `blockstudio/block_tags/allow` and `blockstudio/block_tags/deny`.
@@ -6362,7 +6366,7 @@ Attributes map directly to each component's `block.json` fields; the reference a
   },
   "blockTags": {
     "enabled": true,
-    "allow": ["bsui/"]
+    "allow": ["bsui/*"]
   }
 }
 ```
@@ -6462,7 +6466,7 @@ One naming detail: the `<block>` syntax already uses `name` for the block's own 
 
 ### One modal surface
 
-Dialog, alert dialog, and drawer are one surface wearing three shapes. All three popups read the `--bs-ui-modal-` tokens for their padding and internal gaps, sit on the same popover background and border tokens, and use the same backdrop: fixed, full-viewport, half-black with a 4px backdrop blur, at `z-index: 50` under a popup at `z-index: 51`. Overriding `--bs-ui-modal-padding` restyles every modal layer in the project consistently.
+Dialog, alert dialog, and drawer are one surface wearing three shapes. All three popups read the `--bs-ui-modal-*` tokens for their padding and internal gaps, sit on the same popover background and border tokens, and use the same backdrop: fixed, full-viewport, half-black with a 4px backdrop blur, at `z-index: 50` under a popup at `z-index: 51`. Overriding `--bs-ui-modal-padding` restyles every modal layer in the project consistently.
 
 ### The page is the bundle
 
@@ -6600,19 +6604,19 @@ $examples = Ui::examples();
 
 Compound families also register their child blocks, such as `bsui/dialog-trigger`, `bsui/dialog-popup`, `bsui/select-trigger`, `bsui/select-popup`, `bsui/select-option`, `bsui/tabs-list`, `bsui/tabs-trigger`, and `bsui/tabs-panel`. Every part, with its attributes and defaults, is documented at /ui.
 
-> UI Composition
+> **UI Composition**
 >
 > Parent and child relationships, trigger forwarding, the stores underneath, and the layering model that makes selects work inside dialogs.
 
-> Component reference
+> **Component reference**
 >
 > All 59 components with rendered previews, attributes, and worked examples, plus live compositions at /ui/examples.
 
-> Programmatic Rendering
+> **Programmatic Rendering**
 >
 > Block tags, prefixes, and the PHP rendering functions the examples on this page use.
 
-> Interactivity
+> **Interactivity**
 >
 > The directive and store model the UI components are built on.
 
@@ -6974,7 +6978,7 @@ Both forms are equivalent.
 
 ## Template
 
-Add Interactivity API directives to your block template. The `data-wp-interactive` attribute defines the store namespace, and other `data-wp-` attributes control reactive behavior.
+Add Interactivity API directives to your block template. The `data-wp-interactive` attribute defines the store namespace, and other `data-wp-*` attributes control reactive behavior.
 
 ```php
 <div useBlockProps
@@ -7051,9 +7055,9 @@ store('myBlock', {
 
 ## Editor Support
 
-The Interactivity API is loaded inside the block editor iframe, so interactive directives work in editor previews. This includes `data-wp-context`, `data-wp-bind--`, `data-wp-on--*`, `data-wp-text`, and custom store actions defined in `script.js`.
+The Interactivity API is loaded inside the block editor iframe, so interactive directives work in editor previews. This includes `data-wp-context`, `data-wp-bind--*`, `data-wp-on--*`, `data-wp-text`, and custom store actions defined in `script.js`.
 
-> Building Interactive Components
+> **Building Interactive Components**
 >
 > Complete examples with accordions, tabs, modals, and like buttons.
 
@@ -7191,7 +7195,7 @@ Notes:
 Blockstudio auto-injects a `bs.fn()` helper on pages that have blocks with RPC
 functions.
 
-Signature: `bs.fn(functionName, params?, blockName?) -> Promise`
+**Signature:** `bs.fn(functionName, params?, blockName?) -> Promise`
 
 ### Passing the block name
 
@@ -7319,11 +7323,11 @@ capability, or an array where the user needs any one:
 ```php
 return [
     'save_draft' => [
-        'callback'   => function (array $params): array { / ... / },
+        'callback'   => function (array $params): array { /* ... */ },
         'capability' => 'edit_posts',
     ],
     'moderate' => [
-        'callback'   => function (array $params): array { / ... / },
+        'callback'   => function (array $params): array { /* ... */ },
         'capability' => ['edit_others_posts', 'manage_options'],
     ],
 ];
@@ -7383,9 +7387,9 @@ Under the hood, each function maps to a REST route:
 POST /wp-json/blockstudio/v1/fn/{namespace}/{block}/{function}
 ```
 
-Request body: `{ "params": { ... } }`
+**Request body:** `{ "params": { ... } }`
 
-Response: The return value of the PHP function as JSON.
+**Response:** The return value of the PHP function as JSON.
 
 You can call these endpoints directly from any HTTP client, but `bs.fn()` is the
 recommended way since it handles nonce authentication automatically.
@@ -7660,7 +7664,7 @@ post via `postId`.
 return [
     'storage' => 'meta',
     'postId'  => 42,
-    'fields'  => [ / ... / ],
+    'fields'  => [ /* ... */ ],
 ];
 ```
 
@@ -7762,7 +7766,7 @@ cached value is returned immediately without calling the function.
 rollback on failure. It has two modes: auto mode for common CRUD patterns, and
 manual mode for full control.
 
-Auto mode works with a reactive state object (like Alpine.js `$data`). Pass
+**Auto mode** works with a reactive state object (like Alpine.js `$data`). Pass
 `state`, `key`, `action`, and optionally `optimistic`:
 
 ```js
@@ -7827,7 +7831,7 @@ For create operations, a temporary `id` (like `__temp_1`) is assigned to the
 optimistic item. When the server responds, the temporary item is patched with
 the real data including the server-assigned `id`.
 
-Manual mode gives you full control with `before`, `onSuccess`, and
+**Manual mode** gives you full control with `before`, `onSuccess`, and
 `onError` callbacks:
 
 ```js
@@ -7910,7 +7914,7 @@ store. No JavaScript changes needed.
 return [
     'storage'  => 'table',
     'realtime' => true,
-    'fields'   => [ / ... / ],
+    'fields'   => [ /* ... */ ],
 ];
 ```
 
@@ -7926,7 +7930,7 @@ return [
         'key'      => 'todos',
         'interval' => 5000,
     ],
-    'fields' => [ / ... / ],
+    'fields' => [ /* ... */ ],
 ];
 ```
 
@@ -8199,7 +8203,7 @@ so you don't need to check the block/schema name:
 ```php
 return [
     'storage' => 'table',
-    'fields'  => [ / ... / ],
+    'fields'  => [ /* ... */ ],
     'hooks' => [
         'after_create' => function ($params) {
             // $params['record'] is the created record
@@ -8406,7 +8410,7 @@ add_filter('cron_schedules', function ($schedules) {
 return [
     'check_external_api' => [
         'schedule' => 'every_five_minutes',
-        'callback' => function () { / ... / },
+        'callback' => function () { /* ... */ },
     ],
 ];
 ```
@@ -8545,7 +8549,7 @@ On low-traffic sites, jobs may not fire exactly on schedule. For reliable timing
 set up a real system cron that hits `wp-cron.php`:
 
 ```bash
-/5    * curl -s https://yoursite.com/wp-cron.php > /dev/null 2>&1
+*/5 * * * * curl -s https://yoursite.com/wp-cron.php > /dev/null 2>&1
 ```
 
 Then disable WordPress's built-in cron trigger in `wp-config.php`:
@@ -8653,17 +8657,17 @@ add_filter('blockstudio/blocks/meta', function($meta, $block) {
 }, 10, 2);
 ```
 
-The above code would change the icon of all blocks starting with marketing.
+The above code would change the icon of all blocks starting with **marketing**.
 
 ### conditions
 
 This filter allows you to add custom conditions which can be used within blocks.
+Each condition type maps to a value that the editor compares with the `value` of
+the condition. See Custom Conditions.
 
 ```php
 add_filter('blockstudio/blocks/conditions', function($conditions) {
-  $conditions['myCustomCondition'] = function($condition) {
-    return $condition['value'] === 'expected';
-  };
+  $conditions['myCustomCondition'] = 'expected';
   return $conditions;
 });
 ```
@@ -8745,12 +8749,13 @@ add_filter('blockstudio/blocks/components/inner_blocks/frontend/wrap', function(
 
 ### components/rich_text/render
 
-This filter allows you to adjust the output of the `<RichText />` content.
+This filter allows you to adjust the output of the `<RichText />` content. It
+receives the value of the attribute and the block.
 
 ```php
-add_filter('blockstudio/blocks/components/rich_text/render', function($content, $attribute, $block) {
+add_filter('blockstudio/blocks/components/rich_text/render', function($content, $block) {
   return wp_kses_post($content);
-}, 10, 3);
+}, 10, 2);
 ```
 
 ## Block Tags
@@ -9191,7 +9196,7 @@ add_filter('blockstudio/tailwind/cache_max_age', function() {
 ### enabled
 
 This filter allows you to enable or disable the Blockstudio admin page under
-Tools > Blockstudio.
+**Tools > Blockstudio**.
 
 ```php
 add_filter('blockstudio/admin/enabled', function() {
@@ -9582,13 +9587,13 @@ addAction(
 
 Blockstudio lets you define WordPress pages, block patterns, and Site Editor templates as files in your theme. Write HTML-like templates, and Blockstudio's parser converts them into native WordPress blocks.
 
-- Pages are synced to the database as WordPress posts, keeping your file templates and page content in sync.
-- Patterns are registered in memory via `register_block_pattern()`, available in the block inserter for users to place anywhere.
-- Site Templates provide file-backed `wp_template` and `wp_template_part` sources for the WordPress Site Editor.
+- **Pages** are synced to the database as WordPress posts, keeping your file templates and page content in sync.
+- **Patterns** are registered in memory via `register_block_pattern()`, available in the block inserter for users to place anywhere.
+- **Site Templates** provide file-backed `wp_template` and `wp_template_part` sources for the WordPress Site Editor.
 
 All three features share the same HTML parser and block syntax.
 
-> Building File-Based Pages
+> **Building File-Based Pages**
 >
 > A practical walkthrough of file-based page templates, syncing, and locking.
 
@@ -9775,7 +9780,7 @@ same value.
 On an element mapped to a Blockstudio block, every attribute is stored with the
 block. Declared fields reach the template; the global attributes the block does
 not declare (`id`, `style`, `role`, `title`, `lang`, `dir`, `hidden`,
-`tabindex`, `aria-`, and `data-`) are put on the block's root element when it
+`tabindex`, `aria-*`, and `data-*`) are put on the block's root element when it
 renders, exactly as on block tags. In
 page and pattern sources an `html-` prefix only names one of those global
 attributes, so `html-role="note"` forwards as `role`, while event handlers such
@@ -9843,10 +9848,10 @@ filter order and container example.
 ### Builder Function Signature
 
 ```php
-/*
-  @param array  $attrs         Parsed element or block-tag attributes.
-  @param string $inner_content Raw inner content.
-  @return array WordPress block array.
+/**
+ * @param array  $attrs         Parsed element or block-tag attributes.
+ * @param string $inner_content Raw inner content.
+ * @return array WordPress block array.
  */
 function my_builder( array $attrs, string $inner_content ): array {}
 ```
@@ -9946,13 +9951,13 @@ A full page template combining multiple block types:
 
 Blockstudio lets you define WordPress pages, block patterns, and Site Editor templates as files in your theme. Write HTML-like templates, and Blockstudio's parser converts them into native WordPress blocks.
 
-- Pages are synced to the database as WordPress posts, keeping your file templates and page content in sync.
-- Patterns are registered in memory via `register_block_pattern()`, available in the block inserter for users to place anywhere.
-- Site Templates provide file-backed `wp_template` and `wp_template_part` sources for the WordPress Site Editor.
+- **Pages** are synced to the database as WordPress posts, keeping your file templates and page content in sync.
+- **Patterns** are registered in memory via `register_block_pattern()`, available in the block inserter for users to place anywhere.
+- **Site Templates** provide file-backed `wp_template` and `wp_template_part` sources for the WordPress Site Editor.
 
 All three features share the same HTML parser and block syntax.
 
-> Building File-Based Pages
+> **Building File-Based Pages**
 >
 > A practical walkthrough of file-based page templates, syncing, and locking.
 
@@ -10139,7 +10144,7 @@ same value.
 On an element mapped to a Blockstudio block, every attribute is stored with the
 block. Declared fields reach the template; the global attributes the block does
 not declare (`id`, `style`, `role`, `title`, `lang`, `dir`, `hidden`,
-`tabindex`, `aria-`, and `data-`) are put on the block's root element when it
+`tabindex`, `aria-*`, and `data-*`) are put on the block's root element when it
 renders, exactly as on block tags. In
 page and pattern sources an `html-` prefix only names one of those global
 attributes, so `html-role="note"` forwards as `role`, while event handlers such
@@ -10207,10 +10212,10 @@ filter order and container example.
 ### Builder Function Signature
 
 ```php
-/*
-  @param array  $attrs         Parsed element or block-tag attributes.
-  @param string $inner_content Raw inner content.
-  @return array WordPress block array.
+/**
+ * @param array  $attrs         Parsed element or block-tag attributes.
+ * @param string $inner_content Raw inner content.
+ * @return array WordPress block array.
  */
 function my_builder( array $attrs, string $inner_content ): array {}
 ```
@@ -10978,19 +10983,19 @@ When a template file changes and the page re-syncs:
 
 | Block | Behavior |
 | --- | --- |
-| Keyed block | User content and Blockstudio field values are preserved. Template-owned attributes and structure are applied. |
-| Unkeyed block | Replaced entirely with the template version (same as without keys) |
+| **Keyed block** | User content and Blockstudio field values are preserved. Template-owned attributes and structure are applied. |
+| **Unkeyed block** | Replaced entirely with the template version (same as without keys) |
 
 ### Examples
 
-User edits are preserved in keyed blocks:
+**User edits are preserved in keyed blocks:**
 
 1. Template defines `<p key="intro">Default intro.</p>`
 2. User edits the paragraph in the editor to "Custom intro text."
 3. Developer updates the template, adds a new block, changes layout
 4. On sync: the paragraph keeps "Custom intro text." while the new layout is applied
 
-Attributes from the template still apply:
+**Attributes from the template still apply:**
 
 1. Template has a cover block with `key="hero"` and a `url` attribute
 2. Developer changes the cover's `url` attribute to a new background image
@@ -11284,7 +11289,7 @@ blockstudio_current_page();
 
 Page arrays returned by `Blockstudio\Pages::pages()`, `Blockstudio\Pages::tree()`, `Blockstudio\Pages::children()`, and the global helpers include the synced post identity, source and template paths, collection/path metadata, content type, sync policy, post type/status, editing policy, custom metadata, and a `permalink` key. Collection metadata is loaded from the last successful explicit reconciliation. Normal requests reconstruct this runtime data from persisted configuration and synced post meta without reading page source trees. The Pages class does not expose a separate permalink method.
 
-> Building File-Based Pages
+> **Building File-Based Pages**
 >
 > Template locking, block editing modes, keyed merging, and controlling what clients can edit.
 
@@ -11312,8 +11317,8 @@ Each pattern folder needs a `pattern.json` configuration file:
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `name` | `string` | required | Unique identifier (prefixed with `blockstudio/`) |
-| `title` | `string` | required | Display title in the block inserter |
+| `name` | `string` | *required* | Unique identifier (prefixed with `blockstudio/`) |
+| `title` | `string` | *required* | Display title in the block inserter |
 | `description` | `string` | `""` | Description shown in the inserter |
 | `categories` | `string[]` | `[]` | Pattern categories (e.g., `featured`, `header`, `footer`) |
 | `keywords` | `string[]` | `[]` | Search keywords for the inserter |
@@ -11324,7 +11329,7 @@ Each pattern folder needs a `pattern.json` configuration file:
 
 ## Example
 
-pattern.json:
+**pattern.json:**
 ```json
 {
   "name": "hero-with-cta",
@@ -11336,7 +11341,7 @@ pattern.json:
 }
 ```
 
-index.php:
+**index.php:**
 ```html
 <block name="core/cover" url="https://example.com/hero-bg.jpg" dimRatio="60">
   <h1>Build Something Amazing</h1>
@@ -12029,14 +12034,14 @@ The compilation flow:
 1. WordPress renders the full page HTML into an output buffer
 2. `TailwindPHP::extractCandidates()` scans the HTML and extracts all potential CSS class names (fast regex, no compilation)
 3. The sorted candidates are hashed together with the CSS config to create a cache key
-4. On cache hit: the compiled CSS is read from disk and injected
-5. On cache miss: `TailwindPHP::generate()` compiles the CSS, writes it to the cache directory, and injects it
+4. On **cache hit**: the compiled CSS is read from disk and injected
+5. On **cache miss**: `TailwindPHP::generate()` compiles the CSS, writes it to the cache directory, and injects it
 
 The compiled CSS is injected as:
 
 ```html
 <style id="blockstudio-tailwind">
-  / compiled CSS /
+  /* compiled CSS */
 </style>
 ```
 
@@ -12340,15 +12345,15 @@ add_filter('blockstudio/tailwind/css', function (string $css): string {
 The full CSS input that gets compiled looks like this:
 
 ```css
-/ Base import /
+/* Base import */
 @import 'tailwindcss';
 
-/ Config from settings (if set) /
+/* Config from settings (if set) */
 @theme {
   --color-brand: pink;
 }
 
-/ Anything added via the blockstudio/tailwind/css filter /
+/* Anything added via the blockstudio/tailwind/css filter */
 ```
 
 ## Output Buffer
@@ -12467,7 +12472,7 @@ A complete working setup with custom theme colors and a block that uses them:
 
 This renders on the frontend with all Tailwind utilities and custom theme colors compiled into a single inline `<style>` tag.
 
-> Building a Block Library
+> **Building a Block Library**
 >
 > Design tokens, custom utilities, and the complete Tailwind v4 setup for a production theme.
 
@@ -12481,10 +12486,10 @@ All field types can be added to any block, with the data being saved to the bloc
 
 Extended values can be utilized in versatile ways:
 
-- class: Add a class using the attribute value to the block
-- style: Add inline styles using the attribute value to the block
-- attributes: Set any attribute value directly on the block
-- data attributes: Use extension values to set specific data attributes
+- **class**: Add a class using the attribute value to the block
+- **style**: Add inline styles using the attribute value to the block
+- **attributes**: Set any attribute value directly on the block
+- **data attributes**: Use extension values to set specific data attributes
 
 ## Setup
 
@@ -12493,7 +12498,7 @@ Imagine the following scenario: you want to add a custom class `select` field to
 ```json
 {
   "$schema": "https://blockstudio.dev/schema/extend",
-  "name": "core/",
+  "name": "core/*",
   "priority": 10,
   "blockstudio": {
     "extend": true,
@@ -12528,7 +12533,7 @@ This will add a `customColor` field to every core block, allowing you to set the
 
 ### File Name
 
-Since there is no rendering template, an extension doesn't need a matching `index` file and thus doesn't need to be named `block.json`. This allows storing all extensions conveniently in a single folder. Several files may extend the same blocks, for example two files with `"name": "core/"`; each registers its own fields.
+Since there is no rendering template, an extension doesn't need a matching `index` file and thus doesn't need to be named `block.json`. This allows storing all extensions conveniently in a single folder. Several files may extend the same blocks, for example two files with `"name": "core/*"`; each registers its own fields.
 
 ### Schema
 
@@ -12540,9 +12545,23 @@ View Extension schema
 
 The `name` property of the configuration object defines which blocks should be extended. There are three options depending on your needs:
 
-- blockName: A single block name, e.g. `core/paragraph`
-- [blockNameA, blockNameB]: An array of block names, e.g. `["core/paragraph", "core/heading"]`
-- core/\: A wildcard to extend all blocks of a certain type
+- **blockName**: A single block name, e.g. `core/paragraph`
+- **[blockNameA, blockNameB]**: An array of block names, e.g. `["core/paragraph", "core/heading"]`
+- **core/\***: A wildcard to extend all blocks of a certain type
+
+Any name that ends in an asterisk is a prefix wildcard, not only `core/*`. The
+following extension applies to every block whose name starts with `my-plugin/`,
+including blocks made with Blockstudio:
+
+```json
+{
+  "name": "my-plugin/*",
+  "blockstudio": {
+    "extend": true,
+    "attributes": []
+  }
+}
+```
 
 ### Blockstudio Key
 
@@ -12552,14 +12571,14 @@ Just like when using `block.json` for custom blocks, the `blockstudio` property 
 
 By default, extensions will render in its own tab in the block inspector. If you want to move the extensions to a different position, you can use the `group` property:
 
-- settings: The default position
-- styles: The styles tab
-- advanced: The advanced tab
+- **settings**: The default position
+- **styles**: The styles tab
+- **advanced**: The advanced tab
 
 ```json
 {
   "$schema": "https://blockstudio.dev/schema/extend",
-  "name": "core/",
+  "name": "core/*",
   "blockstudio": {
     "extend": true,
     "group": "styles",
@@ -12575,7 +12594,7 @@ The `priority` property allows you to define the order in which extensions are r
 ```json
 {
   "$schema": "https://blockstudio.dev/schema/extend",
-  "name": "core/",
+  "name": "core/*",
   "blockstudio": {
     "extend": { "priority": 10 },
     "attributes": []
@@ -12594,7 +12613,7 @@ The only thing you need to know about attributes inside extensions is the `set` 
 ```json
 {
   "$schema": "https://blockstudio.dev/schema/extend",
-  "name": "core/",
+  "name": "core/*",
   "blockstudio": {
     "extend": true,
     "attributes": [
@@ -12681,7 +12700,7 @@ Blockstudio is built around a file-first workflow: blocks, fields, templates, as
 
 It is a WP-CLI workflow, not live database replication. On pull, Content Sync projects allowlisted posts, postmeta, terms, termmeta, and post-term relationships to portable files in your theme. On push, it applies those files to another environment, using stable UIDs and only rewriting references you explicitly declare.
 
-> Note
+> **Note**
 >
 > Content Sync is on-demand. It does not run on every admin request. Commands return a skipped row until `content.enabled` is `true`.
 
@@ -12715,11 +12734,11 @@ Enable Content Sync in `blockstudio.json`:
     "authors": "ignore",
     "postTypes": ["team_member"],
     "meta": {
-      "include": ["_my_"],
+      "include": ["_my_*"],
       "exclude": ["_edit_lock", "_edit_last", "_wp_old_slug"],
       "references": {
         "_thumbnail_id": { "kind": "attachment" },
-        "_related_posts": { "kind": "post", "path": "" },
+        "_related_posts": { "kind": "post", "path": "*" },
         "_hero": { "kind": "attachment", "path": "image.id" }
       }
     },
@@ -12731,7 +12750,7 @@ Enable Content Sync in `blockstudio.json`:
 
 `postTypes` is an allowlist. Empty means Content Sync does not touch posts. `taxonomies` is an allowlist of already registered taxonomies whose terms and post relationships should sync. Blockstudio does not register taxonomy definitions from Content Sync files. Postmeta and termmeta are allowlisted through `meta.include`; `meta.exclude` always wins.
 
-> Warning
+> **Warning**
 >
 > Treat `meta.include` as a commit boundary. Synced files are meant to live in git, so do not include keys that hold secrets, tokens, credentials, or PII. `wp bs content status` reports warning rows when an allowlisted meta key looks sensitive.
 
@@ -13063,11 +13082,11 @@ per-request and cleared after the page finishes rendering.
 The profiler shows reduced render call counts when the cache is active,
 making it easy to verify caching is working.
 
-> Static Prerendering
+> **Static Prerendering**
 >
 > Serve anonymous pages as static HTML, optionally before WordPress boots.
 
-> Caching
+> **Caching**
 >
 > The persistent file-backed caches behind every request.
 
@@ -13342,11 +13361,11 @@ removes Blockstudio-owned Early Serve state and warm schedules once, then leaves
 the prerender runtime unregistered. Setting `performance.profile` back to
 `compat` undoes the profile. Each leaves the other layers in place.
 
-> Performance
+> **Performance**
 >
 > The profiles, the profiler, and the render techniques underneath.
 
-> Caching
+> **Caching**
 >
 > The one cache directory every generated artifact lives under.
 
@@ -13570,7 +13589,7 @@ so an evicted file costs one re-render rather than an unstyled page. Raising
 `cache_max_files` past the number of distinct page-level keys avoids the
 re-render entirely.
 
-> Static Prerendering
+> **Static Prerendering**
 >
 > The anonymous HTML cache that lives under this same root.
 
@@ -13662,11 +13681,11 @@ The `speed` and `strict` performance profiles
 enable the loader by default; `compat` leaves it off. Every child value can
 override its profile default.
 
-> Settings
+> **Settings**
 >
 > The full `performance.media` option table.
 
-> Static Prerendering
+> **Static Prerendering**
 >
 > Media metadata is step two of the production adoption order.
 
@@ -13709,7 +13728,7 @@ Now, simply follow the setup instructions to register a code snippet inside the 
 
 ### Admin
 
-Blockstudio ships with an admin screen under Tools > Blockstudio. It is a
+Blockstudio ships with an admin screen under **Tools > Blockstudio**. It is a
 project-level inspection surface for what Blockstudio has registered from the
 filesystem, plus a browser for registries and database records.
 
@@ -13737,11 +13756,11 @@ add_filter('blockstudio/admin/enabled', '__return_false');
 The overview is a read-only inventory of Blockstudio registrations. It includes
 dedicated tabs for:
 
-- Blocks: registered block types, render mode, API version, attribute count
-- Extensions: targets, priority, render mode, attribute count
-- Fields: reusable `field.json` definitions
-- Pages: file-based pages with post type, status, engine, and sync state
-- Schemas: registered `db.php` schemas with storage and field counts
+- **Blocks**: registered block types, render mode, API version, attribute count
+- **Extensions**: targets, priority, render mode, attribute count
+- **Fields**: reusable `field.json` definitions
+- **Pages**: file-based pages with post type, status, engine, and sync state
+- **Schemas**: registered `db.php` schemas with storage and field counts
 
 The tables use native WordPress DataViews so the screen stays aligned with
 wp-admin instead of inventing a separate interface.
@@ -13749,7 +13768,7 @@ wp-admin instead of inventing a separate interface.
 ### Registry
 
 If your project has a `blocks.json` with configured registries, the admin page
-shows a Registry view. It fetches the available blocks from those
+shows a **Registry** view. It fetches the available blocks from those
 registries and lets you import them directly into the configured block
 directory.
 
@@ -13772,7 +13791,7 @@ configuration format.
 ### Databases
 
 If your project registers any `db.php` schemas, the admin page shows a
-Databases view. Each schema gets its own tab and displays actual records
+**Databases** view. Each schema gets its own tab and displays actual records
 inside a DataViews table.
 
 The screen does not serialize all records into the initial admin payload.
@@ -13840,8 +13859,8 @@ add_filter('blockstudio/settings/dev/canvas/admin_bar', '__return_false');
 
 Switch between views using the dropdown menu in the top-right corner.
 
-- Pages: All Blockstudio-managed pages as full-width artboards in a single row.
-- Blocks: All registered Blockstudio blocks in a grid layout, each rendered with its default attribute values.
+- **Pages**: All Blockstudio-managed pages as full-width artboards in a single row.
+- **Blocks**: All registered Blockstudio blocks in a grid layout, each rendered with its default attribute values.
 
 ## Public Inventory and Document API
 
@@ -13993,13 +14012,13 @@ add_filter('blockstudio/settings/dev/grab/enabled', '__return_true');
 ## Usage
 
 1. Visit any frontend page with `?blockstudio-devtools` while logged in as a user with `edit_posts` capability.
-2. Hold Cmd+C (Mac) or Ctrl+C (Windows) for 100ms to activate the grabber.
+2. Hold **Cmd+C** (Mac) or **Ctrl+C** (Windows) for 100ms to activate the grabber.
 3. A crosshair selector activates with a canvas overlay highlighting Blockstudio blocks as you hover.
 4. Two labels appear: one showing the block's template file path and one showing the HTML element tag name.
 5. Click an element to copy its context to your clipboard.
 6. Paste the result into your AI coding tool.
 
-Press Escape or Cmd+C again to deactivate without copying. If you release Cmd+C before 100ms, normal copy behavior is preserved.
+Press **Escape** or **Cmd+C** again to deactivate without copying. If you release Cmd+C before 100ms, normal copy behavior is preserved.
 
 ## Clipboard Format
 
@@ -14622,9 +14641,9 @@ Load it in your plugin's main file:
 
 ```php
 <?php
-/
+/*
 Plugin Name: My Plugin
-/
+*/
 require_once __DIR__ . '/vendor/autoload.php';
 ```
 
@@ -14741,7 +14760,7 @@ the `block.json` beside the template. The shape survives narrowing, so
 `$a['label'] ?? ''`, `isset( $a['cta']['target'] )` and
 `$a['cta']['title'] !== null` keep the declared field types; a template that
 assigns `$a` itself keeps the type it assigned. Do not add a
-`/* @var array<string, mixed> $a /` docblock: it replaces that shape with an
+`/** @var array<string, mixed> $a */` docblock: it replaces that shape with an
 open array.
 
 Field keys follow Blockstudio's runtime flattening rules. `tabs` and anonymous
@@ -14756,7 +14775,7 @@ echo $a['cta_text']; // "text" inside the named "cta" group.
 
 ### Reusable custom fields
 
-File-backed `custom/` references are expanded before template keys and array
+File-backed `custom/*` references are expanded before template keys and array
 shapes are checked. The extension reads the matching `field.json` and applies
 the same `idStructure`, `overrides`, nested reference, group, tabs, and repeater
 rules as Blockstudio:
@@ -14791,7 +14810,7 @@ The resulting template keys are `title` and `hero_description`. They are
 recognized in PHP, Twig, Blade, block tags, and inferred attribute shapes.
 
 Missing, ambiguous, invalid, or cyclic file-backed definitions produce a
-specific `blockstudio.customField.` error. Dependent key checks are skipped for
+specific `blockstudio.customField.*` error. Dependent key checks are skipped for
 that block so one unresolved definition does not create a second wave of false
 unknown-field errors.
 
@@ -14845,8 +14864,8 @@ are known when `ui.enabled` is on.
 An attribute is accepted when the block declares it as a field (including
 custom fields and the fields a block-typed field forwards under its
 `idStructure`), or when Blockstudio forwards it to the block's root element:
-`data-`, `aria-`, `id`, `style`, `role`, `title`, `lang`, `dir`, `hidden`,
-and `tabindex`. In templates every `html-` attribute passes through; in page
+`data-*`, `aria-*`, `id`, `style`, `role`, `title`, `lang`, `dir`, `hidden`,
+and `tabindex`. In templates every `html-*` attribute passes through; in page
 sources an `html-` prefix only names one of the forwarded attributes. Anything
 else, an undeclared `class` above all, is reported, because Blockstudio stores
 it and never renders it.
@@ -14934,7 +14953,7 @@ allowed. Non-blockstudio hooks are ignored.
 
 The extension validates every Blockstudio schema file in the project.
 
-block.json:
+**block.json**:
 
 - Missing `name` field
 - Missing field `type`
@@ -14944,49 +14963,49 @@ block.json:
 - Duplicate field IDs
 - Invalid `pluginDependencies` declarations
 
-Container fields like `group` and `tabs`, plus `custom/` field references, can
+Container fields like `group` and `tabs`, plus `custom/*` field references, can
 omit `id` when they only expand or wrap other fields.
 
-field.json (custom reusable fields):
+**field.json** (custom reusable fields):
 
 - Missing `name`
 - Missing or empty `attributes`
 - Invalid attribute objects or missing field `type`
 - Missing `id` on value fields that require one
 - Unknown field types
-- Missing, ambiguous, invalid, or cyclic nested `custom/` references
+- Missing, ambiguous, invalid, or cyclic nested `custom/*` references
 
-Extension JSON (block extensions in `extensions/`):
+**Extension JSON** (block extensions in `extensions/`):
 
 - Missing `name` (target block)
 - Missing `blockstudio` key
 - Missing `blockstudio.extend` key
 
-page.json (file-based pages):
+**page.json** (file-based pages):
 
 - Missing `title`
 - Missing `slug`
 - Invalid `postStatus` values
 
-db.php:
+**db.php**:
 
 - Missing `fields` array
 - Invalid field types
 - Supports both legacy arrays and `Blockstudio\\Db\\Schema` / `Blockstudio\\Db\\Field`
 
-rpc.php:
+**rpc.php**:
 
 - Invalid HTTP methods
 - Wrong `public` value (must be `true`, `false`, or `'open'`)
 - Supports both legacy arrays and attributed object returns
 
-cron.php:
+**cron.php**:
 
 - Missing `schedule` on configured tasks
 - Missing `callback` on configured tasks
 - Supports both legacy arrays and attributed object returns
 
-blockstudio.json:
+**blockstudio.json**:
 
 - Shorthand booleans like `"tailwind": true` (must use the nested object
   format `{"enabled": true, "config": ""}`)
@@ -15030,7 +15049,7 @@ parameters:
   blockstudioThemeRoots:
     - .
   blockstudioThemeExcludePaths:
-    - fixtures/
+    - fixtures/**
   blockstudioThemeMaxFiles: 10000
   blockstudioExtremeJavaScript: true
   blockstudioExtremeTailwind: true
@@ -15041,12 +15060,12 @@ PHPStan's standard `excludePaths` independently controls PHP analysis.
 
 The canonical command's `phpstan.excludePaths` setting in `blockstudio.json`
 (and its `--exclude` option) configures both layers. Relative patterns resolve
-against every configured root, so entries such as `vendor/` bound PHPStan
+against every configured root, so entries such as `vendor/**` bound PHPStan
 analysis as well as Blockstudio's project scan.
 
-A pattern naming a single directory, such as `_dist/` or `node_modules/`,
+A pattern naming a single directory, such as `_dist/**` or `node_modules/**`,
 excludes that directory wherever it appears, not only beside the theme root. A
-pattern containing a slash, such as `assets//docs/`, stays anchored to the
+pattern containing a slash, such as `assets/*/docs/**`, stays anchored to the
 root. Generated block assets live in a `_dist` directory inside each block, so
 the single-directory form is what keeps compiled output out of analysis.
 
@@ -15115,7 +15134,7 @@ Keep project-wide command defaults in `blockstudio.json`:
   "phpstan": {
     "preset": "extreme-theme",
     "roots": ["."],
-    "excludePaths": ["fixtures/"],
+    "excludePaths": ["fixtures/**"],
     "maxFiles": 10000
   }
 }
@@ -15135,7 +15154,7 @@ vendor/bin/blockstudio-phpstan \
   --preset theme \
   --configuration phpstan.neon \
   --root . \
-  --exclude 'fixtures/*' \
+  --exclude 'fixtures/**' \
   --max-files 10000 \
   --error-format json \
   -- --no-progress
@@ -15238,7 +15257,7 @@ Non-zero exits, timeouts, malformed JSON, and `ok: false` produce
 
 ### Diagnostic identifiers
 
-New preset diagnostics retain stable `blockstudio.` IDs:
+New preset diagnostics retain stable `blockstudio.*` IDs:
 
 - Theme structure:
   `blockstudio.theme.root.missing`, `blockstudio.theme.style.missing`,
@@ -15306,17 +15325,17 @@ Blockstudio contract created: /path/to/project/AGENTS.md
 Nothing in the output is a fixed template. Every line is derived from one of
 three sources:
 
-- The project's own files. A theme with a `style.css` header, blocks, and
+- **The project's own files.** A theme with a `style.css` header, blocks, and
   file-backed pages produces a different document than a plugin that registers
   blocks and nothing else. Counts, directories, block namespaces, and template
   languages are what the scanner actually found, using the same roots and
   exclusions as analysis.
-- `blockstudio.json`. Only enabled features are described, with their
+- **`blockstudio.json`.** Only enabled features are described, with their
   configured values: block tag prefixes and the namespaces they resolve
   through, Tailwind, the bundled UI, the editor asset reset, the cache path,
   the performance profile, static prerendering and its dynamic paths, theme
   defaults, Content Sync, and the commit hook.
-- The selected `phpstan.preset`. The correctness section is read from the
+- **The selected `phpstan.preset`.** The correctness section is read from the
   preset files themselves, layer by layer, so it lists exactly the rules that
   preset registers. At `base` it describes the schema, template, hook, and
   settings rules. At `extreme-theme` it also describes the theme structure
