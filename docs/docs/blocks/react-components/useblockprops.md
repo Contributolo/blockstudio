@@ -43,6 +43,17 @@ well as the saved frontend markup.
 
 ## Considerations
 
+### Links in the Editor
+
+Blockstudio prevents link navigation inside the block editor, including
+`target="_blank"`, modifier-clicks, middle-clicks, and keyboard activation.
+Click events still reach Gutenberg, so ordinary clicks select the block.
+RichText remains editable. This applies with or without `useBlockProps`,
+including an anchor used as the block's root element.
+
+Frontend links and the browser's context-menu commands are unchanged. You do
+not need to remove links from templates or branch on `$isEditor`.
+
 ### Root Element
 
 Since there can only be one root element in a block template, when using `useBlockProps`, the block template has to have a single root element. For example, the following will not work and Gutenberg will create a wrapper around the template.

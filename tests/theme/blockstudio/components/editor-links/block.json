@@ -1,0 +1,27 @@
+{
+  "$schema": "https://blockstudio.dev/schema/block",
+  "name": "blockstudio/component-editor-links",
+  "title": "Editor links",
+  "category": "blockstudio-test-native",
+  "blockstudio": {
+    "attributes": [
+      {
+        "id": "root",
+        "type": "select",
+        "default": "props",
+        "options": [
+          { "value": "props", "label": "useBlockProps" },
+          { "value": "fallback", "label": "Fallback wrapper" },
+          { "value": "anchor", "label": "Anchor root" },
+          { "value": "innerblocks", "label": "InnerBlocks root" },
+          { "value": "richtext", "label": "RichText root" }
+        ]
+      },
+      {
+        "id": "text",
+        "type": "richtext",
+        "default": "Editable text"
+      }
+    ]
+  }
+}

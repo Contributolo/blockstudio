@@ -64,6 +64,7 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 * Fix: repeater removal confirmations use the default question for `textRemove: true` (#110)
 * Fix: the Update URI header prevents unrelated WordPress.org plugins from being offered as Blockstudio updates (#113)
 * Fix: repeater row preferences preserve other rows and tolerate unavailable or malformed browser storage
+* Fix: links inside Blockstudio blocks no longer navigate away from the editor when clicked (#116)
 
 = 7.7.1 =
 * Fix: page sync skips post writes, update hooks, timestamps, and revisions when merged content and managed fields are unchanged (#104)
