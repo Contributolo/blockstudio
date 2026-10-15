@@ -223,6 +223,8 @@ For now, only values from the current attribute can be used inside `set` definit
 
 When using arrays, the `set` property will be applied to every item in the array.
 
+Each item adds its own class or style declaration, while any other attribute receives the results of all items at once, separated by spaces and without empty or repeated values, so a selector like `[data-langs~="en"]` matches every chosen item.
+
 ### Attributes Field
 
 When using the `attributes` field, there is no `set` property needed, as the field automatically maps the values to the attribute name and value.

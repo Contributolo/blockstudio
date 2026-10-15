@@ -6,6 +6,7 @@ import { addFilter } from '@wordpress/hooks';
 import { cloneDeep, isArray, set as lodashSet } from 'lodash-es';
 import { Fields } from '@/blocks/components/fields';
 import { getEditorDocument } from '@/blocks/utils/get-editor-document';
+import { joinListValues } from '@/blocks/utils/join-list-values';
 import { parseTemplate } from '@/blocks/utils/parse-template';
 import { selectors as selectorsTailwind } from '@/tailwind/store/selectors';
 import {
@@ -75,7 +76,7 @@ const getAttributes = (
           if ((attributes as Any)?.[attribute.id]) {
             const copy = cloneDeep(attributes) as Any;
 
-            const applyValue = (value: Any) => {
+            const applyValue = (value: Any, list?: Any[]) => {
               if (['select', 'radio', 'checkbox'].includes(attribute.field)) {
                 if (
                   attribute.populate &&
@@ -105,15 +106,31 @@ const getAttributes = (
                 classNames.push(val);
               } else if (set.attribute === 'style') {
                 styles.push(val.replace(/;+$/, ''));
+              } else if (list) {
+                list.push(val);
               } else {
                 dataAttributes[set.attribute] = val;
               }
             };
 
-            if (isArray(copy[attribute.id])) {
-              copy[attribute.id].forEach((value: Any) => applyValue(value));
+            const entries = copy[attribute.id];
+
+            if (isArray(entries)) {
+              // Mirrors render_blocks(): each entry is evaluated as the
+              // field's value, and an attribute other than class or style
+              // receives all results at once instead of only the last one.
+              const list: Any[] = [];
+              entries.forEach((value: Any) => {
+                lodashSet(copy, attribute.id, value);
+                applyValue(value, list);
+              });
+
+              const joined = joinListValues(list);
+              if (joined) {
+                dataAttributes[set.attribute] = joined;
+              }
             } else {
-              applyValue(copy[attribute.id]);
+              applyValue(entries);
             }
           }
         });

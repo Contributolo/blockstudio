@@ -163,7 +163,8 @@ class Extensions {
 
 					$apply_value = function (
 						$value,
-						$attr
+						$attr,
+						?array &$list = null
 					) use (
 						&$class,
 						&$style,
@@ -184,12 +185,16 @@ class Extensions {
 						} elseif ( 'style' === $set['attribute'] ) {
 							$style .= ' ' . $value . ';';
 							$style  = str_replace( ';;', ';', $style );
+						} elseif ( null !== $list ) {
+							$list[] = $value;
 						} else {
 							$content->set_attribute( $set['attribute'], $value );
 						}
 					};
 
 					if ( $is_sequential( $val ) ) {
+						// Setting the attribute once per entry would keep only the last one.
+						$list  = array();
 						$index = -1;
 						foreach ( $val as $v ) {
 							++$index;
@@ -202,8 +207,14 @@ class Extensions {
 								$v,
 								array(
 									$key => $blockstudio_attributes[ $key ][ $index ],
-								)
+								),
+								$list
 							);
+						}
+
+						$joined = self::join_list_values( $list );
+						if ( '' !== $joined ) {
+							$content->set_attribute( $set['attribute'], $joined );
 						}
 					} else {
 						$apply_value( $value, $blockstudio_attributes );
@@ -271,6 +282,37 @@ class Extensions {
 		}
 
 		return $matches;
+	}
+
+	/**
+	 * Join the values a list field produces for one "set" attribute.
+	 *
+	 * Every list entry is evaluated on its own. For attributes other than
+	 * class and style, the results are written once as a space-separated
+	 * list, the way HTML token lists work, so a selector like
+	 * `[data-langs~="en"]` matches every chosen entry. Empty and repeated
+	 * results are skipped, as are values that are not text or numbers.
+	 *
+	 * @param array $values The evaluated values, one per list entry.
+	 *
+	 * @return string The values joined with a single space.
+	 */
+	public static function join_list_values( array $values ): string {
+		$tokens = array();
+
+		foreach ( $values as $value ) {
+			if ( ! is_string( $value ) && ! is_int( $value ) && ! is_float( $value ) ) {
+				continue;
+			}
+
+			$value = trim( (string) $value );
+
+			if ( '' !== $value && ! in_array( $value, $tokens, true ) ) {
+				$tokens[] = $value;
+			}
+		}
+
+		return implode( ' ', $tokens );
 	}
 
 	/**
