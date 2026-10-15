@@ -56,6 +56,14 @@ file: docs/docs/dev/composer.md
 purpose: Install Blockstudio using Composer.
 hooks: blockstudio/url
 
+## Docs / Start / Setup
+
+### Translations
+route: /docs/general/translations
+file: docs/docs/general/translations.md
+purpose: Use Blockstudio in your language and help translate it.
+php: Translations::script_path()
+
 ## Docs / Blocks / Block Definition
 
 ### Schema

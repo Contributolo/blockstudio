@@ -8,7 +8,7 @@ const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const contentRoot = resolve(repositoryRoot, 'docs');
 const problems = [];
 const expectedDocuments = {
-  docs: 72,
+  docs: 73,
   guides: 20,
   registry: 14,
   blog: 9,

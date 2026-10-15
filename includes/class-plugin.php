@@ -186,6 +186,7 @@ class Plugin {
 		require_once $classes_dir . 'content-sync.php';
 		require_once $classes_dir . 'cli.php';
 		require_once $classes_dir . 'github-updater.php';
+		require_once $classes_dir . 'translations.php';
 
 		// File-based pages system.
 		require_once $classes_dir . 'page-markdown.php';
@@ -244,6 +245,8 @@ class Plugin {
 	 */
 	private function init(): void {
 		$this->init_storage_system();
+
+		Translations::register();
 
 		if ( class_exists( 'Blockstudio\Runtime' ) ) {
 			Runtime::init();
