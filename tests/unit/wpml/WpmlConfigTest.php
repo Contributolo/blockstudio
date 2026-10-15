@@ -512,6 +512,84 @@ XML;
 		);
 		$this->assertSame( $registered, $this->declared_paths( $fields ) );
 	}
+	public function test_a_later_definition_of_a_storage_key_decides(): void {
+		$text   = array( 'id' => 'tone', 'type' => 'text', 'label' => 'Tone' );
+		$select = array( 'id' => 'tone', 'type' => 'select', 'label' => 'Tone', 'options' => array( 'a', 'b' ) );
+		$link   = array( 'id' => 'tone', 'type' => 'link', 'label' => 'Tone' );
+
+		$this->assertSame( array(), $this->declared_paths( array( $text, $select ) ), 'text, then select' );
+		$this->assertSame( array( 'tone' ), $this->declared_paths( array( $select, $text ) ), 'select, then text' );
+		$this->assertSame( array( 'tone' ), $this->declared_paths( array( $link, $text ) ), 'link, then text' );
+		$this->assertSame( array( 'tone/title', 'tone/url' ), $this->declared_paths( array( $text, $link ) ), 'text, then link' );
+		$this->assertSame( array(), $this->declared_paths( array( $text, $text + array( 'hidden' => true ) ) ), 'text, then hidden text' );
+	}
+
+	public function test_extensions_override_block_fields_and_earlier_extensions(): void {
+		// registered_blocks() lists the block's fields first, then the fields of each matching extension in order.
+		$block  = array(
+			array( 'id' => 'tone', 'type' => 'text', 'label' => 'Tone' ),
+			array( 'id' => 'heading', 'type' => 'text', 'label' => 'Heading' ),
+		);
+		$first  = array(
+			array( 'id' => 'mood', 'type' => 'select', 'label' => 'Mood', 'options' => array( 'a' ) ),
+			array( 'id' => 'note', 'type' => 'text', 'label' => 'Note' ),
+			array( 'id' => 'cta', 'type' => 'link', 'label' => 'Call to action' ),
+		);
+		$second = array(
+			array( 'id' => 'tone', 'type' => 'select', 'label' => 'Tone', 'options' => array( 'a' ) ),
+			array( 'id' => 'mood', 'type' => 'text', 'label' => 'Mood' ),
+			array( 'id' => 'note', 'type' => 'link', 'label' => 'Note' ),
+			array( 'id' => 'cta', 'type' => 'textarea', 'label' => 'Call to action' ),
+		);
+
+		$this->assertSame(
+			array( 'heading', 'mood', 'note/title', 'note/url', 'cta' ),
+			$this->declared_paths( array_merge( $block, $first, $second ) )
+		);
+	}
+
+	public function test_later_definitions_decide_inside_containers(): void {
+		$rows = static fn( array $fields ): array => array(
+			'id'         => 'items',
+			'type'       => 'repeater',
+			'label'      => 'Items',
+			'attributes' => $fields,
+		);
+		$text   = array( 'id' => 'title', 'type' => 'text', 'label' => 'Title' );
+		$select = array( 'id' => 'title', 'type' => 'select', 'label' => 'Title', 'options' => array( 'a' ) );
+		$link   = array( 'id' => 'title', 'type' => 'link', 'label' => 'Title' );
+
+		$this->assertSame( array(), $this->declared_paths( array( $rows( array( $text, $select ) ) ) ), 'text, then select in one row' );
+		$this->assertSame( array( 'items/*/title/title', 'items/*/title/url' ), $this->declared_paths( array( $rows( array( $text, $link ) ) ) ), 'text, then link in one row' );
+		$this->assertSame( array(), $this->declared_paths( array( $rows( array( $text ) ), $rows( array( $select ) ) ) ), 'a later repeater replaces the rows' );
+		$this->assertSame( array( 'items/*/title' ), $this->declared_paths( array( $rows( array( $select ) ), $rows( array( $text ) ) ) ), 'a later repeater brings its own rows' );
+		$this->assertSame( array(), $this->declared_paths( array( $rows( array( $text ) ), array( 'id' => 'items', 'type' => 'text', 'hidden' => true ) ) ), 'a later hidden field replaces a repeater' );
+
+		$group = static fn( array $fields, bool $hidden = false ): array => array(
+			'id'         => 'box',
+			'type'       => 'group',
+			'label'      => 'Box',
+			'attributes' => $fields,
+		) + ( $hidden ? array( 'hidden' => true ) : array() );
+
+		$this->assertSame( array(), $this->declared_paths( array( $group( array( $text ) ), array( 'id' => 'box_title', 'type' => 'select', 'options' => array( 'a' ) ) ) ), 'group field, then a select with the same storage key' );
+		$this->assertSame( array( 'box_title' ), $this->declared_paths( array( array( 'id' => 'box_title', 'type' => 'select', 'options' => array( 'a' ) ), $group( array( $text ) ) ) ), 'select, then a group field with the same storage key' );
+		$this->assertSame( array(), $this->declared_paths( array( $group( array( $text ) ), $group( array( $text ), true ) ) ), 'a later hidden group' );
+
+		$tabs = array(
+			'type' => 'tabs',
+			'tabs' => array(
+				array(
+					'title'      => 'Content',
+					'attributes' => array( array( 'id' => 'tone', 'type' => 'text', 'label' => 'Tone' ) ),
+				),
+			),
+		);
+
+		$this->assertSame( array(), $this->declared_paths( array( $tabs, array( 'id' => 'tone', 'type' => 'select', 'options' => array( 'a' ) ) ) ), 'tab field, then select' );
+		$this->assertSame( array( 'tone' ), $this->declared_paths( array( array( 'id' => 'tone', 'type' => 'select', 'options' => array( 'a' ) ), $tabs ) ), 'select, then tab field' );
+	}
+
 	public function test_escapes_names_and_labels(): void {
 		$xml = Wpml_Config::section(
 			array(

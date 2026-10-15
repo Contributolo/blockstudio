@@ -15732,6 +15732,14 @@ extensions add to a Blockstudio block are included. Fields
 that extensions add to core blocks or to blocks of other plugins are not, because
 those blocks get their configuration from WPML or from their own plugin.
 
+When two fields end up with the same storage key (twice in one field list, a
+block field and an extension field, or two extensions), the later definition
+decides. Block fields are read first, then the fields of each matching
+extension in registration order. A `select` that
+follows a `text` field with the same key is not declared, a `link` that follows
+it is declared as a link, and a later `hidden` field removes the declaration.
+The same applies inside groups, tabs, and repeater rows.
+
 | Field | Declaration |
 | --- | --- |
 | `text`, `textarea`, `richtext`, `wysiwyg` | Translatable text. |

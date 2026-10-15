@@ -23,7 +23,8 @@ use WP_Error;
  * with translate="0".
  *
  * Fields are read from the registered block definitions, after custom field
- * expansion, attribute filters, overrides, and matching extensions. Keys follow
+ * expansion, attribute filters, overrides, and matching extensions. When a
+ * storage key is defined more than once, the later definition decides. Keys follow
  * the storage rules of the attribute builder: Blockstudio stores every value
  * under blockstudio.attributes, fields in a group with an ID are prefixed with
  * that ID, groups without an ID and tabs add no level, and repeater rows are
@@ -105,8 +106,7 @@ final class Wpml_Config {
 	 * @return array<string, array{title: string, fields: array}> Blocks by name, sorted by name.
 	 */
 	public static function registered_blocks(): array {
-		$extensions = Build::extensions();
-		$blocks     = array();
+		$blocks = array();
 
 		foreach ( Build::blocks() as $name => $block ) {
 			$name   = (string) $name;
@@ -114,11 +114,8 @@ final class Wpml_Config {
 				? array_values( $block->blockstudio['attributes'] )
 				: array();
 
-			foreach ( Extensions::get_matches( $name, $extensions ) as $extension ) {
-				if ( is_array( $extension->blockstudio['attributes'] ?? null ) ) {
-					$fields = array_merge( $fields, array_values( $extension->blockstudio['attributes'] ) );
-				}
-			}
+			// Block fields first, then the fields of each matching extension in registration order.
+			$fields = array_merge( $fields, array_values( \bs_block_extension_fields( $name ) ) );
 
 			$blocks[ $name ] = array(
 				'title'  => is_string( $block->title ?? null ) ? $block->title : '',
@@ -143,6 +140,9 @@ final class Wpml_Config {
 	 *     $section = Wpml_Config::section( Wpml_Config::registered_blocks() );
 	 *     echo Wpml_Config::document( $section['xml'] );
 	 *
+	 * Fields are read in order, so a later definition of a storage key replaces
+	 * an earlier one (see effective()).
+	 *
 	 * @param array<string, array{title?: string, fields?: array}> $blocks Blocks by name, as returned by registered_blocks().
 	 *
 	 * @return array{xml: string, translated: int, untranslated: int, skipped: array<int, string>} The section for a
@@ -158,7 +158,7 @@ final class Wpml_Config {
 		foreach ( $blocks as $name => $block ) {
 			$name   = (string) $name;
 			$fields = is_array( $block['fields'] ?? null ) ? $block['fields'] : array();
-			$keys   = self::unique( self::keys( $fields, '', array(), $name, $skipped ) );
+			$keys   = self::keys( self::effective( $fields ), $name, $skipped );
 			$type   = 'type="' . self::escape( $name ) . '"';
 
 			if ( array() === $keys ) {
@@ -299,49 +299,59 @@ final class Wpml_Config {
 	}
 
 	/**
-	 * Build the key nodes for a list of fields.
+	 * Resolve the definition in effect for each storage key of a list of fields.
 	 *
-	 * Keys follow the storage rules of Container_Field_Handler: a group with an
-	 * ID prefixes the IDs of its fields, a group without an ID and tabs add no
-	 * level, and repeater rows are one level matched with "*". Where the
-	 * attribute builder stores nothing, for a group with an ID nested in another
-	 * group, the key matches no value and WPML ignores it.
+	 * A storage key can be defined more than once: twice in one field list, by
+	 * a field of the block and a field an extension adds, or by two extensions.
+	 * Blockstudio keeps the later definition (the field handlers write each
+	 * attribute by storage key, and Block::extension_attributes() and
+	 * Extensions::render_blocks() let a later extension replace an earlier
+	 * one), so a later definition replaces an earlier one as a whole, whatever
+	 * its type. Block fields count before the fields extensions add, in the
+	 * order registered_blocks() lists them: a select after a text field leaves nothing to translate, a link
+	 * after a text field is declared as a link, and a repeater after a repeater
+	 * brings its own row fields. A hidden field also replaces an earlier
+	 * definition; it is never translated, nor is anything inside a hidden group
+	 * or tabs field.
 	 *
-	 * @param array             $fields  Field definitions.
+	 * Storage keys follow Container_Field_Handler: a group with an ID prefixes
+	 * the IDs of its fields, a group without an ID and tabs add no level.
+	 * Repeater rows are resolved on their own level by keys().
+	 *
+	 * @param array             $fields  Field definitions, in the order Blockstudio reads them.
 	 * @param string            $prefix  Storage key prefix from the enclosing groups with an ID.
 	 * @param array<int,string> $parents Labels of the enclosing repeaters and groups with an ID.
-	 * @param string            $block   Block name, for the skipped list.
-	 * @param array<int,string> $skipped Fields of unknown types (passed by reference).
+	 * @param bool              $hidden  Whether an enclosing group or tabs field is hidden.
 	 *
-	 * @return array<int, array> Key nodes.
+	 * @return array<string, array{field: array, parents: array<int,string>, hidden: bool}> Definitions by storage key,
+	 *         in the order the keys first appear.
 	 */
-	private static function keys( array $fields, string $prefix, array $parents, string $block, array &$skipped ): array {
-		$nodes = array();
+	private static function effective( array $fields, string $prefix = '', array $parents = array(), bool $hidden = false ): array {
+		$effective = array();
 
 		foreach ( $fields as $field ) {
-			// Hidden fields hold values that editors do not write, such as block field references.
-			if ( ! is_array( $field ) || ! empty( $field['hidden'] ) ) {
+			if ( ! is_array( $field ) ) {
 				continue;
 			}
 
-			$type  = is_string( $field['type'] ?? null ) ? $field['type'] : '';
-			$id    = is_string( $field['id'] ?? null ) || is_int( $field['id'] ?? null ) ? (string) $field['id'] : '';
-			$key   = '' === $prefix ? $id : $prefix . '_' . $id;
-			$label = self::label( $field, $id );
-			$inner = is_array( $field['attributes'] ?? null ) ? $field['attributes'] : array();
+			$type      = is_string( $field['type'] ?? null ) ? $field['type'] : '';
+			$id        = is_string( $field['id'] ?? null ) || is_int( $field['id'] ?? null ) ? (string) $field['id'] : '';
+			$key       = '' === $prefix ? $id : $prefix . '_' . $id;
+			$is_hidden = $hidden || ! empty( $field['hidden'] );
+			$inner     = is_array( $field['attributes'] ?? null ) ? $field['attributes'] : array();
 
 			if ( 'tabs' === $type ) {
 				foreach ( is_array( $field['tabs'] ?? null ) ? $field['tabs'] : array() as $tab ) {
 					$tab_fields = is_array( $tab['attributes'] ?? null ) ? $tab['attributes'] : array();
-					$nodes      = array_merge( $nodes, self::keys( $tab_fields, $prefix, $parents, $block, $skipped ) );
+					$effective  = array_replace( $effective, self::effective( $tab_fields, $prefix, $parents, $is_hidden ) );
 				}
 				continue;
 			}
 
 			if ( 'group' === $type ) {
-				$nodes = '' === $id
-					? array_merge( $nodes, self::keys( $inner, $prefix, $parents, $block, $skipped ) )
-					: array_merge( $nodes, self::keys( $inner, $key, array_merge( $parents, array( $label ) ), $block, $skipped ) );
+				$effective = '' === $id
+					? array_replace( $effective, self::effective( $inner, $prefix, $parents, $is_hidden ) )
+					: array_replace( $effective, self::effective( $inner, $key, array_merge( $parents, array( self::label( $field, $id ) ) ), $is_hidden ) );
 				continue;
 			}
 
@@ -349,8 +359,48 @@ final class Wpml_Config {
 				continue;
 			}
 
+			$effective[ $key ] = array(
+				'field'   => $field,
+				'parents' => $parents,
+				'hidden'  => $is_hidden,
+			);
+		}
+
+		return $effective;
+	}
+
+	/**
+	 * Build the key nodes for resolved field definitions.
+	 *
+	 * Text fields become a key, link fields a key with title and url, repeaters
+	 * a key with one row level matched with "*" (their row fields resolved on
+	 * their own), and value fields nothing. Where the attribute builder stores
+	 * nothing, for a group with an ID nested in another group, the key matches
+	 * no value and WPML ignores it.
+	 *
+	 * @param array<string, array{field: array, parents: array<int,string>, hidden: bool}> $effective Definitions from effective().
+	 * @param string                                                                       $block     Block name, for the skipped list.
+	 * @param array<int,string>                                                            $skipped   Fields of unknown types (passed by reference).
+	 *
+	 * @return array<int, array> Key nodes.
+	 */
+	private static function keys( array $effective, string $block, array &$skipped ): array {
+		$nodes = array();
+
+		foreach ( $effective as $key => $entry ) {
+			// Hidden fields hold values that editors do not write, such as block field references.
+			if ( $entry['hidden'] ) {
+				continue;
+			}
+
+			$field = $entry['field'];
+			$key   = (string) $key;
+			$type  = (string) $field['type'];
+			$label = self::label( $field, (string) $field['id'] );
+			$inner = is_array( $field['attributes'] ?? null ) ? $field['attributes'] : array();
+
 			if ( 'repeater' === $type ) {
-				$rows = self::unique( self::keys( $inner, '', array_merge( $parents, array( $label ) ), $block, $skipped ) );
+				$rows = self::keys( self::effective( $inner, '', array_merge( $entry['parents'], array( $label ) ) ), $block, $skipped );
 
 				if ( array() !== $rows ) {
 					$nodes[] = array(
@@ -366,7 +416,7 @@ final class Wpml_Config {
 				continue;
 			}
 
-			$path = implode( ': ', array_merge( $parents, array( $label ) ) );
+			$path = implode( ': ', array_merge( $entry['parents'], array( $label ) ) );
 
 			if ( in_array( $type, self::TEXT_TYPES, true ) ) {
 				$nodes[] = array(
@@ -395,23 +445,6 @@ final class Wpml_Config {
 		}
 
 		return $nodes;
-	}
-
-	/**
-	 * Keep the first node for each key name.
-	 *
-	 * @param array<int, array> $nodes Key nodes of one level.
-	 *
-	 * @return array<int, array> Key nodes with unique names.
-	 */
-	private static function unique( array $nodes ): array {
-		$unique = array();
-
-		foreach ( $nodes as $node ) {
-			$unique[ $node['name'] ] ??= $node;
-		}
-
-		return array_values( $unique );
 	}
 
 	/**
