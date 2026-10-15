@@ -1,7 +1,7 @@
 <?php if ( 'innerblocks' === $a['root'] ) : ?>
-  <InnerBlocks tag="section" class="editor-links-innerblocks" template='[["blockstudio/component-editor-links"]]' />
+  <InnerBlocks useBlockProps tag="section" class="editor-links-innerblocks" template='[["blockstudio/component-editor-links"]]' />
 <?php elseif ( 'richtext' === $a['root'] ) : ?>
-  <RichText attribute="text" tag="p" class="editor-links-richtext" />
+  <RichText useBlockProps attribute="text" tag="p" class="editor-links-richtext" />
 <?php elseif ( 'anchor' === $a['root'] ) : ?>
   <a useBlockProps href="<?php echo esc_url( home_url( '/?blockstudio-editor-link=root' ) ); ?>" class="editor-links">
     <span data-editor-link="root">Root link</span>

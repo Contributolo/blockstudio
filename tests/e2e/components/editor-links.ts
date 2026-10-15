@@ -50,8 +50,10 @@ const expectSafeClick = async (
     (window as any).wp.data.select('core/editor').getEditedPostContent(),
   );
   await target.evaluate((element) => {
-    (window as any).__editorLinkPrevented = false;
-    element.addEventListener(
+    const anchor = element.closest('a[href]');
+    if (!anchor) throw new Error('Expected a rendered block link');
+    (window as any).__editorLinkPrevented = null;
+    anchor.addEventListener(
       'click',
       (event) => {
         (window as any).__editorLinkPrevented = event.defaultPrevented;
@@ -115,6 +117,10 @@ test('anchor block roots do not navigate', async () => {
 
 test('bare InnerBlocks roots preserve nested block selection', async () => {
   const ids = await insert('innerblocks');
+  await expect(canvas.locator('.editor-links-innerblocks')).toHaveAttribute(
+    'data-block',
+    ids.block,
+  );
   const childId = await canvas
     .locator('.editor-links')
     .getAttribute('data-block');
@@ -143,6 +149,7 @@ test('bare RichText roots remain editable with links', async () => {
   const richtext = canvas.locator(
     '.editor-links-richtext[contenteditable="true"]',
   );
+  await expect(richtext).toHaveAttribute('data-block');
   const link = richtext.locator('a');
   await expect(link).toHaveText('Editable link');
   const url = canvas.url();
@@ -154,6 +161,7 @@ test('bare RichText roots remain editable with links', async () => {
 });
 
 test('keyboard, modifier and middle clicks are canceled and existing wrapper handlers still run', async () => {
+  await insert('props');
   await page.evaluate(() => {
     const wp = (window as any).wp;
     wp.hooks.addFilter(
@@ -165,6 +173,7 @@ test('keyboard, modifier and middle clicks are canceled and existing wrapper han
             ...props,
             wrapperProps: {
               ...props.wrapperProps,
+              'data-editor-link-handlers': 'ready',
               onClickCapture: () => {
                 (window as any).__editorLinkClickHandler = true;
               },
@@ -179,7 +188,10 @@ test('keyboard, modifier and middle clicks are canceled and existing wrapper han
     );
   });
   try {
-    await insert('props');
+    await expect(canvas.locator('.editor-links')).toHaveAttribute(
+      'data-editor-link-handlers',
+      'ready',
+    );
     const link = canvas.locator('[data-editor-link="normal"]').locator('..');
     for (const modifiers of [
       { ctrlKey: true },
