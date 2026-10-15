@@ -194,12 +194,13 @@ add_filter('blockstudio/blocks/components/inner_blocks/frontend/wrap', function(
 
 ### components/rich_text/render
 
-This filter allows you to adjust the output of the `<RichText />` content.
+This filter allows you to adjust the output of the `<RichText />` content. It
+receives the value of the attribute and the block.
 
 ```php title="functions.php"
-add_filter('blockstudio/blocks/components/rich_text/render', function($content, $attribute, $block) {
+add_filter('blockstudio/blocks/components/rich_text/render', function($content, $block) {
   return wp_kses_post($content);
-}, 10, 3);
+}, 10, 2);
 ```
 
 ## Block Tags
