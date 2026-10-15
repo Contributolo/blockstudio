@@ -56,6 +56,7 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 
 = 7.7.2 =
 * New: public `bs_block_fields()` and `bs_block_assets()` helpers expose registered field definitions and block assets (#115)
+* New: public `bs_block_extension_fields()` exposes fields added by matching extensions, including on core and third-party blocks (#121)
 * New: repeaters support `minimized` to collapse existing rows by default while opening newly added rows (#95, #114)
 * New: bundled German and formal German translations work across plugin and Composer installations (#111)
 * Fix: Markdown, YAML, and updater dependencies are isolated from other plugins and themes in ZIP and Composer installations
@@ -71,6 +72,7 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 * Fix: the RichText render filter example uses the correct two arguments (#119)
 * Fix: custom condition examples return values for editor comparisons instead of callbacks (#120)
 * Fix: generated LLM documentation preserves wildcard names and asterisks in code examples
+* Fix: an extension matching several target patterns is applied only once (#121)
 
 = 7.7.1 =
 * Fix: page sync skips post writes, update hooks, timestamps, and revisions when merged content and managed fields are unchanged (#104)

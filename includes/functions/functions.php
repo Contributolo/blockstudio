@@ -175,7 +175,7 @@ if ( ! function_exists( 'bs_block_extension_fields' ) ) {
 	 * core, third-party, and Blockstudio blocks. Their values are stored in the
 	 * block's blockstudio.attributes, next to the values of its own fields.
 	 *
-	 * @since 7.7.3
+	 * @since 7.7.2
 	 *
 	 * @param string $name Block name, for example 'core/paragraph'.
 	 *
