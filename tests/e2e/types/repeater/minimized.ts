@@ -80,7 +80,8 @@ test.describe('repeater minimized', () => {
   test('collapsing expanded exceptions restores the default after reload', async () => {
     await row(0).locator('.blockstudio-repeater__minimize').first().click();
     await row(1).locator('.blockstudio-repeater__minimize').first().click();
-    await saveAndReload(page);
+    await expect(page.locator('.editor-post-publish-button')).toBeDisabled();
+    await page.reload();
     const canvas = await getEditorCanvas(page);
     await canvas.locator('.is-root-container > .wp-block').first().click();
     await openSidebar(page);
