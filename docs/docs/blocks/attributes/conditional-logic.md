@@ -112,17 +112,21 @@ The text attribute will show if (**post ID is 1386** AND **post type is post**) 
 
 ### Custom Conditions
 
-Custom conditions can be added using the `blockstudio/blocks/conditions` filter:
+Custom conditions can be added using the `blockstudio/blocks/conditions` filter.
+The filter runs in PHP when the editor loads and returns one value per condition
+type. Conditions are evaluated in the editor, which compares that value with the
+`value` of the condition using the operator.
 
 ```php title="functions.php"
 add_filter('blockstudio/blocks/conditions', function($conditions) {
-  $conditions['purchasedProduct'] = function($condition) {
-    // Check if user purchased the product
-    return user_has_purchased($condition['value']);
-  };
+  // Check if the current user purchased the product.
+  $conditions['purchasedProduct'] = user_has_purchased(123) ? 'yes' : 'no';
   return $conditions;
 });
 ```
+
+Return a non-empty string for every state. A condition type whose value is empty
+or missing is skipped, so the field would stay visible.
 
 ```json title="block.json"
 {
@@ -137,7 +141,7 @@ add_filter('blockstudio/blocks/conditions', function($conditions) {
             {
               "type": "purchasedProduct",
               "operator": "==",
-              "value": "1"
+              "value": "yes"
             }
           ]
         ]
