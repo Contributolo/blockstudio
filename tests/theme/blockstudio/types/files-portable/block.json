@@ -1,0 +1,41 @@
+{
+  "$schema": "https://blockstudio.dev/schema/block",
+  "name": "blockstudio/type-files-portable",
+  "title": "Native Portable Files",
+  "category": "blockstudio-test-native",
+  "icon": "star-filled",
+  "blockstudio": {
+    "attributes": [
+      {
+        "id": "image",
+        "type": "files",
+        "label": "Portable image",
+        "multiple": false,
+        "max": 1,
+        "returnFormat": "id"
+      },
+      {
+        "id": "shots",
+        "type": "files",
+        "label": "Portable gallery",
+        "multiple": true,
+        "returnFormat": "id"
+      },
+      {
+        "id": "items",
+        "type": "repeater",
+        "attributes": [
+          {
+            "id": "image",
+            "type": "files",
+            "label": "Row image",
+            "allowedTypes": ["image"],
+            "multiple": false,
+            "max": 1,
+            "returnFormat": "id"
+          }
+        ]
+      }
+    ]
+  }
+}

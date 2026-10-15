@@ -6,13 +6,14 @@ import {
 } from '@wordpress/components';
 import { forwardRef, useState } from '@wordpress/element';
 import { closeSmall, file } from '@wordpress/icons';
-import { isArray } from 'lodash-es';
 import { Control } from '@/blocks/components/control';
 import { List } from '@/blocks/components/list/index';
 import { Label } from '@/blocks/components/list/label';
+import { isMediaId, normalizeCardValues } from '@/blocks/utils/card-values';
 import {
   Any,
   BlockstudioBlockAttributes,
+  BlockstudioFieldsChange,
   BlockstudioFieldsListMove,
   BlockstudioFieldsRepeaterAddRemove,
 } from '@/types/types';
@@ -33,6 +34,7 @@ type CardDataObject = {
 };
 
 type CardData = CardDataObject | string | number | null | undefined;
+type CardValues = CardData | CardData[] | false;
 
 const getCardDataObject = (data: CardData): CardDataObject =>
   data && typeof data === 'object' ? data : {};
@@ -67,7 +69,7 @@ export const Card = forwardRef<
   HTMLDivElement,
   {
     attributes: BlockstudioBlockAttributes;
-    change: (val: string[], media: boolean) => void;
+    change: BlockstudioFieldsChange;
     data: CardData;
     id: string;
     inRepeater: boolean;
@@ -78,9 +80,7 @@ export const Card = forwardRef<
     onClick: (name: string) => void;
     onClickDelete?: () => void;
     style?: Record<string, string>;
-    v: {
-      [key: string]: Any;
-    };
+    v: CardValues;
   }
 >(
   (
@@ -118,16 +118,10 @@ export const Card = forwardRef<
       }
 
       if (showDelete) {
-        const filteredIds = isArray(v)
-          ? v.filter(
-              (e) =>
-                e !== dataObject.id &&
-                (media ? true : e?.value !== dataObject.value),
-            )
-          : [];
-        const transformedIds = (
-          filteredIds.length === 0 ? false : filteredIds
-        ) as string[];
+        const filteredIds = normalizeCardValues(v).filter(
+          (_, valueIndex) => valueIndex !== index,
+        );
+        const transformedIds = filteredIds.length === 0 ? false : filteredIds;
         change(transformedIds, !media);
       }
     };
@@ -290,9 +284,9 @@ export const Cards = ({
   v,
 }: {
   attributes: BlockstudioBlockAttributes;
-  change: (val: string[], media: boolean) => void;
+  change: BlockstudioFieldsChange;
   disable: BlockstudioFieldsRepeaterAddRemove;
-  ids: string[];
+  ids: CardValues;
   inRepeater: boolean;
   item: {
     id?: string;
@@ -307,53 +301,57 @@ export const Cards = ({
       >
     | boolean;
   style?: Record<string, string>;
-  v: {
-    [key: string]: Any;
-  };
+  v: CardValues;
 }) => {
-  return v?.length || v ? (
-    <List {...{ style, ids }} onChange={(val) => change(val, !media)}>
-      {({ moveUp, moveDown }) =>
-        (v.length ? v : [v]).map(
-          (itemInner: string | number, index: number) => {
-            const el = (media as Record<string, Any>)?.[itemInner] ?? itemInner;
-            const id = `${v[index]?.value || v[index]}`;
+  const values = normalizeCardValues(v);
 
-            return (
-              <Draggable
-                {...{ index }}
-                key={id}
-                draggableId={id}
-                isDragDisabled={!v?.length}
-              >
-                {(provided, snapshot) => (
-                  <Card
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    {...{
-                      attributes,
-                      change,
-                      inRepeater,
-                      index,
-                      moveDown,
-                      moveUp,
-                      v,
-                    }}
-                    data={el}
-                    id={item.id || item.value || ''}
-                    loaded={media ? el?.mime_type : true}
-                    onClick={(id) => disable(id)}
-                    style={getItemStyle(
-                      snapshot.isDragging,
-                      provided.draggableProps.style || {},
-                    )}
-                  />
-                )}
-              </Draggable>
-            );
-          },
-        )
+  return values.length ? (
+    <List
+      style={style}
+      ids={normalizeCardValues(ids)}
+      onChange={(val) => change(val, !media)}
+    >
+      {({ moveUp, moveDown }) =>
+        values.map((itemInner, index) => {
+          const el = isMediaId(itemInner)
+            ? ((media as Record<string, Any>)?.[itemInner] ?? itemInner)
+            : itemInner;
+          const id = `${getCardDataObject(itemInner).value ?? itemInner}`;
+
+          return (
+            <Draggable
+              {...{ index }}
+              key={id}
+              draggableId={id}
+              isDragDisabled={!Array.isArray(v)}
+            >
+              {(provided, snapshot) => (
+                <Card
+                  ref={provided.innerRef}
+                  {...provided.draggableProps}
+                  {...provided.dragHandleProps}
+                  {...{
+                    attributes,
+                    change,
+                    inRepeater,
+                    index,
+                    moveDown,
+                    moveUp,
+                    v,
+                  }}
+                  data={el}
+                  id={item.id || item.value || ''}
+                  loaded={!media || !isMediaId(itemInner) || !!el?.mime_type}
+                  onClick={(id) => disable(id)}
+                  style={getItemStyle(
+                    snapshot.isDragging,
+                    provided.draggableProps.style || {},
+                  )}
+                />
+              )}
+            </Draggable>
+          );
+        })
       }
     </List>
   ) : null;

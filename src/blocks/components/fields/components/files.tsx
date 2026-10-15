@@ -7,8 +7,12 @@ import { Base } from '@/blocks/components/base';
 import { Cards } from '@/blocks/components/list/cards';
 import { useMedia } from '@/blocks/hooks/use-media';
 import { selectors } from '@/blocks/store/selectors';
+import { isMediaId, normalizeCardValues } from '@/blocks/utils/card-values';
 import { BlockstudioAttribute } from '@/types/block';
-import { BlockstudioBlockAttributes } from '@/types/types';
+import {
+  BlockstudioBlockAttributes,
+  BlockstudioFieldsChange,
+} from '@/types/types';
 import { __ } from '@/utils/__';
 import { css } from '@/utils/css';
 
@@ -26,17 +30,15 @@ export const Files = ({
   ...rest
 }: {
   attributes: BlockstudioBlockAttributes;
-  change: (val: string[] | string, media?: boolean, size?: string) => void;
+  change: BlockstudioFieldsChange;
   config: boolean;
   disable: (id: string) => void;
   inRepeater: boolean;
   item: BlockstudioAttribute;
-  v: string[];
+  v: string | number | (string | number)[] | false | null | undefined;
   repeaterId: string;
 }) => {
-  const mediaIds = (Array.isArray(v) ? v : [v]).filter((id) =>
-    /^[1-9]\d*$/.test(`${id ?? ''}`),
-  );
+  const mediaIds = normalizeCardValues(v).filter(isMediaId).map(Number);
   const shouldResolveMedia = mediaIds.length > 0;
 
   useMedia(mediaIds);
@@ -111,7 +113,7 @@ export const Files = ({
           <MediaUploadCheck>
             <MediaUpload
               {...rest}
-              value={v as unknown as number}
+              value={(Array.isArray(v) ? mediaIds : mediaIds[0]) as number}
               modalClass={` blockstudio-function__media-min-${
                 item?.min || 0
               } blockstudio-function__media-max-${item?.max || 'unlimited'}`}

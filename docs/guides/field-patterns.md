@@ -582,6 +582,16 @@ Control what the files field returns:
 
 Use `"id"` when you need to call `wp_get_attachment_image()` yourself. Use `"url"` for simple background images. Use `"object"` (the default) for everything else.
 
+With `"returnFormat": "id"`, an imported string reference such as `"buckshair-home"`
+is passed through unchanged. The editor shows a fallback card without a thumbnail,
+including in repeater rows. Opening or saving the page does not convert a scalar
+reference into an array. Mixed lists of attachment IDs and string references also
+work; only positive attachment IDs are looked up in the media library.
+
+Blockstudio does not resolve custom string references to attachments. Resolve them
+in your own render filter or template when using portable names across sites.
+Choosing a replacement in the media library stores its attachment ID as usual.
+
 ## Dynamic Options
 
 ### Populate from posts

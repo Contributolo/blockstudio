@@ -4,7 +4,7 @@ import { ConditionalWrapper } from '@/components/conditional-wrapper';
 import { BlockstudioFieldsListMove } from '@/types/types';
 import { css } from '@/utils/css';
 
-export const List = ({
+export const List = <T,>({
   children,
   context = true,
   id = 'droppable',
@@ -24,8 +24,8 @@ export const List = ({
       }) => ReactNode);
   context?: boolean;
   id?: string;
-  ids?: string[];
-  onChange?: (ids: string[], droppableId: string) => void;
+  ids?: T[];
+  onChange?: (ids: T[], droppableId: string) => void;
   repeaters?: { [key: string]: string[] };
   style?: Record<string, string>;
 }) => {
@@ -66,7 +66,7 @@ export const List = ({
       data,
       result.source.index,
       result.destination.index,
-    ) as string[];
+    ) as T[];
 
     onChange?.(newItems, droppableId || '');
   };
@@ -87,7 +87,7 @@ export const List = ({
 
     const data = droppableId ? repeaterData(droppableId) : ids || [];
     const newItems = reorder(data, index, index + offset);
-    onChange?.(newItems as string[], droppableId);
+    onChange?.(newItems as T[], droppableId);
 
     const focusIndex = index + offset;
     (

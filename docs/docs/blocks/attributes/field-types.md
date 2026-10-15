@@ -42,6 +42,11 @@ All fields share these common properties:
 | `switch`      | boolean | Display a toggle that can disable the field. Defaults to `false`. |
 | `conditions`  | array   | Conditional logic rules                                           |
 
+Files fields with `"returnFormat": "id"` preserve imported string references,
+including single values inside repeaters. Unresolved names show fallback cards
+without thumbnails; Blockstudio does not resolve them to attachment IDs. See
+[portable media references](/guides/field-patterns#return-format-variations) for details.
+
 <!-- GENERATED_FIELD_TYPES_START -->
 
 ## attributes
