@@ -11,6 +11,12 @@ use PHPUnit\Framework\TestCase;
 
 class GithubUpdaterTest extends TestCase {
 
+	public function test_update_uri_excludes_wordpress_org_without_disabling_the_github_checker(): void {
+		$data = get_plugin_data( BLOCKSTUDIO_FILE, false, false );
+		$this->assertSame( 'https://blockstudio.dev', $data['UpdateURI'] );
+		$this->assertSame( 'blockstudio.dev', wp_parse_url( $data['UpdateURI'], PHP_URL_HOST ) );
+	}
+
 	public function test_private_factory_builds_github_checker_and_enables_release_assets(): void {
 		$checker = PucFactory::buildUpdateChecker( 'https://github.com/inline0/blockstudio/', BLOCKSTUDIO_FILE, 'blockstudio-isolation-test', 0 );
 		try {

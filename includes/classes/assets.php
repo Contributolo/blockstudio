@@ -1228,6 +1228,61 @@ class Assets {
 	}
 
 	/**
+	 * Inspect the discovered assets of a registered Blockstudio block.
+	 *
+	 * @since 7.7.2
+	 *
+	 * @param string $name Registered block name.
+	 *
+	 * @return array<int, array{type:string,handle:string,url:?string,inline:bool,scope:array<int,string>,html:string}> Assets.
+	 */
+	public static function for_block( string $name ): array {
+		$type = \WP_Block_Type_Registry::get_instance()->get_registered( $name );
+		if ( ! $type || ! is_array( $type->blockstudio ?? null ) ) {
+			return array();
+		}
+
+		$block  = Block_Registry::instance()->get_block_data( $name );
+		$assets = array();
+		foreach ( $block['assets'] ?? array() as $key => $asset ) {
+			if ( ! is_string( $key ) || ! is_array( $asset ) || ! is_string( $asset['path'] ?? null ) ) {
+				continue;
+			}
+			if ( str_starts_with( $key, 'admin' ) || str_starts_with( $key, 'block-editor' ) ) {
+				continue;
+			}
+			$path = self::get_path( $asset['path'] );
+			if ( ! is_file( $path ) || 0 === filesize( $path ) || str_ends_with( $path, '.scss' ) ) {
+				continue;
+			}
+
+			$inline = 'inline' === ( $asset['type'] ?? '' );
+			$html   = $inline ? self::render_inline( $key, $asset, $block, true ) : self::render_tag( $key, $asset, $block );
+			if ( ! is_string( $html ) || '' === $html ) {
+				continue;
+			}
+
+			$scope = array( 'frontend', 'editor' );
+			if ( ! empty( $asset['editor'] ) ) {
+				$scope = array( 'editor' );
+			} elseif ( preg_match( '/[-.]view\.(?:css|scss|js)$/', $key ) ) {
+				$scope = array( 'frontend' );
+			}
+
+			$assets[] = array(
+				'type'   => self::is_css( $key ) ? 'style' : 'module',
+				'handle' => self::get_id( $key, $block ),
+				'url'    => $inline ? null : Files::get_relative_url( $path ) . '?ver=' . filemtime( $asset['path'] ),
+				'inline' => $inline,
+				'scope'  => $scope,
+				'html'   => $html,
+			);
+		}
+
+		return $assets;
+	}
+
+	/**
 	 * Get all assets for a preview window in Gutenberg.
 	 *
 	 * @param array $block  The block data.

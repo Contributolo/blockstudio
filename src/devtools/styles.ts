@@ -1,3 +1,4 @@
+import { __ } from '@/utils/__';
 import type { Bounds } from './store';
 import { shortenPath } from './copy';
 
@@ -242,7 +243,8 @@ const hideLabel = (): void => {
 
 const showCopiedFeedback = (path: string): void => {
   if (panel) {
-    panel.textContent = `Copied: ${shortenPath(path)}`;
+    /* translators: %s: shortened path of the copied file. */
+    panel.textContent = __('Copied: %s').replace('%s', shortenPath(path));
   }
 };
 

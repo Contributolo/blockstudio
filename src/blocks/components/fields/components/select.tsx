@@ -414,7 +414,9 @@ export const Select = ({
             change(resetDefault(), true);
           }}
         >
-          {__((item?.allowReset as unknown as string) || 'Reset to default')}
+          {typeof item.allowReset === 'string'
+            ? __(item.allowReset, true)
+            : __('Reset to default')}
         </Button>
       )}
     </div>

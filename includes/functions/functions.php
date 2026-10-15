@@ -8,6 +8,7 @@
 use Blockstudio\Db;
 use Blockstudio\Render;
 use Blockstudio\Build;
+use Blockstudio\Assets;
 use Blockstudio\Pages;
 use Blockstudio\Site_Templates;
 use Blockstudio\Field_Type_Registry;
@@ -134,6 +135,57 @@ if ( ! function_exists( 'bs_render_block' ) ) {
 	function bs_render_block( $value ) {
 		// phpcs:enable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 		return Render::block( $value );
+	}
+}
+
+if ( ! function_exists( 'bs_block_fields' ) ) {
+	/**
+	 * Get the resolved field definitions of a registered Blockstudio block.
+	 *
+	 * Call after block registration. Nested groups, tabs, and repeaters retain
+	 * their structure, including filters and custom field expansion.
+	 *
+	 * @since 7.7.2
+	 *
+	 * @param string $name Registered block name, for example 'theme/card'.
+	 *
+	 * @return array|null Field definitions, or null for unknown and non-Blockstudio blocks.
+	 *
+	 * @example $fields = bs_block_fields( 'theme/card' );
+	 *
+	 * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound -- Public API function.
+	 */
+	function bs_block_fields( string $name ): ?array {
+		// phpcs:enable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
+		$block = WP_Block_Type_Registry::get_instance()->get_registered( $name );
+		if ( ! $block || ! is_array( $block->blockstudio ?? null ) ) {
+			return null;
+		}
+
+		return $block->blockstudio['attributes'] ?? array();
+	}
+}
+
+if ( ! function_exists( 'bs_block_assets' ) ) {
+	/**
+	 * Inspect a registered block's discovered CSS and JavaScript assets.
+	 *
+	 * Does not render the block, enqueue assets, or compile files. Each entry
+	 * includes ready-to-use HTML from the normal asset renderer.
+	 *
+	 * @since 7.7.2
+	 *
+	 * @param string $name Registered Blockstudio block name.
+	 *
+	 * @return array<int, array{type:string,handle:string,url:?string,inline:bool,scope:array<int,string>,html:string}> Assets.
+	 *
+	 * @example $assets = bs_block_assets( 'theme/card' );
+	 *
+	 * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound -- Public API function.
+	 */
+	function bs_block_assets( string $name ): array {
+		// phpcs:enable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
+		return Assets::for_block( $name );
 	}
 }
 

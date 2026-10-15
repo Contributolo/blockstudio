@@ -104,6 +104,34 @@ render several independent documents in one request should call
 `Blockstudio\Batch_Render::reset()` between them; `Canvas::documents()` does
 this automatically.
 
+## Inspecting Blocks
+
+Use `bs_block_fields()` after block registration (on `init` or later) to get
+the resolved field definitions without reading internal registries:
+
+```php
+$fields = bs_block_fields('theme/card');
+
+if ($fields === null) {
+  // Unknown block, or not a Blockstudio block.
+}
+```
+
+The return value is the registered field-definition array, including attribute
+filters, expanded custom fields, overrides, and nested groups, tabs, and
+repeaters. A Blockstudio block with no fields returns `[]`. The result is a
+copy: changing it does not change the registered block.
+
+These are definitions, not saved values or an automatic content validator.
+When validating saved block markup, read values from
+`attrs.blockstudio.attributes` and walk the definitions according to each
+field's structure and type. WordPress-owned attributes remain separate.
+
+Use [`bs_block_assets()`](/docs/blocks/assets#inspecting-a-blocks-assets) to
+inspect the block's discovered CSS and JavaScript. For a complete preview
+document, including nested blocks and shared runtime dependencies, use
+`Render::document()` as described above.
+
 ## PHP Functions
 
 ### Without Data

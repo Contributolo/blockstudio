@@ -604,6 +604,7 @@ Renders a set of fields that can be repeated.
 |----------|------|-------------|
 | `min` | `number` | Minimum amount of rows. |
 | `max` | `number` | Maximum amount of rows. |
+| `minimized` | `boolean` | Collapse the existing rows when the editor opens. Rows added in the editor start expanded. |
 | `textButton` | `string` | Text for the add button. |
 | `textMinimized` | `string \| object` | Text that will be displayed when rows are minimized. |
 | `textRemove` | `string \| boolean` | Text to display in alert when removing repeater row. |

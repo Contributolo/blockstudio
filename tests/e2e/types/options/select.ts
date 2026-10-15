@@ -46,6 +46,20 @@ testType('select', false, () => {
       },
     })),
     {
+      description: 'boolean reset option has a visible default label',
+      testFunction: async (page: Page, canvas: Frame) => {
+        await canvas.click('[data-type^="blockstudio/type-select"]');
+        await openSidebar(page);
+        const input = page.locator('.blockstudio-fields .blockstudio-fields__field--select .components-select-control__input').first();
+        await input.selectOption('2');
+        const reset = page.getByRole('button', { name: 'Reset to default', exact: true });
+        await expect(reset).toBeVisible();
+        await reset.click();
+        await expect(input).toHaveValue('');
+        await expect(reset).toBeHidden();
+      },
+    },
+    {
       description: 'reset select',
       testFunction: async (page: Page, canvas: Frame) => {
         await canvas.click('[data-type^="blockstudio/type-select"]');

@@ -644,6 +644,10 @@ export interface BlockstudioAttribute {
    */
   rows?: number;
   /**
+   * Collapse the existing rows when the editor opens. Rows added in the editor start expanded.
+   */
+  minimized?: boolean;
+  /**
    * Text that will be displayed when rows are minimized.
    */
   textMinimized?: FluffyTextMinimized | string;
@@ -999,6 +1003,10 @@ export interface AttributeAttribute {
    * Accepts all other field types besides another tabs.
    */
   attributes?: Attribute[];
+  /**
+   * Collapse the existing rows when the editor opens. Rows added in the editor start expanded.
+   */
+  minimized?: boolean;
   /**
    * Text that will be displayed when rows are minimized.
    */
@@ -3660,6 +3668,7 @@ const typeMap: any = {
       { json: 'stylisedUi', js: 'stylisedUi', typ: u(undefined, true) },
       { json: 'tabs', js: 'tabs', typ: u(undefined, a(r('FluffyTab'))) },
       { json: 'rows', js: 'rows', typ: u(undefined, 3.14) },
+      { json: 'minimized', js: 'minimized', typ: u(undefined, true) },
       {
         json: 'textMinimized',
         js: 'textMinimized',
@@ -3835,6 +3844,7 @@ const typeMap: any = {
         js: 'attributes',
         typ: u(undefined, a(r('Attribute'))),
       },
+      { json: 'minimized', js: 'minimized', typ: u(undefined, true) },
       {
         json: 'textMinimized',
         js: 'textMinimized',

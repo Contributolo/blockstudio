@@ -55,7 +55,15 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 == Changelog ==
 
 = 7.7.2 =
+* New: public `bs_block_fields()` and `bs_block_assets()` helpers expose registered field definitions and block assets (#115)
+* New: repeaters support `minimized` to collapse existing rows by default while opening newly added rows (#95, #114)
+* New: bundled German and formal German translations work across plugin and Composer installations (#111)
 * Fix: Markdown, YAML, and updater dependencies are isolated from other plugins and themes in ZIP and Composer installations
+* Fix: default field-control labels can be extracted and translated (#110)
+* Fix: select reset buttons show a default label for `allowReset: true` and preserve custom labels (#110)
+* Fix: repeater removal confirmations use the default question for `textRemove: true` (#110)
+* Fix: the Update URI header prevents unrelated WordPress.org plugins from being offered as Blockstudio updates (#113)
+* Fix: repeater row preferences preserve other rows and tolerate unavailable or malformed browser storage
 
 = 7.7.1 =
 * Fix: page sync skips post writes, update hooks, timestamps, and revisions when merged content and managed fields are unchanged (#104)

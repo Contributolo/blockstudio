@@ -1,0 +1,39 @@
+{
+  "$schema": "https://blockstudio.dev/schema/block",
+  "name": "blockstudio/type-repeater-minimized",
+  "title": "Native Repeater Minimized",
+  "category": "blockstudio-test-native",
+  "icon": "star-filled",
+  "description": "Tests a repeater whose existing rows start collapsed.",
+  "keywords": ["native", "repeater", "minimized"],
+  "blockstudio": {
+    "conditions": [
+      [
+        {
+          "type": "postType",
+          "operator": "==",
+          "value": "post"
+        }
+      ]
+    ],
+    "attributes": [
+      {
+        "id": "items",
+        "type": "repeater",
+        "label": "Items",
+        "minimized": true,
+        "textButton": "Add item",
+        "textRemove": true,
+        "textMinimized": { "id": "title", "prefix": "Collapsed: " },
+        "default": [{ "title": "First" }, { "title": "Second" }],
+        "attributes": [
+          {
+            "id": "title",
+            "type": "text",
+            "label": "Title"
+          }
+        ]
+      }
+    ]
+  }
+}

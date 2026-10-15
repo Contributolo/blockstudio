@@ -56,6 +56,14 @@ file: docs/docs/dev/composer.md
 purpose: Install Blockstudio using Composer.
 hooks: blockstudio/url
 
+## Docs / Start / Setup
+
+### Translations
+route: /docs/general/translations
+file: docs/docs/general/translations.md
+purpose: Use Blockstudio in your language and help translate it.
+php: Translations::script_path()
+
 ## Docs / Blocks / Block Definition
 
 ### Schema
@@ -89,6 +97,9 @@ php: $a, $b, $c, Blade_Renderer::available(), Blade_Renderer::render(), Blockstu
 route: /docs/blocks/assets
 file: docs/docs/blocks/assets/index.md
 purpose: Automatically enqueue and process CSS, SCSS, and JavaScript files for your blocks.
+settings: editor
+hooks: blockstudio/assets/disable
+php: Render::document(), bs_block_assets(), bs_block_fields()
 
 ### Registering Assets
 route: /docs/blocks/assets/registering
@@ -289,7 +300,7 @@ file: docs/docs/blocks/rendering.md
 purpose: Render Blockstudio blocks programmatically via PHP functions or HTML tags.
 settings: assets, blockTags, content, tailwind, ui
 hooks: blockstudio/block_tags/allow, blockstudio/block_tags/builders, blockstudio/block_tags/deny, blockstudio/block_tags/prefixes, blockstudio/block_tags/render, blockstudio/block_tags/renderers, blockstudio/block_tags/tag_aliases, blockstudio/parser/element_mapping, blockstudio/parser/renderers, blockstudio/settings/block_tags/enabled
-php: $a, Batch_Render::reset(), Block_Tags::parse_inner_blocks(), Blockstudio\Batch_Render, Blockstudio\Block_Tags, Blockstudio\Render, Canvas::documents(), Render::composition(), Render::content(), Render::document(), Render::document_from_html(), Render::normalize(), bs_block(), bs_render_block()
+php: $a, Batch_Render::reset(), Block_Tags::parse_inner_blocks(), Blockstudio\Batch_Render, Blockstudio\Block_Tags, Blockstudio\Render, Canvas::documents(), Render::composition(), Render::content(), Render::document(), Render::document_from_html(), Render::normalize(), bs_block(), bs_block_assets(), bs_block_fields(), bs_render_block()
 
 ### Components
 route: /docs/blocks/components

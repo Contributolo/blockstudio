@@ -147,6 +147,7 @@ section markers in Markdown files.
 | `npm run catalog:blocks` | Run catalog block test |
 | `composer cs` | Check PHPCS |
 | `composer cs:fix` | Auto-fix PHPCS issues |
+| `npm run i18n` | Update `languages/` after changing translatable strings |
 
 ### Docs Commands
 

@@ -176,10 +176,7 @@ export const Link = ({
       )}
       <div>
         <Button variant="secondary" onClick={() => setOpen(true)}>
-          {__(
-            item?.textButton || 'Select Link',
-            item?.textButton as unknown as boolean,
-          )}
+          {item?.textButton ? __(item.textButton, true) : __('Select Link')}
         </Button>
       </div>
       {open && (

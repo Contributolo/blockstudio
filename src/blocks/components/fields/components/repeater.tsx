@@ -13,6 +13,10 @@ import { result } from 'lodash-es';
 import { Base } from '@/blocks/components/base';
 import { List } from '@/blocks/components/list';
 import { isAllowedToRender } from '@/blocks/utils/is-allowed-to-render';
+import {
+  readRepeaterState,
+  writeRepeaterState,
+} from '@/blocks/utils/repeater-state';
 import { BlockstudioAttribute } from '@/types/block';
 import {
   Any,
@@ -65,6 +69,7 @@ const DragElement = ({
   moveDown,
   moveUp,
   remove,
+  startMinimized,
   transformed,
 }: {
   attributes: BlockstudioBlockAttributes;
@@ -81,6 +86,7 @@ const DragElement = ({
   moveDown?: BlockstudioFieldsListMove;
   moveUp?: BlockstudioFieldsListMove;
   remove: BlockstudioFieldsRepeaterAddRemove;
+  startMinimized: boolean;
   transformed: BlockstudioBlock['blockstudio'];
 }) => {
   let textMinimized = __('Repeater element') as string;
@@ -118,12 +124,19 @@ const DragElement = ({
     }${item?.textMinimized?.suffix || ''}`;
   }
 
-  let storage = localStorage.getItem('blockstudioRepeater')
-    ? JSON.parse(localStorage.getItem('blockstudioRepeater') || '')
-    : [];
+  // The storage lists the rows that differ from the default of their
+  // repeater: minimized rows, or expanded rows when the repeater sets minimized.
+  const storageKey = item?.minimized
+    ? 'blockstudioRepeaterExpanded'
+    : 'blockstudioRepeater';
   const id = `${postId}-${block.name}-${getId(index)}`;
   const [isHover, setIsHover] = useState(false);
-  const [isMinimized, setIsMinimized] = useState(!!storage.includes(id));
+  const [isMinimized, setIsMinimized] = useState(() => {
+    const storage = readRepeaterState(storageKey);
+    return item?.minimized
+      ? startMinimized && !storage.includes(id)
+      : storage.includes(id);
+  });
 
   const repeaterId = draggableId
     .replaceAll('[', '')
@@ -319,16 +332,9 @@ const DragElement = ({
                 icon: chevronDown,
                 className: 'blockstudio-repeater__minimize',
                 onClick: () => {
-                  if (storage.includes(id)) {
-                    storage = storage.filter((item: string) => item !== id);
-                  } else {
-                    storage.push(id);
-                  }
-                  localStorage.setItem(
-                    'blockstudioRepeater',
-                    JSON.stringify(storage),
-                  );
-                  setIsMinimized(!isMinimized);
+                  const next = !isMinimized;
+                  writeRepeaterState(storageKey, id, next, !!item?.minimized);
+                  setIsMinimized(next);
                 },
                 reverse: isMinimized,
                 condition: true,
@@ -352,10 +358,9 @@ const DragElement = ({
 
                   if (
                     window.confirm(
-                      __(
-                        item?.textRemove || 'Do you want to delete this row?',
-                        item?.textRemove,
-                      ),
+                      typeof item?.textRemove === 'string' && item.textRemove
+                        ? __(item.textRemove, true)
+                        : __('Do you want to delete this row?'),
                     )
                   ) {
                     remove(getId(index));
@@ -473,6 +478,12 @@ export const Repeater = ({
   v: string[];
 }) => {
   const [groups, setGroups] = useState<Any[]>([]);
+  // With minimized, the rows that exist when the field mounts start
+  // collapsed; rows added afterwards start expanded so they can be filled in.
+  const initialRows = useRef(v?.length ?? 0);
+  if ((v?.length ?? 0) < initialRows.current) {
+    initialRows.current = v?.length ?? 0;
+  }
   const innerId = id === '' ? item.id : id;
   const listId = id || item.id || '';
 
@@ -553,6 +564,7 @@ export const Repeater = ({
                     moveDown={moveDown}
                     moveUp={moveUp}
                     remove={remove}
+                    startMinimized={index < initialRows.current}
                     transformed={transformed as Any}
                     key={draggableId}
                   />
@@ -569,10 +581,7 @@ export const Repeater = ({
           })}
           disabled={!!(item?.max && item.max <= v?.length)}
         >
-          {__(
-            item?.textButton || 'Add row',
-            item?.textButton as unknown as boolean,
-          )}
+          {item?.textButton ? __(item.textButton, true) : __('Add row')}
         </Button>
       </Base>
     </RepeaterRegistryContext.Provider>

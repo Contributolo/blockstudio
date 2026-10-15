@@ -54,10 +54,9 @@ export const Files = ({
         }
         onClick={open}
       >
-        {__(
-          item?.textMediaButton || 'Open Media Library',
-          item?.textMediaButton as unknown as boolean,
-        )}
+        {item?.textMediaButton
+          ? __(item.textMediaButton, true)
+          : __('Open Media Library')}
       </Button>
     );
   };

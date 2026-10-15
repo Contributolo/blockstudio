@@ -27,6 +27,7 @@
           }
         ],
         "default": "three-1",
+        "allowReset": true,
         "returnFormat": "both",
         "allowNull": "Select an option"
       },

@@ -479,42 +479,14 @@ When a condition inside a repeater needs to check a field outside the repeater, 
 
 Without `"context": "main"`, the condition would look for a `showDescriptions` field inside the repeater row. With it, the condition checks the root-level toggle.
 
-### Repeater with tabs inside
+### Tabs inside repeaters
 
-Tabs work inside repeaters to organize complex row content:
+Tabs are not available inside repeaters: a `tabs` field inside a repeater row renders an empty row. Keep the fields of a row flat instead. For long rows, a custom row label (`textMinimized`) keeps collapsed rows readable, and conditions inside the row can hide fields that only some rows need, as shown in the patterns above.
 
-```json
-{
-  "id": "slides",
-  "type": "repeater",
-  "label": "Slides",
-  "textMinimized": { "id": "title", "fallback": "Slide" },
-  "attributes": [
-    {
-      "type": "tabs",
-      "attributes": [
-        {
-          "type": "group",
-          "title": "Content",
-          "attributes": [
-            { "id": "title", "type": "text", "label": "Title" },
-            { "id": "body", "type": "textarea", "label": "Body" }
-          ]
-        },
-        {
-          "type": "group",
-          "title": "Media",
-          "attributes": [
-            { "id": "image", "type": "files", "label": "Image", "multiple": false }
-          ]
-        }
-      ]
-    }
-  ]
-}
-```
-
-Each slide row has its own tabbed interface with Content and Media tabs.
+Set `"minimized": true` on a repeater to start existing rows collapsed. Newly
+added rows open immediately. Expanded exceptions are remembered in this browser
+across editor reloads; this is an editing preference, not saved post content.
+Repeaters without `minimized` keep their existing expanded-by-default behavior.
 
 ## Media Patterns
 
