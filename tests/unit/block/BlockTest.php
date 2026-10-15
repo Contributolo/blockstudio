@@ -425,4 +425,120 @@ class BlockTest extends TestCase {
 		$this->assertNull( $warning );
 		$this->assertSame( array( 'Curated', 'Featured' ), $attributes['caseStudies'] );
 	}
+
+	public static function single_multiple_option_value_provider(): array {
+		$languages = array(
+			array(
+				'value' => 'de',
+				'label' => 'Deutsch',
+			),
+			array(
+				'value' => 'en',
+				'label' => 'English',
+			),
+		);
+		$numbers   = array(
+			array(
+				'value' => 1,
+				'label' => 'One',
+			),
+			array(
+				'value' => 2,
+				'label' => 'Two',
+			),
+		);
+
+		return array(
+			'select string'               => array( 'select', $languages, 'value', 'de', array( 'de' ) ),
+			'select string as both'       => array( 'select', $languages, 'both', 'de', array( $languages[0] ) ),
+			'select number'               => array( 'select', $numbers, 'label', 2, array( 'Two' ) ),
+			'select numeric string'       => array( 'select', $numbers, 'value', '2', array( 2 ) ),
+			'select object'               => array( 'select', $languages, 'label', $languages[1], array( 'English' ) ),
+			'select object, plain option' => array(
+				'select',
+				array( 'red', 'green' ),
+				'value',
+				array(
+					'value' => 'red',
+					'label' => 'red',
+				),
+				array( 'red' ),
+			),
+			'select list'                 => array( 'select', $languages, 'value', $languages, array( 'de', 'en' ) ),
+			'select list of values'       => array( 'select', $languages, 'label', array( 'en', 'de' ), array( 'English', 'Deutsch' ) ),
+			'select unknown string'       => array( 'select', $languages, 'value', 'fr', false ),
+			'select empty string'         => array( 'select', $languages, 'value', '', false ),
+			'select false'                => array( 'select', $languages, 'value', false, false ),
+			'select empty list'           => array( 'select', $languages, 'value', array(), false ),
+			'checkbox string'             => array( 'checkbox', $languages, 'value', 'en', array( 'en' ) ),
+			'checkbox number'             => array( 'checkbox', $numbers, 'value', 1, array( 1 ) ),
+			'checkbox object'             => array( 'checkbox', $languages, 'value', $languages[1], array( 'en' ) ),
+			'checkbox list'               => array( 'checkbox', $languages, 'value', array_reverse( $languages ), array( 'de', 'en' ) ),
+			'fetch select string'         => array(
+				'select',
+				array(),
+				'value',
+				'de',
+				array(
+					array(
+						'value' => 'de',
+						'label' => 'de',
+					),
+				),
+				array( 'type' => 'fetch' ),
+			),
+			'fetch select object'         => array( 'select', array(), 'value', $languages[0], array( $languages[0] ), array( 'type' => 'fetch' ) ),
+			'fetch select list'           => array( 'select', array(), 'value', $languages, $languages, array( 'type' => 'fetch' ) ),
+		);
+	}
+
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'single_multiple_option_value_provider' )]
+	public function test_transform_attributes_reads_single_multiple_option_value_as_list(
+		string $field,
+		array $options,
+		string $return_format,
+		mixed $stored,
+		mixed $expected,
+		array $populate = array()
+	): void {
+		$attributes      = array( 'language' => $stored );
+		$attribute_names = array();
+		$attribute_data  = array();
+		$errors          = array();
+
+		set_error_handler(
+			static function ( int $severity, string $message ) use ( &$errors ): bool {
+				$errors[] = $message;
+				return true;
+			},
+			E_WARNING | E_NOTICE
+		);
+
+		try {
+			Block::transform_attributes(
+				$attributes,
+				$attribute_names,
+				array(),
+				'test/multiple-option',
+				array( 'name' => 'test/multiple-option' ),
+				false,
+				array(
+					'language' => array(
+						'type'         => 'array',
+						'field'        => $field,
+						'multiple'     => 'select' === $field,
+						'returnFormat' => $return_format,
+						'options'      => $options,
+						'populate'     => $populate,
+					),
+				),
+				$attribute_data
+			);
+		} finally {
+			restore_error_handler();
+		}
+
+		$this->assertSame( array(), $errors );
+		$this->assertSame( $expected, $attributes['language'] );
+	}
 }

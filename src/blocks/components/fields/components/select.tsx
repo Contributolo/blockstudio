@@ -8,6 +8,7 @@ import {
 import { useRef, useEffect, useState, useMemo } from '@wordpress/element';
 import { debounce, get, isArray } from 'lodash-es';
 import { Cards } from '@/blocks/components/list/cards';
+import { normalizeOptionValues } from '@/blocks/utils/option-values';
 import { parseTemplate } from '@/blocks/utils/parse-template';
 import { BlockstudioAttribute } from '@/types/block';
 import {
@@ -71,7 +72,7 @@ const AdvancedSelect = ({
   options: BlockstudioFieldsOptions[];
   value: Any;
 }) => {
-  value = multiple && value?.value ? [value] : value;
+  value = multiple ? normalizeOptionValues(value, options) : value;
 
   const hasDynamicArgs = hasTemplateStrings(item?.populate);
   const isFetch =

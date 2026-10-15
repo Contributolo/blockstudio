@@ -1705,6 +1705,14 @@ class Block {
 		string $return_format,
 		array $populate
 	): void {
+		$is_multiple_option =
+			'checkbox' === $type ||
+			( 'select' === $type && ( $att['multiple'] ?? false ) );
+
+		if ( $is_multiple_option ) {
+			$value = self::multiple_option_values( $value );
+		}
+
 		if (
 			'select' === $type &&
 			isset( $populate['type'] ) &&
@@ -1714,10 +1722,6 @@ class Block {
 
 			return;
 		}
-
-		$is_multiple_option =
-			'checkbox' === $type ||
-			( 'select' === $type && ( $att['multiple'] ?? false ) );
 
 		if ( ( 'select' === $type || 'radio' === $type ) && ! $is_multiple_option ) {
 			$attributes[ $key ] = self::get_option_value(
@@ -1755,6 +1759,35 @@ class Block {
 
 			$attributes[ $key ] = $new_values;
 		}
+	}
+
+	/**
+	 * Read a multiple select or checkbox value as a list of selections.
+	 *
+	 * The editor stores a list of options. Content saved before `multiple` was
+	 * enabled holds one option, and content written outside the editor often
+	 * holds a plain value. Both count as a single selection. Labels are
+	 * resolved from the field options later, so a plain value is its own label.
+	 *
+	 * @param mixed $value The stored value.
+	 *
+	 * @return array The selections.
+	 */
+	private static function multiple_option_values( $value ): array {
+		if ( is_array( $value ) ) {
+			return array_key_exists( 'value', $value ) ? array( $value ) : $value;
+		}
+
+		if ( '' === $value || ! ( is_string( $value ) || is_int( $value ) || is_float( $value ) ) ) {
+			return array();
+		}
+
+		return array(
+			array(
+				'value' => $value,
+				'label' => $value,
+			),
+		);
 	}
 
 	/**

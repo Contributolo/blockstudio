@@ -41,6 +41,7 @@ import { createBlocks } from '@/blocks/utils/create-blocks';
 import { dispatch } from '@/blocks/utils/dispatch';
 import { getDefaults } from '@/blocks/utils/get-defaults';
 import { isAllowedToRender } from '@/blocks/utils/is-allowed-to-render';
+import { normalizeOptionValues } from '@/blocks/utils/option-values';
 import { BlockstudioAttribute } from '@/types/block';
 import {
   Any,
@@ -167,6 +168,17 @@ export const Fields = ({
           ? Number(value)
           : value;
 
+      const toggleOption = () => {
+        const selected = normalizeOptionValues(v, optionSetter().options);
+
+        return selected.map((e) => e.value).includes(value)
+          ? selected.filter((e) => e.value !== value)
+          : [
+              ...selected,
+              { value: optionValue, label: finder()?.label || value },
+            ];
+      };
+
       return (item.type === 'select' && !item?.multiple) ||
         item.type === 'radio'
         ? {
@@ -176,16 +188,7 @@ export const Fields = ({
         : item.type === 'checkbox' ||
             (item.type === 'select' && item?.multiple === true)
           ? value
-            ? v?.length &&
-              v.map((e: { value: string | number }) => e.value).includes(value)
-              ? v.filter((e: { value: string | number }) => e.value !== value)
-              : [
-                  ...(v?.length ? v : []),
-                  {
-                    value: optionValue,
-                    label: finder()?.label || value,
-                  },
-                ]
+            ? toggleOption()
             : []
           : // @ts-ignore
             item.type === 'token'
