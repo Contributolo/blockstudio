@@ -107,12 +107,12 @@ The above code would change the icon of all blocks starting with **marketing**.
 ### conditions
 
 This filter allows you to add custom conditions which can be used within blocks.
+Each condition type maps to a value that the editor compares with the `value` of
+the condition. See [Custom Conditions](/docs/blocks/attributes/conditional-logic#custom-conditions).
 
 ```php title="functions.php"
 add_filter('blockstudio/blocks/conditions', function($conditions) {
-  $conditions['myCustomCondition'] = function($condition) {
-    return $condition['value'] === 'expected';
-  };
+  $conditions['myCustomCondition'] = 'expected';
   return $conditions;
 });
 ```
