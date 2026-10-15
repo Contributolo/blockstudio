@@ -127,6 +127,25 @@ When validating saved block markup, read values from
 `attrs.blockstudio.attributes` and walk the definitions according to each
 field's structure and type. WordPress-owned attributes remain separate.
 
+Fields added by [extensions](/docs/extensions) are not part of
+`bs_block_fields()`. Use `bs_block_extension_fields()` to get them. It matches
+extensions by block name, so it also works for core and third-party blocks:
+
+```php
+$fields = array_merge(
+  bs_block_fields('core/paragraph') ?? [],
+  bs_block_extension_fields('core/paragraph')
+);
+```
+
+The return value lists the field definitions of every matching extension, in
+the order the extensions are registered, with the same structure as
+`bs_block_fields()`. A block that no extension matches returns `[]`. Extension
+values are saved in the same `attrs.blockstudio.attributes` object as the
+block's own field values, so all ids share one namespace. If two extensions
+define the same id, both definitions are returned and edit the same value; on
+render, the definition of the extension registered later applies.
+
 Use [`bs_block_assets()`](/docs/blocks/assets#inspecting-a-blocks-assets) to
 inspect the block's discovered CSS and JavaScript. For a complete preview
 document, including nested blocks and shared runtime dependencies, use

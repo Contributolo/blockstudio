@@ -226,3 +226,10 @@ When using arrays, the `set` property will be applied to every item in the array
 ### Attributes Field
 
 When using the `attributes` field, there is no `set` property needed, as the field automatically maps the values to the attribute name and value.
+
+## Inspecting Extension Fields
+
+`bs_block_extension_fields('core/paragraph')` returns the field definitions of
+every extension that matches a block. See
+[Inspecting Blocks](/docs/blocks/rendering#inspecting-blocks) for the return
+value and how it relates to `bs_block_fields()`.
