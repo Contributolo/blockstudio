@@ -327,6 +327,7 @@ blockstudio_report_api_collisions(
 		'bs_block',
 		'bs_render_block',
 		'bs_block_fields',
+		'bs_block_extension_fields',
 		'bs_block_assets',
 		'bs_db_form',
 		'bs_icon',

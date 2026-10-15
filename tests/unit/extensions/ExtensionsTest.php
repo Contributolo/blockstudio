@@ -183,6 +183,16 @@ class ExtensionsTest extends TestCase {
 		$this->assertCount( 1, $matches );
 	}
 
+	public function test_get_matches_returns_an_extension_once_when_several_names_match(): void {
+		$ext     = (object) array(
+			'name'       => array( 'core/*', 'core/paragraph' ),
+			'attributes' => array(),
+		);
+		$matches = Extensions::get_matches( 'core/paragraph', array( $ext ) );
+
+		$this->assertSame( array( $ext ), $matches );
+	}
+
 	public function test_get_matches_multiple_extensions(): void {
 		$ext1 = (object) array(
 			'name'       => 'core/*',

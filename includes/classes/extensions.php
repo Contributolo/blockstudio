@@ -234,6 +234,8 @@ class Extensions {
 	/**
 	 * Get matching extensions for a block.
 	 *
+	 * Each extension is returned once, even when several of its names match.
+	 *
 	 * @param string $string     The block name.
 	 * @param array  $extensions The extensions array.
 	 *
@@ -260,6 +262,7 @@ class Extensions {
 				foreach ( $e->name as $name ) {
 					if ( $match_found( $name, $string ) ) {
 						$matches[] = $e;
+						break;
 					}
 				}
 			} elseif ( $match_found( $e->name, $string ) ) {

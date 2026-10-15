@@ -9,6 +9,7 @@ use Blockstudio\Db;
 use Blockstudio\Render;
 use Blockstudio\Build;
 use Blockstudio\Assets;
+use Blockstudio\Extensions;
 use Blockstudio\Pages;
 use Blockstudio\Site_Templates;
 use Blockstudio\Field_Type_Registry;
@@ -163,6 +164,35 @@ if ( ! function_exists( 'bs_block_fields' ) ) {
 		}
 
 		return $block->blockstudio['attributes'] ?? array();
+	}
+}
+
+if ( ! function_exists( 'bs_block_extension_fields' ) ) {
+	/**
+	 * Get the field definitions that extensions add to a block.
+	 *
+	 * Extensions are matched by block name, as on render, so this works for
+	 * core, third-party, and Blockstudio blocks. Their values are stored in the
+	 * block's blockstudio.attributes, next to the values of its own fields.
+	 *
+	 * @since 7.7.3
+	 *
+	 * @param string $name Block name, for example 'core/paragraph'.
+	 *
+	 * @return array Field definitions of every matching extension, in registration order.
+	 *
+	 * @example $fields = bs_block_extension_fields( 'core/paragraph' );
+	 *
+	 * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound -- Public API function.
+	 */
+	function bs_block_extension_fields( string $name ): array {
+		// phpcs:enable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
+		$fields = array();
+		foreach ( Extensions::get_matches( $name, Build::extensions() ) as $extension ) {
+			$fields = array_merge( $fields, $extension->blockstudio['attributes'] ?? array() );
+		}
+
+		return $fields;
 	}
 }
 

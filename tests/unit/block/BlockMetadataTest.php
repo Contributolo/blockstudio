@@ -6,7 +6,10 @@
  */
 
 use Blockstudio\Assets;
+use Blockstudio\Attribute_Builder;
 use Blockstudio\Block_Registry;
+use Blockstudio\Build;
+use Blockstudio\Extensions;
 use PHPUnit\Framework\TestCase;
 
 class BlockMetadataTest extends TestCase {
@@ -14,6 +17,7 @@ class BlockMetadataTest extends TestCase {
 	private string $name = 'blockstudio/metadata-test';
 	private string $directory;
 	private array $filters = array();
+	private ?array $extensions = null;
 
 	protected function setUp(): void {
 		$this->directory = WP_CONTENT_DIR . '/blockstudio-metadata-' . uniqid();
@@ -28,6 +32,9 @@ class BlockMetadataTest extends TestCase {
 			unregister_block_type( $this->name );
 		}
 		Block_Registry::instance()->remove_block( $this->name );
+		if ( null !== $this->extensions ) {
+			$this->set_extensions( $this->extensions );
+		}
 		$files = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $this->directory, FilesystemIterator::SKIP_DOTS ), RecursiveIteratorIterator::CHILD_FIRST );
 		foreach ( $files as $file ) {
 			$file->isDir() ? rmdir( $file->getPathname() ) : unlink( $file->getPathname() );
@@ -42,6 +49,27 @@ class BlockMetadataTest extends TestCase {
 			$this->name,
 			array( 'name' => $this->name, 'path' => $this->directory . '/block.json', 'assets' => $assets )
 		);
+	}
+
+	private function extend( array ...$extensions ): void {
+		$this->extensions ??= Build::extensions();
+		$this->set_extensions( array() );
+		foreach ( $extensions as [ $name, $fields ] ) {
+			Block_Registry::instance()->register_extension(
+				new WP_Block_Type(
+					$name,
+					array(
+						'attributes'  => ( new Attribute_Builder() )->build( $fields, false, true ),
+						'blockstudio' => array( 'extend' => true, 'attributes' => $fields ),
+					)
+				)
+			);
+		}
+	}
+
+	// The registry has no API to remove an extension again.
+	private function set_extensions( array $extensions ): void {
+		( new ReflectionProperty( Block_Registry::class, 'extensions' ) )->setValue( Block_Registry::instance(), $extensions );
 	}
 
 	private function asset( string $name, string $contents, bool $inline = false, bool $editor = false ): array {
@@ -124,5 +152,68 @@ class BlockMetadataTest extends TestCase {
 		add_filter( 'blockstudio/assets/disable', $disable );
 		$this->filters[] = array( 'blockstudio/assets/disable', $disable );
 		$this->assertSame( array(), bs_block_assets( $this->name ) );
+	}
+
+	public function test_extension_fields_are_collected_from_every_extension_matching_the_name(): void {
+		$wildcard  = array( 'id' => 'unitWildcard', 'type' => 'text' );
+		$exact     = array( 'id' => 'unitExact', 'type' => 'toggle' );
+		$listed    = array( 'id' => 'unitListed', 'type' => 'number' );
+		$paragraph = array( 'id' => 'unitParagraph', 'type' => 'select', 'options' => array( array( 'value' => 'a', 'label' => 'A' ) ) );
+		$this->extend(
+			array( 'unit-meta/*', array( $wildcard ) ),
+			array( 'unit-meta/card', array( $exact ) ),
+			array( array( 'unit-meta/*', 'unit-meta/card' ), array( $listed ) ),
+			array( 'core/paragraph', array( $paragraph ) )
+		);
+
+		$this->assertSame( array( $wildcard, $exact, $listed ), bs_block_extension_fields( 'unit-meta/card' ) );
+		$this->assertSame( array( $wildcard, $listed ), bs_block_extension_fields( 'unit-meta/hero' ) );
+		$this->assertSame( array( $paragraph ), bs_block_extension_fields( 'core/paragraph' ) );
+		$this->assertSame( array(), bs_block_extension_fields( 'core/heading' ) );
+		$this->assertSame( array(), bs_block_extension_fields( 'unit-metadata/card' ) );
+		$this->assertSame( array(), bs_block_extension_fields( 'missing/block' ) );
+	}
+
+	public function test_extension_fields_of_a_blockstudio_block_stay_separate_from_its_own_fields(): void {
+		$own       = array( array( 'id' => 'title', 'type' => 'text' ) );
+		$extension = array( array( 'id' => 'spacing', 'type' => 'text' ) );
+		$this->register( $own );
+		$this->extend( array( 'blockstudio/metadata-*', $extension ) );
+
+		$this->assertSame( $own, bs_block_fields( $this->name ) );
+		$this->assertSame( $extension, bs_block_extension_fields( $this->name ) );
+	}
+
+	public function test_extensions_sharing_an_id_are_both_reported_and_the_later_one_renders(): void {
+		$first  = array( 'id' => 'unitTone', 'type' => 'text', 'set' => array( array( 'attribute' => 'class', 'value' => 'first-{attributes.unitTone}' ) ) );
+		$second = array( 'id' => 'unitTone', 'type' => 'text', 'set' => array( array( 'attribute' => 'class', 'value' => 'second-{attributes.unitTone}' ) ) );
+		$this->extend( array( 'core/*', array( $first ) ), array( 'core/paragraph', array( $second ) ) );
+
+		$this->assertSame( array( $first, $second ), bs_block_extension_fields( 'core/paragraph' ) );
+		$html = Extensions::render_blocks(
+			'<p>Text</p>',
+			array(
+				'blockName' => 'core/paragraph',
+				'attrs'     => array( 'blockstudio' => array( 'attributes' => array( 'unitTone' => 'warm' ) ) ),
+			)
+		);
+		$this->assertSame( '<p class="second-warm">Text</p>', $html );
+	}
+
+	public function test_extension_fields_of_discovered_extension_files(): void {
+		$titles = static fn ( ?array $fields ): array => array_column( $fields ?? array(), 'title' );
+
+		$text = $titles( bs_block_extension_fields( 'blockstudio/type-text' ) );
+		$this->assertContains( 'Addons attributes', $text );
+		$this->assertContains( 'Addons style', $text );
+		$this->assertNotContains( 'Addons attributes', $titles( bs_block_fields( 'blockstudio/type-text' ) ) );
+
+		$heading = $titles( bs_block_extension_fields( 'core/heading' ) );
+		$this->assertContains( 'Addons all', $heading );
+		$this->assertContains( 'Addons color', $heading );
+
+		$paragraph = $titles( bs_block_extension_fields( 'core/paragraph' ) );
+		$this->assertContains( 'Addons all', $paragraph );
+		$this->assertNotContains( 'Addons color', $paragraph );
 	}
 }
