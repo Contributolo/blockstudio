@@ -35,6 +35,7 @@ class Cli {
 		\WP_CLI::add_command( 'bs assets', array( __CLASS__, 'assets' ) );
 		\WP_CLI::add_command( 'bs teardown', array( __CLASS__, 'teardown' ) );
 		\WP_CLI::add_command( 'bs cache', array( __CLASS__, 'cache' ) );
+		\WP_CLI::add_command( 'bs wpml', array( __CLASS__, 'wpml' ) );
 	}
 
 	/**
@@ -186,6 +187,108 @@ class Cli {
 			);
 		}
 		return $lines;
+	}
+
+	// WPML.
+
+	/**
+	 * Generate the WPML language configuration for all Blockstudio blocks.
+	 *
+	 * Prints a wpml-config.xml that declares the text fields of every
+	 * registered block for translation. Blocks without text fields are declared
+	 * with translate="0", so WPML copies their values unchanged.
+	 *
+	 * ## OPTIONS
+	 *
+	 * <config>
+	 * : Generate the gutenberg-blocks configuration.
+	 *
+	 * [--file=<path>]
+	 * : Write to this wpml-config.xml instead of printing. A missing file is created. In an existing file, only the section between the Blockstudio markers is replaced.
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp bs wpml config
+	 *     wp bs wpml config --file=wp-content/themes/my-theme/wpml-config.xml
+	 *
+	 * @param array $args       Positional arguments.
+	 * @param array $assoc_args Associative arguments.
+	 *
+	 * @return void
+	 */
+	public static function wpml( $args, $assoc_args ): void {
+		$subcommand = $args[0] ?? '';
+
+		if ( 'config' !== $subcommand ) {
+			\WP_CLI::error( "Unknown subcommand: $subcommand. Use: config" );
+			return;
+		}
+
+		$blocks = Wpml_Config::registered_blocks();
+
+		if ( array() === $blocks ) {
+			\WP_CLI::error( 'No Blockstudio blocks found.' );
+			return;
+		}
+
+		$section = Wpml_Config::section( $blocks );
+
+		foreach ( $section['skipped'] as $field ) {
+			\WP_CLI::warning( "Not declared, the field type is unknown: $field" );
+		}
+
+		$file = isset( $assoc_args['file'] ) ? (string) $assoc_args['file'] : '';
+
+		if ( '' === $file ) {
+			\WP_CLI::line( Wpml_Config::document( $section['xml'] ) );
+			return;
+		}
+
+		$contents = false;
+
+		if ( file_exists( $file ) ) {
+			$contents = file_get_contents( $file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+
+			if ( false === $contents ) {
+				\WP_CLI::error( "Could not read $file." );
+				return;
+			}
+		}
+
+		$xml = false === $contents
+			? Wpml_Config::document( $section['xml'] ) . "\n"
+			: Wpml_Config::merge( $contents, $section['xml'] );
+
+		if ( is_wp_error( $xml ) ) {
+			\WP_CLI::error( $xml->get_error_message() );
+			return;
+		}
+
+		$duplicates = Wpml_Config::validate( $xml );
+
+		if ( is_wp_error( $duplicates ) ) {
+			\WP_CLI::error( $duplicates->get_error_message() . " $file was not changed." );
+			return;
+		}
+
+		foreach ( $duplicates as $type ) {
+			\WP_CLI::warning( "$type is declared more than once. Remove its entry outside the Blockstudio section." );
+		}
+
+		$summary = sprintf( '%1$d blocks with text fields, %2$d without', $section['translated'], $section['untranslated'] );
+
+		if ( $xml === $contents ) {
+			\WP_CLI::success( "$file is up to date ($summary)." );
+			return;
+		}
+
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- Writing the configuration file the user named.
+		if ( false === file_put_contents( $file, $xml, LOCK_EX ) ) {
+			\WP_CLI::error( "Could not write $file." );
+			return;
+		}
+
+		\WP_CLI::success( "Wrote $file ($summary)." );
 	}
 
 	// Blocks.
