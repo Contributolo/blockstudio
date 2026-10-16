@@ -8,6 +8,6 @@
     "symfony/deprecation-contracts": "v3.6.0",
     "symfony/polyfill-ctype": "v1.33.0",
     "symfony/polyfill-php80": "v1.37.0",
-    "symfony/yaml": "v7.4.13",
+    "symfony/yaml": "v7.4.21",
     "yahnis-elsts/plugin-update-checker": "v5.6"
 }
