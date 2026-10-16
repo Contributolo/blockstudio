@@ -13,6 +13,7 @@ import {
 } from '@wordpress/element';
 import { closeSmall, chevronDown, create } from '@wordpress/icons';
 import { result } from 'lodash-es';
+import type { MouseEvent } from 'react';
 import { Base } from '@/blocks/components/base';
 import { List } from '@/blocks/components/list';
 import { isAllowedToRender } from '@/blocks/utils/is-allowed-to-render';
@@ -135,12 +136,23 @@ const DragElement = ({
   const id = `${postId}-${block.name}-${getId(index)}`;
   const [isHover, setIsHover] = useState(false);
   const [isRemoveOpen, setIsRemoveOpen] = useState(false);
+  const removeTrigger = useRef<HTMLButtonElement | null>(null);
+  const returnRemoveFocus = useRef(false);
   const [isMinimized, setIsMinimized] = useState(() => {
     const storage = readRepeaterState(storageKey);
     return item?.minimized
       ? startMinimized && !storage.includes(id)
       : storage.includes(id);
   });
+
+  useEffect(() => {
+    if (isRemoveOpen || !returnRemoveFocus.current) return;
+
+    // Inspector clicks can leave focus in the canvas or inserter. Restore
+    // the actual trigger after the modal has unmounted.
+    returnRemoveFocus.current = false;
+    removeTrigger.current?.focus({ preventScroll: true });
+  }, [isRemoveOpen]);
 
   const repeaterId = draggableId
     .replaceAll('[', '')
@@ -367,12 +379,13 @@ const DragElement = ({
                   className: 'blockstudio-repeater__remove',
                   /* translators: %d: number of the repeater row. */
                   label: __('Remove row %d'),
-                  onClick: () => {
+                  onClick: (event: MouseEvent<HTMLButtonElement>) => {
                     if (item?.textRemove === false) {
                       remove(getId(index));
                       return;
                     }
 
+                    removeTrigger.current = event.currentTarget;
                     setIsRemoveOpen(true);
                   },
                   condition: item?.min ? item.min < length : true,
@@ -463,7 +476,10 @@ const DragElement = ({
         <ConfirmDialog
           contentLabel={__('Remove row %d').replace('%d', String(index + 1))}
           confirmButtonText={__('Delete')}
-          onCancel={() => setIsRemoveOpen(false)}
+          onCancel={() => {
+            returnRemoveFocus.current = true;
+            setIsRemoveOpen(false);
+          }}
           onConfirm={() => {
             setIsRemoveOpen(false);
             remove(getId(index));
