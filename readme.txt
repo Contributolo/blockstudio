@@ -3,7 +3,7 @@ Contributors: dnnsjsk
 Requires at least: 6.7
 Tested up to: 7.0.0
 Requires PHP: 8.2
-Stable tag: 7.7.3
+Stable tag: 7.7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,17 +54,19 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 
 == Changelog ==
 
-= 7.7.3 =
+= 7.7.4 =
 * New: `wp bs wpml config` generates translation configuration from registered Blockstudio fields and reports conflicting storage definitions (#122)
 * New: extension `set` rules support opt-in `join` for space-separated list values without changing existing single-valued bindings (#124)
-* Fix: early serve and the runtime cache resolve percent-encoded request paths to routes with non-ASCII characters
-* Fix: blocks whose templates use `useBlockProps` or RichText keep non-ASCII text as UTF-8 instead of numeric HTML entities
 * Fix: multiple selects and checkboxes accept imported scalar and single-option values, including numeric zero inside repeaters, without losing selections (#123)
 * Fix: WYSIWYG fields register Link and Underline once, respecting disabled automatic linking and link navigation (#125)
 * Fix: WYSIWYG links no longer gain unwanted new-tab or nofollow attributes; explicitly configured link attributes are preserved (#130)
 * Fix: repeater row controls have accessible names, expanded state, and native Enter and Space keyboard behavior (#126)
 * Fix: update the isolated CommonMark and YAML libraries to include upstream security fixes (#127, #128)
 * Fix: dependency builds work on PHP 8.5 with the updated PHP-Scoper development tool (#129)
+
+= 7.7.3 =
+* Fix: early serve and the runtime cache resolve percent-encoded request paths to routes with non-ASCII characters
+* Fix: blocks whose templates use `useBlockProps` or RichText keep non-ASCII text as UTF-8 instead of numeric HTML entities
 
 = 7.7.2 =
 * New: public `bs_block_fields()` and `bs_block_assets()` helpers expose registered field definitions and block assets (#115)

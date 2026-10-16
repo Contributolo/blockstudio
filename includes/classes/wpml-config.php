@@ -60,7 +60,7 @@ use WP_Error;
  * Nothing here runs on a regular request: the configuration is generated on
  * demand by `wp bs wpml config`.
  *
- * @since 7.7.3
+ * @since 7.7.4
  */
 final class Wpml_Config {
 
