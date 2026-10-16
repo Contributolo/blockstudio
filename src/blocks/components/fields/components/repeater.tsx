@@ -461,7 +461,7 @@ const DragElement = ({
       </Draggable>
       {isRemoveOpen && (
         <ConfirmDialog
-          aria-label={__('Remove row %d').replace('%d', String(index + 1))}
+          contentLabel={__('Remove row %d').replace('%d', String(index + 1))}
           confirmButtonText={__('Delete')}
           onCancel={() => setIsRemoveOpen(false)}
           onConfirm={() => {
