@@ -370,6 +370,18 @@ export const Select = ({
         : '';
   };
 
+  // A native select falls back to its first option when no option matches,
+  // which would show a choice that is not stored and not rendered.
+  const isEmpty =
+    value === undefined ||
+    value === null ||
+    (value as Any) === false ||
+    value === '';
+  const nativeOptions =
+    isEmpty && !options.some((option) => option.value === '')
+      ? [{ value: '', label: '', disabled: true }, ...options]
+      : options;
+
   return (
     <div
       css={css({
@@ -397,7 +409,8 @@ export const Select = ({
         />
       ) : (
         <SelectControl
-          {...{ ...rest, value, options }}
+          {...{ ...rest, value }}
+          options={nativeOptions}
           className={`components-base-control`}
           help={false}
           label={false}
