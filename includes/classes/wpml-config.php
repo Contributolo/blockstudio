@@ -41,13 +41,12 @@ use WP_Error;
  *   Extensions::render_blocks() do, so the field of a later extension
  *   replaces that of an earlier one.
  * - A block field and an extension field with the same storage key both
- *   apply: Block::render() gives the template the block's definition,
- *   Extensions::render_blocks() uses the extension's, and the editor shows a
- *   control for each, which write the same value.
+ *   apply: Block::render() gives the template the block's definition, and
+ *   Extensions::render_blocks() uses the extension's.
  * - Two fields with the same ID in the rows of one repeater both apply as
  *   well: the attribute builder keeps both row definitions, Block::render()
- *   transforms a row value with the first, and the editor shows a control for
- *   each and fills a new row with the default of the last.
+ *   transforms a row value with the first, and the editor fills a new row
+ *   with the default of the last.
  *
  * Definitions that both apply are declared once when they classify the same,
  * with the label of the first one (the block's field), and repeaters are

@@ -161,9 +161,9 @@ only when it is clear what is stored there:
   of the extensions of a block work the same way: a later field, or the field
   of an extension registered later, replaces an earlier one.
 - A block field and an extension field with the same key both stay in effect.
-  The block template receives the value as the block's field defines it, the
-  extension applies its own field, and the editor shows both controls, which
-  write the same value. The key is declared once when both fields need the same
+  The block template receives the value as the block's field defines it, while
+  the extension is applied with its own field. The key is declared once when
+  both fields need the same
   declaration: both are text fields (`text`, `textarea`, `richtext`, or
   `wysiwyg`), both are links, or neither is declared, such as a `select` and a
   `number`. Two repeaters are compared field by field in their rows. The label
