@@ -7,19 +7,20 @@ use PHPUnit\Framework\TestCase;
 
 class WpmlConfigTest extends TestCase {
 
-	private function section( array $fields ): array {
+	private function section( array $fields, array $extension_fields = array() ): array {
 		return Wpml_Config::section(
 			array(
 				'acme/example' => array(
-					'title'  => 'Example',
-					'fields' => $fields,
+					'title'            => 'Example',
+					'fields'           => $fields,
+					'extension_fields' => $extension_fields,
 				),
 			)
 		);
 	}
 
-	private function declared_paths( array $fields ): array {
-		$xml  = simplexml_load_string( Wpml_Config::document( $this->section( $fields )['xml'] ) );
+	private function declared_paths( array $fields, array $extension_fields = array() ): array {
+		$xml  = simplexml_load_string( Wpml_Config::document( $this->section( $fields, $extension_fields )['xml'] ) );
 		$root = $xml->xpath( '/wpml-config/gutenberg-blocks/gutenberg-block/key[@name="blockstudio"]/key[@name="attributes"]' );
 
 		return array() === $root ? array() : $this->key_paths( $root[0], '' );
@@ -235,6 +236,7 @@ XML;
 		$this->assertSame( 1, $section['translated'] );
 		$this->assertSame( 0, $section['untranslated'] );
 		$this->assertSame( array(), $section['skipped'] );
+		$this->assertSame( array(), $section['conflicts'] );
 	}
 
 	public function test_declares_a_block_without_text_fields_with_translate_0(): void {
@@ -524,28 +526,25 @@ XML;
 		$this->assertSame( array(), $this->declared_paths( array( $text, $text + array( 'hidden' => true ) ) ), 'text, then hidden text' );
 	}
 
-	public function test_extensions_override_block_fields_and_earlier_extensions(): void {
-		// registered_blocks() lists the block's fields first, then the fields of each matching extension in order.
-		$block  = array(
-			array( 'id' => 'tone', 'type' => 'text', 'label' => 'Tone' ),
-			array( 'id' => 'heading', 'type' => 'text', 'label' => 'Heading' ),
-		);
+	public function test_a_later_extension_replaces_the_field_of_an_earlier_one(): void {
 		$first  = array(
 			array( 'id' => 'mood', 'type' => 'select', 'label' => 'Mood', 'options' => array( 'a' ) ),
 			array( 'id' => 'note', 'type' => 'text', 'label' => 'Note' ),
 			array( 'id' => 'cta', 'type' => 'link', 'label' => 'Call to action' ),
+			array( 'id' => 'tone', 'type' => 'text', 'label' => 'Tone' ),
 		);
 		$second = array(
-			array( 'id' => 'tone', 'type' => 'select', 'label' => 'Tone', 'options' => array( 'a' ) ),
 			array( 'id' => 'mood', 'type' => 'text', 'label' => 'Mood' ),
 			array( 'id' => 'note', 'type' => 'link', 'label' => 'Note' ),
 			array( 'id' => 'cta', 'type' => 'textarea', 'label' => 'Call to action' ),
+			array( 'id' => 'tone', 'type' => 'select', 'label' => 'Tone', 'options' => array( 'a' ) ),
 		);
 
-		$this->assertSame(
-			array( 'heading', 'mood', 'note/title', 'note/url', 'cta' ),
-			$this->declared_paths( array_merge( $block, $first, $second ) )
-		);
+		// registered_blocks() lists the fields of every matching extension in registration order.
+		$section = $this->section( array(), array_merge( $first, $second ) );
+
+		$this->assertSame( array( 'mood', 'note/title', 'note/url', 'cta' ), $this->declared_paths( array(), array_merge( $first, $second ) ) );
+		$this->assertSame( array(), $section['conflicts'] );
 	}
 
 	public function test_later_definitions_decide_inside_containers(): void {
@@ -557,10 +556,7 @@ XML;
 		);
 		$text   = array( 'id' => 'title', 'type' => 'text', 'label' => 'Title' );
 		$select = array( 'id' => 'title', 'type' => 'select', 'label' => 'Title', 'options' => array( 'a' ) );
-		$link   = array( 'id' => 'title', 'type' => 'link', 'label' => 'Title' );
 
-		$this->assertSame( array(), $this->declared_paths( array( $rows( array( $text, $select ) ) ) ), 'text, then select in one row' );
-		$this->assertSame( array( 'items/*/title/title', 'items/*/title/url' ), $this->declared_paths( array( $rows( array( $text, $link ) ) ) ), 'text, then link in one row' );
 		$this->assertSame( array(), $this->declared_paths( array( $rows( array( $text ) ), $rows( array( $select ) ) ) ), 'a later repeater replaces the rows' );
 		$this->assertSame( array( 'items/*/title' ), $this->declared_paths( array( $rows( array( $select ) ), $rows( array( $text ) ) ) ), 'a later repeater brings its own rows' );
 		$this->assertSame( array(), $this->declared_paths( array( $rows( array( $text ) ), array( 'id' => 'items', 'type' => 'text', 'hidden' => true ) ) ), 'a later hidden field replaces a repeater' );
@@ -588,6 +584,139 @@ XML;
 
 		$this->assertSame( array(), $this->declared_paths( array( $tabs, array( 'id' => 'tone', 'type' => 'select', 'options' => array( 'a' ) ) ) ), 'tab field, then select' );
 		$this->assertSame( array( 'tone' ), $this->declared_paths( array( array( 'id' => 'tone', 'type' => 'select', 'options' => array( 'a' ) ), $tabs ) ), 'select, then tab field' );
+	}
+
+	public function test_block_and_extension_fields_with_one_key_are_declared_only_when_their_types_agree(): void {
+		$field = static fn( string $type, string $label = 'Tone', array $extra = array() ): array => array(
+			'id'    => 'tone',
+			'type'  => $type,
+			'label' => $label,
+		) + $extra;
+		$select = $field( 'select', 'Tone', array( 'options' => array( 'warm', 'cold' ) ) );
+
+		$conflicts = array(
+			'text, then select'        => array( $field( 'text' ), $select, 'text in the block, select in an extension' ),
+			'select, then text'        => array( $select, $field( 'text' ), 'select in the block, text in an extension' ),
+			'link, then text'          => array( $field( 'link' ), $field( 'text' ), 'link in the block, text in an extension' ),
+			'hidden text, then text'   => array( $field( 'text', 'Tone', array( 'hidden' => true ) ), $field( 'text' ), 'hidden text in the block, text in an extension' ),
+			'unknown type, then text'  => array( $field( 'acme/tone' ), $field( 'text' ), 'acme/tone in the block, text in an extension' ),
+		);
+
+		foreach ( $conflicts as $case => [ $own, $extension, $types ] ) {
+			$section = $this->section( array( $own ), array( $extension ) );
+
+			$this->assertSame( array( "acme/example: tone ($types)" ), $section['conflicts'], $case );
+			$this->assertSame( array(), $section['skipped'], $case );
+			$this->assertSame( array(), $this->declared_paths( array( $own ), array( $extension ) ), $case );
+		}
+
+		$agreeing = array(
+			'text, then textarea'     => array( $field( 'text' ), $field( 'textarea', 'Mood' ), array( 'tone' ) ),
+			'wysiwyg, then richtext'  => array( $field( 'wysiwyg' ), $field( 'richtext', 'Mood' ), array( 'tone' ) ),
+			'link, then link'         => array( $field( 'link' ), $field( 'link', 'Mood' ), array( 'tone/title', 'tone/url' ) ),
+			'select, then number'     => array( $select, $field( 'number', 'Mood' ), array() ),
+			'hidden text, then radio' => array( $field( 'text', 'Tone', array( 'hidden' => true ) ), $field( 'radio', 'Mood' ), array() ),
+		);
+
+		foreach ( $agreeing as $case => [ $own, $extension, $paths ] ) {
+			$section = $this->section( array( $own ), array( $extension ) );
+
+			$this->assertSame( array(), $section['conflicts'], $case );
+			$this->assertSame( $paths, $this->declared_paths( array( $own ), array( $extension ) ), $case );
+
+			if ( array() !== $paths ) {
+				$this->assertStringContainsString( 'label="Tone"', $section['xml'], "$case: the label of the block's field" );
+				$this->assertStringNotContainsString( 'Mood', $section['xml'], $case );
+			}
+		}
+
+		$this->assertSame(
+			array( 'acme/example: Tone (acme/tone)' ),
+			$this->section( array( $field( 'acme/tone' ) ), array( $field( 'acme/tone', 'Mood' ) ) )['skipped'],
+			'the same unknown type is reported once'
+		);
+	}
+
+	public function test_repeaters_of_a_block_and_an_extension_are_compared_row_field_by_row_field(): void {
+		$own       = array(
+			'id'         => 'items',
+			'type'       => 'repeater',
+			'label'      => 'Items',
+			'attributes' => array(
+				array( 'id' => 'title', 'type' => 'text', 'label' => 'Title' ),
+				array( 'id' => 'image', 'type' => 'files', 'label' => 'Image' ),
+				array( 'id' => 'note', 'type' => 'text', 'label' => 'Note' ),
+			),
+		);
+		$extension = array(
+			'id'         => 'items',
+			'type'       => 'repeater',
+			'label'      => 'Entries',
+			'attributes' => array(
+				array( 'id' => 'title', 'type' => 'select', 'label' => 'Title', 'options' => array( 'a' ) ),
+				array( 'id' => 'note', 'type' => 'textarea', 'label' => 'Note' ),
+				array( 'id' => 'caption', 'type' => 'text', 'label' => 'Caption' ),
+			),
+		);
+
+		$section = $this->section( array( $own ), array( $extension ) );
+
+		$this->assertSame( array( 'acme/example: items/*/title (text in the block, select in an extension)' ), $section['conflicts'] );
+		$this->assertSame( array( 'items/*/note', 'items/*/caption' ), $this->declared_paths( array( $own ), array( $extension ) ) );
+		$this->assertStringContainsString( '<key name="note" label="Items: Note" />', $section['xml'] );
+		$this->assertStringContainsString( '<key name="caption" label="Entries: Caption" />', $section['xml'] );
+
+		$this->assertSame(
+			array( 'acme/example: items (repeater in the block, text in an extension)' ),
+			$this->section( array( $own ), array( array( 'id' => 'items', 'type' => 'text' ) ) )['conflicts']
+		);
+	}
+
+	public function test_fields_with_the_same_id_in_one_repeater_row_are_declared_only_when_their_types_agree(): void {
+		$rows   = static fn( array $fields ): array => array(
+			'id'         => 'items',
+			'type'       => 'repeater',
+			'label'      => 'Items',
+			'attributes' => $fields,
+		);
+		$text   = array( 'id' => 'title', 'type' => 'text', 'label' => 'Title' );
+		$select = array( 'id' => 'title', 'type' => 'select', 'label' => 'Title', 'options' => array( 'a' ) );
+		$link   = array( 'id' => 'title', 'type' => 'link', 'label' => 'Title' );
+
+		$cases = array(
+			'text, then select' => array( $rows( array( $text, $select ) ), 'text and select in the block' ),
+			'select, then text' => array( $rows( array( $select, $text ) ), 'select and text in the block' ),
+			'text, then link'   => array( $rows( array( $text, $link ) ), 'text and link in the block' ),
+		);
+
+		foreach ( $cases as $case => [ $repeater, $types ] ) {
+			$this->assertSame( array( "acme/example: items/*/title ($types)" ), $this->section( array( $repeater ) )['conflicts'], $case );
+			$this->assertSame( array(), $this->declared_paths( array( $repeater ) ), $case );
+		}
+
+		$this->assertSame(
+			array( 'acme/example: items/*/title (text and select in an extension)' ),
+			$this->section( array(), array( $rows( array( $text, $select ) ) ) )['conflicts'],
+			'in the rows of an extension'
+		);
+
+		$agreeing = $rows( array( $text, array( 'id' => 'title', 'type' => 'textarea', 'label' => 'Heading' ) ) );
+
+		$this->assertSame( array(), $this->section( array( $agreeing ) )['conflicts'] );
+		$this->assertSame( array( 'items/*/title' ), $this->declared_paths( array( $agreeing ) ) );
+		$this->assertStringContainsString( '<key name="title" label="Items: Title" />', $this->section( array( $agreeing ) )['xml'] );
+	}
+
+	public function test_a_message_with_the_id_of_a_field_does_not_replace_it(): void {
+		$this->assertSame(
+			array( 'note' ),
+			$this->declared_paths(
+				array(
+					array( 'id' => 'note', 'type' => 'text' ),
+					array( 'id' => 'note', 'type' => 'message', 'value' => 'Shown in the editor only.' ),
+				)
+			)
+		);
 	}
 
 	public function test_escapes_names_and_labels(): void {

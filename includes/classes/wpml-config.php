@@ -23,12 +23,40 @@ use WP_Error;
  * with translate="0".
  *
  * Fields are read from the registered block definitions, after custom field
- * expansion, attribute filters, overrides, and matching extensions. When a
- * storage key is defined more than once, the later definition decides. Keys follow
+ * expansion, attribute filters, overrides, and matching extensions. Keys follow
  * the storage rules of the attribute builder: Blockstudio stores every value
  * under blockstudio.attributes, fields in a group with an ID are prefixed with
  * that ID, groups without an ID and tabs add no level, and repeater rows are
  * matched with "*".
+ *
+ * A storage key can be defined more than once. Each definition is classified
+ * as text (text, textarea, richtext, wysiwyg), link, repeater, or a value that
+ * is not declared (every other built-in type, and hidden fields):
+ *
+ * - Within the fields of the block, outside repeater rows, the attribute
+ *   builder registers one attribute per storage key, and a later definition
+ *   replaces an earlier one.
+ *   The fields of the matching extensions resolve the same way, in
+ *   registration order, as Block::extension_attributes() and
+ *   Extensions::render_blocks() do, so the field of a later extension
+ *   replaces that of an earlier one.
+ * - A block field and an extension field with the same storage key both
+ *   apply: Block::render() gives the template the block's definition,
+ *   Extensions::render_blocks() uses the extension's, and the editor shows a
+ *   control for each, which write the same value.
+ * - Two fields with the same ID in the rows of one repeater both apply as
+ *   well: the attribute builder keeps both row definitions, Block::render()
+ *   transforms a row value with the first, and the editor shows a control for
+ *   each and fills a new row with the default of the last.
+ *
+ * Definitions that both apply are declared once when they classify the same,
+ * with the label of the first one (the block's field), and repeaters are
+ * compared row field by row field. When they classify differently, the stored
+ * value can be text, an option, or a link object, depending on the control
+ * that wrote it, so the key is not declared and section() reports it as a
+ * conflict. Text, textarea, richtext, and wysiwyg fields all store a string
+ * and get the same declaration (WPML chooses the editor for each string from
+ * its content), so they never conflict with each other.
  *
  * Nothing here runs on a regular request: the configuration is generated on
  * demand by `wp bs wpml config`.
@@ -85,7 +113,6 @@ final class Wpml_Config {
 		'gradient',
 		'html-tag',
 		'icon',
-		'message',
 		'number',
 		'radio',
 		'range',
@@ -99,27 +126,26 @@ final class Wpml_Config {
 	 * Collect the fields of every registered Blockstudio block.
 	 *
 	 * Fields that extensions add to a Blockstudio block are stored in the same
-	 * attributes object, so they are included. Extensions of core or
-	 * third-party blocks are not: an entry for those blocks would compete with
-	 * the configuration that WPML or the block's plugin ships.
+	 * attributes object, so they are included, separately from the block's own
+	 * fields. Extensions of core or third-party blocks are not: an entry for
+	 * those blocks would compete with the configuration that WPML or the
+	 * block's plugin ships.
 	 *
-	 * @return array<string, array{title: string, fields: array}> Blocks by name, sorted by name.
+	 * @return array<string, array{title: string, fields: array, extension_fields: array}> Blocks by name, sorted by
+	 *         name, with the block's fields and the fields of every matching extension in registration order.
 	 */
 	public static function registered_blocks(): array {
 		$blocks = array();
 
 		foreach ( Build::blocks() as $name => $block ) {
-			$name   = (string) $name;
-			$fields = is_array( $block->blockstudio['attributes'] ?? null )
-				? array_values( $block->blockstudio['attributes'] )
-				: array();
-
-			// Block fields first, then the fields of each matching extension in registration order.
-			$fields = array_merge( $fields, array_values( \bs_block_extension_fields( $name ) ) );
+			$name = (string) $name;
 
 			$blocks[ $name ] = array(
-				'title'  => is_string( $block->title ?? null ) ? $block->title : '',
-				'fields' => $fields,
+				'title'            => is_string( $block->title ?? null ) ? $block->title : '',
+				'fields'           => is_array( $block->blockstudio['attributes'] ?? null )
+					? array_values( $block->blockstudio['attributes'] )
+					: array(),
+				'extension_fields' => array_values( \bs_block_extension_fields( $name ) ),
 			);
 		}
 
@@ -140,26 +166,36 @@ final class Wpml_Config {
 	 *     $section = Wpml_Config::section( Wpml_Config::registered_blocks() );
 	 *     echo Wpml_Config::document( $section['xml'] );
 	 *
-	 * Fields are read in order, so a later definition of a storage key replaces
-	 * an earlier one (see effective()).
+	 * A storage key that a block field and an extension field both define, or
+	 * that two fields define in the rows of one repeater, is declared only when
+	 * the definitions classify the same; otherwise it is listed in conflicts,
+	 * for example "acme/card: tone (text in the block, select in an
+	 * extension)". See the class description for the full policy.
 	 *
-	 * @param array<string, array{title?: string, fields?: array}> $blocks Blocks by name, as returned by registered_blocks().
+	 * @param array<string, array{title?: string, fields?: array, extension_fields?: array}> $blocks Blocks by name, as
+	 *        returned by registered_blocks().
 	 *
-	 * @return array{xml: string, translated: int, untranslated: int, skipped: array<int, string>} The section for a
-	 *         gutenberg-blocks element, the number of blocks with and without text fields, and the fields left out
-	 *         because their type is unknown.
+	 * @return array{xml: string, translated: int, untranslated: int, skipped: array<int, string>, conflicts: array<int, string>}
+	 *         The section for a gutenberg-blocks element, the number of blocks with and without text fields, the fields
+	 *         left out because their type is unknown, and the storage keys left out because their definitions conflict.
 	 */
 	public static function section( array $blocks ): array {
 		$lines        = array( self::START, "\t\t" . self::NOTE );
 		$skipped      = array();
+		$conflicts    = array();
 		$translated   = 0;
 		$untranslated = 0;
 
 		foreach ( $blocks as $name => $block ) {
-			$name   = (string) $name;
-			$fields = is_array( $block['fields'] ?? null ) ? $block['fields'] : array();
-			$keys   = self::keys( self::effective( $fields ), $name, $skipped );
-			$type   = 'type="' . self::escape( $name ) . '"';
+			$name       = (string) $name;
+			$fields     = is_array( $block['fields'] ?? null ) ? $block['fields'] : array();
+			$extensions = is_array( $block['extension_fields'] ?? null ) ? $block['extension_fields'] : array();
+			$candidates = self::combine(
+				self::latest( self::definitions( $fields, 'block' ) ),
+				self::latest( self::definitions( $extensions, 'extension' ) )
+			);
+			$keys       = self::keys( $candidates, $name, '', $skipped, $conflicts );
+			$type       = 'type="' . self::escape( $name ) . '"';
 
 			if ( array() === $keys ) {
 				++$untranslated;
@@ -197,6 +233,7 @@ final class Wpml_Config {
 			'translated'   => $translated,
 			'untranslated' => $untranslated,
 			'skipped'      => $skipped,
+			'conflicts'    => $conflicts,
 		);
 	}
 
@@ -299,35 +336,24 @@ final class Wpml_Config {
 	}
 
 	/**
-	 * Resolve the definition in effect for each storage key of a list of fields.
-	 *
-	 * A storage key can be defined more than once: twice in one field list, by
-	 * a field of the block and a field an extension adds, or by two extensions.
-	 * Blockstudio keeps the later definition (the field handlers write each
-	 * attribute by storage key, and Block::extension_attributes() and
-	 * Extensions::render_blocks() let a later extension replace an earlier
-	 * one), so a later definition replaces an earlier one as a whole, whatever
-	 * its type. Block fields count before the fields extensions add, in the
-	 * order registered_blocks() lists them: a select after a text field leaves nothing to translate, a link
-	 * after a text field is declared as a link, and a repeater after a repeater
-	 * brings its own row fields. A hidden field also replaces an earlier
-	 * definition; it is never translated, nor is anything inside a hidden group
-	 * or tabs field.
+	 * Collect every definition of each storage key in a list of fields.
 	 *
 	 * Storage keys follow Container_Field_Handler: a group with an ID prefixes
 	 * the IDs of its fields, a group without an ID and tabs add no level.
-	 * Repeater rows are resolved on their own level by keys().
+	 * Repeater rows are collected on their own level by keys(). Everything inside
+	 * a hidden group or tabs field counts as hidden.
 	 *
 	 * @param array             $fields  Field definitions, in the order Blockstudio reads them.
+	 * @param string            $source  Where the fields come from: "block" or "extension".
 	 * @param string            $prefix  Storage key prefix from the enclosing groups with an ID.
 	 * @param array<int,string> $parents Labels of the enclosing repeaters and groups with an ID.
 	 * @param bool              $hidden  Whether an enclosing group or tabs field is hidden.
 	 *
-	 * @return array<string, array{field: array, parents: array<int,string>, hidden: bool}> Definitions by storage key,
-	 *         in the order the keys first appear.
+	 * @return array<string, array<int, array{field: array, source: string, parents: array<int,string>, hidden: bool}>>
+	 *         The definitions of each storage key in order, with the keys in the order they first appear.
 	 */
-	private static function effective( array $fields, string $prefix = '', array $parents = array(), bool $hidden = false ): array {
-		$effective = array();
+	private static function definitions( array $fields, string $source, string $prefix = '', array $parents = array(), bool $hidden = false ): array {
+		$definitions = array();
 
 		foreach ( $fields as $field ) {
 			if ( ! is_array( $field ) ) {
@@ -342,65 +368,117 @@ final class Wpml_Config {
 
 			if ( 'tabs' === $type ) {
 				foreach ( is_array( $field['tabs'] ?? null ) ? $field['tabs'] : array() as $tab ) {
-					$tab_fields = is_array( $tab['attributes'] ?? null ) ? $tab['attributes'] : array();
-					$effective  = array_replace( $effective, self::effective( $tab_fields, $prefix, $parents, $is_hidden ) );
+					$tab_fields  = is_array( $tab['attributes'] ?? null ) ? $tab['attributes'] : array();
+					$definitions = self::combine( $definitions, self::definitions( $tab_fields, $source, $prefix, $parents, $is_hidden ) );
 				}
 				continue;
 			}
 
 			if ( 'group' === $type ) {
-				$effective = '' === $id
-					? array_replace( $effective, self::effective( $inner, $prefix, $parents, $is_hidden ) )
-					: array_replace( $effective, self::effective( $inner, $key, array_merge( $parents, array( self::label( $field, $id ) ) ), $is_hidden ) );
+				$definitions = self::combine(
+					$definitions,
+					'' === $id
+						? self::definitions( $inner, $source, $prefix, $parents, $is_hidden )
+						: self::definitions( $inner, $source, $key, array_merge( $parents, array( self::label( $field, $id ) ) ), $is_hidden )
+				);
 				continue;
 			}
 
-			if ( '' === $id || '' === $type ) {
+			// The attribute builder registers nothing for a message, so it never replaces a field.
+			if ( '' === $id || '' === $type || 'message' === $type ) {
 				continue;
 			}
 
-			$effective[ $key ] = array(
+			$definitions[ $key ][] = array(
 				'field'   => $field,
+				'source'  => $source,
 				'parents' => $parents,
 				'hidden'  => $is_hidden,
 			);
 		}
 
-		return $effective;
+		return $definitions;
 	}
 
 	/**
-	 * Build the key nodes for resolved field definitions.
+	 * Keep the last definition of each storage key.
 	 *
-	 * Text fields become a key, link fields a key with title and url, repeaters
-	 * a key with one row level matched with "*" (their row fields resolved on
-	 * their own), and value fields nothing. Where the attribute builder stores
-	 * nothing, for a group with an ID nested in another group, the key matches
-	 * no value and WPML ignores it.
+	 * Outside repeater rows, the attribute builder writes each attribute by
+	 * storage key, so a later definition replaces an earlier one, whatever its
+	 * type. The same holds for the fields of several extensions, which
+	 * Block::extension_attributes() and Extensions::render_blocks() merge in
+	 * registration order. Repeater rows keep every definition (see keys()).
 	 *
-	 * @param array<string, array{field: array, parents: array<int,string>, hidden: bool}> $effective Definitions from effective().
-	 * @param string                                                                       $block     Block name, for the skipped list.
-	 * @param array<int,string>                                                            $skipped   Fields of unknown types (passed by reference).
+	 * @param array<string, array<int, array>> $definitions Definitions from definitions().
+	 *
+	 * @return array<string, array<int, array>> The last definition of each storage key.
+	 */
+	private static function latest( array $definitions ): array {
+		return array_map( static fn( array $entries ): array => array_slice( $entries, -1 ), $definitions );
+	}
+
+	/**
+	 * Add the definitions of a second list to those of a first, key by key.
+	 *
+	 * @param array<string, array<int, array>> $definitions Definitions by storage key.
+	 * @param array<string, array<int, array>> $more        Definitions to add after them.
+	 *
+	 * @return array<string, array<int, array>> Both, with the keys of the first list first.
+	 */
+	private static function combine( array $definitions, array $more ): array {
+		foreach ( $more as $key => $entries ) {
+			$definitions[ $key ] = array_merge( $definitions[ $key ] ?? array(), $entries );
+		}
+
+		return $definitions;
+	}
+
+	/**
+	 * Build the key nodes for the definitions that apply to each storage key.
+	 *
+	 * Definitions of one key that classify differently (see kind()) are
+	 * reported as a conflict and not declared. Otherwise text fields become a
+	 * key, link fields a key with title and url, repeaters a key with one row
+	 * level matched with "*" (the row fields of all its definitions compared the
+	 * same way), and value fields nothing. The first definition, the block's own
+	 * where there is one, gives the label. Where the attribute builder stores
+	 * nothing, for a group with an ID nested in another group or in repeater
+	 * rows, the key matches no value and WPML ignores it.
+	 *
+	 * @param array<string, array<int, array>> $candidates Definitions that apply to each storage key, as from definitions().
+	 * @param string                           $block      Block name, for the skipped and conflicts lists.
+	 * @param string                           $path       Storage path of the enclosing repeater rows, empty outside them:
+	 *                                                     each repeater adds its key and "*", separated by slashes.
+	 * @param array<int,string>                $skipped    Fields of unknown types (passed by reference).
+	 * @param array<int,string>                $conflicts  Storage keys whose definitions conflict (passed by reference).
 	 *
 	 * @return array<int, array> Key nodes.
 	 */
-	private static function keys( array $effective, string $block, array &$skipped ): array {
+	private static function keys( array $candidates, string $block, string $path, array &$skipped, array &$conflicts ): array {
 		$nodes = array();
 
-		foreach ( $effective as $key => $entry ) {
-			// Hidden fields hold values that editors do not write, such as block field references.
-			if ( $entry['hidden'] ) {
+		foreach ( $candidates as $key => $entries ) {
+			$key   = (string) $key;
+			$kinds = array_values( array_unique( array_map( static fn( array $entry ): string => self::kind( $entry ), $entries ) ) );
+
+			if ( 1 !== count( $kinds ) ) {
+				$conflicts[] = sprintf( '%1$s: %2$s (%3$s)', $block, $path . $key, self::describe( $entries ) );
 				continue;
 			}
 
-			$field = $entry['field'];
-			$key   = (string) $key;
-			$type  = (string) $field['type'];
-			$label = self::label( $field, (string) $field['id'] );
-			$inner = is_array( $field['attributes'] ?? null ) ? $field['attributes'] : array();
+			$field = $entries[0]['field'];
+			$label = implode( ': ', array_merge( $entries[0]['parents'], array( self::label( $field, (string) $field['id'] ) ) ) );
 
-			if ( 'repeater' === $type ) {
-				$rows = self::keys( self::effective( $inner, '', array_merge( $entry['parents'], array( $label ) ) ), $block, $skipped );
+			if ( 'repeater' === $kinds[0] ) {
+				$rows = array();
+
+				foreach ( $entries as $entry ) {
+					$inner = is_array( $entry['field']['attributes'] ?? null ) ? $entry['field']['attributes'] : array();
+					$trail = array_merge( $entry['parents'], array( self::label( $entry['field'], (string) $entry['field']['id'] ) ) );
+					$rows  = self::combine( $rows, self::definitions( $inner, $entry['source'], '', $trail ) );
+				}
+
+				$rows = self::keys( $rows, $block, $path . $key . '/*/', $skipped, $conflicts );
 
 				if ( array() !== $rows ) {
 					$nodes[] = array(
@@ -416,35 +494,80 @@ final class Wpml_Config {
 				continue;
 			}
 
-			$path = implode( ': ', array_merge( $entry['parents'], array( $label ) ) );
-
-			if ( in_array( $type, self::TEXT_TYPES, true ) ) {
+			if ( 'text' === $kinds[0] ) {
 				$nodes[] = array(
 					'name'  => $key,
-					'label' => $path,
+					'label' => $label,
 				);
-			} elseif ( 'link' === $type ) {
+			} elseif ( 'link' === $kinds[0] ) {
 				// WPML points a URL declared as a link to the translated page when it saves a translation.
 				$nodes[] = array(
 					'name' => $key,
 					'keys' => array(
 						array(
 							'name'  => 'title',
-							'label' => $path,
+							'label' => $label,
 						),
 						array(
 							'name'  => 'url',
 							'type'  => 'link',
-							'label' => $path . ': URL',
+							'label' => $label . ': URL',
 						),
 					),
 				);
-			} elseif ( ! in_array( $type, self::VALUE_TYPES, true ) ) {
-				$skipped[] = sprintf( '%1$s: %2$s (%3$s)', $block, $path, $type );
+			} elseif ( 'value' !== $kinds[0] ) {
+				$skipped[] = sprintf( '%1$s: %2$s (%3$s)', $block, $label, (string) $field['type'] );
 			}
 		}
 
 		return $nodes;
+	}
+
+	/**
+	 * Classify a definition by the declaration its stored value needs.
+	 *
+	 * @param array{field: array, source: string, parents: array<int,string>, hidden: bool} $entry Definition.
+	 *
+	 * @return string "text", "link", "repeater", "value" for a value that is not declared, or "type:" followed by the
+	 *                type for an unknown type.
+	 */
+	private static function kind( array $entry ): string {
+		$type = (string) $entry['field']['type'];
+
+		// Hidden fields hold values that editors do not write, such as block field references.
+		if ( $entry['hidden'] || in_array( $type, self::VALUE_TYPES, true ) ) {
+			return 'value';
+		}
+
+		if ( in_array( $type, self::TEXT_TYPES, true ) ) {
+			return 'text';
+		}
+
+		return 'link' === $type || 'repeater' === $type ? $type : 'type:' . $type;
+	}
+
+	/**
+	 * Describe the definitions of a conflicting storage key.
+	 *
+	 * @param array<int, array{field: array, source: string, parents: array<int,string>, hidden: bool}> $entries Definitions.
+	 *
+	 * @return string Types by source, for example "text in the block, select in an extension".
+	 */
+	private static function describe( array $entries ): string {
+		$types = array();
+
+		foreach ( $entries as $entry ) {
+			$where             = 'block' === $entry['source'] ? 'in the block' : 'in an extension';
+			$types[ $where ][] = ( $entry['hidden'] ? 'hidden ' : '' ) . (string) $entry['field']['type'];
+		}
+
+		$parts = array();
+
+		foreach ( $types as $where => $list ) {
+			$parts[] = implode( ' and ', array_unique( $list ) ) . ' ' . $where;
+		}
+
+		return implode( ', ', $parts );
 	}
 
 	/**

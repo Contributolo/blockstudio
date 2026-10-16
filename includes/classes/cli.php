@@ -196,7 +196,10 @@ class Cli {
 	 *
 	 * Prints a wpml-config.xml that declares the text fields of every
 	 * registered block for translation. Blocks without text fields are declared
-	 * with translate="0", so WPML copies their values unchanged.
+	 * with translate="0", so WPML copies their values unchanged. Fields of
+	 * unknown types, and storage keys whose fields have different types (a block
+	 * field and an extension field, or two fields in the rows of one repeater),
+	 * are not declared; the command prints a warning for each.
 	 *
 	 * ## OPTIONS
 	 *
@@ -235,6 +238,10 @@ class Cli {
 
 		foreach ( $section['skipped'] as $field ) {
 			\WP_CLI::warning( "Not declared, the field type is unknown: $field" );
+		}
+
+		foreach ( $section['conflicts'] as $conflict ) {
+			\WP_CLI::warning( "Not declared, the fields that store this key have different types: $conflict" );
 		}
 
 		$file = isset( $assoc_args['file'] ) ? (string) $assoc_args['file'] : '';
