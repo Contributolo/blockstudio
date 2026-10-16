@@ -1,0 +1,28 @@
+{
+  "$schema": "https://blockstudio.dev/schema/block",
+  "name": "blockstudio/type-select-empty",
+  "title": "Native Select Empty",
+  "category": "blockstudio-test-native",
+  "icon": "star-filled",
+  "description": "Native Blockstudio Select block without default.",
+  "keywords": ["select", "empty", "native"],
+  "blockstudio": {
+    "attributes": [
+      {
+        "id": "choice",
+        "type": "select",
+        "label": "Choice",
+        "options": [
+          {
+            "value": "one",
+            "label": "One"
+          },
+          {
+            "value": "two",
+            "label": "Two"
+          }
+        ]
+      }
+    ]
+  }
+}

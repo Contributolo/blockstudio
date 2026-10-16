@@ -50,14 +50,14 @@ test.describe('repeater minimized', () => {
   });
 
   test('boolean removal confirmation uses the translated default question', async () => {
-    const dialog = page.waitForEvent('dialog');
-    const click = row(2)
-      .locator('.blockstudio-repeater__remove')
-      .first()
-      .click();
-    const confirmation = await dialog;
-    expect(confirmation.message()).toBe('Do you want to delete this row?');
-    await click;
+    await row(2).locator('.blockstudio-repeater__remove').first().click();
+    const dialog = page.getByRole('dialog', {
+      name: 'Remove row 3',
+      exact: true,
+    });
+    await expect(dialog).toHaveText(/Do you want to delete this row\?/);
+    await dialog.getByRole('button', { name: 'Delete', exact: true }).click();
+    await expect(dialog).toHaveCount(0);
     await expect(row(2)).toHaveCount(0);
     await page.click('text=Add item');
     await expect(rowInput(2)).toBeVisible();

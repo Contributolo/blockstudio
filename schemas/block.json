@@ -5420,7 +5420,7 @@
                                 "string",
                                 "boolean"
                               ],
-                              "description": "Text to display in alert when removing repeater row."
+                              "description": "Confirmation question shown in the editor when removing a repeater row. A non-empty string changes the question; false removes immediately without a dialog. Omitted, true, or an empty string uses the default question."
                             },
                             "attributes": {
                               "type": "array",
@@ -6604,7 +6604,7 @@
                       "string",
                       "boolean"
                     ],
-                    "description": "Text to display in alert when removing repeater row."
+                    "description": "Confirmation question shown in the editor when removing a repeater row. A non-empty string changes the question; false removes immediately without a dialog. Omitted, true, or an empty string uses the default question."
                   },
                   "attributes": {
                     "type": "array",

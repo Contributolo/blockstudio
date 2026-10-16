@@ -1,5 +1,8 @@
 import { Draggable } from '@hello-pangea/dnd';
-import { Button } from '@wordpress/components';
+import {
+  Button,
+  __experimentalConfirmDialog as ConfirmDialog,
+} from '@wordpress/components';
 import {
   Fragment,
   createContext,
@@ -131,6 +134,7 @@ const DragElement = ({
     : 'blockstudioRepeater';
   const id = `${postId}-${block.name}-${getId(index)}`;
   const [isHover, setIsHover] = useState(false);
+  const [isRemoveOpen, setIsRemoveOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(() => {
     const storage = readRepeaterState(storageKey);
     return item?.minimized
@@ -273,192 +277,204 @@ const DragElement = ({
   };
 
   return (
-    <Draggable
-      draggableId={draggableId}
-      index={index}
-      isDragDisabled={length === 1}
-    >
-      {(provided, snapshot) => (
-        <div
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-          id={repeaterId}
-          style={{
-            ...{ position: 'relative' },
-            ...(getItemStyle(
-              snapshot.isDragging,
-              provided.draggableProps.style || {},
-              index,
-            ) as { [key: string]: string }),
-          }}
-          css={css({
-            '&:hover > div, &:focus > div, &:focus-within > div': {
-              opacity: 1,
-            },
-            '&:focus': {
-              borderColor: 'var(--wp-admin-theme-color)',
-              zIndex: 10,
-            },
-          })}
-          className={`blockstudio-space blockstudio-repeater__item blockstudio-repeater__item--${
-            index + 1
-          }`}
-          onMouseEnter={() => setIsHover(true)}
-          onMouseLeave={() => setIsHover(false)}
-          onFocus={() => setIsHover(true)}
-          onBlur={() => setIsHover(false)}
-          onKeyDown={(e) => {
-            if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              e.stopPropagation();
-            }
-            if (e.key === 'ArrowUp') moveUp?.(index, innerId, repeaterId);
-            if (e.key === 'ArrowDown') moveDown?.(index, innerId, repeaterId);
-          }}
-        >
+    <>
+      <Draggable
+        draggableId={draggableId}
+        index={index}
+        isDragDisabled={length === 1}
+      >
+        {(provided, snapshot) => (
           <div
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            id={repeaterId}
+            style={{
+              ...{ position: 'relative' },
+              ...(getItemStyle(
+                snapshot.isDragging,
+                provided.draggableProps.style || {},
+                index,
+              ) as { [key: string]: string }),
+            }}
             css={css({
-              position: 'absolute',
-              right: '1px',
-              top: 0,
-              opacity: 0,
-              display: snapshot.isDragging && !isHover ? 'none' : 'flex',
-              borderBottom: border,
+              '&:hover > div, &:focus > div, &:focus-within > div': {
+                opacity: 1,
+              },
+              '&:focus': {
+                borderColor: 'var(--wp-admin-theme-color)',
+                zIndex: 10,
+              },
             })}
+            className={`blockstudio-space blockstudio-repeater__item blockstudio-repeater__item--${
+              index + 1
+            }`}
+            onMouseEnter={() => setIsHover(true)}
+            onMouseLeave={() => setIsHover(false)}
+            onFocus={() => setIsHover(true)}
+            onBlur={() => setIsHover(false)}
+            onKeyDown={(e) => {
+              // Portal events must not reorder an ancestor repeater row.
+              if (!e.currentTarget.contains(e.target as Node)) return;
+
+              if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                e.preventDefault();
+                e.stopPropagation();
+              }
+              if (e.key === 'ArrowUp') moveUp?.(index, innerId, repeaterId);
+              if (e.key === 'ArrowDown') moveDown?.(index, innerId, repeaterId);
+            }}
           >
-            {[
-              {
-                icon: chevronDown,
-                className: 'blockstudio-repeater__minimize',
-                /* translators: %d: number of the repeater row. */
-                label: isMinimized
-                  ? __('Expand row %d')
-                  : __('Collapse row %d'),
-                expanded: !isMinimized,
-                onClick: () => {
-                  const next = !isMinimized;
-                  writeRepeaterState(storageKey, id, next, !!item?.minimized);
-                  setIsMinimized(next);
+            <div
+              css={css({
+                position: 'absolute',
+                right: '1px',
+                top: 0,
+                opacity: 0,
+                display: snapshot.isDragging && !isHover ? 'none' : 'flex',
+                borderBottom: border,
+              })}
+            >
+              {[
+                {
+                  icon: chevronDown,
+                  className: 'blockstudio-repeater__minimize',
+                  /* translators: %d: number of the repeater row. */
+                  label: isMinimized
+                    ? __('Expand row %d')
+                    : __('Collapse row %d'),
+                  expanded: !isMinimized,
+                  onClick: () => {
+                    const next = !isMinimized;
+                    writeRepeaterState(storageKey, id, next, !!item?.minimized);
+                    setIsMinimized(next);
+                  },
+                  reverse: isMinimized,
+                  condition: true,
                 },
-                reverse: isMinimized,
-                condition: true,
-              },
-              {
-                icon: create,
-                className: 'blockstudio-repeater__duplicate',
-                /* translators: %d: number of the repeater row. */
-                label: __('Duplicate row %d'),
-                onClick: () => {
-                  duplicate(getId(index));
+                {
+                  icon: create,
+                  className: 'blockstudio-repeater__duplicate',
+                  /* translators: %d: number of the repeater row. */
+                  label: __('Duplicate row %d'),
+                  onClick: () => {
+                    duplicate(getId(index));
+                  },
+                  condition: item.max ? length <= item.max : true,
                 },
-                condition: item.max ? length <= item.max : true,
-              },
-              {
-                icon: closeSmall,
-                className: 'blockstudio-repeater__remove',
-                /* translators: %d: number of the repeater row. */
-                label: __('Remove row %d'),
-                onClick: () => {
-                  if (item?.textRemove === false) {
-                    remove(getId(index));
-                    return;
-                  }
+                {
+                  icon: closeSmall,
+                  className: 'blockstudio-repeater__remove',
+                  /* translators: %d: number of the repeater row. */
+                  label: __('Remove row %d'),
+                  onClick: () => {
+                    if (item?.textRemove === false) {
+                      remove(getId(index));
+                      return;
+                    }
 
-                  if (
-                    window.confirm(
-                      typeof item?.textRemove === 'string' && item.textRemove
-                        ? __(item.textRemove, true)
-                        : __('Do you want to delete this row?'),
-                    )
-                  ) {
-                    remove(getId(index));
-                  }
+                    setIsRemoveOpen(true);
+                  },
+                  condition: item?.min ? item.min < length : true,
                 },
-                condition: item?.min ? item.min < length : true,
-              },
-            ]
-              .filter((e) => e.condition)
-              .map((control) => {
-                // A native button keeps Space from starting a keyboard drag of
-                // the row, because the drag sensor ignores interactive elements.
+              ]
+                .filter((e) => e.condition)
+                .map((control) => {
+                  // A native button keeps Space from starting a keyboard drag of
+                  // the row, because the drag sensor ignores interactive elements.
+                  return (
+                    <Button
+                      key={control.className}
+                      className={control.className}
+                      icon={control.icon}
+                      label={control.label.replace('%d', String(index + 1))}
+                      aria-expanded={control.expanded}
+                      size="small"
+                      onClick={control.onClick}
+                      css={css({
+                        width: '24px',
+                        minWidth: '24px',
+                        height: '24px',
+                        padding: 0,
+                        border: 0,
+                        borderLeft: border,
+                        borderRadius: 0,
+                        // Core buttons turn the accent color with aria-expanded.
+                        color: 'inherit',
+                        zIndex: 50,
+
+                        '&:hover, &:focus': {
+                          color: 'var(--wp-admin-theme-color)',
+                        },
+
+                        '& svg': {
+                          transform: control.reverse
+                            ? 'rotate(180deg)'
+                            : undefined,
+                          position: 'relative',
+                          top: control.reverse ? '1px' : undefined,
+                        },
+                      })}
+                    />
+                  );
+                })}
+            </div>
+            <div
+              css={css({
+                display: isMinimized ? 'none' : 'contents',
+              })}
+            >
+              {group.map((e: Any, index: number) => {
+                const transformedAttribute = getTransformedAttribute(e, index);
+
+                if (e.options || transformedAttribute?.options) {
+                  e = {
+                    ...e,
+                    options: transformedAttribute?.options || e.options,
+                  };
+                }
+
+                if (e.type === 'group') {
+                  return renderGroup(e, index);
+                }
+
                 return (
-                  <Button
-                    key={control.className}
-                    className={control.className}
-                    icon={control.icon}
-                    label={control.label.replace('%d', String(index + 1))}
-                    aria-expanded={control.expanded}
-                    size="small"
-                    onClick={control.onClick}
-                    css={css({
-                      width: '24px',
-                      minWidth: '24px',
-                      height: '24px',
-                      padding: 0,
-                      border: 0,
-                      borderLeft: border,
-                      borderRadius: 0,
-                      // Core buttons turn the accent color with aria-expanded.
-                      color: 'inherit',
-                      zIndex: 50,
-
-                      '&:hover, &:focus': {
-                        color: 'var(--wp-admin-theme-color)',
-                      },
-
-                      '& svg': {
-                        transform: control.reverse
-                          ? 'rotate(180deg)'
-                          : undefined,
-                        position: 'relative',
-                        top: control.reverse ? '1px' : undefined,
-                      },
-                    })}
-                  />
+                  <Fragment key={`${draggableId}.${e.id}`}>
+                    {element(
+                      e,
+                      `${draggableId}.${e.id}`,
+                      transformedAttribute as unknown as boolean,
+                    )}
+                  </Fragment>
                 );
               })}
+            </div>
+            <div
+              css={css({
+                display: !isMinimized ? 'none' : 'contents',
+              })}
+            >
+              {textMinimized.replace('{index}', String(index + 1))}
+            </div>
           </div>
-          <div
-            css={css({
-              display: isMinimized ? 'none' : 'contents',
-            })}
-          >
-            {group.map((e: Any, index: number) => {
-              const transformedAttribute = getTransformedAttribute(e, index);
-
-              if (e.options || transformedAttribute?.options) {
-                e = {
-                  ...e,
-                  options: transformedAttribute?.options || e.options,
-                };
-              }
-
-              if (e.type === 'group') {
-                return renderGroup(e, index);
-              }
-
-              return (
-                <Fragment key={`${draggableId}.${e.id}`}>
-                  {element(
-                    e,
-                    `${draggableId}.${e.id}`,
-                    transformedAttribute as unknown as boolean,
-                  )}
-                </Fragment>
-              );
-            })}
-          </div>
-          <div
-            css={css({
-              display: !isMinimized ? 'none' : 'contents',
-            })}
-          >
-            {textMinimized.replace('{index}', String(index + 1))}
-          </div>
-        </div>
+        )}
+      </Draggable>
+      {isRemoveOpen && (
+        <ConfirmDialog
+          aria-label={__('Remove row %d').replace('%d', String(index + 1))}
+          confirmButtonText={__('Delete')}
+          onCancel={() => setIsRemoveOpen(false)}
+          onConfirm={() => {
+            setIsRemoveOpen(false);
+            remove(getId(index));
+          }}
+        >
+          {typeof item?.textRemove === 'string' && item.textRemove
+            ? __(item.textRemove, true)
+            : __('Do you want to delete this row?')}
+        </ConfirmDialog>
       )}
-    </Draggable>
+    </>
   );
 };
 

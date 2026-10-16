@@ -612,7 +612,7 @@ Renders a set of fields that can be repeated.
 | `minimized` | `boolean` | Collapse the existing rows when the editor opens. Rows added in the editor start expanded. |
 | `textButton` | `string` | Text for the add button. |
 | `textMinimized` | `string \| object` | Text that will be displayed when rows are minimized. |
-| `textRemove` | `string \| boolean` | Text to display in alert when removing repeater row. |
+| `textRemove` | `string \| boolean` | Confirmation question shown in the editor when removing a repeater row. A non-empty string changes the question; false removes immediately without a dialog. Omitted, true, or an empty string uses the default question. |
 | `attributes` | `array` | Accepts all other field types besides another tabs. |
 
 ## richtext
@@ -687,6 +687,29 @@ array of option objects. Numeric `0` and string `"0"` are valid selections.
 Templates receive the field's configured `returnFormat`, just as they do for
 values selected in the editor. Options still need to match the field's declared
 or populated choices.
+
+A native single select without a stored value or default displays a disabled
+empty placeholder, not its first option. Choosing the first option explicitly
+stores it. Once a choice is stored, the placeholder disappears. Use `allowNull`
+when editors should also be able to clear a selection; an empty placeholder does
+not make an otherwise required choice clearable.
+
+## Repeater Removal
+
+Removing a row opens the editor's confirmation dialog with **Delete** and
+**Cancel** buttons. Cancel or Escape leaves the row unchanged. The row is only
+removed after confirmation, including inside nested repeaters.
+
+`textRemove` controls the same behavior for every repeater:
+
+| Value | Behavior |
+|-------|----------|
+| Omitted, `true`, or `""` | Show the default confirmation question. |
+| A non-empty string | Show that custom question, using the existing custom-text translation mechanism. |
+| `false` | Remove the row immediately without a dialog. |
+
+For example, `"textRemove": "Remove this team member?"` changes the question.
+The existing `min` restriction still prevents removing rows below the minimum.
 
 ## WYSIWYG Links
 

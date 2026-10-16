@@ -120,6 +120,7 @@ test.describe('repeater-richtext', () => {
 			)
 			.click();
 
+		await page.getByRole('dialog').getByRole('button', { name: 'Delete', exact: true }).click();
 		await count(page, '[data-rfd-draggable-id^="items["]', 1);
 		canvas = await getEditorCanvas(page);
 		await count(canvas, '.repeater-item', 1);

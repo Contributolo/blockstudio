@@ -353,6 +353,7 @@ msgid "Insert Media"
 msgstr "Medien einfügen"
 
 #: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
 msgid "Delete"
 msgstr "Löschen"
 

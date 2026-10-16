@@ -1,4 +1,20 @@
+import type { BlockstudioFieldsOptions } from '@/types/types';
+
 type OptionValue = { value: string | number; label: string };
+
+// A native select otherwise displays its first option even though the stored
+// value is empty. The placeholder must not become a new selectable choice.
+export const getNativeSelectOptions = (
+  value: unknown,
+  options: BlockstudioFieldsOptions[],
+): (BlockstudioFieldsOptions & { disabled?: boolean })[] => {
+  const isEmpty =
+    value === undefined || value === null || value === false || value === '';
+
+  return isEmpty && !options.some((option) => option.value === '')
+    ? [{ value: '', label: '', disabled: true }, ...options]
+    : options;
+};
 
 const isOptionObject = (value: unknown): value is OptionValue =>
   !!value && typeof value === 'object' && 'value' in value;

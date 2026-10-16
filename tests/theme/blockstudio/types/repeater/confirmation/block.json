@@ -1,0 +1,48 @@
+{
+  "$schema": "https://blockstudio.dev/schema/block",
+  "name": "blockstudio/type-repeater-confirmation",
+  "title": "Native Repeater Confirmation",
+  "category": "blockstudio-test-native",
+  "blockstudio": {
+    "attributes": [
+      {
+        "id": "custom",
+        "type": "repeater",
+        "min": 1,
+        "textRemove": "Remove this entry?",
+        "default": [{ "title": "Keep custom" }, { "title": "Delete custom" }],
+        "attributes": [{ "id": "title", "type": "text" }]
+      },
+      {
+        "id": "silent",
+        "type": "repeater",
+        "textRemove": false,
+        "default": [{ "title": "Keep silent" }, { "title": "Delete silent" }],
+        "attributes": [{ "id": "title", "type": "text" }]
+      },
+      {
+        "id": "empty",
+        "type": "repeater",
+        "textRemove": "",
+        "default": [{ "title": "Keep empty" }, { "title": "Delete empty" }],
+        "attributes": [{ "id": "title", "type": "text" }]
+      },
+      {
+        "id": "nested",
+        "type": "repeater",
+        "default": [
+          { "items": [{ "title": "Keep nested" }, { "title": "Delete nested" }] },
+          { "items": [{ "title": "Other parent" }] }
+        ],
+        "attributes": [
+          {
+            "id": "items",
+            "type": "repeater",
+            "textRemove": "Remove nested entry?",
+            "attributes": [{ "id": "title", "type": "text" }]
+          }
+        ]
+      }
+    ]
+  }
+}

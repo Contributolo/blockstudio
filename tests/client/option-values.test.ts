@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
+  getNativeSelectOptions,
   getOptionLabel,
   getOptionValue,
   normalizeOptionValues,
@@ -12,6 +13,27 @@ const languages = [
   { value: 'de', label: 'Deutsch' },
   { value: 'en', label: 'English' },
 ];
+
+test('empty native selects show a disabled placeholder without changing their options', () => {
+  for (const value of [undefined, null, false, '']) {
+    assert.deepEqual(getNativeSelectOptions(value, languages), [
+      { value: '', label: '', disabled: true },
+      ...languages,
+    ]);
+  }
+  assert.equal(languages.length, 2);
+});
+
+test('native selects preserve an existing nullable or explicit empty option', () => {
+  const options = [{ value: '', label: 'No selection' }, ...languages];
+  assert.equal(getNativeSelectOptions('', options), options);
+});
+
+test('native selects do not add placeholders for stored values, including zero', () => {
+  for (const value of ['de', 0, '0']) {
+    assert.equal(getNativeSelectOptions(value, languages), languages);
+  }
+});
 const numbers = [
   { value: 1, label: 'One' },
   { value: 2, label: 'Two' },

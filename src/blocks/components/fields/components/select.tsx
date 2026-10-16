@@ -9,6 +9,7 @@ import { useRef, useEffect, useState, useMemo } from '@wordpress/element';
 import { debounce, get, isArray } from 'lodash-es';
 import { Cards } from '@/blocks/components/list/cards';
 import {
+  getNativeSelectOptions,
   isSameOptionValue,
   normalizeOptionValues,
 } from '@/blocks/utils/option-values';
@@ -398,7 +399,8 @@ export const Select = ({
         />
       ) : (
         <SelectControl
-          {...{ ...rest, value, options }}
+          {...{ ...rest, value }}
+          options={getNativeSelectOptions(value, options)}
           className={`components-base-control`}
           help={false}
           label={false}

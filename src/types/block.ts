@@ -652,7 +652,9 @@ export interface BlockstudioAttribute {
    */
   textMinimized?: FluffyTextMinimized | string;
   /**
-   * Text to display in alert when removing repeater row.
+   * Confirmation question shown in the editor when removing a repeater row. A non-empty string
+   * changes the question; false removes immediately without a dialog. Omitted, true, or an empty
+   * string uses the default question.
    */
   textRemove?: boolean | string;
   /**
@@ -1012,7 +1014,9 @@ export interface AttributeAttribute {
    */
   textMinimized?: PurpleTextMinimized | string;
   /**
-   * Text to display in alert when removing repeater row.
+   * Confirmation question shown in the editor when removing a repeater row. A non-empty string
+   * changes the question; false removes immediately without a dialog. Omitted, true, or an empty
+   * string uses the default question.
    */
   textRemove?: boolean | string;
   /**

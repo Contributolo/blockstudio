@@ -72,19 +72,49 @@ test.describe('repeater row controls', () => {
 
   test('remove with Space after the confirmation', async () => {
     await control(2, 'Remove row 3').focus();
-    const dialog = page.waitForEvent('dialog');
-    const press = page.keyboard.press('Space');
-    expect((await dialog).message()).toBe('Do you want to delete this row?');
-    await press;
+    await page.keyboard.press('Space');
+    const dialog = page.getByRole('dialog', {
+      name: 'Remove row 3',
+      exact: true,
+    });
+    await expect(dialog).toHaveText(/Do you want to delete this row\?/);
+    await expect(rows()).toHaveCount(3);
+    await dialog.getByRole('button', { name: 'Delete', exact: true }).click();
+    await expect(dialog).toHaveCount(0);
     await expect(rows()).toHaveCount(2);
+  });
+
+  test('cancel and Escape preserve the row and restore focus', async () => {
+    const remove = control(1, 'Remove row 2');
+    const dialog = page.getByRole('dialog', {
+      name: 'Remove row 2',
+      exact: true,
+    });
+    await remove.click();
+    await dialog.getByRole('button', { name: 'Cancel', exact: true }).click();
+    await expect(dialog).toHaveCount(0);
+    await expect(rows()).toHaveCount(2);
+    await expect(remove).toBeFocused();
+
+    await page.keyboard.press('Enter');
+    await expect(dialog).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(dialog).toHaveCount(0);
+    await expect(rows()).toHaveCount(2);
+    await expect(remove).toBeFocused();
   });
 
   test('remove with Enter', async () => {
     await control(1, 'Remove row 2').focus();
-    const dialog = page.waitForEvent('dialog');
-    const press = page.keyboard.press('Enter');
-    await dialog;
-    await press;
+    await page.keyboard.press('Enter');
+    const dialog = page.getByRole('dialog', {
+      name: 'Remove row 2',
+      exact: true,
+    });
+    await expect(dialog).toBeVisible();
+    await dialog.getByRole('button', { name: 'Delete', exact: true }).focus();
+    await page.keyboard.press('Enter');
+    await expect(dialog).toHaveCount(0);
     await expect(rows()).toHaveCount(1);
     await expect(control(0, 'Remove row 1')).toHaveCount(1);
   });

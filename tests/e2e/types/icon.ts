@@ -59,6 +59,7 @@ testType(
             .nth(0)
             .click();
           await page.locator('.blockstudio-repeater__remove').nth(1).click();
+          await page.getByRole('dialog').getByRole('button', { name: 'Delete', exact: true }).click();
           await expect(
             page.locator('.components-form-token-field__input').nth(2)
           ).not.toHaveValue('0');
