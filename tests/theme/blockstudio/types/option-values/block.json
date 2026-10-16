@@ -1,0 +1,131 @@
+{
+  "$schema": "https://blockstudio.dev/schema/block",
+  "name": "blockstudio/type-option-values",
+  "title": "Native Option Values",
+  "category": "blockstudio-test-native",
+  "icon": "star-filled",
+  "blockstudio": {
+    "attributes": [
+      {
+        "id": "checkboxNumber",
+        "type": "checkbox",
+        "label": "Checkbox - Number",
+        "options": [
+          {
+            "value": 0,
+            "label": "Zero"
+          },
+          {
+            "value": 1,
+            "label": "One"
+          },
+          {
+            "value": 2,
+            "label": "Two"
+          }
+        ]
+      },
+      {
+        "id": "checkboxString",
+        "type": "checkbox",
+        "label": "Checkbox - String",
+        "options": [
+          {
+            "value": "0",
+            "label": "Zero"
+          },
+          {
+            "value": "1",
+            "label": "One"
+          },
+          {
+            "value": "2",
+            "label": "Two"
+          }
+        ]
+      },
+      {
+        "id": "checkboxPlainNumber",
+        "type": "checkbox",
+        "label": "Checkbox - Plain Number",
+        "options": [
+          0,
+          1,
+          2
+        ]
+      },
+      {
+        "id": "checkboxPlainString",
+        "type": "checkbox",
+        "label": "Checkbox - Plain String",
+        "options": [
+          "0",
+          "1",
+          "2"
+        ]
+      },
+      {
+        "id": "selectNumber",
+        "type": "select",
+        "multiple": true,
+        "label": "Select - Number",
+        "options": [
+          {
+            "value": 0,
+            "label": "Zero"
+          },
+          {
+            "value": 1,
+            "label": "One"
+          },
+          {
+            "value": 2,
+            "label": "Two"
+          }
+        ]
+      },
+      {
+        "id": "selectString",
+        "type": "select",
+        "multiple": true,
+        "label": "Select - String",
+        "options": [
+          {
+            "value": "0",
+            "label": "Zero"
+          },
+          {
+            "value": "1",
+            "label": "One"
+          },
+          {
+            "value": "2",
+            "label": "Two"
+          }
+        ]
+      },
+      {
+        "id": "selectPlainNumber",
+        "type": "select",
+        "multiple": true,
+        "label": "Select - Plain Number",
+        "options": [
+          0,
+          1,
+          2
+        ]
+      },
+      {
+        "id": "selectPlainString",
+        "type": "select",
+        "multiple": true,
+        "label": "Select - Plain String",
+        "options": [
+          "0",
+          "1",
+          "2"
+        ]
+      }
+    ]
+  }
+}
