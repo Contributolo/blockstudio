@@ -407,6 +407,43 @@ class StaticPrerenderEarlyServeTest extends TestCase {
 		$this->assertSame( $html, $this->serve_through_dropin( '/live-only/' ) );
 	}
 
+	public function test_percent_encoded_requests_resolve_unicode_routes(): void {
+		$site         = Static_Prerender_Early_Serve::current_site_identity();
+		$artifact_key = str_repeat( 'f', 64 );
+		$html         = '<!doctype html><html><body>Unicode route</body></html>';
+
+		file_put_contents( $this->cache . '/' . $artifact_key . '.html', $html );
+		$this->assertTrue(
+			Static_Prerender_Early_Serve::install_artifact_entry(
+				array(
+					'host'      => $site['host'],
+					'home_path' => $site['home_path'],
+					'build_id'  => str_repeat( 'a', 32 ),
+					'ttl'       => 3600,
+					'routes'    => array( $site['home_path'] . 'tool/Grüße-…/' => $artifact_key ),
+				),
+				$this->cache
+			)
+		);
+
+		$this->assertSame( $html, $this->serve_through_dropin( $site['home_path'] . 'tool/Gr%C3%BC%C3%9Fe-%E2%80%A6/' ) );
+		$this->assertSame( $html, $this->serve_through_dropin( $site['home_path'] . 'tool/gr%c3%bc%c3%9fe-%e2%80%a6/' ) );
+		$this->assertSame(
+			Static_Prerender_Runtime::cache_key_for_request(
+				array(
+					'HTTP_HOST'   => 'localhost:8888',
+					'REQUEST_URI' => '/tool/gr%C3%BC%C3%9Fe/',
+				)
+			),
+			Static_Prerender_Runtime::cache_key_for_request(
+				array(
+					'HTTP_HOST'   => 'localhost:8888',
+					'REQUEST_URI' => '/tool/grüße/',
+				)
+			)
+		);
+	}
+
 	public function test_generated_dropin_contains_the_same_anonymous_safety_boundaries(): void {
 		$source = Static_Prerender_Early_Serve::dropin_source();
 

@@ -2122,7 +2122,7 @@ final class Static_Prerender_Runtime {
 	private static function url_path( string $value ): string {
 		$path = wp_parse_url( $value, PHP_URL_PATH );
 
-		return is_string( $path ) && '' !== $path ? $path : '/';
+		return is_string( $path ) && '' !== $path ? rawurldecode( $path ) : '/';
 	}
 
 	/**

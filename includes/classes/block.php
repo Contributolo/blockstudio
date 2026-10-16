@@ -751,7 +751,11 @@ class Block {
 					}
 				}
 			}
-			$html           = $doc->saveHTML();
+			$html           = mb_decode_numericentity(
+				(string) $doc->saveHTML(),
+				array( 0x80, 0x10ffff, 0, 0xffffff ),
+				'UTF-8'
+			);
 			$trim_off_front = strpos( $html, '<body>' ) + 6;
 			$trim_off_end   = strrpos( $html, '</body>' ) - strlen( $html );
 

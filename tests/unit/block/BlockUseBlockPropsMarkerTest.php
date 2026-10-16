@@ -58,6 +58,16 @@ class BlockUseBlockPropsMarkerTest extends TestCase {
 		$this->assertSame( array(), $tags[1]['attributes'] );
 	}
 
+	public function test_frontend_cleanup_keeps_non_ascii_text_as_utf8(): void {
+		$output = $this->replace(
+			'<div useBlockProps class="x" title="Grüße"><p>مرحبا – 日本語 &amp; ü</p></div>'
+		);
+
+		$this->assertStringContainsString( '<p>مرحبا – 日本語 &amp; ü</p>', $output );
+		$this->assertStringContainsString( 'title="Grüße"', $output );
+		$this->assertStringNotContainsString( '&#', $output );
+	}
+
 	public function test_frontend_richtext_content_that_mentions_the_marker_renders_literally(): void {
 		$output = Block::render(
 			array(

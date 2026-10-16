@@ -3,7 +3,7 @@ Contributors: dnnsjsk
 Requires at least: 6.7
 Tested up to: 7.0.0
 Requires PHP: 8.2
-Stable tag: 7.7.2
+Stable tag: 7.7.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,10 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 * [Getting Started](https://blockstudio.dev/docs/getting-started)
 
 == Changelog ==
+
+= 7.7.3 =
+* Fix: early serve and the runtime cache resolve percent-encoded request paths to routes with non-ASCII characters
+* Fix: blocks whose templates use `useBlockProps` or RichText keep non-ASCII text as UTF-8 instead of numeric HTML entities
 
 = 7.7.2 =
 * New: public `bs_block_fields()` and `bs_block_assets()` helpers expose registered field definitions and block assets (#115)

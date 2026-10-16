@@ -23,7 +23,7 @@ final class Static_Prerender_Early_Serve {
 	 *
 	 * @var int
 	 */
-	public const DROPIN_VERSION = 5;
+	public const DROPIN_VERSION = 6;
 
 	/**
 	 * Ownership marker for the generated map.
@@ -532,7 +532,7 @@ function blockstudio_early_serve_static_prerender(): void {
 		return;
 	}
 
-	\$path = strtolower( (string) ( parse_url( \$uri, PHP_URL_PATH ) ?: '/' ) );
+	\$path = strtolower( rawurldecode( (string) ( parse_url( \$uri, PHP_URL_PATH ) ?: '/' ) ) );
 	foreach ( array( '/wp-admin', '/wp-json', '/wp-login.php', '/xmlrpc.php' ) as \$prefix ) {
 		if ( str_starts_with( \$path . '/', \$prefix . '/' ) ) {
 			return;
@@ -587,7 +587,7 @@ function blockstudio_early_serve_static_prerender(): void {
 		return;
 	}
 
-	\$route_path = strtolower( '/' . ltrim( (string) ( parse_url( \$uri, PHP_URL_PATH ) ?: '/' ), '/' ) );
+	\$route_path = strtolower( '/' . ltrim( rawurldecode( (string) ( parse_url( \$uri, PHP_URL_PATH ) ?: '/' ) ), '/' ) );
 	\$route_path = (string) ( preg_replace( '#/+#', '/', \$route_path ) ?: '/' );
 	\$directory = rtrim( (string) ( \$entry['dir'] ?? '' ), '/' );
 	if ( 'graph' === ( \$entry['mode'] ?? null ) ) {
@@ -1483,6 +1483,6 @@ PHP;
 	private static function url_path( string $value ): string {
 		$path = wp_parse_url( $value, PHP_URL_PATH );
 
-		return is_string( $path ) && '' !== $path ? $path : '/';
+		return is_string( $path ) && '' !== $path ? rawurldecode( $path ) : '/';
 	}
 }
