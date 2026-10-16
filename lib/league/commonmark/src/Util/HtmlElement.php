@@ -96,7 +96,6 @@ final class HtmlElement implements \Stringable
     public function setContents($contents): self
     {
         $this->contents = $contents ?? '';
-        // @phpstan-ignore-line
         return $this;
     }
     /** @psalm-immutable */

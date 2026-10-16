@@ -1,6 +1,6 @@
 {
     "dflydev/dot-access-data": "v3.0.3",
-    "league/commonmark": "2.8.2",
+    "league/commonmark": "2.10.3",
     "league/config": "v1.2.0",
     "nette/schema": "v1.3.5",
     "nette/utils": "v4.1.4",
