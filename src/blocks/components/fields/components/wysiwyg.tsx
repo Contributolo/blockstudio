@@ -1,8 +1,4 @@
-import { Link } from '@tiptap/extension-link';
-import { TextAlign } from '@tiptap/extension-text-align';
-import { Underline } from '@tiptap/extension-underline';
 import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
 import {
   Button,
   SelectControl,
@@ -28,6 +24,7 @@ import parserHtml from 'prettier/plugins/html';
 import prettier from 'prettier/standalone';
 import { Base } from '@/blocks/components/base';
 import { Code } from '@/blocks/components/fields/components/code';
+import { getWysiwygExtensions } from '@/blocks/utils/wysiwyg-extensions';
 import { Alignment, BlockstudioAttribute } from '@/types/block';
 import { __ } from '@/utils/__';
 import { css } from '@/utils/css';
@@ -65,29 +62,7 @@ export const WYSIWYG = ({
   const [val, setVal] = useState(value);
 
   const editor = useEditor({
-    extensions: [
-      StarterKit.configure({
-        heading: {
-          levels: item?.toolbar?.tags?.headings?.length
-            ? item?.toolbar?.tags?.headings
-            : [],
-        },
-      }),
-      Link.configure({
-        autolink: false,
-        openOnClick: false,
-        HTMLAttributes: item?.toolbar?.formats?.link?.attributes || {},
-      }),
-      Underline,
-      TextAlign.configure({
-        types: item?.toolbar?.formats?.textAlign?.types || [
-          'heading',
-          'paragraph',
-          'list',
-        ],
-        alignments: item?.toolbar?.formats?.textAlign?.alignments || [],
-      }),
-    ],
+    extensions: getWysiwygExtensions(item),
     content: val,
     onUpdate: ({ editor }) => setVal(editor.getHTML()),
     onSelectionUpdate: ({ editor }) =>
