@@ -90,7 +90,7 @@ testType('repeater', false, () => {
         );
         await count(
           page,
-          '[data-rfd-draggable-id="repeater[0].repeater[0].repeater[0]"] > div > [role="button"]',
+          '[data-rfd-draggable-id="repeater[0].repeater[0].repeater[0]"] > div > button',
           2,
         );
       },

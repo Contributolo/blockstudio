@@ -12,7 +12,8 @@ meta_description: "Manage Blockstudio blocks, pages, database, RPC, and cron fro
 # CLI
 
 Blockstudio registers WP-CLI commands for managing blocks, file-backed pages,
-database records, RPC functions, cron jobs, and settings from the terminal.
+database records, RPC functions, cron jobs, settings, and the WPML language
+configuration from the terminal.
 
 ## Blocks
 
@@ -442,6 +443,20 @@ longer exists, and `dead` entries whose directory is gone. `map prune` removes
 orphaned and dead entries and prints each removed entry with its reason;
 `--dry-run` prints the same report without writing. A map owned by another
 tool is never touched.
+
+## WPML
+
+### Generate the language configuration
+
+```bash
+wp bs wpml config
+wp bs wpml config --file=wp-content/themes/my-theme/wpml-config.xml
+```
+
+Prints a `wpml-config.xml` that declares the text fields of every registered
+block for translation, or writes it with `--file`. In an existing file, only
+the section between the Blockstudio markers is replaced. See
+[WPML](/docs/dev/wpml) for what is declared and how to keep the file up to date.
 
 ## Block Tag Migration
 

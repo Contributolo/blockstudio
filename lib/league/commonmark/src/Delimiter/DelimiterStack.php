@@ -43,7 +43,6 @@ final class DelimiterStack
             // @phpstan-ignore-line
         } else {
             $this->missingIndexCache = new \SplObjectStorage();
-            // @phpstan-ignore-line
         }
     }
     public function push(DelimiterInterface $newDelimiter): void

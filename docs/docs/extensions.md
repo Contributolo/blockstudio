@@ -223,6 +223,35 @@ For now, only values from the current attribute can be used inside `set` definit
 
 When using arrays, the `set` property will be applied to every item in the array.
 
+Each item adds its own class or style declaration. Any other attribute holds a single value, so every item overwrites it and the last item wins. Set `join` to `true` to write the results of all items instead, separated by spaces and without empty or repeated values, so a selector like `[data-langs~="en"]` matches every chosen item. `join` has no effect on `class` and `style`, or on fields that return a single value.
+
+```json
+{
+  "id": "langs",
+  "type": "checkbox",
+  "label": "Languages",
+  "options": [
+    {
+      "value": "en",
+      "label": "English"
+    },
+    {
+      "value": "de",
+      "label": "German"
+    }
+  ],
+  "set": [
+    {
+      "attribute": "data-langs",
+      "value": "{attributes.langs}",
+      "join": true
+    }
+  ]
+}
+```
+
+Choosing both options renders `data-langs="en de"`. Without `join`, it renders `data-langs="de"`.
+
 ### Attributes Field
 
 When using the `attributes` field, there is no `set` property needed, as the field automatically maps the values to the attribute name and value.

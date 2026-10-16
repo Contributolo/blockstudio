@@ -47,6 +47,8 @@ use WP_HTML_Tag_Processor;
  * - { "attribute": "class", "value": "{value}" } → adds CSS class
  * - { "attribute": "style", "value": "--color: {value}" } → adds inline style
  * - { "attribute": "data-foo", "value": "{value}" } → adds data attribute
+ * - { "attribute": "data-foo", "value": "{value}", "join": true } → writes
+ *   every entry of a list, separated by spaces, instead of the last one
  *
  * Template Syntax:
  * - {attributes.fieldName} → current field value
@@ -161,12 +163,23 @@ class Extensions {
 						continue;
 					}
 
+					// Opt-in: without "join", every entry of a list overwrites
+					// the attribute and the last one wins. Class and style
+					// already collect every entry.
+					$join = true === ( $set['join'] ?? false ) &&
+						'class' !== $set['attribute'] &&
+						'style' !== $set['attribute'] &&
+						$is_sequential( $val );
+					$list = array();
+
 					$apply_value = function (
 						$value,
 						$attr
 					) use (
 						&$class,
 						&$style,
+						&$list,
+						$join,
 						$set,
 						$content
 					) {
@@ -184,6 +197,8 @@ class Extensions {
 						} elseif ( 'style' === $set['attribute'] ) {
 							$style .= ' ' . $value . ';';
 							$style  = str_replace( ';;', ';', $style );
+						} elseif ( $join ) {
+							$list[] = $value;
 						} else {
 							$content->set_attribute( $set['attribute'], $value );
 						}
@@ -204,6 +219,13 @@ class Extensions {
 									$key => $blockstudio_attributes[ $key ][ $index ],
 								)
 							);
+						}
+
+						if ( $join ) {
+							$joined = self::join_list_values( $list );
+							if ( '' !== $joined ) {
+								$content->set_attribute( $set['attribute'], $joined );
+							}
 						}
 					} else {
 						$apply_value( $value, $blockstudio_attributes );
@@ -271,6 +293,38 @@ class Extensions {
 		}
 
 		return $matches;
+	}
+
+	/**
+	 * Join the values a list field produces for a "set" entry with "join".
+	 *
+	 * Every list entry is evaluated on its own. With `"join": true` on an
+	 * attribute other than class and style, the results are written once as
+	 * a space-separated list, the way HTML token lists work, so a selector
+	 * like `[data-langs~="en"]` matches every chosen entry. Empty and
+	 * repeated results are skipped, as are values that are not text or
+	 * numbers.
+	 *
+	 * @param array $values The evaluated values, one per list entry.
+	 *
+	 * @return string The values joined with a single space.
+	 */
+	public static function join_list_values( array $values ): string {
+		$tokens = array();
+
+		foreach ( $values as $value ) {
+			if ( ! is_string( $value ) && ! is_int( $value ) && ! is_float( $value ) ) {
+				continue;
+			}
+
+			$value = trim( (string) $value );
+
+			if ( '' !== $value && ! in_array( $value, $tokens, true ) ) {
+				$tokens[] = $value;
+			}
+		}
+
+		return implode( ' ', $tokens );
 	}
 
 	/**

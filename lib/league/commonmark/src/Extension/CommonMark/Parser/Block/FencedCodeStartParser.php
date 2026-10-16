@@ -23,7 +23,7 @@ final class FencedCodeStartParser implements BlockStartParserInterface
             return BlockStart::none();
         }
         $indent = $cursor->getIndent();
-        $fence = $cursor->match('/^[ \t]*(?:`{3,}(?!.*`)|~{3,})/');
+        $fence = $cursor->matchInPlace('/\G[ \t]*(?:`{3,}+(?!.*`)|~{3,})/');
         if ($fence === null) {
             return BlockStart::none();
         }

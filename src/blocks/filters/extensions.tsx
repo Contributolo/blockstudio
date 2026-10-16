@@ -6,6 +6,7 @@ import { addFilter } from '@wordpress/hooks';
 import { cloneDeep, isArray, set as lodashSet } from 'lodash-es';
 import { Fields } from '@/blocks/components/fields';
 import { getEditorDocument } from '@/blocks/utils/get-editor-document';
+import { joinListValues } from '@/blocks/utils/join-list-values';
 import { parseTemplate } from '@/blocks/utils/parse-template';
 import { selectors as selectorsTailwind } from '@/tailwind/store/selectors';
 import {
@@ -17,6 +18,8 @@ import { css } from '@/utils/css';
 
 const extensions = window.blockstudioAdmin.data.extensions;
 const isCanvas = !!(window as any).blockstudioCanvas;
+
+type ExtensionSet = { attribute: string; value: string; join?: boolean };
 
 const matchFound = (name: string, string: string) => {
   if (typeof name === 'string' && name.endsWith('*')) {
@@ -71,9 +74,18 @@ const getAttributes = (
     Object.values(block.attributes || {}).forEach((attribute: Any) => {
       if (disabled.includes(attribute.id)) return;
       if (attribute.set?.length) {
-        attribute.set.forEach((set: { attribute: string; value: string }) => {
+        attribute.set.forEach((set: ExtensionSet) => {
           if ((attributes as Any)?.[attribute.id]) {
             const copy = cloneDeep(attributes) as Any;
+            const entries = copy[attribute.id];
+            // Opt-in, as in render_blocks(): without join every entry of a
+            // list overwrites the attribute and the last one wins.
+            const join =
+              set.join === true &&
+              set.attribute !== 'class' &&
+              set.attribute !== 'style' &&
+              isArray(entries);
+            const list: Any[] = [];
 
             const applyValue = (value: Any) => {
               if (['select', 'radio', 'checkbox'].includes(attribute.field)) {
@@ -95,6 +107,19 @@ const getAttributes = (
                 }
               }
 
+              // Tokens are stored as { value, label }; render_blocks()
+              // receives them reduced to the return format.
+              if (
+                attribute.field === 'token' &&
+                attribute.returnFormat !== 'both'
+              ) {
+                lodashSet(
+                  copy,
+                  attribute.id,
+                  value?.[attribute.returnFormat || 'value'] ?? value,
+                );
+              }
+
               const val = set.value
                 ? parseTemplate(set.value, {
                     attributes: copy,
@@ -105,15 +130,27 @@ const getAttributes = (
                 classNames.push(val);
               } else if (set.attribute === 'style') {
                 styles.push(val.replace(/;+$/, ''));
+              } else if (join) {
+                list.push(val);
               } else {
                 dataAttributes[set.attribute] = val;
               }
             };
 
-            if (isArray(copy[attribute.id])) {
-              copy[attribute.id].forEach((value: Any) => applyValue(value));
+            if (isArray(entries)) {
+              // As in render_blocks(), each entry is the field's value while
+              // its template is evaluated.
+              entries.forEach((value: Any) => {
+                lodashSet(copy, attribute.id, value);
+                applyValue(value);
+              });
+
+              const joined = joinListValues(list);
+              if (join && joined) {
+                dataAttributes[set.attribute] = joined;
+              }
             } else {
-              applyValue(copy[attribute.id]);
+              applyValue(entries);
             }
           }
         });

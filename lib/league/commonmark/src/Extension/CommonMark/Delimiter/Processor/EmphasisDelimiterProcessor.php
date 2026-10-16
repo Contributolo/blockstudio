@@ -90,6 +90,15 @@ final class EmphasisDelimiterProcessor implements CacheableDelimiterProcessorInt
     }
     public function getCacheKey(DelimiterInterface $closer): string
     {
-        return \sprintf('%s-%s-%d-%d', $this->char, $closer->canOpen() ? 'canOpen' : 'cannotOpen', $closer->getOriginalLength() % 3, $closer->getLength());
+        return \sprintf(
+            '%s-%s-%d-%d',
+            $this->char,
+            $closer->canOpen() ? 'canOpen' : 'cannotOpen',
+            $closer->getOriginalLength() % 3,
+            // getDelimiterUse() only ever asks whether the closer's length is >= 2, so lengths
+            // beyond that are interchangeable. Clamping keeps the key space bounded, which is
+            // what makes the delimiter stack's lower-bound cache amortize.
+            \min($closer->getLength(), 2)
+        );
     }
 }

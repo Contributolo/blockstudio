@@ -425,4 +425,203 @@ class BlockTest extends TestCase {
 		$this->assertNull( $warning );
 		$this->assertSame( array( 'Curated', 'Featured' ), $attributes['caseStudies'] );
 	}
+
+	public static function single_multiple_option_value_provider(): array {
+		$languages = array(
+			array(
+				'value' => 'de',
+				'label' => 'Deutsch',
+			),
+			array(
+				'value' => 'en',
+				'label' => 'English',
+			),
+		);
+		$numbers   = array(
+			array(
+				'value' => 1,
+				'label' => 'One',
+			),
+			array(
+				'value' => 2,
+				'label' => 'Two',
+			),
+		);
+
+		return array(
+			'select string'               => array( 'select', $languages, 'value', 'de', array( 'de' ) ),
+			'select string as both'       => array( 'select', $languages, 'both', 'de', array( $languages[0] ) ),
+			'select number'               => array( 'select', $numbers, 'label', 2, array( 'Two' ) ),
+			'select numeric string'       => array( 'select', $numbers, 'value', '2', array( 2 ) ),
+			'select object'               => array( 'select', $languages, 'label', $languages[1], array( 'English' ) ),
+			'select object, plain option' => array(
+				'select',
+				array( 'red', 'green' ),
+				'value',
+				array(
+					'value' => 'red',
+					'label' => 'red',
+				),
+				array( 'red' ),
+			),
+			'select list'                 => array( 'select', $languages, 'value', $languages, array( 'de', 'en' ) ),
+			'select list of values'       => array( 'select', $languages, 'label', array( 'en', 'de' ), array( 'English', 'Deutsch' ) ),
+			'select unknown string'       => array( 'select', $languages, 'value', 'fr', false ),
+			'select empty string'         => array( 'select', $languages, 'value', '', false ),
+			'select false'                => array( 'select', $languages, 'value', false, false ),
+			'select empty list'           => array( 'select', $languages, 'value', array(), false ),
+			'checkbox string'             => array( 'checkbox', $languages, 'value', 'en', array( 'en' ) ),
+			'checkbox number'             => array( 'checkbox', $numbers, 'value', 1, array( 1 ) ),
+			'checkbox object'             => array( 'checkbox', $languages, 'value', $languages[1], array( 'en' ) ),
+			'checkbox list'               => array( 'checkbox', $languages, 'value', array_reverse( $languages ), array( 'de', 'en' ) ),
+			'fetch select string'         => array(
+				'select',
+				array(),
+				'value',
+				'de',
+				array(
+					array(
+						'value' => 'de',
+						'label' => 'de',
+					),
+				),
+				array( 'type' => 'fetch' ),
+			),
+			'fetch select object'         => array( 'select', array(), 'value', $languages[0], array( $languages[0] ), array( 'type' => 'fetch' ) ),
+			'fetch select list'           => array( 'select', array(), 'value', $languages, $languages, array( 'type' => 'fetch' ) ),
+		);
+	}
+
+	public static function zero_option_value_provider(): array {
+		$zeros        = array(
+			array(
+				'value' => 0,
+				'label' => 'Zero',
+			),
+			array(
+				'value' => 1,
+				'label' => 'One',
+			),
+		);
+		$zero_strings = array(
+			array(
+				'value' => '0',
+				'label' => 'Zero',
+			),
+			array(
+				'value' => '1',
+				'label' => 'One',
+			),
+		);
+		$empty_string = array(
+			array(
+				'value' => '',
+				'label' => 'None',
+			),
+			array(
+				'value' => 'all',
+				'label' => 'All',
+			),
+		);
+
+		return array(
+			'checkbox zero'                     => array( 'checkbox', $zeros, 'value', 0, array( 0 ) ),
+			'checkbox zero as string'           => array( 'checkbox', $zeros, 'value', '0', array( 0 ) ),
+			'checkbox zero object'              => array( 'checkbox', $zeros, 'value', $zeros[0], array( 0 ) ),
+			'checkbox zero in list'             => array( 'checkbox', $zeros, 'value', array_reverse( $zeros ), array( 0, 1 ) ),
+			'checkbox zero as label'            => array( 'checkbox', $zeros, 'label', 0, array( 'Zero' ) ),
+			'checkbox zero as both'             => array( 'checkbox', $zeros, 'both', 0, array( $zeros[0] ) ),
+			'checkbox zero without option'      => array( 'checkbox', array_slice( $zeros, 1 ), 'value', 0, false ),
+			'checkbox string zero'              => array( 'checkbox', $zero_strings, 'value', '0', array( '0' ) ),
+			'checkbox string zero object'       => array( 'checkbox', $zero_strings, 'value', $zero_strings[0], array( '0' ) ),
+			'checkbox plain zero'               => array( 'checkbox', array( 0, 1 ), 'value', 0, array( 0 ) ),
+			'checkbox empty string option'      => array( 'checkbox', $empty_string, 'value', array( $empty_string[0] ), array( '' ) ),
+			'select zero'                       => array( 'select', $zeros, 'value', 0, array( 0 ) ),
+			'select zero object'                => array( 'select', $zeros, 'label', $zeros[0], array( 'Zero' ) ),
+			'select zero in list'               => array( 'select', $zeros, 'value', array_reverse( $zeros ), array( 1, 0 ) ),
+			'select string zero'                => array( 'select', $zero_strings, 'value', '0', array( '0' ) ),
+			'select string zero in list'        => array( 'select', $zero_strings, 'value', $zero_strings, array( '0', '1' ) ),
+			'select plain string zero'          => array( 'select', array( '0', '1' ), 'value', '0', array( '0' ) ),
+			'select plain string zero as label' => array( 'select', array( '0', '1' ), 'label', array( '1', '0' ), array( '1', '0' ) ),
+		);
+	}
+
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'single_multiple_option_value_provider' )]
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'zero_option_value_provider' )]
+	public function test_transform_attributes_reads_single_multiple_option_value_as_list(
+		string $field,
+		array $options,
+		string $return_format,
+		mixed $stored,
+		mixed $expected,
+		array $populate = array()
+	): void {
+		$attributes      = array( 'language' => $stored );
+		$attribute_names = array();
+		$attribute_data  = array();
+		$errors          = array();
+
+		set_error_handler(
+			static function ( int $severity, string $message ) use ( &$errors ): bool {
+				$errors[] = $message;
+				return true;
+			},
+			E_WARNING | E_NOTICE
+		);
+
+		try {
+			Block::transform_attributes(
+				$attributes,
+				$attribute_names,
+				array(),
+				'test/multiple-option',
+				array( 'name' => 'test/multiple-option' ),
+				false,
+				array(
+					'language' => array(
+						'type'         => 'array',
+						'field'        => $field,
+						'multiple'     => 'select' === $field,
+						'returnFormat' => $return_format,
+						'options'      => $options,
+						'populate'     => $populate,
+					),
+				),
+				$attribute_data
+			);
+		} finally {
+			restore_error_handler();
+		}
+
+		$this->assertSame( array(), $errors );
+		$this->assertSame( $expected, $attributes['language'] );
+	}
+
+	public function test_repeater_options_render_imported_zero_and_single_objects(): void {
+		$values = array(
+			'items' => array(
+				array( 'checkbox' => 0, 'select' => 0 ),
+				array(
+					'checkbox' => array( 'value' => 1, 'label' => 'One' ),
+					'select'   => array( 'value' => 1, 'label' => 'One' ),
+				),
+			),
+		);
+		$html = do_blocks(
+			'<!-- wp:blockstudio/type-repeater-option-values ' .
+			wp_json_encode( array( 'blockstudio' => array( 'attributes' => $values ) ) ) . ' /-->'
+		);
+
+		$this->assertStringContainsString(
+			wp_json_encode(
+				array(
+					'items' => array(
+						array( 'checkbox' => array( 0 ), 'select' => array( 0 ) ),
+						array( 'checkbox' => array( 1 ), 'select' => array( 1 ) ),
+					),
+				)
+			),
+			$html
+		);
+	}
 }

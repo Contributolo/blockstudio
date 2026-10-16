@@ -41,6 +41,12 @@ import { createBlocks } from '@/blocks/utils/create-blocks';
 import { dispatch } from '@/blocks/utils/dispatch';
 import { getDefaults } from '@/blocks/utils/get-defaults';
 import { isAllowedToRender } from '@/blocks/utils/is-allowed-to-render';
+import {
+  findOption,
+  getOptionLabel,
+  getOptionValue,
+  toggleOptionValue,
+} from '@/blocks/utils/option-values';
 import { BlockstudioAttribute } from '@/types/block';
 import {
   Any,
@@ -155,15 +161,11 @@ export const Fields = ({
     }
 
     const getValue = (item: Any, value: string | number) => {
-      const finder = (innerValue = value) => {
-        return transformedOptions?.find(
-          (e: { value: string | number }) =>
-            String(e?.value || e) === String(innerValue),
-        );
-      };
+      const finder = (innerValue: unknown = value) =>
+        findOption(transformedOptions, innerValue) as Any;
 
       const optionValue =
-        isNumeric(value) && isNumber(finder()?.value || finder())
+        isNumeric(value) && isNumber(getOptionValue(finder()))
           ? Number(value)
           : value;
 
@@ -175,18 +177,7 @@ export const Fields = ({
           }
         : item.type === 'checkbox' ||
             (item.type === 'select' && item?.multiple === true)
-          ? value
-            ? v?.length &&
-              v.map((e: { value: string | number }) => e.value).includes(value)
-              ? v.filter((e: { value: string | number }) => e.value !== value)
-              : [
-                  ...(v?.length ? v : []),
-                  {
-                    value: optionValue,
-                    label: finder()?.label || value,
-                  },
-                ]
-            : []
+          ? toggleOptionValue(v, value, transformedOptions)
           : // @ts-ignore
             item.type === 'token'
             ? typeof value === 'string'
@@ -236,8 +227,13 @@ export const Fields = ({
     };
 
     if (repeaterId !== '') {
-      if (result(attributes, key)) {
-        v = result(attributes, key);
+      const stored = result(attributes, key);
+      const isMultipleOption =
+        item.type === 'checkbox' ||
+        (item.type === 'select' && item.multiple === true);
+
+      if (stored || (stored === 0 && isMultipleOption)) {
+        v = stored;
         val = v?.value || v;
       } else {
         v = '';
@@ -323,9 +319,8 @@ export const Fields = ({
         (item.type === 'select' && !item?.multiple) ||
         item.type === 'radio'
       ) {
-        const innerBlocks = transformedOptions?.find(
-          (e: Any) => String(e?.value || e) === String(value),
-        )?.innerBlocks;
+        const innerBlocks = (findOption(transformedOptions, value) as Any)
+          ?.innerBlocks;
 
         if (innerBlocks) {
           createBlocks(innerBlocks, clientId);
@@ -530,8 +525,8 @@ export const Fields = ({
     const optionSetter = () => {
       const transform = transformedOptions?.map((e: Any) => {
         return {
-          value: e?.value || e,
-          label: e?.label || e,
+          value: getOptionValue(e),
+          label: getOptionLabel(e),
           disabled: e?.disabled || false,
           innerBlocks: e?.innerBlocks || false,
         };

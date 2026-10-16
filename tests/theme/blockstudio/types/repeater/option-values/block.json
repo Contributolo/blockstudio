@@ -1,0 +1,33 @@
+{
+  "$schema": "https://blockstudio.dev/schema/block",
+  "name": "blockstudio/type-repeater-option-values",
+  "title": "Native Repeater Option Values",
+  "category": "blockstudio-test-native",
+  "blockstudio": {
+    "attributes": [
+      {
+        "id": "items",
+        "type": "repeater",
+        "attributes": [
+          {
+            "id": "checkbox",
+            "type": "checkbox",
+            "options": [
+              { "value": 0, "label": "Zero" },
+              { "value": 1, "label": "One" }
+            ]
+          },
+          {
+            "id": "select",
+            "type": "select",
+            "multiple": true,
+            "options": [
+              { "value": 0, "label": "Zero" },
+              { "value": 1, "label": "One" }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

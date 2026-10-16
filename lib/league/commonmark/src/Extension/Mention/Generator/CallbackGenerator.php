@@ -35,11 +35,12 @@ final class CallbackGenerator implements MentionGeneratorInterface
         if ($result === null) {
             return null;
         }
-        if ($result instanceof AbstractInline && !$result instanceof Mention) {
+        if ($result instanceof Mention) {
+            if ($result->hasUrl()) {
+                return $mention;
+            }
+        } elseif ($result instanceof AbstractInline) {
             return $result;
-        }
-        if ($result instanceof Mention && $result->hasUrl()) {
-            return $mention;
         }
         throw new LogicException('CallbackGenerator callable must set the URL on the passed mention and return the mention, return a new AbstractInline based object or null if the mention is not a match');
     }

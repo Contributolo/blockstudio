@@ -119,6 +119,55 @@ test.describe('CLI - pages', () => {
   });
 });
 
+test.describe('CLI - WPML', () => {
+  test('prints configuration and updates only its managed XML section', () => {
+    const generated = wp('bs wpml config');
+    expect(generated).toContain('<wpml-config>');
+    expect(generated).toContain(
+      '<gutenberg-block type="blockstudio/type-text" translate="1"',
+    );
+    expect(generated).toContain('<key name="blockstudio">');
+    expect(generated).toContain('<key name="attributes">');
+
+    const file = 'tests/theme/wpml-config-e2e.xml';
+    const theme = wp("eval 'echo get_stylesheet_directory();'");
+    const command = `bs wpml config --file=${theme}/wpml-config-e2e.xml`;
+    const prefix =
+      '<wpml-config>\n<custom-types><custom-type translate="1">book</custom-type></custom-types>\n<gutenberg-blocks>\n<gutenberg-block type="other/map" translate="0" />\n';
+    const suffix = '\n</gutenberg-blocks>\n</wpml-config>\n';
+
+    try {
+      expect(existsSync(file)).toBe(false);
+      expect(wp(command)).toContain('Wrote');
+      const created = readFileSync(file, 'utf8');
+      expect(created.trim()).toBe(generated);
+      expect(wp(command)).toContain('is up to date');
+      expect(readFileSync(file, 'utf8')).toBe(created);
+
+      writeFileSync(
+        file,
+        `${prefix}<!-- blockstudio:start -->\n<!-- blockstudio:end -->${suffix}`,
+      );
+      expect(wp(command)).toContain('Wrote');
+      const merged = readFileSync(file, 'utf8');
+      expect(merged.startsWith(prefix)).toBe(true);
+      expect(merged.endsWith(suffix)).toBe(true);
+      expect(merged).toContain(
+        '<gutenberg-block type="blockstudio/type-text" translate="1"',
+      );
+      expect(wp(command)).toContain('is up to date');
+      expect(readFileSync(file, 'utf8')).toBe(merged);
+
+      const unmanaged = '<wpml-config><gutenberg-blocks /></wpml-config>';
+      writeFileSync(file, unmanaged);
+      expect(() => wp(command)).toThrow();
+      expect(readFileSync(file, 'utf8')).toBe(unmanaged);
+    } finally {
+      rmSync(file, { force: true });
+    }
+  });
+});
+
 test.describe('CLI - db', () => {
   test('lists schemas', () => {
     const out = wp('bs db schemas --format=json');

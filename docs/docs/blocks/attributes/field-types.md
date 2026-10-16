@@ -673,3 +673,46 @@ Renders a WYSIWYG editor.
 | `toolbar` | `object` | The toolbar configuration for the editor. |
 
 <!-- GENERATED_FIELD_TYPES_END -->
+
+## Imported Option Values
+
+Checkboxes and selects with `"multiple": true` normally store an array of
+`{ "value": "...", "label": "..." }` objects. They also accept a single option
+object, a scalar string or number, or an array of scalar values imported through
+the REST API or content tooling. This also works inside repeater rows.
+
+The editor displays these values as selections without rewriting their stored
+shape on an untouched save. Adding or removing a selection writes the usual
+array of option objects. Numeric `0` and string `"0"` are valid selections.
+Templates receive the field's configured `returnFormat`, just as they do for
+values selected in the editor. Options still need to match the field's declared
+or populated choices.
+
+## WYSIWYG Links
+
+The WYSIWYG link toolbar inserts same-tab links without adding `target` or `rel`
+by default. Enable the new-tab option with `toolbar.formats.link.opensInNewTab`:
+
+```json
+{
+  "id": "content",
+  "type": "wysiwyg",
+  "toolbar": {
+    "formats": {
+      "link": {
+        "opensInNewTab": true
+      }
+    }
+  }
+}
+```
+
+Choosing a new tab adds `target="_blank"` and `rel="noreferrer noopener"`.
+Turning it off removes those automatic attributes. To apply attributes to every
+link in that field, set `toolbar.formats.link.attributes`, for example
+`{ "class": "content-link", "rel": "nofollow" }`. Explicit configuration is
+preserved, and new-tab safety tokens are added to the configured `rel`.
+
+Typing a URL does not automatically turn it into a link, and clicking an existing
+link in the field does not navigate away from the editor. Previously saved link
+attributes remain in existing content; they are not migrated automatically.

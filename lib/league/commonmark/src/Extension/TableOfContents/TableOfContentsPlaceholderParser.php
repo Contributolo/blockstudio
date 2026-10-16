@@ -50,7 +50,7 @@ final class TableOfContentsPlaceholderParser extends AbstractBlockContinueParser
                     return BlockStart::none();
                 }
                 // The placeholder must be the only thing on the line
-                if ($cursor->match('/^' . \preg_quote($placeholder, '/') . '$/') === null) {
+                if ($cursor->matchInPlace('/\G' . \preg_quote($placeholder, '/') . '$/') === null) {
                     return BlockStart::none();
                 }
                 return BlockStart::of(new TableOfContentsPlaceholderParser())->at($cursor);

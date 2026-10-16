@@ -8,7 +8,7 @@ import {
   useRef,
   useState,
 } from '@wordpress/element';
-import { Icon, closeSmall, chevronDown, create } from '@wordpress/icons';
+import { closeSmall, chevronDown, create } from '@wordpress/icons';
 import { result } from 'lodash-es';
 import { Base } from '@/blocks/components/base';
 import { List } from '@/blocks/components/list';
@@ -331,6 +331,11 @@ const DragElement = ({
               {
                 icon: chevronDown,
                 className: 'blockstudio-repeater__minimize',
+                /* translators: %d: number of the repeater row. */
+                label: isMinimized
+                  ? __('Expand row %d')
+                  : __('Collapse row %d'),
+                expanded: !isMinimized,
                 onClick: () => {
                   const next = !isMinimized;
                   writeRepeaterState(storageKey, id, next, !!item?.minimized);
@@ -342,6 +347,8 @@ const DragElement = ({
               {
                 icon: create,
                 className: 'blockstudio-repeater__duplicate',
+                /* translators: %d: number of the repeater row. */
+                label: __('Duplicate row %d'),
                 onClick: () => {
                   duplicate(getId(index));
                 },
@@ -350,6 +357,8 @@ const DragElement = ({
               {
                 icon: closeSmall,
                 className: 'blockstudio-repeater__remove',
+                /* translators: %d: number of the repeater row. */
+                label: __('Remove row %d'),
                 onClick: () => {
                   if (item?.textRemove === false) {
                     remove(getId(index));
@@ -370,40 +379,43 @@ const DragElement = ({
               },
             ]
               .filter((e) => e.condition)
-              .map((item, index) => {
+              .map((control) => {
+                // A native button keeps Space from starting a keyboard drag of
+                // the row, because the drag sensor ignores interactive elements.
                 return (
-                  <div
-                    tabIndex={0}
-                    className={item.className}
-                    key={`icon-${index}`}
-                    role="button"
-                    onClick={item.onClick}
+                  <Button
+                    key={control.className}
+                    className={control.className}
+                    icon={control.icon}
+                    label={control.label.replace('%d', String(index + 1))}
+                    aria-expanded={control.expanded}
+                    size="small"
+                    onClick={control.onClick}
                     css={css({
                       width: '24px',
+                      minWidth: '24px',
                       height: '24px',
-                      cursor: 'pointer',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      zIndex: 50,
+                      padding: 0,
+                      border: 0,
                       borderLeft: border,
+                      borderRadius: 0,
+                      // Core buttons turn the accent color with aria-expanded.
+                      color: 'inherit',
+                      zIndex: 50,
 
                       '&:hover, &:focus': {
-                        fill: 'var(--wp-admin-theme-color)',
+                        color: 'var(--wp-admin-theme-color)',
+                      },
+
+                      '& svg': {
+                        transform: control.reverse
+                          ? 'rotate(180deg)'
+                          : undefined,
+                        position: 'relative',
+                        top: control.reverse ? '1px' : undefined,
                       },
                     })}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') item.onClick();
-                    }}
-                  >
-                    <Icon
-                      icon={item.icon}
-                      css={css({
-                        transform: item.reverse ? 'rotate(180deg)' : undefined,
-                        position: 'relative',
-                        top: item.reverse ? '1px' : undefined,
-                      })}
-                    />
-                  </div>
+                  />
                 );
               })}
           </div>

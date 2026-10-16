@@ -268,6 +268,28 @@ class ExtensionsTest extends TestCase {
 		$this->assertSame( 'mt-sm mb-lg', $result );
 	}
 
+	// join_list_values()
+
+	public function test_join_list_values_separates_values_with_a_space(): void {
+		$this->assertSame( 'en-au de fr', Extensions::join_list_values( array( 'en-au', 'de', 'fr' ) ) );
+	}
+
+	public function test_join_list_values_skips_empty_and_repeated_values(): void {
+		$this->assertSame( 'en de', Extensions::join_list_values( array( '', 'en', ' ', null, 'de', 'en' ) ) );
+	}
+
+	public function test_join_list_values_trims_values_and_keeps_numbers(): void {
+		$this->assertSame( 'en 2 1.5', Extensions::join_list_values( array( ' en ', 2, 1.5 ) ) );
+	}
+
+	public function test_join_list_values_skips_values_that_are_not_text(): void {
+		$this->assertSame( 'en', Extensions::join_list_values( array( array( 'value' => 'de' ), true, 'en', false ) ) );
+	}
+
+	public function test_join_list_values_of_an_empty_list_is_empty(): void {
+		$this->assertSame( '', Extensions::join_list_values( array() ) );
+	}
+
 	// get() nested access
 
 	public function test_get_top_level_key(): void {

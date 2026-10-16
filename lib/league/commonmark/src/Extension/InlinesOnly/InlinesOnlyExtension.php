@@ -22,7 +22,7 @@ final class InlinesOnlyExtension implements ConfigurableExtensionInterface
 {
     public function configureSchema(ConfigurationBuilderInterface $builder): void
     {
-        $builder->addSchema('commonmark', Expect::structure(['use_asterisk' => Expect::bool(\true), 'use_underscore' => Expect::bool(\true), 'enable_strong' => Expect::bool(\true), 'enable_em' => Expect::bool(\true)]));
+        $builder->addSchema('commonmark', Expect::structure(['use_asterisk' => Expect::bool(\true), 'use_underscore' => Expect::bool(\true), 'enable_strong' => Expect::bool(\true), 'enable_em' => Expect::bool(\true), 'unordered_list_markers' => Expect::listOf('string')->min(1)->default(['*', '+', '-'])->mergeDefaults(\false)]));
     }
     // phpcs:disable Generic.Functions.FunctionCallArgumentSpacing.TooMuchSpaceAfterComma,Squiz.WhiteSpace.SemicolonSpacing.Incorrect
     public function register(EnvironmentBuilderInterface $environment): void

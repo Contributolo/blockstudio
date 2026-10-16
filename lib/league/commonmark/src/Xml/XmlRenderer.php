@@ -28,6 +28,9 @@ final class XmlRenderer implements DocumentRendererInterface
     public function renderDocument(Document $document): RenderedContentInterface
     {
         $this->environment->dispatch(new DocumentPreRenderEvent($document, 'xml'));
+        // Indentation is purely cosmetic, so it's capped to keep the output size linear
+        // (rather than quadratic) with respect to the depth of the document.
+        $maxIndent = $this->getMaxIndentationLevel();
         $xml = '<?xml version="1.0" encoding="UTF-8"?>';
         $indent = 0;
         $walker = $document->walker();
@@ -39,7 +42,7 @@ final class XmlRenderer implements DocumentRendererInterface
             $tagName = $renderer->getXmlTagName($node);
             if ($event->isEntering()) {
                 $attrs = $renderer->getXmlAttributes($node);
-                $xml .= "\n" . \str_repeat(self::INDENTATION, $indent);
+                $xml .= "\n" . \str_repeat(self::INDENTATION, \min($indent, $maxIndent));
                 $xml .= self::tag($tagName, $attrs, $selfClosing);
                 if ($node instanceof StringContainerInterface) {
                     $xml .= Xml::escape($node->getLiteral());
@@ -52,11 +55,15 @@ final class XmlRenderer implements DocumentRendererInterface
                 }
             } elseif (!$closeImmediately) {
                 $indent--;
-                $xml .= "\n" . \str_repeat(self::INDENTATION, $indent);
+                $xml .= "\n" . \str_repeat(self::INDENTATION, \min($indent, $maxIndent));
                 $xml .= self::tag('/' . $tagName);
             }
         }
         return new RenderedContent($document, $xml . "\n");
+    }
+    private function getMaxIndentationLevel(): int
+    {
+        return $this->environment->getConfiguration()->get('xml/max_indentation_level');
     }
     /**
      * @param array<string, string|int|float|bool> $attrs
@@ -87,7 +94,6 @@ final class XmlRenderer implements DocumentRendererInterface
         if (\is_bool($value)) {
             return $value ? 'true' : 'false';
         }
-        // @phpstan-ignore-next-line
         throw new InvalidArgumentException('$value must be a string, int, float, or bool');
     }
     private function findXmlRenderer(Node $node): XmlNodeRendererInterface
