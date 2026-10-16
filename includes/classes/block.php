@@ -751,15 +751,13 @@ class Block {
 					}
 				}
 			}
-			$html           = mb_decode_numericentity(
-				(string) $doc->saveHTML(),
-				array( 0x80, 0x10ffff, 0, 0xffffff ),
-				'UTF-8'
-			);
-			$trim_off_front = strpos( $html, '<body>' ) + 6;
-			$trim_off_end   = strrpos( $html, '</body>' ) - strlen( $html );
-
-			$content = substr( $html, $trim_off_front, $trim_off_end );
+			$body    = $doc->getElementsByTagName( 'body' )->item( 0 );
+			$content = '';
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- DOM property.
+			foreach ( null === $body ? array() : $body->childNodes as $node ) {
+				$content .= (string) $doc->saveHTML( $node );
+			}
+			$content = mb_decode_numericentity( $content, array( 0x80, 0x10ffff, 0, 0xffffff ), 'UTF-8' );
 		}
 
 		return $content;
