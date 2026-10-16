@@ -492,7 +492,62 @@ class BlockTest extends TestCase {
 		);
 	}
 
+	public static function zero_option_value_provider(): array {
+		$zeros        = array(
+			array(
+				'value' => 0,
+				'label' => 'Zero',
+			),
+			array(
+				'value' => 1,
+				'label' => 'One',
+			),
+		);
+		$zero_strings = array(
+			array(
+				'value' => '0',
+				'label' => 'Zero',
+			),
+			array(
+				'value' => '1',
+				'label' => 'One',
+			),
+		);
+		$empty_string = array(
+			array(
+				'value' => '',
+				'label' => 'None',
+			),
+			array(
+				'value' => 'all',
+				'label' => 'All',
+			),
+		);
+
+		return array(
+			'checkbox zero'                     => array( 'checkbox', $zeros, 'value', 0, array( 0 ) ),
+			'checkbox zero as string'           => array( 'checkbox', $zeros, 'value', '0', array( 0 ) ),
+			'checkbox zero object'              => array( 'checkbox', $zeros, 'value', $zeros[0], array( 0 ) ),
+			'checkbox zero in list'             => array( 'checkbox', $zeros, 'value', array_reverse( $zeros ), array( 0, 1 ) ),
+			'checkbox zero as label'            => array( 'checkbox', $zeros, 'label', 0, array( 'Zero' ) ),
+			'checkbox zero as both'             => array( 'checkbox', $zeros, 'both', 0, array( $zeros[0] ) ),
+			'checkbox zero without option'      => array( 'checkbox', array_slice( $zeros, 1 ), 'value', 0, false ),
+			'checkbox string zero'              => array( 'checkbox', $zero_strings, 'value', '0', array( '0' ) ),
+			'checkbox string zero object'       => array( 'checkbox', $zero_strings, 'value', $zero_strings[0], array( '0' ) ),
+			'checkbox plain zero'               => array( 'checkbox', array( 0, 1 ), 'value', 0, array( 0 ) ),
+			'checkbox empty string option'      => array( 'checkbox', $empty_string, 'value', array( $empty_string[0] ), array( '' ) ),
+			'select zero'                       => array( 'select', $zeros, 'value', 0, array( 0 ) ),
+			'select zero object'                => array( 'select', $zeros, 'label', $zeros[0], array( 'Zero' ) ),
+			'select zero in list'               => array( 'select', $zeros, 'value', array_reverse( $zeros ), array( 1, 0 ) ),
+			'select string zero'                => array( 'select', $zero_strings, 'value', '0', array( '0' ) ),
+			'select string zero in list'        => array( 'select', $zero_strings, 'value', $zero_strings, array( '0', '1' ) ),
+			'select plain string zero'          => array( 'select', array( '0', '1' ), 'value', '0', array( '0' ) ),
+			'select plain string zero as label' => array( 'select', array( '0', '1' ), 'label', array( '1', '0' ), array( '1', '0' ) ),
+		);
+	}
+
 	#[\PHPUnit\Framework\Attributes\DataProvider( 'single_multiple_option_value_provider' )]
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'zero_option_value_provider' )]
 	public function test_transform_attributes_reads_single_multiple_option_value_as_list(
 		string $field,
 		array $options,

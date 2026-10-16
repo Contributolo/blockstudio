@@ -1327,7 +1327,12 @@ class Block {
 				$attribute_names[] = $k;
 			}
 
-			if ( isset( $att['type'] ) && $att && ( ! empty( $v ) || '0' === $v ) ) {
+			$is_value =
+				! empty( $v ) ||
+				'0' === $v ||
+				( 0 === $v && self::is_multiple_option_field( (array) $att ) );
+
+			if ( isset( $att['type'] ) && $att && $is_value ) {
 				$return_format = $att['returnFormat'] ?? 'value';
 				$populate      = $att['populate'] ?? array();
 				$type          = $att['field'] ?? false;
@@ -1705,9 +1710,7 @@ class Block {
 		string $return_format,
 		array $populate
 	): void {
-		$is_multiple_option =
-			'checkbox' === $type ||
-			( 'select' === $type && ( $att['multiple'] ?? false ) );
+		$is_multiple_option = self::is_multiple_option_field( $att );
 
 		if ( $is_multiple_option ) {
 			$value = self::multiple_option_values( $value );
@@ -1738,7 +1741,7 @@ class Block {
 			foreach ( $value as $l ) {
 				$val = self::get_option_value( $att, $return_format, $l, $populate );
 
-				if ( $val ) {
+				if ( false !== $val && null !== $val ) {
 					$new_values[] = $val;
 				}
 			}
@@ -1759,6 +1762,19 @@ class Block {
 
 			$attributes[ $key ] = $new_values;
 		}
+	}
+
+	/**
+	 * Whether a field stores a list of options: checkboxes and multiple selects.
+	 *
+	 * @param array $att The attribute definition.
+	 *
+	 * @return bool Whether the field stores a list of options.
+	 */
+	private static function is_multiple_option_field( array $att ): bool {
+		$type = $att['field'] ?? '';
+
+		return 'checkbox' === $type || ( 'select' === $type && ( $att['multiple'] ?? false ) );
 	}
 
 	/**
