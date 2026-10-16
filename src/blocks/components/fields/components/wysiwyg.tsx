@@ -28,6 +28,10 @@ import parserHtml from 'prettier/plugins/html';
 import prettier from 'prettier/standalone';
 import { Base } from '@/blocks/components/base';
 import { Code } from '@/blocks/components/fields/components/code';
+import {
+  getWysiwygLinkAttributes,
+  getWysiwygLinkHTMLAttributes,
+} from '@/blocks/utils/wysiwyg-link';
 import { Alignment, BlockstudioAttribute } from '@/types/block';
 import { __ } from '@/utils/__';
 import { css } from '@/utils/css';
@@ -76,7 +80,7 @@ export const WYSIWYG = ({
       Link.configure({
         autolink: false,
         openOnClick: false,
-        HTMLAttributes: item?.toolbar?.formats?.link?.attributes || {},
+        HTMLAttributes: getWysiwygLinkHTMLAttributes(item),
       }),
       Underline,
       TextAlign.configure({
@@ -443,12 +447,7 @@ export const WYSIWYG = ({
               from: selection?.[0] ?? 0,
               to: selection?.[1] ?? 0,
             });
-            editor.commands.setLink({
-              href: (e as unknown as BlockstudioAttribute).url,
-              target: (e as unknown as BlockstudioAttribute).opensInNewTab
-                ? '_blank'
-                : '_self',
-            });
+            editor.commands.setLink(getWysiwygLinkAttributes(item, e));
           }}
           onRemove={() => {
             editor.commands.setTextSelection({
