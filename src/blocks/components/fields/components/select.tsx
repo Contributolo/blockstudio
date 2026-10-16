@@ -8,7 +8,10 @@ import {
 import { useRef, useEffect, useState, useMemo } from '@wordpress/element';
 import { debounce, get, isArray } from 'lodash-es';
 import { Cards } from '@/blocks/components/list/cards';
-import { normalizeOptionValues } from '@/blocks/utils/option-values';
+import {
+  isSameOptionValue,
+  normalizeOptionValues,
+} from '@/blocks/utils/option-values';
 import { parseTemplate } from '@/blocks/utils/parse-template';
 import { BlockstudioAttribute } from '@/types/block';
 import {
@@ -93,13 +96,10 @@ const AdvancedSelect = ({
   const [isLoading, setIsLoading] = useState(false);
   const [searchValue, setSearchValue] = useState('');
 
-  const filteredValue = multiple
-    ? (value || []).filter((e: Any) => e?.value)
-    : value;
   const filteredOptions = multiple
     ? allOptions.filter(
         (option) =>
-          !filteredValue.map((e: Any) => e.value).includes(option.value),
+          !value.some((e: Any) => isSameOptionValue(e.value, option.value)),
       )
     : allOptions;
 
@@ -298,12 +298,12 @@ const AdvancedSelect = ({
           help={false}
         />
       )}
-      {multiple && filteredValue.length >= 1 && (
+      {multiple && value.length >= 1 && (
         <Cards
           {...{ attributes, change, disable, inRepeater, item }}
           style={{ marginTop: '8px' }}
-          v={filteredValue}
-          ids={filteredValue}
+          v={value}
+          ids={value}
         />
       )}
     </div>

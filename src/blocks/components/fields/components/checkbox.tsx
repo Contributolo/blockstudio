@@ -1,6 +1,9 @@
 import { CheckboxControl } from '@wordpress/components';
 import { Base } from '@/blocks/components/base';
-import { normalizeOptionValues } from '@/blocks/utils/option-values';
+import {
+  isSameOptionValue,
+  normalizeOptionValues,
+} from '@/blocks/utils/option-values';
 import { BlockstudioAttribute } from '@/types/block';
 import { BlockstudioFieldsOptions } from '@/types/types';
 import { __ } from '@/utils/__';
@@ -47,9 +50,9 @@ export const Checkbox = ({
             <CheckboxControl
               key={itemInner.value}
               onChange={() => change(itemInner.value)}
-              checked={values
-                .map((e: { value: string | number }) => e.value)
-                .includes(itemInner.value)}
+              checked={values.some((e) =>
+                isSameOptionValue(e.value, itemInner.value),
+              )}
               label={itemInner.label}
               className={`components-base-control`}
             />
