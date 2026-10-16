@@ -215,6 +215,31 @@
                     }
                   }
                 }
+              },
+              "set": {
+                "type": "array",
+                "description": "Writes the field value to the wrapper element of the extended block.",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "attribute"
+                  ],
+                  "properties": {
+                    "attribute": {
+                      "type": "string",
+                      "description": "The attribute to write, e.g. `class`, `style`, `href` or a data attribute."
+                    },
+                    "value": {
+                      "type": "string",
+                      "description": "The value to write. Attribute data is available in bracket syntax, e.g.: `{attributes.customColor}`."
+                    },
+                    "join": {
+                      "type": "boolean",
+                      "description": "When the field value is a list, write the results of all entries once, separated by spaces, instead of only the last one. Empty and repeated results are skipped. Has no effect on class and style, which add one class or declaration per entry either way.",
+                      "default": false
+                    }
+                  }
+                }
               }
             },
             "anyOf": [
@@ -925,6 +950,31 @@
                                   ],
                                   "description": "Value that will be compared."
                                 }
+                              }
+                            }
+                          }
+                        },
+                        "set": {
+                          "type": "array",
+                          "description": "Writes the field value to the wrapper element of the extended block.",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "attribute"
+                            ],
+                            "properties": {
+                              "attribute": {
+                                "type": "string",
+                                "description": "The attribute to write, e.g. `class`, `style`, `href` or a data attribute."
+                              },
+                              "value": {
+                                "type": "string",
+                                "description": "The value to write. Attribute data is available in bracket syntax, e.g.: `{attributes.customColor}`."
+                              },
+                              "join": {
+                                "type": "boolean",
+                                "description": "When the field value is a list, write the results of all entries once, separated by spaces, instead of only the last one. Empty and repeated results are skipped. Has no effect on class and style, which add one class or declaration per entry either way.",
+                                "default": false
                               }
                             }
                           }

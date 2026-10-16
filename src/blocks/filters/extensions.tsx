@@ -19,6 +19,8 @@ import { css } from '@/utils/css';
 const extensions = window.blockstudioAdmin.data.extensions;
 const isCanvas = !!(window as any).blockstudioCanvas;
 
+type ExtensionSet = { attribute: string; value: string; join?: boolean };
+
 const matchFound = (name: string, string: string) => {
   if (typeof name === 'string' && name.endsWith('*')) {
     const prefix = name.slice(0, -1);
@@ -72,11 +74,20 @@ const getAttributes = (
     Object.values(block.attributes || {}).forEach((attribute: Any) => {
       if (disabled.includes(attribute.id)) return;
       if (attribute.set?.length) {
-        attribute.set.forEach((set: { attribute: string; value: string }) => {
+        attribute.set.forEach((set: ExtensionSet) => {
           if ((attributes as Any)?.[attribute.id]) {
             const copy = cloneDeep(attributes) as Any;
+            const entries = copy[attribute.id];
+            // Opt-in, as in render_blocks(): without join every entry of a
+            // list overwrites the attribute and the last one wins.
+            const join =
+              set.join === true &&
+              set.attribute !== 'class' &&
+              set.attribute !== 'style' &&
+              isArray(entries);
+            const list: Any[] = [];
 
-            const applyValue = (value: Any, list?: Any[]) => {
+            const applyValue = (value: Any) => {
               if (['select', 'radio', 'checkbox'].includes(attribute.field)) {
                 if (
                   attribute.populate &&
@@ -96,6 +107,19 @@ const getAttributes = (
                 }
               }
 
+              // Tokens are stored as { value, label }; render_blocks()
+              // receives them reduced to the return format.
+              if (
+                attribute.field === 'token' &&
+                attribute.returnFormat !== 'both'
+              ) {
+                lodashSet(
+                  copy,
+                  attribute.id,
+                  value?.[attribute.returnFormat || 'value'] ?? value,
+                );
+              }
+
               const val = set.value
                 ? parseTemplate(set.value, {
                     attributes: copy,
@@ -106,27 +130,23 @@ const getAttributes = (
                 classNames.push(val);
               } else if (set.attribute === 'style') {
                 styles.push(val.replace(/;+$/, ''));
-              } else if (list) {
+              } else if (join) {
                 list.push(val);
               } else {
                 dataAttributes[set.attribute] = val;
               }
             };
 
-            const entries = copy[attribute.id];
-
             if (isArray(entries)) {
-              // Mirrors render_blocks(): each entry is evaluated as the
-              // field's value, and an attribute other than class or style
-              // receives all results at once instead of only the last one.
-              const list: Any[] = [];
+              // As in render_blocks(), each entry is the field's value while
+              // its template is evaluated.
               entries.forEach((value: Any) => {
                 lodashSet(copy, attribute.id, value);
-                applyValue(value, list);
+                applyValue(value);
               });
 
               const joined = joinListValues(list);
-              if (joined) {
+              if (join && joined) {
                 dataAttributes[set.attribute] = joined;
               }
             } else {

@@ -1,0 +1,169 @@
+{
+  "name": "core/verse",
+  "blockstudio": {
+    "extend": true,
+    "attributes": [
+      {
+        "id": "setListLink",
+        "type": "checkbox",
+        "label": "Set list link",
+        "options": [
+          {
+            "value": "/first/",
+            "label": "First link"
+          },
+          {
+            "value": "/second/",
+            "label": "Second link"
+          }
+        ],
+        "set": [
+          {
+            "attribute": "href",
+            "value": "{attributes.setListLink}"
+          }
+        ]
+      },
+      {
+        "id": "setListAnchor",
+        "type": "checkbox",
+        "label": "Set list anchor",
+        "options": [
+          {
+            "value": "first-anchor",
+            "label": "First anchor"
+          },
+          {
+            "value": "second-anchor",
+            "label": "Second anchor"
+          }
+        ],
+        "set": [
+          {
+            "attribute": "id",
+            "value": "{attributes.setListAnchor}"
+          }
+        ]
+      },
+      {
+        "id": "setListLangs",
+        "type": "checkbox",
+        "label": "Set list languages",
+        "options": [
+          {
+            "value": "en-au",
+            "label": "Set list English"
+          },
+          {
+            "value": "de",
+            "label": "Set list German"
+          },
+          {
+            "value": "fr",
+            "label": "Set list French"
+          }
+        ],
+        "set": [
+          {
+            "attribute": "data-langs",
+            "value": "{attributes.setListLangs}",
+            "join": true
+          },
+          {
+            "attribute": "data-last-lang",
+            "value": "{attributes.setListLangs}"
+          },
+          {
+            "attribute": "data-has-lang",
+            "value": "yes",
+            "join": true
+          },
+          {
+            "attribute": "class",
+            "value": "lang-{attributes.setListLangs}",
+            "join": true
+          },
+          {
+            "attribute": "style",
+            "value": "--lang-{attributes.setListLangs}: 1",
+            "join": true
+          }
+        ]
+      },
+      {
+        "id": "setListLanguages",
+        "type": "select",
+        "label": "Set list language names",
+        "multiple": true,
+        "returnFormat": "both",
+        "options": [
+          {
+            "value": "en-au",
+            "label": "English"
+          },
+          {
+            "value": "de",
+            "label": "German"
+          }
+        ],
+        "set": [
+          {
+            "attribute": "data-languages",
+            "value": "{attributes.setListLanguages.label}",
+            "join": true
+          },
+          {
+            "attribute": "data-last-language",
+            "value": "{attributes.setListLanguages.label}"
+          }
+        ]
+      },
+      {
+        "id": "setListTags",
+        "type": "token",
+        "label": "Set list tags",
+        "set": [
+          {
+            "attribute": "data-tags",
+            "value": "{attributes.setListTags}",
+            "join": true
+          },
+          {
+            "attribute": "data-last-tag",
+            "value": "{attributes.setListTags}"
+          }
+        ]
+      },
+      {
+        "id": "setListEmpty",
+        "type": "checkbox",
+        "label": "Set list empty",
+        "options": [
+          {
+            "value": "unused",
+            "label": "Set list unused"
+          }
+        ],
+        "set": [
+          {
+            "attribute": "data-empty",
+            "value": "{attributes.setListEmpty}",
+            "join": true
+          }
+        ]
+      },
+      {
+        "id": "setListTone",
+        "type": "text",
+        "label": "Set list tone",
+        "set": [
+          {
+            "attribute": "data-tone",
+            "value": "tone-{attributes.setListTone}",
+            "join": true
+          }
+        ]
+      }
+    ]
+  }
+}
