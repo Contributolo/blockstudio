@@ -65,6 +65,7 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 * Fix: native selects without a stored value show no selection instead of displaying the first option (#131)
 * Fix: update the isolated CommonMark and YAML libraries to include upstream security fixes (#127, #128)
 * Fix: dependency builds work on PHP 8.5 with the updated PHP-Scoper development tool (#129)
+* Fix: the built-in GitHub updater accepts a server-side token to avoid shared-host anonymous API rate limits (#133)
 
 = 7.7.3 =
 * Fix: early serve and the runtime cache resolve percent-encoded request paths to routes with non-ASCII characters

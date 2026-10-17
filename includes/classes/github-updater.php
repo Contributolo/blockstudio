@@ -26,6 +26,24 @@ class Github_Updater {
 			'blockstudio'
 		);
 
+		/**
+		 * Filter the GitHub token used by the built-in updater.
+		 *
+		 * Register before Blockstudio loads, for example in an MU plugin.
+		 *
+		 * @since 7.7.4
+		 *
+		 * @param string $token Token from BLOCKSTUDIO_GITHUB_TOKEN, or an empty string.
+		 */
+		$token = apply_filters(
+			'blockstudio/updater/token',
+			defined( 'BLOCKSTUDIO_GITHUB_TOKEN' ) ? BLOCKSTUDIO_GITHUB_TOKEN : ''
+		);
+
+		if ( is_string( $token ) && '' !== trim( $token ) ) {
+			$update_checker->setAuthentication( trim( $token ) );
+		}
+
 		$update_checker->getVcsApi()->enableReleaseAssets();
 
 		$update_checker->addResultFilter(

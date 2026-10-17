@@ -29,6 +29,7 @@ purpose: Welcome to the Blockstudio documentation.
 route: /docs/general/getting-started
 file: docs/docs/general/getting-started.md
 purpose: Set up your first Blockstudio project.
+hooks: blockstudio/updater/token
 
 ### Settings
 route: /docs/general/settings

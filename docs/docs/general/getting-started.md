@@ -37,6 +37,40 @@ provided by another plugin or theme. Install your own Composer dependency if
 your application uses one of those libraries directly; Blockstudio's bundled
 copies are internal, not a public PHP API.
 
+### Authenticated Update Checks
+
+Manual installations check GitHub anonymously by default. Several sites sharing
+one outbound IP can exhaust GitHub's anonymous API allowance and receive HTTP
+403 responses when checking for updates. From 7.7.4, configure a GitHub personal
+access token in `wp-config.php`, before WordPress loads:
+
+```php title="wp-config.php"
+define('BLOCKSTUDIO_GITHUB_TOKEN', 'your-github-token');
+```
+
+The token only needs access to public repository information. Do not grant write
+permissions. Keep it in server-side configuration, out of version control and
+out of `blockstudio.json`, block attributes, and frontend code. The updater
+passes it to its bundled GitHub client for authenticated checks and release
+downloads. Requests to unrelated repositories and other download hosts do not
+receive the token.
+
+For environment-managed secrets, an MU plugin can supply or override the token:
+
+```php title="wp-content/mu-plugins/blockstudio-updater.php"
+<?php
+add_filter('blockstudio/updater/token', function ($token) {
+  return getenv('BLOCKSTUDIO_GITHUB_TOKEN') ?: $token;
+});
+```
+
+The filter runs when Blockstudio initializes its updater, before the theme
+loads. Register it in an MU plugin rather than `functions.php`. Returning an
+empty string disables authentication even when the constant is defined. Empty
+or non-string values leave checks anonymous. Tokens are optional; without one,
+existing update behavior is unchanged. Composer installations still use
+Composer for updates and do not initialize this updater.
+
 ## Creating Your First Block
 
 ### 1. Create a Block Directory
