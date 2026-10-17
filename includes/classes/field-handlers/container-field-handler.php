@@ -7,7 +7,7 @@
 
 namespace Blockstudio\Field_Handlers;
 
-use Blockstudio\Build;
+use Blockstudio\Field_Definitions;
 
 /**
  * Handler for container field types.
@@ -131,8 +131,7 @@ class Container_Field_Handler extends Abstract_Field_Handler {
 		}
 
 		// Flatten id-less groups and filter out remaining nested groups.
-		$filtered_attributes = $this->flatten_idless_groups( $field['attributes'] );
-		Build::filter_not_key( $filtered_attributes, 'type', 'group' );
+		$filtered_attributes = Field_Definitions::children( $field['attributes'] );
 
 		$new_prefix = '' === $prefix
 			? ( $field['id'] ?? '' )
@@ -171,15 +170,7 @@ class Container_Field_Handler extends Abstract_Field_Handler {
 		}
 
 		// Flatten id-less groups and filter out remaining nested groups from attributes.
-		$inner_attributes = $this->flatten_idless_groups( $field['attributes'] ?? array() );
-		if ( count( $inner_attributes ) >= 1 ) {
-			$inner_attributes = array_values(
-				array_filter(
-					$inner_attributes,
-					fn( $val ) => 'group' !== ( $val['type'] ?? '' )
-				)
-			);
-		}
+		$inner_attributes = Field_Definitions::children( $field['attributes'] ?? array() );
 
 		$attribute = array(
 			'blockstudio' => true,
@@ -258,34 +249,5 @@ class Container_Field_Handler extends Abstract_Field_Handler {
 		}
 
 		return null;
-	}
-
-	/**
-	 * Flatten groups without IDs while preserving ID-bearing groups.
-	 *
-	 * @param array $attributes The attributes to flatten.
-	 *
-	 * @return array The flattened attributes.
-	 */
-	private function flatten_idless_groups( array $attributes ): array {
-		$flattened = array();
-
-		foreach ( $attributes as $attribute ) {
-			if (
-				'group' === ( $attribute['type'] ?? '' ) &&
-				empty( $attribute['id'] ) &&
-				isset( $attribute['attributes'] )
-			) {
-				$flattened = array_merge(
-					$flattened,
-					$this->flatten_idless_groups( $attribute['attributes'] )
-				);
-				continue;
-			}
-
-			$flattened[] = $attribute;
-		}
-
-		return $flattened;
 	}
 }

@@ -158,7 +158,7 @@ final class Field_Type_Config {
 
 		// Mixed/special types.
 		'files'      => array(
-			'attribute' => array( 'number', 'object', 'array' ),
+			'attribute' => array( 'number', 'object', 'array', 'string' ),
 			'default'   => null,
 		),
 		'group'      => array(
@@ -443,5 +443,30 @@ final class Field_Type_Config {
 		return 'checkbox' === $type ||
 			'token' === $type ||
 			( 'select' === $type && ( $field['multiple'] ?? false ) );
+	}
+
+	/**
+	 * Read a stored multiple select or checkbox as a list of selections.
+	 *
+	 * Shared by rendering and validation so imported scalar and single-option
+	 * values keep the same meaning in both paths.
+	 *
+	 * @param mixed $value Stored value.
+	 * @return array Selections without resolving labels or querying options.
+	 * @internal
+	 */
+	public static function multiple_option_values( mixed $value ): array {
+		if ( is_array( $value ) ) {
+			return array_key_exists( 'value', $value ) ? array( $value ) : $value;
+		}
+		if ( '' === $value || ! ( is_string( $value ) || is_int( $value ) || is_float( $value ) ) ) {
+			return array();
+		}
+		return array(
+			array(
+				'value' => $value,
+				'label' => $value,
+			),
+		);
 	}
 }

@@ -45,6 +45,29 @@ wp bs blocks list --components
 wp bs blocks list --format=json
 ```
 
+### Validate stored fields
+
+```bash
+wp bs blocks validate 42
+wp bs blocks validate 42 57 --format=json
+```
+
+Checks the stored content of the specified post IDs, including nested
+`innerBlocks`, using [`bs_validate_block()`](/docs/blocks/rendering#validating-stored-values).
+It does not render blocks, expand synced pattern references, or modify posts.
+Unknown blocks without Blockstudio extensions are skipped.
+
+The default table lists the post ID, zero-based block path, block name,
+finding code, field path, source, and message. JSON also includes the original
+`value` and `expected` values. A nested block can have the block path `0/1`
+and the field path `cards/2/style`; these are separate paths.
+
+The command exits with `0` for no findings and `1` when findings exist.
+JSON output is a plain list, including `[]` on success, so automation can
+read it even when the command exits with `1`. Missing posts, missing IDs, and
+formats other than `table` or `json` are errors. All IDs are checked before
+validation begins.
+
 ## Pages
 
 File-backed page synchronization is explicit. Ordinary WordPress requests
@@ -454,9 +477,9 @@ wp bs wpml config --file=wp-content/themes/my-theme/wpml-config.xml
 ```
 
 Prints a `wpml-config.xml` that declares the text fields of every registered
-block for translation, or writes it with `--file`. In an existing file, only
-the section between the Blockstudio markers is replaced. See
-[WPML](/docs/dev/wpml) for what is declared and how to keep the file up to date.
+block for translation and its files fields as attachment IDs, or writes it with
+`--file`. In an existing file, only the section between the Blockstudio markers
+is replaced. See [WPML](/docs/dev/wpml) for what is declared and how to keep the file up to date.
 
 ## Block Tag Migration
 

@@ -10,20 +10,19 @@ import {
 } from 'fs';
 import { join, relative } from 'path';
 
+const cleanWpOutput = (result: string) => {
+  return result.split('\n').filter(
+    (line) => !line.startsWith('ℹ ') && !line.startsWith('✔ ') && !line.startsWith('Ran '),
+  ).join('\n').trim();
+};
+
 const wp = (cmd: string) => {
   const result = execSync(
     `cd tests/wp-env && npx wp-env run cli -- wp ${cmd}`,
     { encoding: 'utf-8', timeout: 30000 }
   ).trim();
 
-  const lines = result.split('\n');
-  const output = lines.filter(
-    (l) =>
-      !l.startsWith('ℹ ') &&
-      !l.startsWith('✔ ') &&
-      !l.startsWith('Ran ')
-  );
-  return output.join('\n').trim();
+  return cleanWpOutput(result);
 };
 
 const themeJsonPath = 'tests/theme/blockstudio.json';
@@ -99,6 +98,36 @@ test.describe('CLI - blocks', () => {
     expect(blocks.length).toBeGreaterThan(0);
     expect(blocks.every((b: any) => b.component === 'yes')).toBe(true);
   });
+
+  test('validates nested stored fields with JSON, exit codes and no post writes', () => {
+    const ids = JSON.parse(wp(`eval '$ids = array(); foreach (array("one", "unknown-option") as $value) { $block = array("blockName" => "blockstudio/type-select", "attrs" => array("blockstudio" => array("attributes" => array("defaultValueLabel" => $value))), "innerBlocks" => array(), "innerHTML" => "", "innerContent" => array()); $content = "<!-- wp:group -->" . serialize_block($block) . "<!-- /wp:group -->"; $ids[] = wp_insert_post(wp_slash(array("post_type" => "post", "post_status" => "draft", "post_title" => "Validation CLI", "post_content" => $content))); } echo wp_json_encode($ids);'`));
+    try {
+      const before = ids.map((id: number) => JSON.parse(wp(`post get ${id} --format=json`)));
+      expect(JSON.parse(wp(`bs blocks validate ${ids[0]} --format=json`))).toEqual([]);
+      expect(wp(`bs blocks validate ${ids[0]}`)).toContain('No stored field problems found');
+      let failure: { status: number; stdout: string } | undefined;
+      try {
+        wp(`bs blocks validate ${ids.join(' ')} --format=json`);
+      } catch (error) {
+        failure = error as typeof failure;
+      }
+      expect(failure?.status).toBe(1);
+      const findings = JSON.parse(cleanWpOutput(failure!.stdout));
+      expect(findings).toHaveLength(1);
+      expect(findings[0]).toMatchObject({
+        post_id: ids[1], block_path: '0/0', block_name: 'blockstudio/type-select',
+        code: 'unknown_option', path: 'defaultValueLabel', source: 'block', value: 'unknown-option',
+      });
+      expect(findings[0].expected).toEqual(['one', 'two', 'three']);
+      expect(() => wp(`bs blocks validate ${ids[1]}`)).toThrow();
+      expect(() => wp('bs blocks validate')).toThrow();
+      expect(() => wp('bs blocks validate 0 --format=json')).toThrow();
+      expect(() => wp(`bs blocks validate ${ids[0]} --format=csv`)).toThrow();
+      expect(ids.map((id: number) => JSON.parse(wp(`post get ${id} --format=json`)))).toEqual(before);
+    } finally {
+      wp(`post delete ${ids.join(' ')} --force`);
+    }
+  });
 });
 
 test.describe('CLI - pages', () => {
@@ -128,6 +157,7 @@ test.describe('CLI - WPML', () => {
     );
     expect(generated).toContain('<key name="blockstudio">');
     expect(generated).toContain('<key name="attributes">');
+    expect(generated).toContain('type="post-ids" sub-type="attachment"');
 
     const file = 'tests/theme/wpml-config-e2e.xml';
     const theme = wp("eval 'echo get_stylesheet_directory();'");

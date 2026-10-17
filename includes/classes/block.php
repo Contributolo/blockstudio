@@ -1792,20 +1792,7 @@ class Block {
 	 * @return array The selections.
 	 */
 	private static function multiple_option_values( $value ): array {
-		if ( is_array( $value ) ) {
-			return array_key_exists( 'value', $value ) ? array( $value ) : $value;
-		}
-
-		if ( '' === $value || ! ( is_string( $value ) || is_int( $value ) || is_float( $value ) ) ) {
-			return array();
-		}
-
-		return array(
-			array(
-				'value' => $value,
-				'label' => $value,
-			),
-		);
+		return Field_Type_Config::multiple_option_values( $value );
 	}
 
 	/**

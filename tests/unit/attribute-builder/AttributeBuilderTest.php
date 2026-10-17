@@ -577,7 +577,7 @@ class AttributeBuilderTest extends TestCase {
 		$result = $this->builder->build( $fields );
 
 		$this->assertArrayHasKey( 'image', $result );
-		$this->assertSame( array( 'number', 'object', 'array' ), $result['image']['type'] );
+		$this->assertSame( array( 'number', 'object', 'array', 'string' ), $result['image']['type'] );
 		$this->assertSame( 'files', $result['image']['field'] );
 		$this->assertFalse( $result['image']['multiple'] );
 		$this->assertSame( 'full', $result['image']['returnSize'] );

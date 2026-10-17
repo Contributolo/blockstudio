@@ -3,7 +3,7 @@ Contributors: dnnsjsk
 Requires at least: 6.7
 Tested up to: 7.0.0
 Requires PHP: 8.2
-Stable tag: 7.7.4
+Stable tag: 7.7.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,13 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 * [Getting Started](https://blockstudio.dev/docs/getting-started)
 
 == Changelog ==
+
+= 7.7.5 =
+* New: `bs_validate_block()` reports stored field problems without rendering or changing content, with an opt-in filter for custom resolvers (#135)
+* New: `wp bs blocks validate` checks stored block fields across posts and nested blocks, with table or JSON reports and failure exit codes (#135)
+* Fix: generated WPML configuration declares files fields as attachment IDs, including multiple files and blocks without translatable text (#134)
+* Fix: WPML Media Translation jobs include attachments from Blockstudio fields, matching extensions, and nested blocks (#136)
+* Fix: PHPStan describes link fields with their actual `url` key instead of `href` (#135)
 
 = 7.7.4 =
 * New: `wp bs wpml config` generates translation configuration from registered Blockstudio fields and reports conflicting storage definitions (#122)

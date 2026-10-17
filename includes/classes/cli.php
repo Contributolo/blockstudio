@@ -196,10 +196,12 @@ class Cli {
 	 *
 	 * Prints a wpml-config.xml that declares the text fields of every
 	 * registered block for translation. Blocks without text fields are declared
-	 * with translate="0", so WPML copies their values unchanged. Fields of
-	 * unknown types, and storage keys whose fields have different types (a block
-	 * field and an extension field, or two fields in the rows of one repeater),
-	 * are not declared; the command prints a warning for each.
+	 * with translate="0", so WPML copies their values unchanged. Files fields
+	 * are declared as attachment IDs, so WPML renders the attachment of the
+	 * page language. Fields of unknown types, and storage keys whose fields
+	 * have different types (a block field and an extension field, or two fields
+	 * in the rows of one repeater), are not declared; the command prints a
+	 * warning for each.
 	 *
 	 * ## OPTIONS
 	 *
@@ -310,9 +312,13 @@ class Cli {
 	 */
 	public static function blocks( $args, $assoc_args ) {
 		$subcommand = $args[0] ?? 'list';
+		if ( 'validate' === $subcommand ) {
+			self::blocks_validate( array_slice( $args, 1 ), $assoc_args );
+			return;
+		}
 
 		if ( 'list' !== $subcommand ) {
-			\WP_CLI::error( "Unknown subcommand: $subcommand. Use: list" );
+			\WP_CLI::error( "Unknown subcommand: $subcommand. Use: list or validate" );
 			return;
 		}
 
@@ -342,6 +348,50 @@ class Cli {
 		}
 
 		\WP_CLI\Utils\format_items( $format, $rows, array( 'name', 'title', 'component', 'category' ) );
+	}
+
+	/**
+	 * Report stored field problems without rendering or modifying posts.
+	 *
+	 * @param array $ids        Post IDs to validate.
+	 * @param array $assoc_args Output options.
+	 * @return void
+	 */
+	private static function blocks_validate( array $ids, array $assoc_args ): void {
+		$format = $assoc_args['format'] ?? 'table';
+		if ( ! in_array( $format, array( 'table', 'json' ), true ) ) {
+			\WP_CLI::error( 'Invalid format. Use: table or json' );
+			return;
+		}
+		if ( array() === $ids ) {
+			\WP_CLI::error( 'Usage: wp bs blocks validate <post-id>... [--format=table|json]' );
+			return;
+		}
+		$posts = array();
+		foreach ( $ids as $id ) {
+			$post = ctype_digit( (string) $id ) && (int) $id > 0 ? get_post( (int) $id ) : null;
+			if ( ! $post ) {
+				\WP_CLI::error( "Invalid or missing post: $id" );
+				return;
+			}
+			$posts[ $post->ID ] = $post;
+		}
+		$rows = array();
+		foreach ( $posts as $post ) {
+			foreach ( Block_Validator::blocks( parse_blocks( $post->post_content ) ) as $finding ) {
+				$rows[] = array( 'post_id' => $post->ID ) + $finding;
+			}
+		}
+		if ( 'json' === $format ) {
+			\WP_CLI::line( (string) wp_json_encode( $rows, JSON_PRETTY_PRINT ) );
+		} elseif ( array() !== $rows ) {
+			\WP_CLI\Utils\format_items( 'table', $rows, array( 'post_id', 'block_path', 'block_name', 'code', 'path', 'source', 'message' ) );
+		} else {
+			\WP_CLI::success( 'No stored field problems found.' );
+		}
+		if ( array() !== $rows ) {
+			\WP_CLI::halt( 1 );
+		}
 	}
 
 	// Database.

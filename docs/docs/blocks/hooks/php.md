@@ -142,6 +142,21 @@ add_filter('blockstudio/blocks/attributes/render', function($attributes, $block)
 }, 10, 2);
 ```
 
+### attributes/validate
+
+Adjust findings from explicit [`bs_validate_block()`](/docs/blocks/rendering#validating-stored-values)
+calls, for example when a custom render filter resolves stored references.
+This does not enable automatic validation on saves or renders.
+
+```php title="functions.php"
+add_filter('blockstudio/blocks/attributes/validate', function($findings, $name, $attrs) {
+  return $findings;
+}, 10, 3);
+```
+
+Return a list of findings. The filter is not called when the block has no
+Blockstudio fields or matching extensions (`null`).
+
 ### attributes/populate
 
 This filter allows you to add custom data to the options of a `checkbox`,

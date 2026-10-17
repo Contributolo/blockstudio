@@ -17,6 +17,38 @@ msgstr ""
 msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
 msgstr ""
 
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr ""
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr ""
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr ""
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr ""
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr ""
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr ""
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr ""
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr ""
+
 #: includes/classes/build.php
 msgid "Blockstudio is preparing its block cache. Please retry shortly."
 msgstr ""

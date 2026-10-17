@@ -87,7 +87,7 @@ class FieldTypeConfigTest extends TestCase {
 	public function test_get_attribute_type_for_files_returns_array_of_types(): void {
 		$result = Field_Type_Config::get_attribute_type( 'files' );
 		$this->assertIsArray( $result );
-		$this->assertSame( array( 'number', 'object', 'array' ), $result );
+		$this->assertSame( array( 'number', 'object', 'array', 'string' ), $result );
 	}
 
 	public function test_get_attribute_type_for_null_attribute_types(): void {

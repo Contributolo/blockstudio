@@ -196,6 +196,30 @@ if ( ! function_exists( 'bs_block_extension_fields' ) ) {
 	}
 }
 
+if ( ! function_exists( 'bs_validate_block' ) ) {
+	/**
+	 * Validate stored field values without rendering, saving, or sanitizing them.
+	 *
+	 * Call after block registration. Supply the complete attrs array from
+	 * parse_blocks(), including blockstudio, disabled fields and top-level
+	 * values. Only this block is checked; callers walk innerBlocks themselves.
+	 *
+	 * @since 7.7.5
+	 *
+	 * @param string $name  Block name, including extended core or third-party blocks.
+	 * @param array  $attrs Complete parsed block attributes.
+	 * @return array<int, array{code:string,path:string,source:string,message:string,value:mixed,expected:mixed}>|null
+	 *         Findings, an empty list when valid, or null for an unmanaged block.
+	 * @example $findings = bs_validate_block( $block['blockName'], $block['attrs'] );
+	 *
+	 * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound -- Public API function.
+	 */
+	function bs_validate_block( string $name, array $attrs ): ?array {
+		// phpcs:enable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
+		return \Blockstudio\Block_Validator::validate( $name, $attrs );
+	}
+}
+
 if ( ! function_exists( 'bs_block_assets' ) ) {
 	/**
 	 * Inspect a registered block's discovered CSS and JavaScript assets.

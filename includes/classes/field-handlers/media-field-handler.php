@@ -7,6 +7,8 @@
 
 namespace Blockstudio\Field_Handlers;
 
+use Blockstudio\Field_Type_Config;
+
 /**
  * Handler for media/file field types.
  *
@@ -44,7 +46,7 @@ class Media_Field_Handler extends Abstract_Field_Handler {
 
 		$attribute = array(
 			'blockstudio' => true,
-			'type'        => array( 'number', 'object', 'array' ),
+			'type'        => Field_Type_Config::TYPES['files']['attribute'],
 			'field'       => $type,
 			'multiple'    => $field['multiple'] ?? false,
 			'returnSize'  => $field['returnSize'] ?? 'full',

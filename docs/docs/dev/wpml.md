@@ -14,8 +14,8 @@ meta_description: "Generate the WPML language configuration that makes the text 
 WPML translates the attributes of a custom block only as far as a language
 configuration file declares them. Blockstudio stores every field value in the
 block comment under `blockstudio.attributes`, so each block needs an entry that
-points WPML at its text fields. The `wp bs wpml config` command writes these
-entries for every registered block.
+points WPML at its text fields and its attachment IDs. The `wp bs wpml config`
+command writes these entries for every registered block.
 
 ## Why blocks need a configuration
 
@@ -46,7 +46,7 @@ Or let the command write the file:
 wp bs wpml config --file=wp-content/themes/my-theme/wpml-config.xml
 ```
 
-A block with a text field, a link, and a repeater:
+A block with a text field, an image, a link, and a repeater:
 
 ```json title="block.json"
 {
@@ -55,6 +55,7 @@ A block with a text field, a link, and a repeater:
   "blockstudio": {
     "attributes": [
       { "id": "heading", "type": "text", "label": "Heading" },
+      { "id": "gallery", "type": "files", "label": "Gallery", "multiple": true },
       {
         "id": "style",
         "type": "select",
@@ -90,9 +91,13 @@ becomes:
 			<key name="blockstudio">
 				<key name="attributes">
 					<key name="heading" label="Heading" />
+					<key name="gallery">
+						<key name="*" type="post-ids" sub-type="attachment" />
+					</key>
 					<key name="cards">
 						<key name="*">
 							<key name="title" label="Cards: Title" />
+							<key name="image" type="post-ids" sub-type="attachment" />
 							<key name="link">
 								<key name="title" label="Cards: Button" />
 								<key name="url" type="link" label="Cards: Button: URL" />
@@ -107,8 +112,13 @@ becomes:
 </wpml-config>
 ```
 
-The `style` and `image` values are not declared, so WPML copies them into the
-translation unchanged.
+The `style` value is not declared, so WPML copies it into the translation
+unchanged. The `gallery` and `image` IDs are copied as well, and WPML replaces
+each one with the attachment of the page language when the block is rendered,
+so a translated image can have its own alt text. See "Automatically Converting
+IDs in Blocks" in
+[Make Custom Gutenberg Blocks Translatable](https://wpml.org/documentation/support/language-configuration-files/make-custom-gutenberg-blocks-translatable/).
+When an attachment has no translation, WPML keeps the original ID.
 
 ## What is declared
 
@@ -122,14 +132,16 @@ those blocks get their configuration from WPML or from their own plugin.
 | --- | --- |
 | `text`, `textarea`, `richtext`, `wysiwyg` | Translatable text. |
 | `link` | `title` as text and `url` with `type="link"`, so WPML replaces a link with its translation when one is available. |
+| `files` | The stored attachment ID with `type="post-ids"` and `sub-type="attachment"`. With `multiple`, a level named `*` for the list, which also matches the single ID that the field stores when one file is selected. |
 | `repeater` | A level named `*` that matches every row, with the declarations of the row fields. Nested repeaters work the same way. |
 | `group` with an `id` | The fields of the group, with the group ID as key prefix (`cta_text` for the field `text` in the group `cta`). |
 | `group` without an `id`, `tabs` | The fields, without a level of their own. |
 | Every other built-in type | Not declared. WPML copies the value unchanged. |
 
-A block without a declared field gets `translate="0"`. WPML then copies all of
-its values and offers nothing from it for translation. Inner blocks are
-translated as usual.
+A block without a declared text field gets `translate="0"`. WPML then copies
+all of its values and offers nothing from it for translation. Its `files`
+fields are still declared inside the entry, because WPML converts attachment
+IDs whatever `translate` says. Inner blocks are translated as usual.
 
 Not declared:
 
@@ -165,8 +177,9 @@ only when it is clear what is stored there:
   the extension is applied with its own field. The key is declared once when
   both fields need the same
   declaration: both are text fields (`text`, `textarea`, `richtext`, or
-  `wysiwyg`), both are links, or neither is declared, such as a `select` and a
-  `number`. Two repeaters are compared field by field in their rows. The label
+  `wysiwyg`), both are links, both are `files` fields (with `multiple` on
+  either, the key gets the `*` level), or neither is declared, such as a
+  `select` and a `number`. Two repeaters are compared field by field in their rows. The label
   comes from the block's field.
 - Two fields with the same `id` in the rows of one repeater both stay in effect
   as well, and are compared the same way.
@@ -185,7 +198,8 @@ Rename one of the fields, or give both the same type, to have the key declared.
 ## Keep the configuration up to date
 
 Run the command again after adding, removing, or renaming fields, and ship the
-updated file with the theme or plugin. Content that existed before shows new
+updated file with the theme or plugin. Regenerate configurations made before
+7.7.5 to include attachment-ID declarations. Content that existed before shows new
 fields for translation once its original is updated, as described in the WPML
 guide above.
 
@@ -219,3 +233,54 @@ Entries for Blockstudio blocks that were written by hand, such as
 `translate="0"` entries that hide technical values, are no longer needed once
 the generated section covers the block. The command warns about every block
 that is declared more than once, so these entries can be removed.
+
+## Image texts in translation jobs
+
+WPML puts the texts of the images that a page uses into the translation job of
+the page: title, alt text, caption, and description. When the job is
+completed, WPML writes the translated texts to the attachment of the target
+language and creates that attachment if there is none yet. See
+[How to Translate Media](https://wpml.org/documentation/translating-your-contents/media/).
+WPML finds the images in `<img>` tags in the content, in galleries, in the
+featured image, and in the blocks it knows. A Blockstudio block stores
+attachment IDs in the block comment, so WPML finds none of them.
+
+When WPML is active, Blockstudio adds the attachments that its fields store in
+the blocks of a page to the images WPML found:
+
+- `files` fields, including hidden ones, and `attributes` fields with `media`,
+  the same fields the block editor loads as media.
+- Fields in groups, tabs, repeater rows, and inner blocks.
+- Fields of [extensions](/docs/extensions), also on core blocks and blocks of
+  other plugins, because their values are stored in the attributes of the
+  extended block.
+
+Values that are not the ID of an attachment are left out. Nothing needs to be
+configured, and the `wpml-config.xml` is not involved. Without WPML, nothing is
+scanned for translation jobs and the media integration class is not loaded.
+
+This is separate from attachment-ID conversion: the generated XML tells WPML
+which translated attachment to render, while this integration tells it which
+attachment texts to include in a translation job. String references and IDs
+of non-attachment posts are not added to media jobs. Saved nested field values
+take precedence over top-level values on Blockstudio blocks, as on render.
+
+The texts are part of the job only when one of the image text options under
+WPML > Settings > Media Translation is enabled, "Automatically detect best
+options for translating image texts" or "Translate Media Library texts when
+translating content", as for images in core blocks.
+
+Blockstudio reports the images through the filter
+`wpml_ids_of_media_used_in_post`, which WPML applies to the media of a post in
+`PostWithMediaFiles`. To leave an image out of the jobs, remove its ID in a
+callback on the same filter with a priority above 10:
+
+```php
+add_filter(
+	'wpml_ids_of_media_used_in_post',
+	function ( $ids ) {
+		return array_values( array_diff( $ids, array( 42 ) ) );
+	},
+	20
+);
+```

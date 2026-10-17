@@ -122,10 +122,9 @@ filters, expanded custom fields, overrides, and nested groups, tabs, and
 repeaters. A Blockstudio block with no fields returns `[]`. The result is a
 copy: changing it does not change the registered block.
 
-These are definitions, not saved values or an automatic content validator.
-When validating saved block markup, read values from
-`attrs.blockstudio.attributes` and walk the definitions according to each
-field's structure and type. WordPress-owned attributes remain separate.
+These are definitions, not saved values. To validate saved markup, use
+[`bs_validate_block()`](#validating-stored-values) instead of maintaining a
+separate field walker. WordPress-owned attributes remain separate.
 
 Fields added by [extensions](/docs/extensions) are not part of
 `bs_block_fields()`. Use `bs_block_extension_fields()` to get them. It matches
@@ -150,6 +149,113 @@ Use [`bs_block_assets()`](/docs/blocks/assets#inspecting-a-blocks-assets) to
 inspect the block's discovered CSS and JavaScript. For a complete preview
 document, including nested blocks and shared runtime dependencies, use
 `Render::document()` as described above.
+
+### Validating stored values
+
+Use `bs_validate_block()` after block registration (`init` or later) to check
+programmatically generated or imported block attributes before saving them:
+
+```php
+$block = parse_blocks($content)[0];
+$findings = bs_validate_block($block['blockName'], $block['attrs']);
+
+if ($findings === null) {
+  // No Blockstudio fields or matching extensions apply.
+} elseif ($findings === []) {
+  // No stored-value problems were found.
+} else {
+  // Review the findings before saving.
+}
+```
+
+Pass the complete `attrs` array, not just `blockstudio.attributes`. A
+Blockstudio render accepts declared fields at the top level as well, and
+nested values win when both are supplied. Extensions of core and third-party
+blocks read only `blockstudio.attributes`. An empty Blockstudio block is
+managed and returns `[]`, not `null`.
+
+Validation is explicit and read-only. It does not render templates, change
+values, save posts, query media, or run populate callbacks. It does not run
+automatically during saves, page synchronization, or rendering. It is not a
+sanitizer, an authorization check, or a check that an attachment exists.
+
+Each finding contains these stable keys:
+
+```php
+[
+  'code' => 'unknown_option',
+  'path' => 'steps/1/style',
+  'source' => 'block',
+  'message' => 'This value is not among the field options.',
+  'value' => 'c',
+  'expected' => ['a', 'b'],
+]
+```
+
+Use `code`, not the translated `message`, in tooling. `source` is `block` or
+`extension`. Paths use storage keys and zero-based repeater row indices,
+without a leading slash. Literal `~` and `/` in a key are escaped as `~0` and
+`~1`. A top-level group prefixes its children (`cta_title`); anonymous groups
+and tabs add no level. Groups with an ID inside another group or a repeater
+are not supported by the builder, so their keys are not accepted. Message
+fields have no stored value. A files field permits its `<id>__size` companion.
+
+| Code | Meaning | `expected` |
+| --- | --- | --- |
+| `unknown_field` | No retained field declares this storage key. | Known storage keys. |
+| `unknown_option` | A selection is not among the known options. | Allowed option values. |
+| `wrong_type` | The stored shape is not supported by the field. | Expected storage family or type. |
+| `too_few_rows`, `too_many_rows` | A present repeater is outside its `min` or `max`. | The row bound. |
+| `definition_conflict` | Applicable definitions for one key require different storage shapes. | Source and field type of each definition. |
+| `shadowed_value` | A nested value overrides a different top-level field value. | The winning nested value. |
+| `invalid_container` | `blockstudio` or `blockstudio.attributes` is not an object. | `object`. |
+
+The accepted shapes follow rendering: multiple selects and checkboxes can
+contain a list, one option object, or an imported scalar, including numeric
+zero. Numeric strings are accepted for numbers. Files can contain attachment
+IDs, ID objects, lists, or string references. Link and icon values must be
+objects; custom field types use their registered attribute type.
+
+Missing fields are not required. Empty values (`null`, `false`, `''`, `[]`)
+and disabled fields do not produce value errors. An explicitly empty repeater
+is still checked against `min`; an absent or disabled repeater is not.
+Definition conflicts are reported even when the key has no saved value.
+
+Static options and populate options already resolved at registration are
+checked without invoking populate again. Remote `fetch` options and populate
+arguments containing `{attributes.*}` are skipped. Color and gradient values
+may be custom unless `disableCustomColors` or `disableCustomGradients` is set.
+This checks stored values, not `default`, `fallback`, or editor validation rules.
+
+Matching extension fields are included for every block they target. Later
+definitions win within the block or its extensions at the root, as on render.
+A block's own field and an extension field remain separate definitions of
+the same key; repeater row definitions are also all retained. Incompatible
+storage shapes produce `definition_conflict`; compatible shapes are checked
+against each applicable definition, including their options.
+
+The function checks one block. Walk `innerBlocks` when validating a document;
+synced patterns and other references are not expanded automatically. The
+[`wp bs blocks validate`](/docs/dev/cli#validate-stored-fields) command walks
+the blocks of one or more posts and reports their block paths.
+
+Sites with a custom render-time resolver can adapt the findings without
+changing stored data:
+
+```php
+add_filter('blockstudio/blocks/attributes/validate', function($findings, $name, $attrs) {
+  if ($name !== 'my-theme/card') {
+    return $findings;
+  }
+
+  return array_values(array_filter($findings, function($finding) {
+    return !($finding['path'] === 'customReference' && $finding['code'] === 'wrong_type');
+  }));
+}, 10, 3);
+```
+
+Always return a list of findings; returning `[]` accepts the block. This
+filter runs only for managed blocks, never for the `null` result.
 
 ## PHP Functions
 

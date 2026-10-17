@@ -694,7 +694,7 @@ The extension maps every Blockstudio field type to a concrete PHP type:
 | `select`, `radio`, `checkbox` (single)                        | `string\|int`                                                                               |
 | `select`, `checkbox` (multiple)                               | `list<string\|int>`                                                                         |
 | `color`                                                       | `array{value: string, opacity: float\|null}`                                                |
-| `link`                                                        | `array{href: string, title: string\|null, target: string\|null, opensInNewTab: bool\|null}` |
+| `link`                                                        | `array{url: string, title: string\|null, target: string\|null, opensInNewTab: bool\|null}` |
 | `icon`                                                        | `array{set: string, subSet: string, icon: string}`                                          |
 | `files` (single)                                              | `array{id: int, url: string, alt: string\|null, mime_type: string\|null}`                   |
 | `files` (multiple)                                            | `list<array{id: int, url: string, ...}>`                                                    |
