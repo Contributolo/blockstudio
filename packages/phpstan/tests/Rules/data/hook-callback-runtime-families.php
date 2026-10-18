@@ -12,6 +12,7 @@ add_filter('blockstudio/discovery/sources', function ($sources) { return $source
 add_filter('blockstudio/field_types', function ($types) { return $types; });
 add_filter('blockstudio/block_tags/prefixes', function ($prefixes) { return $prefixes; });
 add_filter('blockstudio/blocks/components/rich_text/render', function ($html) { return $html; });
+add_filter('blockstudio/blocks/attributes/validate', function ($findings) { return $findings; });
 add_filter('blockstudio/ui/inventory', function ($inventory) { return $inventory; });
 add_filter('blockstudio/tailwind/css', function ($css) { return $css; });
 add_filter('blockstudio/path', function () { return ''; });

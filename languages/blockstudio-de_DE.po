@@ -21,6 +21,58 @@ msgstr "Blockstudio"
 msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
 msgstr "Das Attribut „%1$s“ am Block-Tag %2$s wird verworfen, weil der Block kein Feld mit dieser ID deklariert. Deklariere das Feld oder schreibe es als data-, aria- oder html-Attribut, damit es am Wurzelelement landet."
 
+#: includes/classes/block-validator.php
+msgid "The blockstudio attribute must be an object."
+msgstr "Das Attribut blockstudio muss ein Objekt sein."
+
+#: includes/classes/block-validator.php
+msgid "The field values must be an object."
+msgstr "Die Feldwerte müssen ein Objekt sein."
+
+#: includes/classes/block-validator.php
+msgid "The list of disabled fields must be an array."
+msgstr "Die Liste der deaktivierten Felder muss ein Array sein."
+
+#: includes/classes/block-validator.php
+msgid "This field is set at the top level of the attrs and in blockstudio.attributes. The value in blockstudio.attributes is rendered."
+msgstr "Dieses Feld ist auf der obersten Ebene der attrs und in blockstudio.attributes gesetzt. Ausgegeben wird der Wert aus blockstudio.attributes."
+
+#: includes/classes/block-validator.php
+msgid "WordPress drops this top-level value before render because it does not match the attribute type. The default applies."
+msgstr "WordPress verwirft diesen Wert auf der obersten Ebene vor dem Rendern, weil er nicht zum Typ des Attributs passt. Es gilt der Standardwert."
+
+#: includes/classes/block-validator.php
+msgid "Only the block template reads this value at the top level of the attrs. Extensions read their values from blockstudio.attributes."
+msgstr "Auf der obersten Ebene der attrs liest nur das Template des Blocks diesen Wert. Erweiterungen lesen ihre Werte aus blockstudio.attributes."
+
+#: includes/classes/block-validator.php
+msgid "No field of this block or its extensions stores this key."
+msgstr "Kein Feld dieses Blocks oder seiner Erweiterungen speichert diesen Schlüssel."
+
+#: includes/classes/block-validator.php
+msgid "The block and an extension define this key with fields that store different shapes. Each render path reads the value with its own field."
+msgstr "Der Block und eine Erweiterung definieren diesen Schlüssel mit Feldern, die unterschiedliche Formen speichern. Jeder Render-Weg liest den Wert mit seinem eigenen Feld."
+
+#: includes/classes/block-validator.php
+msgid "This value is not an option of the field."
+msgstr "Dieser Wert ist keine Option des Felds."
+
+#: includes/classes/block-validator.php
+msgid "The renderer cannot resolve this ID to an attachment."
+msgstr "Der Renderer kann diese ID keinem Anhang zuordnen."
+
+#: includes/classes/block-validator.php
+msgid "Two fields of the repeater rows use this ID with different shapes. Only the first one is read."
+msgstr "Zwei Felder der Zeilen nutzen diese ID mit unterschiedlichen Formen. Gelesen wird nur das erste."
+
+#: includes/classes/block-validator.php
+msgid "No field of the repeater rows stores this key."
+msgstr "Kein Feld der Zeilen speichert diesen Schlüssel."
+
+#: includes/classes/block-validator.php
+msgid "The value does not have the shape this field stores."
+msgstr "Der Wert hat nicht die Form, die dieses Feld speichert."
+
 #: includes/classes/build.php
 msgid "Blockstudio is preparing its block cache. Please retry shortly."
 msgstr "Blockstudio baut gerade seinen Block-Cache auf. Bitte versuche es gleich noch einmal."

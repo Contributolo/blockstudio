@@ -9,6 +9,7 @@ use Blockstudio\Db;
 use Blockstudio\Render;
 use Blockstudio\Build;
 use Blockstudio\Assets;
+use Blockstudio\Block_Validator;
 use Blockstudio\Extensions;
 use Blockstudio\Pages;
 use Blockstudio\Site_Templates;
@@ -193,6 +194,40 @@ if ( ! function_exists( 'bs_block_extension_fields' ) ) {
 		}
 
 		return $fields;
+	}
+}
+
+if ( ! function_exists( 'bs_validate_block' ) ) {
+	/**
+	 * Check stored field values against the fields of a block and its extensions.
+	 *
+	 * Follows the render path: storage keys as the attribute builder lays them
+	 * out, top-level values checked the way WordPress checks registered
+	 * attributes, values read the way Block::transform() and
+	 * Extensions::render_blocks() read them. Shapes the renderer normalises and
+	 * values it does not transform are valid. Each finding has a stable code
+	 * (invalid_container, unknown_field, shadowed_value, extension_top_level,
+	 * definition_conflict, wrong_type, unknown_option, unknown_attachment), the
+	 * storage path, the source of the field ("block", "extension", or null), a
+	 * message, the stored value, and what was expected where it applies.
+	 *
+	 * Call after block registration.
+	 *
+	 * @since 7.7.5
+	 *
+	 * @param string $name  Block name, for example 'theme/card' or 'core/paragraph'.
+	 * @param array  $attrs The block's attrs as parse_blocks() returns them.
+	 *
+	 * @return array|null Findings (empty when the values are valid), or null when neither
+	 *                    bs_block_fields() nor bs_block_extension_fields() apply to the block.
+	 *
+	 * @example $findings = bs_validate_block( $block['blockName'], $block['attrs'] );
+	 *
+	 * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound -- Public API function.
+	 */
+	function bs_validate_block( string $name, array $attrs ): ?array {
+		// phpcs:enable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
+		return Block_Validator::validate( $name, $attrs );
 	}
 }
 

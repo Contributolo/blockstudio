@@ -1769,11 +1769,13 @@ class Block {
 	/**
 	 * Whether a field stores a list of options: checkboxes and multiple selects.
 	 *
+	 * @internal Shared with Block_Validator so both read option values the same way.
+	 *
 	 * @param array $att The attribute definition.
 	 *
 	 * @return bool Whether the field stores a list of options.
 	 */
-	private static function is_multiple_option_field( array $att ): bool {
+	public static function is_multiple_option_field( array $att ): bool {
 		$type = $att['field'] ?? '';
 
 		return 'checkbox' === $type || ( 'select' === $type && ( $att['multiple'] ?? false ) );
@@ -1787,11 +1789,13 @@ class Block {
 	 * holds a plain value. Both count as a single selection. Labels are
 	 * resolved from the field options later, so a plain value is its own label.
 	 *
+	 * @internal Shared with Block_Validator so both read option values the same way.
+	 *
 	 * @param mixed $value The stored value.
 	 *
 	 * @return array The selections.
 	 */
-	private static function multiple_option_values( $value ): array {
+	public static function multiple_option_values( $value ): array {
 		if ( is_array( $value ) ) {
 			return array_key_exists( 'value', $value ) ? array( $value ) : $value;
 		}

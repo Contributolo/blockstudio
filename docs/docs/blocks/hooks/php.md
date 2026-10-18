@@ -142,6 +142,19 @@ add_filter('blockstudio/blocks/attributes/render', function($attributes, $block)
 }, 10, 2);
 ```
 
+### attributes/validate
+
+This filter allows you to change the findings of `bs_validate_block()`. See
+[Validating stored values](/docs/blocks/rendering#validating-stored-values)
+for the finding shape.
+
+```php title="functions.php"
+add_filter('blockstudio/blocks/attributes/validate', function($findings, $name, $attrs) {
+  // Remove or add findings
+  return $findings;
+}, 10, 3);
+```
+
 ### attributes/populate
 
 This filter allows you to add custom data to the options of a `checkbox`,

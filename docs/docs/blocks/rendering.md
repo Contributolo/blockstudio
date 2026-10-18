@@ -122,10 +122,9 @@ filters, expanded custom fields, overrides, and nested groups, tabs, and
 repeaters. A Blockstudio block with no fields returns `[]`. The result is a
 copy: changing it does not change the registered block.
 
-These are definitions, not saved values or an automatic content validator.
-When validating saved block markup, read values from
-`attrs.blockstudio.attributes` and walk the definitions according to each
-field's structure and type. WordPress-owned attributes remain separate.
+These are definitions, not saved values. To check saved values against them,
+use [`bs_validate_block()`](#validating-stored-values). WordPress-owned
+attributes remain separate.
 
 Fields added by [extensions](/docs/extensions) are not part of
 `bs_block_fields()`. Use `bs_block_extension_fields()` to get them. It matches
@@ -145,6 +144,101 @@ values are saved in the same `attrs.blockstudio.attributes` object as the
 block's own field values, so all ids share one namespace. If two extensions
 define the same id, both definitions are returned and edit the same value; on
 render, the definition of the extension registered later applies.
+
+### Validating stored values
+
+Use `bs_validate_block()` to check the values a block stores before you save
+generated or migrated markup. Pass the block name and the `attrs` as
+`parse_blocks()` returns them:
+
+```php
+foreach (parse_blocks($content) as $block) {
+  $findings = bs_validate_block($block['blockName'] ?? '', $block['attrs']);
+
+  if ($findings === null) {
+    continue; // No fields apply to this block.
+  }
+
+  foreach ($findings as $finding) {
+    error_log($finding['code'] . ' ' . $finding['path'] . ': ' . $finding['message']);
+  }
+}
+```
+
+The function checks the block's own fields and the fields of every matching
+extension, so it works for core and third-party blocks with extensions too. It
+returns `null` when neither `bs_block_fields()` nor
+`bs_block_extension_fields()` apply, and `[]` when the values are valid. It
+does not walk `innerBlocks`; call it for each block.
+
+Each finding is an array:
+
+```php
+[
+  'code'     => 'unknown_option',
+  'path'     => 'steps/1/style',  // storage path, row index for repeater rows
+  'source'   => 'block',          // 'block', 'extension', or null
+  'message'  => 'This value is not an option of the field.',
+  'value'    => 'c',              // as stored
+  'expected' => ['a', 'b'],       // where it applies
+]
+```
+
+| Code | When |
+| --- | --- |
+| `invalid_container` | `attrs.blockstudio` or its `attributes` is not an object, or `disabled` is not an array |
+| `unknown_field` | No field of the block, its extensions, or the repeater rows stores the key |
+| `shadowed_value` | A field is set at the top level of `attrs` and in `blockstudio.attributes` with different values; the nested value is rendered |
+| `extension_top_level` | An extension field is set at the top level of `attrs`; only the block template reads it there, the extension does not |
+| `definition_conflict` | The block and an extension, or two fields of one repeater's rows, define the key with fields that store different shapes |
+| `wrong_type` | The value does not have a shape the field stores, or WordPress drops a top-level value whose type does not match the registered attribute |
+| `unknown_option` | A `select`, `radio`, or `checkbox` value is not one of the options the renderer knows; it renders as `false` or is dropped from the list |
+| `unknown_attachment` | A `files` value does not resolve to a stored post (for the return format `url`: an attachment) |
+
+The checks follow the render path. A value is reported when a render path
+drops it, replaces it, or cannot read it, or, for `unknown_field`, when no field
+reads it:
+
+- Storage keys are the ones the attribute builder registered, so a group with
+  an ID prefixes the IDs of its fields and groups without an ID and tabs add no
+  level. `<files>__size` is valid next to a `files` field. On a Blockstudio
+  block, global HTML attributes such as `data-*`, `aria-*`, `id`, and `title`
+  are passed to the root element and are not reported.
+- Values the renderer does not transform (`''`, `[]`, `false`, `null`, and `0`
+  outside a `checkbox` or multiple `select`) are not checked, and neither are
+  fields listed in `disabled`.
+- A single option, or a plain string or number, is valid in a multiple `select`
+  or a `checkbox`. Numeric strings are valid in `number` and `range`.
+- Options are looked up the way the renderer looks them up, including options
+  `populate` adds at build time. `populate` arguments that read other fields
+  (`{attributes.…}`) are not resolved at build time, so the renderer only knows
+  the static options of such a field. A `select` whose options are fetched in
+  the editor passes its value through and is not checked.
+- A `files` value with the return format `id` reaches the template as stored.
+  With the other return formats each ID must belong to a stored post (`url`:
+  an attachment).
+- Values at the top level of `attrs` are first checked the way WordPress checks
+  registered attributes before render (`rest_validate_value_from_schema()`).
+  Single `select` and `radio` fields are registered as objects, list fields as
+  arrays. An empty value WordPress drops is reported only when the field has a
+  `default`, because only then the result changes.
+- Custom field types are checked against the attribute type they declare.
+
+Use the `blockstudio/blocks/attributes/validate` filter to change the findings,
+for example to ignore a key your site still writes and reads elsewhere:
+
+```php
+add_filter('blockstudio/blocks/attributes/validate', function ($findings, $name, $attrs) {
+  if ($name !== 'theme/card') {
+    return $findings;
+  }
+
+  return array_values(array_filter(
+    $findings,
+    fn($finding) => !($finding['code'] === 'unknown_field' && $finding['path'] === 'legacy_id')
+  ));
+}, 10, 3);
+```
 
 Use [`bs_block_assets()`](/docs/blocks/assets#inspecting-a-blocks-assets) to
 inspect the block's discovered CSS and JavaScript. For a complete preview
