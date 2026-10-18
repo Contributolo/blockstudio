@@ -781,6 +781,26 @@ class AttributeBuilderTest extends TestCase {
 		$this->assertSame( array( array( 'text' => 'First' ) ), $result['rows']['default'] );
 	}
 
+	public function test_build_repeater_keeps_min(): void {
+		$fields = array(
+			array(
+				'id'         => 'rows',
+				'type'       => 'repeater',
+				'min'        => 2,
+				'attributes' => array(
+					array(
+						'id'   => 'text',
+						'type' => 'text',
+					),
+				),
+			),
+		);
+
+		$result = $this->builder->build( $fields );
+
+		$this->assertSame( 2, $result['rows']['min'] );
+	}
+
 	public function test_build_repeater_without_id_produces_nothing(): void {
 		$fields = array(
 			array(
