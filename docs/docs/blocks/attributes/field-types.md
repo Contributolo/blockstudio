@@ -709,6 +709,22 @@ constrain editor controls; they do not truncate or pad a saved list on render.
 Use [`bs_validate_block()`](/docs/blocks/rendering#validating-stored-values) to
 report row-bound violations in imported content.
 
+Row fields without a `default` are `false` in a generated row, so such a row
+has no content. Rows that editors add and leave empty look the same. A
+template that prints a card, a heading, or a list item for every row should
+skip rows without content outside the editor, and keep them in the editor so
+their fields stay editable:
+
+```php title="index.php"
+<?php foreach ( $a['items'] as $item ) : ?>
+  <?php if ( ! $isEditor && ! $item['title'] && ! $item['text'] ) continue; ?>
+  <div class="item">
+    <h3><?php echo $item['title']; ?></h3>
+    <p><?php echo $item['text']; ?></p>
+  </div>
+<?php endforeach; ?>
+```
+
 ## Repeater Removal
 
 Removing a row opens the editor's confirmation dialog with **Delete** and
