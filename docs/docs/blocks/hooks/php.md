@@ -931,6 +931,19 @@ add_filter('blockstudio/settings/dev/canvas/admin_bar', function() {
 
 <!-- GENERATED_SETTINGS_END -->
 
+## WPML
+
+### blockstudio/wpml/config/label
+
+Filters the label of each key that `wp bs wpml config` writes. See
+[Change the labels](/docs/dev/wpml#change-the-labels) for the context array.
+
+```php title="functions.php"
+add_filter('blockstudio/wpml/config/label', function($label, $context) {
+  return str_replace(' (optional)', '', $label);
+}, 10, 2);
+```
+
 ## Canvas
 
 ### blockstudio/canvas/inventory

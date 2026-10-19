@@ -169,6 +169,7 @@ final class HookCallbackRule implements Rule
         'blockstudio/ui/inventory',
         'blockstudio/updater/token',
         'blockstudio/url',
+        'blockstudio/wpml/config/label',
     ];
 
     /** @var list<string> */

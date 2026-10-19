@@ -2,6 +2,7 @@
 
 use Blockstudio\Attribute_Builder;
 use Blockstudio\Field_Type_Config;
+use Blockstudio\Translations;
 use Blockstudio\Wpml_Config;
 use PHPUnit\Framework\TestCase;
 
@@ -210,7 +211,7 @@ class WpmlConfigTest extends TestCase {
 					<key name="note" label="Note" />
 					<key name="cta_text" label="Call to action: Text" />
 					<key name="cta_link">
-						<key name="title" label="Call to action: Button" />
+						<key name="title" label="Call to action: Button: Link text" />
 						<key name="url" type="link" label="Call to action: Button: URL" />
 					</key>
 					<key name="cards">
@@ -220,7 +221,7 @@ class WpmlConfigTest extends TestCase {
 								<key name="*">
 									<key name="text" label="Cards: Items: Text" />
 									<key name="link">
-										<key name="title" label="Cards: Items: Link" />
+										<key name="title" label="Cards: Items: Link: Link text" />
 										<key name="url" type="link" label="Cards: Items: Link: URL" />
 									</key>
 								</key>
@@ -635,7 +636,7 @@ XML;
 			$this->assertSame( $paths, $this->declared_paths( array( $own ), array( $extension ) ), $case );
 
 			if ( array() !== $paths ) {
-				$this->assertStringContainsString( 'label="Tone"', $section['xml'], "$case: the label of the block's field" );
+				$this->assertMatchesRegularExpression( '/label="Tone(: Link text)?"/', $section['xml'], "$case: the label of the block's field" );
 				$this->assertStringNotContainsString( 'Mood', $section['xml'], $case );
 			}
 		}
@@ -860,6 +861,125 @@ XML;
 		$this->assertStringContainsString( 'label="Quote &amp; &quot;Cite&quot;"', $xml );
 		$this->assertStringContainsString( 'label="Author &lt;name&gt;"', $xml );
 		$this->assertSame( array(), Wpml_Config::validate( Wpml_Config::document( $xml ) ) );
+	}
+
+	public function test_link_suffixes_are_translated(): void {
+		$locale = static fn () => 'de_DE';
+		add_filter( 'pre_determine_locale', $locale );
+		Translations::load();
+
+		try {
+			$xml = $this->section(
+				array(
+					array(
+						'id'         => 'cards',
+						'type'       => 'repeater',
+						'label'      => 'Karten',
+						'attributes' => array(
+							array(
+								'id'    => 'link',
+								'type'  => 'link',
+								'label' => 'Button',
+							),
+						),
+					),
+				)
+			)['xml'];
+		} finally {
+			remove_filter( 'pre_determine_locale', $locale );
+			unload_textdomain( Translations::DOMAIN );
+			WP_Translation_Controller::get_instance()->set_locale( determine_locale() );
+		}
+
+		$this->assertStringContainsString( '<key name="title" label="Karten: Button: Linktext" />', $xml );
+		$this->assertStringContainsString( '<key name="url" type="link" label="Karten: Button: URL" />', $xml );
+	}
+
+	public function test_label_filter_receives_the_context_of_each_key(): void {
+		$contexts = array();
+		$filter   = static function ( $label, $context ) use ( &$contexts ) {
+			$contexts[] = array( $label, $context['block'], $context['path'], $context['part'], $context['parents'], $context['field']['id'] );
+			return $label;
+		};
+		add_filter( 'blockstudio/wpml/config/label', $filter, 10, 2 );
+
+		try {
+			$this->section(
+				array(
+					array(
+						'id'    => 'heading',
+						'type'  => 'text',
+						'label' => 'Heading',
+					),
+					array(
+						'id'         => 'cards',
+						'type'       => 'repeater',
+						'label'      => 'Cards',
+						'attributes' => array(
+							array(
+								'id'    => 'link',
+								'type'  => 'link',
+								'label' => 'Button',
+							),
+						),
+					),
+				)
+			);
+		} finally {
+			remove_filter( 'blockstudio/wpml/config/label', $filter, 10 );
+		}
+
+		$this->assertSame(
+			array(
+				array( 'Heading', 'acme/example', 'heading', 'text', array(), 'heading' ),
+				array( 'Cards: Button: Link text', 'acme/example', 'cards/*/link', 'title', array( 'Cards' ), 'link' ),
+				array( 'Cards: Button: URL', 'acme/example', 'cards/*/link', 'url', array( 'Cards' ), 'link' ),
+			),
+			$contexts
+		);
+	}
+
+	public function test_label_filter_changes_escapes_and_leaves_out_labels(): void {
+		$filter = static function ( $label, $context ) {
+			if ( 'url' === $context['part'] ) {
+				return '';
+			}
+			if ( 'note' === $context['field']['id'] ) {
+				return null;
+			}
+			return str_replace( ' (optional)', ' & "more"', $label );
+		};
+		add_filter( 'blockstudio/wpml/config/label', $filter, 10, 2 );
+
+		try {
+			$section = $this->section(
+				array(
+					array(
+						'id'    => 'caption',
+						'type'  => 'text',
+						'label' => 'Caption (optional)',
+					),
+					array(
+						'id'    => 'note',
+						'type'  => 'textarea',
+						'label' => 'Note',
+					),
+					array(
+						'id'    => 'link',
+						'type'  => 'link',
+						'label' => 'Button (optional)',
+					),
+				)
+			);
+		} finally {
+			remove_filter( 'blockstudio/wpml/config/label', $filter, 10 );
+		}
+
+		$this->assertStringContainsString( '<key name="caption" label="Caption &amp; &quot;more&quot;" />', $section['xml'] );
+		$this->assertStringContainsString( '<key name="note" label="Note" />', $section['xml'] );
+		$this->assertStringContainsString( '<key name="title" label="Button &amp; &quot;more&quot;: Link text" />', $section['xml'] );
+		$this->assertStringContainsString( '<key name="url" type="link" />', $section['xml'] );
+		$this->assertSame( array(), Wpml_Config::validate( Wpml_Config::document( $section['xml'] ) ) );
 	}
 
 	public function test_merge_replaces_only_the_marked_section(): void {

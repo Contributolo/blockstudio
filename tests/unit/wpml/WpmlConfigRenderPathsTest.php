@@ -170,7 +170,7 @@ PHP
 				<key name="attributes">
 					<key name="note" label="Note" />
 					<key name="cta">
-						<key name="title" label="Button" />
+						<key name="title" label="Button: Link text" />
 						<key name="url" type="link" label="Button: URL" />
 					</key>
 					<key name="items">

@@ -99,7 +99,7 @@ becomes:
 							<key name="title" label="Cards: Title" />
 							<key name="image" type="post-ids" sub-type="attachment" />
 							<key name="link">
-								<key name="title" label="Cards: Button" />
+								<key name="title" label="Cards: Button: Link text" />
 								<key name="url" type="link" label="Cards: Button: URL" />
 							</key>
 						</key>
@@ -158,7 +158,34 @@ as a CSS class.
 
 The `label` of each key is the field label, preceded by the labels of the
 enclosing repeaters and groups with an ID. WPML shows it as the field name in
-the translation editor.
+the translation editor. The two keys of a `link` field add `Link text` and
+`URL` to the label. These suffixes are translated into the site language, so
+run the command with the locale your translators work in.
+
+### Change the labels
+
+Field labels are written for the block editor and can carry hints such as
+"Image (optional)" that mean nothing in the translation editor. The
+`blockstudio/wpml/config/label` filter receives each label before it is
+written, with the context of the key:
+
+- `block`: the block name.
+- `path`: the storage path of the field below `blockstudio.attributes`, with
+  a level `*` for the rows of each repeater, for example `cards/*/link`.
+- `field`: the field definition.
+- `parents`: the labels of the enclosing repeaters and groups with an ID.
+- `part`: `text` for a text field, `title` or `url` for the two keys of a
+  link field.
+
+```php title="functions.php"
+add_filter('blockstudio/wpml/config/label', function ($label, $context) {
+  return str_replace(' (optional)', '', $label);
+}, 10, 2);
+```
+
+Return an empty string to leave out the label of a key, so WPML shows the
+label of the block instead. A return value that is not a string keeps the
+original label. Run the command again after changing the filter.
 
 ### Fields with the same storage key
 

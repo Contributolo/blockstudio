@@ -132,6 +132,18 @@ msgstr ""
 msgid "Blockstudio ignored invalid configuration values:"
 msgstr ""
 
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr ""
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr ""
+
 #: src/admin/components/database-records-table.tsx
 msgid "True"
 msgstr ""
