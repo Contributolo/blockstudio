@@ -11,6 +11,7 @@ use DOMDocument;
 use ErrorException;
 use Throwable;
 use Timber\Timber;
+use WP_Block;
 use WP_HTML_Tag_Processor;
 
 /**
@@ -2210,12 +2211,25 @@ class Block {
 			isset( $_GET['blockstudioMode'] ) &&
 			'preview' === $_GET['blockstudioMode'];
 
-		$post_id   = isset( $_GET['postId'] )
+		$context_post_id = $wp_block instanceof WP_Block
+			? (int) ( $wp_block->context['postId'] ?? 0 )
+			: 0;
+		$post_id         = isset( $_GET['postId'] )
 			? intval( $_GET['postId'] )
-			: get_the_ID();
-		$object_id = isset( $_GET['postId'] )
-			? intval( $_GET['postId'] )
-			: ( $is_editor ? $post_id : get_queried_object_id() );
+			: ( $context_post_id ? $context_post_id : get_the_ID() );
+		if ( isset( $_GET['postId'] ) ) {
+			$object_id = intval( $_GET['postId'] );
+		} elseif ( $is_editor ) {
+			$object_id = $post_id;
+		} else {
+			// Inside a Query Loop, $block['postId'] stays the queried post while
+			// $post_id follows the loop item. Without a queried object, as in a
+			// REST request or WP-CLI, it is the post being rendered.
+			$object_id = get_queried_object_id();
+			if ( ! $object_id ) {
+				$object_id = (int) $post_id;
+			}
+		}
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 		$name =
