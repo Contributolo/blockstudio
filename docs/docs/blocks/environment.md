@@ -60,3 +60,24 @@ Blockstudio adds another environment variable that will come in handy for block 
   This content is only going to be rendered on the frontend and editor.
 {% endif %}
 ```
+
+## Outside templates
+
+`$isEditor` and `$isPreview` exist only inside the template. Code that runs
+during the same render but outside the template, such as a theme helper called
+from a template or a filter like `blockstudio/blocks/components/rich_text/render`,
+can call `bs_is_editor()` and `bs_is_preview()`. They return the same values the
+template receives.
+
+```php title="functions.php"
+function theme_card_title(string $title): string {
+  if ($title === '' && bs_is_editor()) {
+    return '<span class="placeholder">Add a title</span>';
+  }
+
+  return esc_html($title);
+}
+```
+
+Block tags always render frontend markup, so inside a block rendered from a
+block tag both functions return `false`, as `$isEditor` and `$isPreview` do.

@@ -5497,6 +5497,27 @@ Blockstudio adds another environment variable that will come in handy for block 
 {% endif %}
 ```
 
+## Outside templates
+
+`$isEditor` and `$isPreview` exist only inside the template. Code that runs
+during the same render but outside the template, such as a theme helper called
+from a template or a filter like `blockstudio/blocks/components/rich_text/render`,
+can call `bs_is_editor()` and `bs_is_preview()`. They return the same values the
+template receives.
+
+```php
+function theme_card_title(string $title): string {
+  if ($title === '' && bs_is_editor()) {
+    return '<span class="placeholder">Add a title</span>';
+  }
+
+  return esc_html($title);
+}
+```
+
+Block tags always render frontend markup, so inside a block rendered from a
+block tag both functions return `false`, as `$isEditor` and `$isPreview` do.
+
 ### Context
 
 When blocks are used inside a loop (for example, a Query block), the block is executed once for each iteration of the loop. Blockstudio provides handy shortcuts for accessing the current loop and outer context.
@@ -15675,7 +15696,7 @@ The extension maps every Blockstudio field type to a concrete PHP type:
 
 The extension ships stubs for the full Blockstudio public API:
 
-- `bs_render_block()`, `bs_get_group()`, `bs_get_scoped_class()`, `bs_db_form()`
+- `bs_render_block()`, `bs_get_group()`, `bs_get_scoped_class()`, `bs_db_form()`, `bs_is_editor()`, `bs_is_preview()`
 - `Db::get()`, `Db::create()`, `Db::list()`, `Db::get_record()`, `Db::update()`, `Db::delete()`
 - `Settings::get()`, `Settings::get_all()`
 - `Field_Registry::instance()`, `Field_Registry::all()`, `Field_Registry::get()`

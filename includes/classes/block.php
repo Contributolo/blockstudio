@@ -2184,6 +2184,22 @@ class Block {
 	}
 
 	/**
+	 * Whether Blockstudio renders in the given mode.
+	 *
+	 * Editor and inserter preview requests send the mode as blockstudioMode,
+	 * and internal renders set or clear it temporarily. render(),
+	 * bs_is_editor(), and bs_is_preview() all read it here.
+	 *
+	 * @param string $mode 'editor' or 'preview'.
+	 * @return bool Whether the current render mode is $mode.
+	 * @internal
+	 */
+	public static function is_render_mode( string $mode ): bool {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Compared against a fixed mode, not stored or output.
+		return isset( $_GET['blockstudioMode'] ) && $mode === $_GET['blockstudioMode'];
+	}
+
+	/**
 	 * Native render.
 	 *
 	 * @since 2.4.0
@@ -2202,14 +2218,10 @@ class Block {
 		$wp_block = '',
 		$content = ''
 	) {
-		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Reading query params for render mode detection.
-		$is_editor  =
-			isset( $_GET['blockstudioMode'] ) &&
-			'editor' === $_GET['blockstudioMode'];
-		$is_preview =
-			isset( $_GET['blockstudioMode'] ) &&
-			'preview' === $_GET['blockstudioMode'];
+		$is_editor  = self::is_render_mode( 'editor' );
+		$is_preview = self::is_render_mode( 'preview' );
 
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Reading query params for render context.
 		$post_id   = isset( $_GET['postId'] )
 			? intval( $_GET['postId'] )
 			: get_the_ID();
