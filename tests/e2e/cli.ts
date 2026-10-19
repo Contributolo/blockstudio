@@ -130,6 +130,25 @@ test.describe('CLI - blocks', () => {
   });
 });
 
+test.describe('CLI - server defaults', () => {
+  test('renders min repeater rows without an editor save or content mutation', async ({ page }) => {
+    const content = '<!-- wp:blockstudio/type-repeater-min-rows /-->';
+    const id = wp(`eval 'echo wp_insert_post(array("post_title" => "Server repeater defaults", "post_status" => "publish", "post_content" => "${content}"));'`);
+    try {
+      const response = await page.goto(`http://localhost:8888/?p=${id}`);
+      expect(response?.status()).toBe(200);
+      const text = await page.locator('#blockstudio-type-repeater-min-rows code').first().textContent();
+      const values = JSON.parse(text!.replace(/^Attributes:\s*/, ''));
+      expect(values.entries).toEqual(Array.from({ length: 3 }, () => ({
+        name: 'Default Name', value: 42, enabled: true,
+      })));
+      expect(wp(`post get ${id} --field=post_content`)).toBe(content);
+    } finally {
+      wp(`post delete ${id} --force`);
+    }
+  });
+});
+
 test.describe('CLI - pages', () => {
   test('synchronizes the complete page inventory and stores its identity', () => {
     const report = JSON.parse(wp('bs pages sync --format=json'));

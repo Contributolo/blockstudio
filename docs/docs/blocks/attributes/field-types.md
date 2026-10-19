@@ -694,6 +694,21 @@ stores it. Once a choice is stored, the placeholder disappears. Use `allowNull`
 when editors should also be able to clear a selection; an empty placeholder does
 not make an otherwise required choice clearable.
 
+## Repeater Initial Rows
+
+When a repeater has `min` but no saved value or explicit `default`, the server
+initializes that many rows using the row fields' defaults. This also applies
+to PHP embeds, block tags, and file-backed page sources that have never been
+opened in the editor. For example, `"min": 2` with a text field whose default
+is `"New item"` renders two rows containing that value.
+
+Stored rows and an explicit repeater `default` take precedence. An explicitly
+saved empty list, `false`, or `null` does not recreate removed rows. Rendering
+does not write these generated defaults back to the post. `min` and `max`
+constrain editor controls; they do not truncate or pad a saved list on render.
+Use [`bs_validate_block()`](/docs/blocks/rendering#validating-stored-values) to
+report row-bound violations in imported content.
+
 ## Repeater Removal
 
 Removing a row opens the editor's confirmation dialog with **Delete** and

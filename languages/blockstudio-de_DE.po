@@ -50,6 +50,10 @@ msgid "The nested field value overrides this top-level value."
 msgstr "Der verschachtelte Feldwert überschreibt diesen Wert auf der obersten Ebene."
 
 #: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "Die Bindungen von Erweiterungen lesen diesen Wert nur aus blockstudio.attributes."
+
+#: includes/classes/block-validator.php
 msgid "Blockstudio field values must be stored in an object."
 msgstr "Blockstudio-Feldwerte müssen in einem Objekt gespeichert werden."
 

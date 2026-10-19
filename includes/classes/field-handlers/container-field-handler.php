@@ -203,6 +203,11 @@ class Container_Field_Handler extends Abstract_Field_Handler {
 		$this->apply_set( $field, $attribute );
 		$this->apply_block_field_metadata( $field, $attribute );
 
+		// Block::transform() fills a repeater without stored rows up to its minimum.
+		if ( isset( $field['min'] ) ) {
+			$attribute['min'] = $field['min'];
+		}
+
 		$attributes[ $field_id ] = $attribute;
 	}
 

@@ -62,6 +62,7 @@ class BlockValidatorTest extends TestCase {
 			'blockstudio' => array( 'extend' => true, 'attributes' => array(
 				array( 'id' => 'extra', 'type' => 'text', 'set' => array( array( 'attribute' => 'data-extra', 'value' => '{attributes.extra}' ) ) ),
 				array( 'id' => 'later', 'type' => 'text' ),
+				array( 'id' => 'html', 'type' => 'attributes', 'media' => true ),
 			) ),
 		) );
 		$this->write( 'extensions/b-last.json', array(
@@ -106,6 +107,7 @@ class BlockValidatorTest extends TestCase {
 			array( 'id' => 'number', 'type' => 'number' ),
 			array( 'id' => 'toggle', 'type' => 'toggle' ),
 			array( 'id' => 'choice', 'type' => 'select', 'options' => array( 'a', 'b', '0' ) ),
+			array( 'id' => 'presetChoice', 'type' => 'select', 'options' => array( 'a', 'b' ), 'default' => 'b' ),
 			array( 'id' => 'many', 'type' => 'select', 'multiple' => true, 'options' => array( 'a', 'b', '0' ) ),
 			array( 'id' => 'checks', 'type' => 'checkbox', 'options' => array( array( 'value' => 'a', 'label' => 'A' ), array( 'value' => 'b', 'label' => 'B' ), array( 'value' => 0, 'label' => 'Zero' ) ) ),
 			array( 'id' => 'radio', 'type' => 'radio', 'options' => array( 'a', 'b' ) ),
@@ -117,6 +119,11 @@ class BlockValidatorTest extends TestCase {
 			array( 'id' => 'gallery', 'type' => 'files', 'returnFormat' => 'id', 'multiple' => true ),
 			array( 'id' => 'link', 'type' => 'link' ),
 			array( 'id' => 'icon', 'type' => 'icon' ),
+			array( 'id' => 'html', 'type' => 'attributes', 'media' => true ),
+			array( 'id' => 'duplicates', 'type' => 'repeater', 'attributes' => array(
+				array( 'id' => 'choice', 'type' => 'select', 'options' => array( 'a' ) ),
+				array( 'id' => 'choice', 'type' => 'select', 'options' => array( 'b' ) ),
+			) ),
 			array( 'id' => 'notice', 'type' => 'message' ),
 			array( 'id' => 'custom', 'type' => 'validation/object' ),
 			array( 'id' => 'display', 'type' => 'validation/display' ),
@@ -212,7 +219,7 @@ class BlockValidatorTest extends TestCase {
 			'bad option object' => array( array( 'choice' => array( 'label' => 'A' ) ), 'wrong_type', 'choice' ),
 			'unknown option' => array( array( 'choice' => 'unknown' ), 'unknown_option', 'choice' ),
 			'unknown imported multiple option' => array( array( 'many' => 'unknown' ), 'unknown_option', 'many' ),
-			'unknown checkbox option' => array( array( 'checks' => array( array( 'value' => 'unknown' ) ) ), 'unknown_option', 'checks' ),
+			'unknown checkbox option' => array( array( 'checks' => array( array( 'value' => 'unknown' ) ) ), 'unknown_option', 'checks/0' ),
 			'wrong multiple shape' => array( array( 'many' => array( 'wrong' => 'a' ) ), 'wrong_type', 'many' ),
 			'tokens are a list' => array( array( 'tokens' => 'a' ), 'wrong_type', 'tokens' ),
 			'wrong token entry' => array( array( 'tokens' => array( array( 'wrong' => 'a' ) ) ), 'wrong_type', 'tokens/0' ),
@@ -331,5 +338,100 @@ class BlockValidatorTest extends TestCase {
 		$this->assertCount( 1, $result );
 		$this->assertSame( '0/0', $result[0]['block_path'] );
 		$this->assertSame( self::NAME, $result[0]['block_name'] );
+	}
+
+	public function test_root_html_attributes_and_bookkeeping_are_not_unknown_fields(): void {
+		$attrs = $this->attrs( array( 'data-example' => 'Forwarded', 'aria-label' => 'Label', 'key' => 'stable-key', 'typo' => 'Unknown' ) );
+		$findings = bs_validate_block( self::NAME, $attrs );
+		$this->assertSame( array( 'typo' ), array_column( $findings, 'path' ) );
+		$html = do_blocks( '<!-- wp:' . self::NAME . ' ' . wp_json_encode( $attrs ) . ' /-->' );
+		$tags = new WP_HTML_Tag_Processor( $html );
+		$this->assertTrue( $tags->next_tag( array( 'class_name' => 'validation-result' ) ), $html );
+		$this->assertSame( 'Forwarded', $tags->get_attribute( 'data-example' ) );
+		$this->assertSame( 'Label', $tags->get_attribute( 'aria-label' ) );
+		$this->assertSame( 'unknown_field', bs_validate_block( 'core/paragraph', $this->attrs( array( 'data-example' => 'Not forwarded' ) ) )[0]['code'] );
+		$result = $this->validate( array( 'rows' => array( array( 'data-example' => 'Not a row field' ) ) ) );
+		$this->assertSame( 'rows/0/data-example', $result[0]['path'] );
+	}
+
+	public function test_top_level_values_follow_wordpress_attribute_validation(): void {
+		$this->assertSame( array(), $this->validate( array( 'radio' => 'a' ) ) );
+		$this->assertSame( 'a', $this->rendered( $this->attrs( array( 'radio' => 'a' ) ) )['radio'] );
+		$findings = bs_validate_block( self::NAME, array( 'radio' => 'a' ) );
+		$this->assertSame( array( 'wrong_type' ), array_column( $findings, 'code' ) );
+		$this->assertSame( 'radio', $findings[0]['path'] );
+		$this->assertSame( 'object', $findings[0]['expected'] );
+		$this->assertFalse( $this->rendered( array( 'radio' => 'a' ) )['radio'] );
+		$this->assertSame( array(), bs_validate_block( self::NAME, array( 'radio' => array( 'value' => 'a', 'label' => 'A' ) ) ) );
+		$this->assertSame( array(), bs_validate_block( self::NAME, array( 'radio' => '', 'blockstudio' => array( 'disabled' => array( 'radio' ) ) ) ) );
+	}
+
+	public function test_top_level_extension_values_do_not_reach_extension_bindings(): void {
+		$attrs = array( 'extra' => 'Top' );
+		$findings = bs_validate_block( self::NAME, $attrs );
+		$this->assertSame( array( 'extension_top_level' ), array_column( $findings, 'code' ) );
+		$this->assertSame( 'extension', $findings[0]['source'] );
+		$this->assertSame( 'Top', $this->rendered( $attrs )['extra'] );
+		$html = do_blocks( '<!-- wp:' . self::NAME . ' ' . wp_json_encode( $attrs ) . ' /-->' );
+		$tags = new WP_HTML_Tag_Processor( $html );
+		$this->assertTrue( $tags->next_tag(), $html );
+		$this->assertNull( $tags->get_attribute( 'data-extra' ) );
+		$this->assertSame( array(), $this->validate( array( 'extra' => 'Nested' ) ) );
+	}
+
+	public function test_empty_top_level_values_report_when_wordpress_restores_a_default(): void {
+		$attrs = array( 'presetChoice' => false );
+		$findings = bs_validate_block( self::NAME, $attrs );
+		$this->assertSame( 'wrong_type', $findings[0]['code'] );
+		$this->assertSame( 'b', $this->rendered( $attrs )['presetChoice'] );
+		$this->assertSame( array(), $this->validate( array( 'presetChoice' => false ) ) );
+		$this->assertFalse( $this->rendered( $this->attrs( array( 'presetChoice' => false ) ) )['presetChoice'] );
+	}
+
+	public function test_palette_controls_store_strings_not_option_objects(): void {
+		$values = array( 'color' => '#123456', 'closedColor' => '#fff', 'gradient' => 'linear-gradient(black, white)' );
+		$this->assertSame( array(), $this->validate( $values ) );
+		$rendered = $this->rendered( $this->attrs( $values ) );
+		foreach ( $values as $key => $value ) {
+			$this->assertSame( $value, $rendered[ $key ] );
+		}
+	}
+
+	public function test_first_compatible_duplicate_row_field_controls_rendering(): void {
+		$values = array( 'duplicates' => array( array( 'choice' => 'a' ) ) );
+		$this->assertSame( array(), $this->validate( $values ) );
+		$this->assertSame( 'a', $this->rendered( $this->attrs( $values ) )['duplicates'][0]['choice'] );
+		$values['duplicates'][0]['choice'] = 'b';
+		$findings = $this->validate( $values );
+		$this->assertCount( 1, $findings );
+		$this->assertSame( array( 'a' ), $findings[0]['expected'] );
+		$this->assertFalse( $this->rendered( $this->attrs( $values ) )['duplicates'][0]['choice'] );
+	}
+
+	public function test_html_attribute_pairs_keep_media_metadata_and_reject_invalid_entries(): void {
+		$valid = array( array( 'attribute' => 'data-image', 'value' => 'https://example.test/image.jpg', 'data' => array( 'media' => 123 ) ) );
+		$this->assertSame( array(), $this->validate( array( 'html' => $valid ) ) );
+		$html = do_blocks( '<!-- wp:paragraph ' . wp_json_encode( $this->attrs( array( 'html' => $valid ) ) ) . ' --><p>Text</p><!-- /wp:paragraph -->' );
+		$this->assertStringContainsString( 'data-image="https://example.test/image.jpg"', $html );
+		$findings = $this->validate( array( 'html' => array( 'invalid', array( 'attribute' => 'data-x', 'value' => array( 'not scalar' ) ) ) ) );
+		$this->assertSame( array( 'wrong_type', 'wrong_type', 'wrong_type', 'wrong_type' ), array_column( $findings, 'code' ) );
+		$this->assertSame( array( 'html/0', 'html/1', 'html/0', 'html/1' ), array_column( $findings, 'path' ) );
+		$this->assertSame( array( 'block', 'block', 'extension', 'extension' ), array_column( $findings, 'source' ) );
+	}
+
+	public function test_option_findings_point_to_the_original_stored_selection(): void {
+		$findings = $this->validate( array( 'many' => 'unknown' ) );
+		$this->assertSame( 'unknown', $findings[0]['value'] );
+		$findings = $this->validate( array( 'many' => array( 'a', 'unknown' ) ) );
+		$this->assertSame( 'many/1', $findings[0]['path'] );
+		$this->assertSame( 'unknown', $findings[0]['value'] );
+	}
+
+	public function test_validation_does_not_query_attachments_or_rerun_populate(): void {
+		$queries = $GLOBALS['wpdb']->num_queries;
+		$calls = $GLOBALS['blockstudio_validation_populate_calls'];
+		$this->assertSame( array(), $this->validate( array( 'image' => 2147483647, 'gallery' => array( 'external-reference' ), 'loaded' => 'resolved' ) ) );
+		$this->assertSame( $queries, $GLOBALS['wpdb']->num_queries );
+		$this->assertSame( $calls, $GLOBALS['blockstudio_validation_populate_calls'] );
 	}
 }

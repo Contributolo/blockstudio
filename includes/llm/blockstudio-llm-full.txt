@@ -5840,12 +5840,15 @@ Each finding contains these stable keys:
 ```
 
 Use `code`, not the translated `message`, in tooling. `source` is `block` or
-`extension`. Paths use storage keys and zero-based repeater row indices,
-without a leading slash. Literal `~` and `/` in a key are escaped as `~0` and
+`extension`. Paths use storage keys and zero-based repeater row or selection
+indices, without a leading slash. Literal `~` and `/` in a key are escaped as `~0` and
 `~1`. A top-level group prefixes its children (`cta_title`); anonymous groups
 and tabs add no level. Groups with an ID inside another group or a repeater
 are not supported by the builder, so their keys are not accepted. Message
 fields have no stored value. A files field permits its `<id>__size` companion.
+At the root of a Blockstudio block, bookkeeping keys and global HTML
+attributes forwarded to the rendered element are not unknown fields. This
+does not permit arbitrary keys in repeater rows or extensions of core blocks.
 
 | Code | Meaning | `expected` |
 | --- | --- | --- |
@@ -5855,6 +5858,7 @@ fields have no stored value. A files field permits its `<id>__size` companion.
 | `too_few_rows`, `too_many_rows` | A present repeater is outside its `min` or `max`. | The row bound. |
 | `definition_conflict` | Applicable definitions for one key require different storage shapes. | Source and field type of each definition. |
 | `shadowed_value` | A nested value overrides a different top-level field value. | The winning nested value. |
+| `extension_top_level` | The template can read a top-level value but extension bindings cannot. | Its required path under `blockstudio/attributes`. |
 | `invalid_container` | `blockstudio` or `blockstudio.attributes` is not an object. | `object`. |
 
 The accepted shapes follow rendering: multiple selects and checkboxes can
@@ -5862,10 +5866,20 @@ contain a list, one option object, or an imported scalar, including numeric
 zero. Numeric strings are accepted for numbers. Files can contain attachment
 IDs, ID objects, lists, or string references. Link and icon values must be
 objects; custom field types use their registered attribute type.
+An `attributes` field holds a list of pairs with a non-empty `attribute` name
+and a scalar `value`; optional metadata such as `data.media` is preserved.
 
-Missing fields are not required. Empty values (`null`, `false`, `''`, `[]`)
-and disabled fields do not produce value errors. An explicitly empty repeater
-is still checked against `min`; an absent or disabled repeater is not.
+WordPress validates registered top-level attributes before rendering, which
+can reject a shape accepted inside `blockstudio.attributes`. For example, a
+radio value of `"a"` works in the nested object but is dropped at the top level,
+where its registered type is `object`. Such a value produces `wrong_type`.
+Use the nested object for the same storage shape the editor writes.
+
+Missing fields are not required. Empty nested values (`null`, `false`, `''`,
+`[]`) and disabled fields do not produce value errors. An explicitly empty
+repeater is still checked against `min`; an absent or disabled repeater is not.
+An empty top-level value is reported if WordPress drops it and restores a
+non-empty default instead. The same value in the nested object can clear it.
 Definition conflicts are reported even when the key has no saved value.
 
 Static options and populate options already resolved at registration are
@@ -5877,9 +5891,11 @@ This checks stored values, not `default`, `fallback`, or editor validation rules
 Matching extension fields are included for every block they target. Later
 definitions win within the block or its extensions at the root, as on render.
 A block's own field and an extension field remain separate definitions of
-the same key; repeater row definitions are also all retained. Incompatible
-storage shapes produce `definition_conflict`; compatible shapes are checked
-against each applicable definition, including their options.
+the same key and both apply. Within repeater rows, the renderer reads the
+first field with a matching ID in each source, so its options and bounds
+apply. Duplicate definitions are retained for conflict diagnostics:
+incompatible storage shapes produce `definition_conflict`, even when a
+later duplicate is not read on render.
 
 The function checks one block. Walk `innerBlocks` when validating a document;
 synced patterns and other references are not expanded automatically. The

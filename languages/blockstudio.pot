@@ -46,6 +46,10 @@ msgid "The nested field value overrides this top-level value."
 msgstr ""
 
 #: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr ""
+
+#: includes/classes/block-validator.php
 msgid "Blockstudio field values must be stored in an object."
 msgstr ""
 

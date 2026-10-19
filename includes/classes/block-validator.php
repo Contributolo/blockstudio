@@ -58,20 +58,52 @@ final class Block_Validator {
 			}
 		}
 
-		// Only a Blockstudio render reads declared top-level fields. An
-		// extension of a core/third-party block reads the nested object only.
-		$top = null === $fields ? array() : array_intersect_key( $attrs, $definitions );
-		foreach ( $top as $key => $value ) {
-			if ( array_key_exists( $key, $values ) && $value !== $values[ $key ] ) {
-				$findings[] = self::finding( 'shadowed_value', self::path( '', $key ), $definitions[ $key ][0]['source'], $value, $values[ $key ] );
-			}
-		}
 		$disabled = $settings['disabled'] ?? array();
 		if ( ! is_array( $disabled ) || ! array_is_list( $disabled ) ) {
 			$findings[] = self::finding( 'wrong_type', 'blockstudio/disabled', $source, $disabled, 'list' );
 			$disabled   = array();
 		}
-		self::values( array_replace( $top, $values ), $definitions, '', $source, $disabled, $findings );
+
+		// Only a Blockstudio render reads declared top-level fields. An
+		// extension of a core/third-party block reads the nested object only.
+		$top = null === $fields ? array() : array_intersect_key( $attrs, $definitions );
+		foreach ( $top as $key => $value ) {
+			if ( array_key_exists( $key, $values ) ) {
+				if ( $value !== $values[ $key ] ) {
+					$findings[] = self::finding( 'shadowed_value', self::path( '', $key ), $definitions[ $key ][0]['source'], $value, $values[ $key ] );
+				}
+				continue;
+			}
+			if ( in_array( $key, $disabled, true ) ) {
+				continue;
+			}
+			$entry = $definitions[ $key ][0];
+			$empty = null === $value || false === $value || '' === $value || array() === $value ||
+				( 0 === $value && ! Field_Type_Config::is_multiple_options( $entry['field']['type'], $entry['field'] ) );
+			// WordPress checks registered top-level attributes before Blockstudio
+			// sees them. The nested object is not subject to those field schemas.
+			if ( isset( $own[ $key ] ) && is_wp_error( rest_validate_value_from_schema( $value, $own[ $key ][0]['compiled'], (string) $key ) ) ) {
+				if ( ! $empty || ! empty( $own[ $key ][0]['compiled']['default'] ) ) {
+					$findings[] = self::finding( 'wrong_type', self::path( '', $key ), 'block', $value, $own[ $key ][0]['compiled']['type'] ?? 'value' );
+				}
+				unset( $top[ $key ] );
+				continue;
+			}
+			if ( isset( $extended[ $key ] ) && ! $empty ) {
+				$findings[] = self::finding( 'extension_top_level', self::path( '', $key ), 'extension', $value, self::path( 'blockstudio/attributes', $key ) );
+			}
+		}
+		$values = array_replace( $top, $values );
+		if ( null !== $fields ) {
+			$unknown   = array_diff_key( $values, $definitions );
+			$unhandled = array_fill_keys( Block::unhandled_attributes( $name, $unknown ), true );
+			foreach ( $unknown as $key => $value ) {
+				if ( ! isset( $unhandled[ $key ] ) ) {
+					unset( $values[ $key ] );
+				}
+			}
+		}
+		self::values( $values, $definitions, '', $source, $disabled, $findings );
 
 		return self::filter( $findings, $name, $attrs );
 	}
@@ -163,7 +195,14 @@ final class Block_Validator {
 			if ( ! array_key_exists( $key, $values ) || in_array( $key, $disabled, true ) ) {
 				continue;
 			}
-			$value = $values[ $key ];
+			// The renderer reads the first matching row field in each source.
+			// Retain every definition above for conflict diagnostics only.
+			$effective = array();
+			foreach ( $entries as $entry ) {
+				$effective[ $entry['source'] ] ??= $entry;
+			}
+			$entries = array_values( $effective );
+			$value   = $values[ $key ];
 			foreach ( $entries as $entry ) {
 				self::value( $value, $entry, $field_path, $findings );
 			}
@@ -208,7 +247,7 @@ final class Block_Validator {
 			return;
 		}
 		$valid = match ( $type ) {
-			'repeater', 'token' => is_array( $value ) && array_is_list( $value ),
+			'repeater', 'token', 'attributes' => is_array( $value ) && array_is_list( $value ),
 			'select', 'checkbox' => self::option_shape( $value, Field_Type_Config::is_multiple_options( $type, $field ) ),
 			'radio' => self::option_shape( $value, false ),
 			'number', 'range' => is_int( $value ) || is_float( $value ) || ( is_string( $value ) && is_numeric( $value ) ),
@@ -237,6 +276,15 @@ final class Block_Validator {
 			foreach ( $value as $index => $token ) {
 				if ( ! self::option_shape( $token, false ) ) {
 					$findings[] = self::finding( 'wrong_type', self::path( $path, $index ), $entry['source'], $token, 'option' );
+				}
+			}
+			return;
+		}
+		if ( 'attributes' === $type ) {
+			foreach ( $value as $index => $pair ) {
+				$object = self::object_values( $pair );
+				if ( null === $object || ! is_string( $object['attribute'] ?? null ) || '' === $object['attribute'] || ! is_scalar( $object['value'] ?? null ) ) {
+					$findings[] = self::finding( 'wrong_type', self::path( $path, $index ), $entry['source'], $pair, 'attribute' );
 				}
 			}
 			return;
@@ -274,13 +322,16 @@ final class Block_Validator {
 		if ( 0 === $value && ! $multiple ) {
 			return;
 		}
+		$stored     = $value;
+		$is_list    = $multiple && is_array( $stored ) && array_is_list( $stored );
 		$value      = is_object( $value ) ? get_object_vars( $value ) : $value;
 		$selections = $multiple ? Field_Type_Config::multiple_option_values( $value ) : array( $value );
 		$expected   = array_map( static fn( $option ) => is_array( $option ) ? ( $option['value'] ?? null ) : $option, $options );
-		foreach ( $selections as $selection ) {
+		foreach ( $selections as $index => $selection ) {
 			$selection = is_object( $selection ) ? get_object_vars( $selection ) : $selection;
 			if ( false === Block::get_option_value( array( 'options' => $options ), 'both', $selection ) ) {
-				$findings[] = self::finding( 'unknown_option', $path, $entry['source'], $selection, $expected );
+				$item_path  = $is_list ? self::path( $path, $index ) : $path;
+				$findings[] = self::finding( 'unknown_option', $item_path, $entry['source'], $is_list ? $stored[ $index ] : $stored, $expected );
 			}
 		}
 	}
@@ -412,6 +463,7 @@ final class Block_Validator {
 			'too_many_rows' => __( 'This repeater has more rows than its maximum.', 'blockstudio' ),
 			'definition_conflict' => __( 'This storage key has conflicting field definitions.', 'blockstudio' ),
 			'shadowed_value' => __( 'The nested field value overrides this top-level value.', 'blockstudio' ),
+			'extension_top_level' => __( 'Extension bindings read this value only from blockstudio.attributes.', 'blockstudio' ),
 			'invalid_container' => __( 'Blockstudio field values must be stored in an object.', 'blockstudio' ),
 		};
 		return compact( 'code', 'path', 'source', 'message', 'value', 'expected' );
