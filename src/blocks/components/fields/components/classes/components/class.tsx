@@ -3,8 +3,6 @@ import CodeMirror from '@uiw/react-codemirror';
 import { Button } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
 import { cloneDeep, set } from 'lodash-es';
-import parserCss from 'prettier/plugins/postcss';
-import prettier from 'prettier/standalone';
 import { style } from '@/const/css';
 import { findCssRules } from '@/tailwind/utils/find-css-rules';
 import { BlockstudioBlockAttributes } from '@/types/types';
@@ -29,6 +27,16 @@ export const Class = ({
 
   useEffect(() => {
     const formatCss = async () => {
+      const [{ default: prettier }, { default: parserCss }] = await Promise.all(
+        [
+          import(
+            /* webpackChunkName: "blocks/prettier" */ 'prettier/standalone'
+          ),
+          import(
+            /* webpackChunkName: "blocks/prettier-postcss" */ 'prettier/plugins/postcss'
+          ),
+        ],
+      );
       const formatted = await prettier.format(
         findCssRules(`.${text}`)?.[0] || '',
         {

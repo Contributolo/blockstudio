@@ -20,8 +20,6 @@ import {
   link,
   code,
 } from '@wordpress/icons';
-import parserHtml from 'prettier/plugins/html';
-import prettier from 'prettier/standalone';
 import { Base } from '@/blocks/components/base';
 import { Code } from '@/blocks/components/fields/components/code';
 import { getWysiwygExtensions } from '@/blocks/utils/wysiwyg-extensions';
@@ -106,6 +104,15 @@ export const WYSIWYG = ({
 
     if (codeMode) {
       const formatHtml = async () => {
+        const [{ default: prettier }, { default: parserHtml }] =
+          await Promise.all([
+            import(
+              /* webpackChunkName: "blocks/prettier" */ 'prettier/standalone'
+            ),
+            import(
+              /* webpackChunkName: "blocks/prettier-html" */ 'prettier/plugins/html'
+            ),
+          ]);
         const formatted = await prettier.format(editor.getHTML(), {
           parser: 'html',
           plugins: [parserHtml],
