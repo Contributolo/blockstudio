@@ -368,7 +368,11 @@ class Rest {
 	public function gutenberg_block_render( $request ) {
 		global $post;
 
-		$post_id = isset( $request['post_id'] ) ? (int) $request['post_id'] : 0;
+		$post_id = (int) (
+			$request->get_param( 'postId' ) ??
+			$request->get_param( 'post_id' ) ??
+			0
+		);
 
 		if ( $post_id > 0 ) {
 			$post = get_post( $post_id ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- Setting post context for rendering.
@@ -419,11 +423,21 @@ class Rest {
 	 * @return WP_Error|WP_HTTP_Response|WP_REST_Response The response.
 	 */
 	public function gutenberg_block_render_all( $request ) {
+		global $post;
+
 		$blocks          = $request->get_param( 'data' );
 		$rendered_blocks = array();
 
 		foreach ( $blocks as $block ) {
-			$_GET       = $block['post'];
+			$_GET    = $block['post'];
+			$post_id = (int) ( $block['post']['postId'] ?? 0 );
+
+			// The route only checks edit_posts, so check each block's post here.
+			if ( $post_id > 0 && current_user_can( 'edit_post', $post_id ) ) {
+				$post = get_post( $post_id ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- Setting post context for rendering.
+				setup_postdata( $post );
+			}
+
 			$block_data = array(
 				'blockName'    => $block['name'],
 				'attrs'        => array_merge(
