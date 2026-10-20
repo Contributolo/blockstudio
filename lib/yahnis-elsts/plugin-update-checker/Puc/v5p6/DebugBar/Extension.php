@@ -138,8 +138,8 @@ if (!class_exists(Extension::class, \false)) {
             $absolutePath = realpath(dirname(__FILE__) . '/../../../' . ltrim($filePath, '/'));
             //Where is the library located inside the WordPress directory structure?
             $absolutePath = PucFactory::normalizePath($absolutePath);
-            $pluginDir = PucFactory::normalizePath(WP_PLUGIN_DIR);
-            $muPluginDir = PucFactory::normalizePath(WPMU_PLUGIN_DIR);
+            $pluginDir = PucFactory::normalizePath(\WP_PLUGIN_DIR);
+            $muPluginDir = PucFactory::normalizePath(\WPMU_PLUGIN_DIR);
             $themeDir = PucFactory::normalizePath(get_theme_root());
             if (strpos($absolutePath, $pluginDir) === 0 || strpos($absolutePath, $muPluginDir) === 0) {
                 //It's part of a plugin.

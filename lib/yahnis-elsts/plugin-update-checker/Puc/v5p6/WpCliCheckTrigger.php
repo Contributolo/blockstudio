@@ -37,7 +37,7 @@ class WpCliCheckTrigger
         }
         $this->componentType = $componentType;
         $this->scheduler = $scheduler;
-        if (!defined('BlockstudioVendor\WP_CLI') || !class_exists(WP_CLI::class, \false)) {
+        if (!defined('WP_CLI') || !class_exists(WP_CLI::class, \false)) {
             return;
             //Nothing to do if WP-CLI is not available.
         }

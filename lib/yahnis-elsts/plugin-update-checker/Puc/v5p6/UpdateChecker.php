@@ -102,7 +102,7 @@ if (!class_exists(UpdateChecker::class, \false)) {
                 add_action('init', array($this, 'loadTextDomain'));
             }
             $this->installHooks();
-            if ($this->wpCliCheckTrigger === null && defined('BlockstudioVendor\WP_CLI')) {
+            if ($this->wpCliCheckTrigger === null && defined('WP_CLI')) {
                 $this->wpCliCheckTrigger = new WpCliCheckTrigger($this->componentType, $this->scheduler);
             }
         }
@@ -114,7 +114,7 @@ if (!class_exists(UpdateChecker::class, \false)) {
             //We're not using load_plugin_textdomain() or its siblings because figuring out where
             //the library is located (plugin, mu-plugin, theme, custom wp-content paths) is messy.
             $domain = 'plugin-update-checker';
-            $locale = apply_filters('plugin_locale', is_admin() && function_exists('BlockstudioVendor\get_user_locale') ? get_user_locale() : get_locale(), $domain);
+            $locale = apply_filters('plugin_locale', is_admin() && function_exists('get_user_locale') ? get_user_locale() : get_locale(), $domain);
             $moFile = $domain . '-' . $locale . '.mo';
             $path = realpath(dirname(__FILE__) . '/../../languages');
             if ($path && file_exists($path)) {
@@ -274,8 +274,8 @@ if (!class_exists(UpdateChecker::class, \false)) {
                 } else if ($reportingItems['active'] === $updateListKey) {
                     //For themes, the "active" field is a string that contains the theme's directory name.
                     //Pretend that the default theme is active so that we don't reveal the actual theme.
-                    if (defined('BlockstudioVendor\WP_DEFAULT_THEME')) {
-                        $reportingItems['active'] = WP_DEFAULT_THEME;
+                    if (defined('WP_DEFAULT_THEME')) {
+                        $reportingItems['active'] = \WP_DEFAULT_THEME;
                     }
                     //Unfortunately, it doesn't seem to be documented if we can safely remove the "active"
                     //key. So when we don't know the default theme, we'll just leave it as is.
@@ -395,7 +395,7 @@ if (!class_exists(UpdateChecker::class, \false)) {
             }
             $actualWpVersions = array();
             $wpVersion = $GLOBALS['wp_version'];
-            if (function_exists('BlockstudioVendor\get_core_updates')) {
+            if (function_exists('get_core_updates')) {
                 $coreUpdates = get_core_updates();
                 if (is_array($coreUpdates)) {
                     foreach ($coreUpdates as $coreUpdate) {
@@ -938,7 +938,7 @@ if (!class_exists(UpdateChecker::class, \false)) {
          */
         public function maybeInitDebugBar()
         {
-            if (class_exists('BlockstudioVendor\Debug_Bar', \false) && class_exists('Debug_Bar_Panel', \false) && file_exists(dirname(__FILE__) . '/DebugBar')) {
+            if (class_exists('Debug_Bar', \false) && class_exists('Debug_Bar_Panel', \false) && file_exists(dirname(__FILE__) . '/DebugBar')) {
                 $this->debugBarExtension = $this->createDebugBarExtension();
             }
         }
