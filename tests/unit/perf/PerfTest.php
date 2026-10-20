@@ -250,6 +250,40 @@ class PerfTest extends TestCase {
 		$this->assertStringNotContainsString( 'id="blockstudio-perf"', $result );
 	}
 
+	// maybe_deactivate()
+
+	public function test_query_probe_stops_at_init_for_visitors_who_cannot_receive_output(): void {
+		$cases = array(
+			'anonymous remote' => array( 0, 'https://www.example.com', false ),
+			'anonymous local'  => array( 0, 'http://localhost', true ),
+			'editor remote'    => array( 1, 'https://www.example.com', true ),
+		);
+		$previous = get_current_user_id();
+		try {
+			foreach ( $cases as $label => list( $user_id, $home, $expected ) ) {
+				$this->setUp();
+				$host = static fn(): string => $home;
+				add_filter( 'home_url', $host );
+				wp_set_current_user( $user_id );
+				$_GET['blockstudio-perf'] = '1';
+				$this->activate_perf();
+				Perf::start( 'total' );
+				Perf::track( 'render', 1.0 );
+
+				Perf::maybe_deactivate();
+				Perf::track( 'render', 1.0 );
+				remove_filter( 'home_url', $host );
+
+				$this->assertSame( $expected, Perf::active(), $label );
+				$this->assertSame( $expected ? 2 : 0, $this->get_static( 'groups' )['render']['count'] ?? 0, $label );
+				$this->assertSame( $expected, isset( $this->get_static( 'starts' )['total'] ), $label );
+			}
+		} finally {
+			wp_set_current_user( $previous );
+			unset( $_GET['blockstudio-perf'] );
+		}
+	}
+
 	// Helper methods
 
 	private function activate_perf(): void {

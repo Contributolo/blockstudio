@@ -89,7 +89,9 @@ add_filter('blockstudio/settings/dev/perf', '__return_true');
 ```
 
 The profiler only outputs data for logged-in users with `edit_posts`
-capability.
+capability. Requests that will not receive the output switch the profiler
+off at `init`, so the query parameter or the setting adds no measurement work
+to them.
 
 ### Output
 
