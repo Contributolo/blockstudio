@@ -26,3 +26,7 @@
 .is-style-fill {
 	background-color: currentColor;
 }
+
+.\32 xl\:w-1\/2 {
+	width: 50%;
+}

@@ -30,7 +30,7 @@ export const Class = ({
   useEffect(() => {
     const formatCss = async () => {
       const formatted = await prettier.format(
-        findCssRules(`.${text}`)?.[0] || '',
+        findCssRules(`.${CSS.escape(text)}`)?.[0] || '',
         {
           parser: 'css',
           plugins: [parserCss],
@@ -126,6 +126,7 @@ export const Class = ({
               lineNumbers: false,
               foldGutter: false,
             }}
+            editable={false}
             extensions={[cssLang()]}
             value={cssRule}
           />

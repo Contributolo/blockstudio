@@ -1,8 +1,6 @@
 export const findCssRules = (selector: string): string[] => {
   const stylesheets = document.styleSheets;
 
-  selector = selector.replace(/([^\w-])/g, '\\$1');
-
   const rulesList: string[] = [];
 
   for (let i = 0; i < stylesheets.length; i++) {

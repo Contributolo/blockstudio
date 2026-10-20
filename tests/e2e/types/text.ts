@@ -37,7 +37,7 @@ testType(
           await page.keyboard.press('Enter');
           await page.click('text=Add Attribute');
           await page.fill('[placeholder="Attribute"]', 'data-test');
-          await page.click('.cm-content');
+          await page.click('[data-id="textAttributes"] .cm-content');
           await page.keyboard.type('test');
           await page.fill('[data-id="textClass"] input', 'test');
           await page.fill('[data-id="textClass2"] input', 'test2');
@@ -72,7 +72,10 @@ testType(
           await page.keyboard.press('Enter');
           await page.click('text=Add Attribute');
           await page.fill('[placeholder="Attribute"]', 'data-test');
-          await page.locator('.cm-line').nth(0).click();
+          await page
+            .locator('[data-id="allAttributes"] .cm-line')
+            .nth(0)
+            .click();
           await page.keyboard.type('test');
           await page.fill('[data-id="allClass"] input', 'test');
           await page.fill('[data-id="allClass2"] input', 'test2');
@@ -80,7 +83,7 @@ testType(
           await page.click('text=All class 3');
           await page.click('text=Option 1');
           await page.click('text=Option 2');
-          await page.locator('.cm-line').nth(1).click();
+          await page.locator('[data-id="allCss"] .cm-line').nth(0).click();
           await page.keyboard.press('ControlOrMeta+A');
           await page.keyboard.press('Backspace');
           await page.keyboard.type(
