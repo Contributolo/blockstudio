@@ -352,3 +352,46 @@ test('identical children keep their own inherited context across cached renders'
     page.off('request', recordRequest);
   }
 });
+
+test('superseded field previews are aborted without clearing the preview', async () => {
+  const isAuditRender = (url: string | URL) =>
+    new URL(url).pathname.endsWith(
+      '/gutenberg/block/render/blockstudio/editor-audit',
+    );
+  const finished: string[] = [];
+  const failed: string[] = [];
+  const recordFinished = (request: { url(): string }) => {
+    if (isAuditRender(request.url())) finished.push(request.url());
+  };
+  const recordFailed = (request: { url(): string }) => {
+    if (isAuditRender(request.url())) failed.push(request.url());
+  };
+  // A slow server keeps each preview in flight past the next debounced edit.
+  const slowRender = async (route: { continue(): Promise<void> }) => {
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    await route.continue().catch(() => {});
+  };
+  const field = canvas.locator('[data-audit-field]').first();
+  const input = page.locator('[data-id="text"] input').first();
+
+  await page.route(isAuditRender, slowRender);
+  page.on('requestfinished', recordFinished);
+  page.on('requestfailed', recordFailed);
+  try {
+    await input.fill('Superseded one');
+    await page.waitForTimeout(800);
+    await input.fill('Superseded two');
+    await page.waitForTimeout(800);
+    await expect(field).toHaveText('First field');
+    await input.fill('Final field');
+    await expect(field).toHaveText('Final field', { timeout: 10000 });
+    await page.waitForTimeout(500);
+    expect(failed).toHaveLength(2);
+    expect(finished).toHaveLength(1);
+    await expect(field).toHaveText('Final field');
+  } finally {
+    page.off('requestfinished', recordFinished);
+    page.off('requestfailed', recordFailed);
+    await page.unroute(isAuditRender, slowRender);
+  }
+});

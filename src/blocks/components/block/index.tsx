@@ -232,6 +232,7 @@ export const Block = ({
   const renderedModeRef = useRef<'editor' | 'preview' | null>(null);
   const attributesRef = useRef(attributes);
   const renderRequestId = useRef(0);
+  const renderAbortController = useRef<AbortController | null>(null);
   const [disableLoading, setDisableLoading] = useState(
     block?.blockstudio?.blockEditor?.disableLoading,
   );
@@ -431,6 +432,9 @@ export const Block = ({
       ...getPostParams(renderMode),
     }).toString();
     const requestId = ++renderRequestId.current;
+    renderAbortController.current?.abort();
+    const controller = new AbortController();
+    renderAbortController.current = controller;
 
     apiFetch({
       path: `/blockstudio/v1/gutenberg/block/render/${block.name}?${params}`,
@@ -439,6 +443,7 @@ export const Block = ({
         attributes: sendAttrs,
         context: memoizedRenderContext,
       },
+      signal: controller.signal,
     })
       .then((response) => {
         if (requestId !== renderRequestId.current) {
@@ -457,7 +462,10 @@ export const Block = ({
         loaded();
       })
       .catch(() => {
-        if (requestId !== renderRequestId.current) {
+        if (
+          controller.signal.aborted ||
+          requestId !== renderRequestId.current
+        ) {
           return;
         }
 
@@ -474,6 +482,10 @@ export const Block = ({
   );
   const debouncedFetchSingleRef = useRef(debouncedFetchSingle);
   debouncedFetchSingleRef.current = debouncedFetchSingle;
+
+  useEffect(function onUnmount() {
+    return () => renderAbortController.current?.abort();
+  }, []);
 
   useEffect(
     function onMount() {
