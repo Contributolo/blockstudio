@@ -28,15 +28,13 @@ function positionPopup( trigger, popup, isMulti ) {
 		const checkmarkSpace = 1.25 * rem;
 
 		const triggerRect = trigger.getBoundingClientRect();
-		const optionRect = selectedOption.getBoundingClientRect();
-		const popupRect = popup.getBoundingClientRect();
-
 		popup.style.animation = 'none';
-		popup.style.minWidth = ( triggerRect.width + popupPadding * 2 + popupBorder * 2 + checkmarkSpace ) + 'px';
+		popup.style.minWidth = 'min(' + ( triggerRect.width + popupPadding * 2 + popupBorder * 2 + checkmarkSpace ) + 'px, calc(100vw - 1rem))';
 		const sizedRect = popup.getBoundingClientRect();
+		const optionRect = selectedOption.getBoundingClientRect();
 
 		let x = triggerRect.left + 1 - popupBorder - popupPadding;
-		const optionOffsetY = optionRect.top - popupRect.top;
+		const optionOffsetY = optionRect.top - sizedRect.top;
 		let y = triggerRect.top - optionOffsetY;
 
 		const maxX = window.innerWidth - sizedRect.width - 8;

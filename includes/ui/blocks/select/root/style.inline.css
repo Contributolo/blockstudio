@@ -28,11 +28,14 @@
 }
 
 [data-bsui-select-root] [role="listbox"] {
+	box-sizing: border-box;
 	position: fixed;
 	z-index: 50;
 	top: 0;
 	left: 0;
-	min-width: 12rem;
+	width: max-content;
+	min-width: min(12rem, calc(100vw - 1rem));
+	max-width: calc(100vw - 1rem);
 	max-height: min(24rem, calc(100vh - 1rem));
 	overflow-y: auto;
 	background: var(--bs-ui-popover);
@@ -43,6 +46,8 @@
 	box-shadow: var(--bs-ui-shadow-md);
 	font-family: var(--bs-ui-font-sans);
 	font-size: var(--bs-ui-font-size);
+	/* Reduced motion must not introduce a transition on measured dimensions. */
+	transition-property: opacity, transform;
 }
 
 [data-bsui-select-root] [role="listbox"]:not([hidden]) {
@@ -65,6 +70,7 @@
 	transition: background var(--bs-ui-transition), color var(--bs-ui-transition);
 	color: var(--bs-ui-popover-foreground);
 	position: relative;
+	overflow-wrap: anywhere;
 }
 
 [data-bsui-select-root] [role="menuitem"]:hover,

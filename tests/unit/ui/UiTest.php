@@ -84,6 +84,53 @@ class UiTest extends TestCase {
 		);
 	}
 
+	public function test_shared_text_components_receive_the_text_asset_once(): void {
+		foreach ( array( 'bsui/card-title', 'bsui/card-description', 'bsui/field-description', 'bsui/file-upload' ) as $name ) {
+			$assets = Ui::global_assets( array( $name ), '<div data-bsui-root></div>' );
+
+			$this->assertSame( 1, substr_count( $assets['style'], '[data-bsui-text][data-variant="title"]' ), $name );
+			$this->assertStringContainsString( '@layer bsui {', $assets['style'], $name );
+		}
+
+		$assets = Ui::global_assets(
+			array( 'bsui/card-title', 'bsui/card-description', 'bsui/field-description' ),
+			'<h3 data-bsui-text data-variant="title">Title</h3>'
+		);
+
+		$this->assertSame( 1, substr_count( $assets['style'], '[data-bsui-text][data-variant="title"]' ) );
+	}
+
+	public function test_shared_text_assets_do_not_duplicate_an_explicit_text_block(): void {
+		$assets = Ui::global_assets(
+			array( 'bsui/card-title', 'bsui/text' ),
+			'<h3 data-bsui-text data-variant="title">Title</h3>'
+		);
+
+		$this->assertStringNotContainsString( '[data-bsui-text]', $assets['style'] );
+	}
+
+	public function test_raw_text_markup_receives_its_dependency_but_other_ui_does_not(): void {
+		$assets = Ui::global_assets( array(), '<p data-bsui-text data-variant="muted">Description</p>' );
+
+		$this->assertStringContainsString( '[data-bsui-text][data-variant="muted"]', $assets['style'] );
+		$this->assertStringNotContainsString(
+			'[data-bsui-text]',
+			Ui::global_assets( array(), '<textarea data-bsui-textarea></textarea>' )['style']
+		);
+		$this->assertSame( '', Ui::global_assets( array(), '<p>Ordinary paragraph</p>' )['style'] );
+	}
+
+	public function test_shared_text_dependency_preserves_variant_filters(): void {
+		$this->add_filter(
+			'blockstudio/ui/text/variants-style',
+			static fn( string $css ): string => $css . '[data-bsui-text][data-variant="custom"] { color: rebeccapurple; }'
+		);
+
+		$assets = Ui::global_assets( array( 'bsui/card-title' ), '<h3 data-bsui-card-title>Title</h3>' );
+
+		$this->assertMatchesRegularExpression( '/@layer bsui \{.*data-variant="custom".*\}/s', $assets['style'] );
+	}
+
 	public function test_generated_examples_use_safe_source_urls(): void {
 		$this->add_filter(
 			'blockstudio/ui/inventory',
