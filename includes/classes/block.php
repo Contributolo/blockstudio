@@ -1322,6 +1322,16 @@ class Block {
 		}
 		$selector_attribute = "data-assets='$selector_attribute_id'";
 
+		if ( ! $repeater ) {
+			$attachment_ids = array();
+			self::collect_attachment_ids( $attributes, false, $block_attributes, $disabled, $attachment_ids );
+
+			// One query for every attachment of the block instead of two per file.
+			if ( $attachment_ids ) {
+				_prime_post_caches( array_unique( $attachment_ids ), false, true );
+			}
+		}
+
 		foreach ( $attributes as $k => $v ) {
 			$att = self::attribute_definition( (string) $k, $repeater, $block_attributes );
 
@@ -1853,6 +1863,48 @@ class Block {
 					<=> array_search( $b['value'] ?? $b, $sorting_arr, true );
 			}
 		);
+	}
+
+	/**
+	 * Collect the attachment IDs that files fields will resolve, repeaters included.
+	 *
+	 * Fields returning plain IDs never load the attachment, so they are skipped.
+	 *
+	 * @param array      $attributes       The attributes.
+	 * @param array|bool $repeater         The repeater attributes, or false.
+	 * @param array      $block_attributes The block attributes.
+	 * @param array      $disabled         The disabled attribute keys.
+	 * @param array      $ids              The collected IDs (passed by reference).
+	 *
+	 * @return void
+	 */
+	private static function collect_attachment_ids(
+		array $attributes,
+		$repeater,
+		array $block_attributes,
+		array $disabled,
+		array &$ids
+	): void {
+		foreach ( $attributes as $k => $v ) {
+			$att  = self::attribute_definition( (string) $k, $repeater, $block_attributes );
+			$type = isset( $att['type'] ) ? ( $att['field'] ?? false ) : false;
+
+			if ( 'files' === $type && 'id' !== ( $att['returnFormat'] ?? 'value' ) ) {
+				foreach ( (array) $v as $id ) {
+					if ( is_numeric( $id ) && $id > 0 && ! in_array( $k . '_' . $id, $disabled, true ) ) {
+						$ids[] = (int) $id;
+					}
+				}
+			}
+
+			if ( 'repeater' === $type && is_array( $v ) ) {
+				foreach ( $v as $row ) {
+					if ( is_array( $row ) ) {
+						self::collect_attachment_ids( $row, $att['attributes'] ?? false, $block_attributes, array(), $ids );
+					}
+				}
+			}
+		}
 	}
 
 	/**
