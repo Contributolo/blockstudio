@@ -1130,6 +1130,22 @@ add_filter('blockstudio/cache/populate_debounce', function() {
 });
 ```
 
+### blockstudio/cache/populate_ignored_meta_keys
+
+Filters meta keys whose writes never refresh populated choices. By default
+these are the keys WordPress writes as editing and login bookkeeping:
+`_edit_lock`, refreshed by the editor and the Heartbeat while a post is open,
+`_edit_last`, written next to a post save that already refreshes, and
+`session_tokens`, written on login and logout. Add keys that change often but
+never affect a populate query.
+
+```php title="functions.php"
+add_filter('blockstudio/cache/populate_ignored_meta_keys', function(array $keys) {
+  $keys[] = '_my_view_counter';
+  return $keys;
+});
+```
+
 ### blockstudio/cache/max_files_per_scope
 
 Filters how many published payloads each runtime cache scope retains.

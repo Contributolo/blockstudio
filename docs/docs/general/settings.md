@@ -307,7 +307,9 @@ not structural block discovery or compiled assets. Choices refresh separately
 under a fixed build-path lock. A burst of writes, such as a translation sync
 or an import, is coalesced: the first write after a quiet period refreshes
 immediately and the last write of the burst is reflected once thirty seconds
-have passed, adjustable with `blockstudio/cache/populate_debounce`. The editor
+have passed, adjustable with `blockstudio/cache/populate_debounce`. Meta that
+WordPress writes as bookkeeping, such as the post edit lock, does not count as a
+change; `blockstudio/cache/populate_ignored_meta_keys` extends that list. The editor
 always queries live options, so the window only affects cached choices read
 at render time. Source files and build settings still invalidate
 the structural cache normally. Overwriting choices does not rescan the cache
