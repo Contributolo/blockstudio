@@ -51,7 +51,7 @@ test.describe( 'bsui/collapsible', () => {
 	test( 'clicking trigger opens panel', async ( { page } ) => {
 		const root = page.locator( '[data-bsui-collapsible-root]' ).first();
 		const triggerWrapper = root.locator( '[data-bsui-collapsible-trigger] button' );
-		const trigger = triggerWrapper.locator( 'button' );
+		const trigger = triggerWrapper;
 		const panel = root.locator( '[data-wp-bind--hidden]' );
 
 		await trigger.click();
@@ -65,7 +65,7 @@ test.describe( 'bsui/collapsible', () => {
 	test( 'clicking trigger again closes panel', async ( { page } ) => {
 		const root = page.locator( '[data-bsui-collapsible-root]' ).first();
 		const triggerWrapper = root.locator( '[data-bsui-collapsible-trigger] button' );
-		const trigger = triggerWrapper.locator( 'button' );
+		const trigger = triggerWrapper;
 		const panel = root.locator( '[data-wp-bind--hidden]' );
 
 		await trigger.click();
@@ -84,7 +84,7 @@ test.describe( 'bsui/collapsible', () => {
 	} ) => {
 		const root = page.locator( '[data-bsui-collapsible-root]' ).nth( 1 );
 		const triggerWrapper = root.locator( '[data-bsui-collapsible-trigger] button' );
-		const trigger = triggerWrapper.locator( 'button' );
+		const trigger = triggerWrapper;
 		const panel = root.locator( '[data-wp-bind--hidden]' );
 
 		await trigger.click();
@@ -131,7 +131,7 @@ test.describe( 'bsui/collapsible', () => {
 	} ) => {
 		const root = page.locator( '[data-bsui-collapsible-root]' ).nth( 2 );
 		const triggerWrapper = root.locator( '[data-bsui-collapsible-trigger] button' );
-		const trigger = triggerWrapper.locator( 'button' );
+		const trigger = triggerWrapper;
 		const panel = root.locator( '[data-wp-bind--hidden]' );
 
 		await trigger.click( { force: true } );

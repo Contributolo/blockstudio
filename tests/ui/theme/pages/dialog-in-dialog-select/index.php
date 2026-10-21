@@ -1,11 +1,11 @@
 <block name="bsui/dialog">
-	<block name="bsui/dialog-trigger" label="Open Settings"></block>
+	<block name="bsui/dialog-trigger" trigger_label="Open Settings"></block>
 	<block name="bsui/dialog-backdrop"></block>
 	<block name="bsui/dialog-popup">
 		<h3>Settings</h3>
 		<p>Configure your preferences.</p>
 		<block name="bsui/dialog">
-			<block name="bsui/dialog-trigger" label="Open Preferences"></block>
+			<block name="bsui/dialog-trigger" trigger_label="Open Preferences"></block>
 			<block name="bsui/dialog-backdrop"></block>
 			<block name="bsui/dialog-popup">
 				<h3>Preferences</h3>

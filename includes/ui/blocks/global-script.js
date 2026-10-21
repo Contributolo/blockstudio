@@ -2,6 +2,39 @@ let lockCount = 0;
 
 window.__bsui = window.__bsui || {};
 
+window.__bsui.resolveBinding = function ( expression, namespace, getContext, getStore ) {
+	if ( ! expression ) return undefined;
+	let path = expression.trim();
+	let negate = false;
+	if ( path.startsWith( '!' ) ) {
+		negate = true;
+		path = path.slice( 1 );
+	}
+	const qualified = path.split( '::' );
+	if ( qualified.length > 2 ) return undefined;
+	if ( qualified.length === 2 ) {
+		namespace = qualified[ 0 ];
+		path = qualified[ 1 ];
+	}
+	if ( path.startsWith( '!' ) ) {
+		negate = ! negate;
+		path = path.slice( 1 );
+	}
+	const parts = path.split( '.' );
+	const source = parts.shift();
+	if ( ! [ 'context', 'state' ].includes( source ) || ! parts.length ) return undefined;
+	if ( parts.some( key => ! /^[\w$-]+$/.test( key ) || [ '__proto__', 'prototype', 'constructor' ].includes( key ) ) ) return undefined;
+	let value = source === 'context' ? getContext( namespace ) : getStore( namespace ).state;
+	for ( const key of parts ) value = value?.[ key ];
+	return negate ? ! value : value;
+};
+
+window.__bsui.syncValue = function ( namespace, getContext, getStore ) {
+	const context = getContext();
+	const value = window.__bsui.resolveBinding( context.valueBinding, namespace, getContext, getStore );
+	if ( value !== undefined && ! Object.is( context.value, value ) ) context.value = value;
+};
+
 window.__bsui.lockScroll = function () {
 	lockCount++;
 	if ( lockCount === 1 ) {

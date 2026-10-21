@@ -48,6 +48,13 @@ class BsuiAccessibilityTest extends TestCase {
 		$this->assertSame( $html, Ui::trigger( $html, array( 'aria-expanded' => 'false' ) ) );
 	}
 
+	public function test_trigger_omits_null_attributes(): void {
+		$this->assertSame(
+			'<button>Open</button>',
+			Ui::trigger( '<button>Open</button>', array( 'aria-controls' => null ) )
+		);
+	}
+
 	public function test_disclosure_triggers_put_aria_state_on_the_button(): void {
 		$triggers = array(
 			'alert-dialog/trigger' => 'bsui/alert-dialog',
@@ -177,5 +184,86 @@ class BsuiAccessibilityTest extends TestCase {
 		}
 
 		$this->assertStringContainsString( 'data-bsui-carousel-viewport data-bsui-focus tabindex="0"', $this->source( 'carousel/root' ) );
+	}
+
+	public function test_compound_controls_expose_value_bindings_without_changing_uncontrolled_defaults(): void {
+		foreach ( array( 'number-field', 'radio-group', 'slider', 'color-picker', 'rating', 'time-picker' ) as $component ) {
+			$attributes = array(
+				'name'    => '',
+				'nameAlt' => '',
+				'value'   => 'test/owner::context.value',
+			);
+			$output     = $this->render( $component . '/root', $attributes );
+			$tags       = new WP_HTML_Tag_Processor( $output );
+			$tags->next_tag();
+			$context = json_decode( $tags->get_attribute( 'data-wp-context' ), true );
+
+			$this->assertSame( 'test/owner::context.value', $context['valueBinding'], $component );
+			$this->assertSame(
+				'callbacks.syncValue',
+				$tags->get_attribute( 'rating' === $component ? 'data-wp-watch' : 'data-wp-watch--controlled' ),
+				$component
+			);
+
+			unset( $attributes['value'] );
+			$output = $this->render( $component . '/root', $attributes );
+			$tags   = new WP_HTML_Tag_Processor( $output );
+			$tags->next_tag();
+			$context = json_decode( $tags->get_attribute( 'data-wp-context' ), true );
+
+			$this->assertSame( '', $context['valueBinding'], $component );
+			$this->assertNull( $tags->get_attribute( 'data-wp-watch--controlled' ), $component );
+		}
+	}
+
+	public function test_toggle_has_its_own_store_and_a_non_submitting_button(): void {
+		$output = $this->render( 'toggle/root', array( 'defaultPressed' => true ) );
+		$tags   = new WP_HTML_Tag_Processor( $output );
+		$tags->next_tag();
+
+		$this->assertSame( 'SPAN', $tags->get_tag() );
+		$this->assertSame( 'bsui/toggle', $tags->get_attribute( 'data-wp-interactive' ) );
+		$this->assertSame( array( 'pressed' => true, 'disabled' => false ), json_decode( $tags->get_attribute( 'data-wp-context' ), true ) );
+		$tags->next_tag( 'BUTTON' );
+		$this->assertSame( 'button', $tags->get_attribute( 'type' ) );
+		$this->assertSame( 'actions.toggle', $tags->get_attribute( 'data-wp-on--click' ) );
+		$this->assertSame( 'state.ariaPressed', $tags->get_attribute( 'data-wp-bind--aria-pressed' ) );
+	}
+
+	public function test_disabled_collapsible_disables_the_actual_trigger_control(): void {
+		foreach ( array( false, true ) as $disabled ) {
+			$output = $this->render(
+				'collapsible/trigger',
+				array( 'trigger' => '<button>Toggle</button>' ),
+				array( 'bsui/collapsible' => array( 'disabled' => $disabled ) )
+			);
+			$tags = new WP_HTML_Tag_Processor( $output );
+			$tags->next_tag( 'BUTTON' );
+			$this->assertSame( $disabled ? true : null, $tags->get_attribute( 'disabled' ) );
+			$this->assertSame( $disabled ? 'true' : null, $tags->get_attribute( 'aria-disabled' ) );
+		}
+	}
+
+	public function test_toolbar_separator_orientation_follows_its_parent(): void {
+		foreach ( array( 'horizontal' => 'vertical', 'vertical' => 'horizontal' ) as $toolbar => $separator ) {
+			$output = $this->render( 'toolbar/separator', array(), array( 'bsui/toolbar' => array( 'orientation' => $toolbar ) ) );
+			$this->assertStringContainsString( 'aria-orientation="' . $separator . '"', $output );
+			$this->assertStringContainsString( 'data-orientation="' . $separator . '"', $output );
+		}
+	}
+
+	public function test_number_field_omitted_bounds_are_unbounded_but_explicit_zero_is_preserved(): void {
+		foreach ( array( false, '', null, 0, '0' ) as $bound ) {
+			$output = $this->render(
+				'number-field/root',
+				array( 'name' => '', 'nameAlt' => '', 'min' => $bound, 'max' => $bound )
+			);
+			$tags = new WP_HTML_Tag_Processor( $output );
+			$tags->next_tag();
+			$context  = json_decode( $tags->get_attribute( 'data-wp-context' ), true );
+			$expected = is_numeric( $bound ) ? 0 : null;
+			$this->assertSame( $expected, $context['min'] );
+			$this->assertSame( $expected, $context['max'] );
+		}
 	}
 }

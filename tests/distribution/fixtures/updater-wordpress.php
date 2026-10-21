@@ -22,7 +22,10 @@ function current_filter(): string {
 }
 
 function get_file_data( $file, $headers, $context ): array {
-	return array( 'Name' => 'Outside WordPress plugins directory' );
+	global $root, $assert, $header_reads;
+	++$header_reads;
+	$assert( array( 'Name' => 'Plugin Name' ) === $headers && 'plugin' === $context, 'Updater requested the wrong plugin header.' );
+	return array( 'Name' => $root . '/blockstudio.php' === $file ? 'Blockstudio' : '' );
 }
 
 require $autoload;
@@ -34,5 +37,11 @@ new $trigger_class( 'plugin', $scheduler );
 $assert( array( 'before_invoke:plugin status', 'before_invoke:plugin list', 'before_invoke:plugin update' ) === array_keys( WP_CLI::$hooks ), 'Scoped updater did not detect WP-CLI.' );
 $assert( 42000 === ( new ReflectionMethod( $scheduler_class, 'getEffectiveCheckPeriod' ) )->invoke( $scheduler ), 'Scoped updater did not detect cron.' );
 $factory = 'BlockstudioVendor\\YahnisElsts\\PluginUpdateChecker\\v5p6\\PucFactory';
-$assert( true === ( new ReflectionMethod( $factory, 'isPluginFile' ) )->invoke( null, __FILE__ ), 'Scoped updater did not detect the global get_file_data function.' );
+$header_reads = 0;
+$is_plugin = new ReflectionMethod( $factory, 'isPluginFile' );
+$assert( true === $is_plugin->invoke( null, $root . '/blockstudio.php' ), 'Scoped updater did not detect the global get_file_data function.' );
+$assert( 1 === $header_reads, 'Plugin detection did not exercise the header fallback.' );
+$assert( false === $is_plugin->invoke( null, __FILE__ ), 'A PHP file without a plugin header must not be treated as a plugin.' );
+$assert( false === $is_plugin->invoke( null, $root . '/missing-plugin.php' ), 'A missing file must not be treated as a plugin.' );
+$assert( 2 === $header_reads, 'A missing plugin file must not reach the header fallback.' );
 echo "Updater WordPress integration passed.\n";

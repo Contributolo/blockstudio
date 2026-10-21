@@ -3,6 +3,9 @@ import { store, getContext, getElement } from '@wordpress/interactivity';
 const RADIO_SELECTOR = '[role="radio"]:not([aria-disabled="true"])';
 
 store( 'bsui/radio-group', {
+	callbacks: {
+		syncValue() { window.__bsui.syncValue( 'bsui/radio-group', getContext, store ); },
+	},
 	state: {
 		get selectedValue() {
 			return getContext().value;

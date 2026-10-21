@@ -13,6 +13,8 @@ $open     = ! empty( $context['bsui/collapsible']['defaultOpen'] ?? false );
 	echo \Blockstudio\Ui::trigger(
 		(string) ( $a['trigger'] ?? '' ),
 		array(
+			'disabled'                    => $disabled,
+			'aria-disabled'               => $disabled ? 'true' : null,
 			'aria-expanded'               => $open ? 'true' : 'false',
 			'data-wp-bind--aria-expanded' => 'bsui/collapsible::state.ariaExpanded',
 		)

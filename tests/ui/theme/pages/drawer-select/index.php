@@ -1,5 +1,5 @@
 <block name="bsui/drawer" position="right">
-	<block name="bsui/drawer-trigger" label="Open Filters"></block>
+	<block name="bsui/drawer-trigger" trigger_label="Open Filters"></block>
 	<block name="bsui/drawer-backdrop"></block>
 	<block name="bsui/drawer-popup">
 		<p>Filter the list below.</p>

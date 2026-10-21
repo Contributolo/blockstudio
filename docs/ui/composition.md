@@ -126,6 +126,72 @@ The first paint is correct HTML with no client-side hydration flash, popups star
 
 `bindText` is available on `bsui/label`, `bsui/checkbox`, `bsui/switch`, `bsui/toggle`, and `bsui/radio-group` items. On the checkbox, switch, and radio items it flows into the shared label primitive, so state-driven text keeps the exact system label typography. Selects and other inputs additionally dispatch a bubbling `change` event from their root, carrying the new value in `detail`, for coarser integrations.
 
+### Controlled values
+
+Leave `value` or `checked` unset for a control that manages its own value. Use
+`defaultValue`, `defaultChecked`, or Toggle's `defaultPressed` for its initial
+selection. A standalone Toggle handles pointer and keyboard input without a
+consumer store.
+
+To control a field from your own store, provide both its binding and an
+`onChange` action that updates the bound value. `value` is a directive path,
+not a literal default. Input, Textarea, Password Input, Number Field, Slider,
+Radio Group, Color Picker, Rating, and Time Picker support `value`.
+Checkbox, Switch, and Toggle use `checked` instead.
+
+Qualify paths with the owning namespace, for example
+`my/settings::context.quantity` or `my/settings::state.quantity`. Compound
+controls have their own namespace; an unqualified path refers to that control,
+not automatically to your parent store. Compound value bindings support dot
+paths into context or state, including numeric array keys, not JavaScript
+expressions or function calls.
+
+Here is a complete Number Field binding in a custom block with Interactivity
+API support enabled:
+
+```php title="index.php"
+<div
+  data-wp-interactive="my/settings"
+  data-wp-context='<?php echo esc_attr(wp_json_encode(['quantity' => 2])); ?>'
+>
+  <bs:bsui-number-field
+    nameAlt="quantity"
+    defaultValue="2"
+    value="my/settings::context.quantity"
+    onChange="my/settings::actions.setQuantity"
+  />
+  <output data-wp-text="context.quantity"></output>
+</div>
+```
+
+```js title="script.inline.js"
+import { getContext, store } from '@wordpress/interactivity';
+
+store('my/settings', {
+  actions: {
+    setQuantity(event) {
+      // Compound controls publish their normalized value in a custom change event.
+      if (event.detail?.value !== undefined) {
+        getContext().quantity = event.detail.value;
+      }
+    },
+  },
+});
+```
+
+Set the matching default for the server-rendered initial value. Once hydrated,
+parent changes update every bound instance, including zero, false, and empty
+values. Checkbox and Switch hidden form inputs also follow their `checked`
+binding. Time Picker values use `HH:MM` in 24-hour format or an empty string.
+For native Input, Textarea, and Password Input handlers, read
+`event.target.value`; compound value controls publish `event.detail.value`.
+Number Field bounds are optional: omitted `min` and `max` leave it unbounded,
+while an explicit zero remains a valid bound.
+
+Select, Date Input, Phone Input, and OTP Input publish changes through
+`onChange`, but do not expose this controlled `value` binding. Use their
+documented default properties for initial values.
+
 ## Composing from your own blocks
 
 Composition is not limited to pages. Block tags render automatically inside block templates, so a project block can emit `bsui` components directly and wrap them in its own structure:
@@ -141,6 +207,42 @@ Composition is not limited to pages. Block tags render automatically inside bloc
 The same works from PHP with `bs_block()`, including nesting through the `content` key, as described under [programmatic rendering](/docs/blocks/rendering). Either way the component's stylesheet and store load with it, and your block stays a thin layer of arrangement over system parts.
 
 For arranging components side by side, `bsui/stack` is the generic flex row or column: `direction`, `gap` on the spacing scale, `align`, `justify`, and a `wrap` toggle. Children keep their natural size by default; the `grow` toggle stretches them to share the stack's length equally, which is how a footer makes two buttons split its width instead of huddling at one end.
+
+### Field groups and cards
+
+`bsui/field-group` renders a fieldset. The default variant groups related
+fields without adding a surface. Use `variant="card"` for a muted outer
+frame, then place fields inside `bsui/field-group-content` to get the inset
+content surface. Keep the title and description outside that content block:
+
+```html
+<bs:bsui-field-group variant="card">
+  <bs:bsui-field-group-title text="Account settings" />
+  <bs:bsui-field-group-description text="Manage your account preferences." />
+  <bs:bsui-field-group-content>
+    <bs:bsui-field>
+      <bs:bsui-field-label text="Display name" />
+      <bs:bsui-input nameAlt="display_name" placeholder="Enter display name" />
+    </bs:bsui-field>
+    <bs:bsui-field>
+      <bs:bsui-field-label text="Email" />
+      <bs:bsui-input nameAlt="email" type="email" placeholder="Enter email" />
+    </bs:bsui-field>
+  </bs:bsui-field-group-content>
+</bs:bsui-field-group>
+```
+
+`disabled="true"` on the group uses the native fieldset behavior to disable
+its form controls. Card styling does not change the default variant.
+
+### Toolbar separators
+
+Place `bsui/toolbar-separator` between toolbar items. It follows the parent
+toolbar's `orientation`: a horizontal toolbar gets a full-height vertical
+separator, and a vertical toolbar gets a full-width horizontal separator.
+Separators stretch to the inside edges of the toolbar border without changing
+control height. A horizontal toolbar scrolls when its contents exceed the
+available width.
 
 ## The layering model
 

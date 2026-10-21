@@ -1,6 +1,6 @@
 <block name="bsui/button" size="icon-sm" variant="outline" label="+"></block>
 <block name="bsui/dialog">
-	<block name="bsui/dialog-trigger" label="Open Editor"></block>
+	<block name="bsui/dialog-trigger" trigger_label="Open Editor"></block>
 	<block name="bsui/dialog-backdrop"></block>
 	<block name="bsui/dialog-popup">
 		<h3>Edit profile</h3>

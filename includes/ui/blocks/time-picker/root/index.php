@@ -18,11 +18,13 @@ if ( $default ) {
 	data-wp-interactive="bsui/time-picker"
 	data-wp-context='<?php echo esc_attr( wp_json_encode( array(
 		'hour'     => $hour !== '' ? (int) $hour : null,
+		'valueBinding' => (string) ( $a['value'] ?? '' ),
 		'minute'   => $minute !== '' ? (int) $minute : null,
 		'step'     => $step,
 		'disabled' => $disabled,
 	) ) ); ?>'
 	<?php if ( $on_change ) echo 'data-wp-on--change="' . esc_attr( $on_change ) . '"'; ?>
+	<?php if ( ! empty( $a['value'] ) ) echo 'data-wp-watch--controlled="callbacks.syncValue"'; ?>
 >
 	<input
 		data-bsui-focus

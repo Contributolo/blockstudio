@@ -12,7 +12,7 @@
 			<block name="bsui/table-cell"><p>Admin</p></block>
 			<block name="bsui/table-cell">
 				<block name="bsui/menu">
-					<block name="bsui/menu-trigger" label="..."></block>
+					<block name="bsui/menu-trigger" trigger_label="..."></block>
 					<block name="bsui/menu-popup">
 						<block name="bsui/menu-item" label="Edit"></block>
 						<block name="bsui/menu-item" label="Delete"></block>
@@ -26,7 +26,7 @@
 			<block name="bsui/table-cell"><p>Editor</p></block>
 			<block name="bsui/table-cell">
 				<block name="bsui/menu">
-					<block name="bsui/menu-trigger" label="..."></block>
+					<block name="bsui/menu-trigger" trigger_label="..."></block>
 					<block name="bsui/menu-popup">
 						<block name="bsui/menu-item" label="Edit"></block>
 						<block name="bsui/menu-item" label="Delete"></block>
@@ -40,7 +40,7 @@
 			<block name="bsui/table-cell"><p>Viewer</p></block>
 			<block name="bsui/table-cell">
 				<block name="bsui/menu">
-					<block name="bsui/menu-trigger" label="..."></block>
+					<block name="bsui/menu-trigger" trigger_label="..."></block>
 					<block name="bsui/menu-popup">
 						<block name="bsui/menu-item" label="Edit"></block>
 						<block name="bsui/menu-item" label="Delete"></block>

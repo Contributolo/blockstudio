@@ -13,6 +13,9 @@ function dispatchChange( value ) {
 }
 
 store( 'bsui/number-field', {
+	callbacks: {
+		syncValue() { window.__bsui.syncValue( 'bsui/number-field', getContext, store ); },
+	},
 	state: {
 		get displayValue() {
 			const { value } = getContext();

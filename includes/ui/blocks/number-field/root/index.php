@@ -1,7 +1,7 @@
 <?php
 $value    = $a['defaultValue'] ?? '';
-$min      = $a['min'] ?? '';
-$max      = $a['max'] ?? '';
+$min      = is_numeric( $a['min'] ?? null ) ? $a['min'] : '';
+$max      = is_numeric( $a['max'] ?? null ) ? $a['max'] : '';
 $step     = $a['step'] ?? 1;
 $name     = ! empty( $a['name'] ?: $a['nameAlt'] ) ? $a['name'] ?: $a['nameAlt'] : '';
 $disabled  = ! empty( $a['disabled'] );
@@ -11,12 +11,14 @@ $on_change = ! empty( $a['onChange'] ) ? $a['onChange'] : '';
 	data-wp-interactive="bsui/number-field"
 	data-wp-context='<?php echo esc_attr( wp_json_encode( array(
 		'value'    => $value !== '' ? (float) $value : null,
+		'valueBinding' => (string) ( $a['value'] ?? '' ),
 		'min'      => $min !== '' ? (float) $min : null,
 		'max'      => $max !== '' ? (float) $max : null,
 		'step'     => (float) $step,
 		'disabled' => $disabled,
 	) ) ); ?>'
 	role="group"
+	<?php if ( ! empty( $a['value'] ) ) echo 'data-wp-watch--controlled="callbacks.syncValue"'; ?>
 	<?php if ( $on_change ) echo 'data-wp-on--change="' . esc_attr( $on_change ) . '"'; ?>
 >
 	<button data-bsui-focus data-wp-on--click="actions.decrement" aria-label="Decrease" <?php if ( $disabled ) echo 'disabled'; ?>>-</button>

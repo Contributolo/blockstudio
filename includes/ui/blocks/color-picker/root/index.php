@@ -6,14 +6,16 @@ $on_change = ! empty( $a['onChange'] ) ? $a['onChange'] : '';
 ?>
 <div
 	data-wp-interactive="bsui/color-picker"
-	data-wp-context='<?php echo esc_attr( wp_json_encode( array( 'value' => $default ) ) ); ?>'
+	data-wp-context='<?php echo esc_attr( wp_json_encode( array( 'value' => $default, 'valueBinding' => (string) ( $a['value'] ?? '' ) ) ) ); ?>'
 	data-bsui-color-picker
+	<?php if ( ! empty( $a['value'] ) ) echo 'data-wp-watch--controlled="callbacks.syncValue"'; ?>
 	<?php if ( $on_change ) echo 'data-wp-on--change="' . esc_attr( $on_change ) . '"'; ?>
 >
-	<div data-bsui-color-swatch style="background-color: <?php echo esc_attr( $default ); ?>;">
+	<div data-bsui-color-swatch data-wp-style--background-color="context.value" style="background-color: <?php echo esc_attr( $default ); ?>;">
 		<input
 			type="color"
 			data-wp-on--input="actions.handleColorInput"
+			data-wp-bind--value="context.value"
 			value="<?php echo esc_attr( $default ); ?>"
 			<?php if ( $disabled ) echo 'disabled'; ?>
 		/>

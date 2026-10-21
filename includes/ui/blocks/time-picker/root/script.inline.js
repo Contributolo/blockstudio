@@ -20,6 +20,21 @@ function fireChange( ref, ctx ) {
 }
 
 store( 'bsui/time-picker', {
+	callbacks: {
+		syncValue() {
+			const ctx = getContext();
+			const value = window.__bsui.resolveBinding( ctx.valueBinding, 'bsui/time-picker', getContext, store );
+			if ( value === undefined || value === ctx.syncedValue ) return;
+			if ( value !== '' && ! /^(?:[01]\d|2[0-3]):[0-5]\d$/.test( value ) ) return;
+			ctx.syncedValue = value;
+			const parts = value.split( ':' );
+			ctx.hour = value === '' ? null : Number( parts[ 0 ] );
+			ctx.minute = value === '' ? null : Number( parts[ 1 ] );
+			const root = getElement().ref;
+			root.querySelector( '[data-bsui-time-hour]' ).value = pad( ctx.hour );
+			root.querySelector( '[data-bsui-time-minute]' ).value = pad( ctx.minute );
+		},
+	},
 	state: {
 		get displayHour() {
 			const { hour } = getContext();
@@ -134,6 +149,7 @@ store( 'bsui/time-picker', {
 			if ( ctx.hour !== null ) {
 				ref.value = pad( ctx.hour );
 			}
+			fireChange( ref, ctx );
 		},
 		padMinute() {
 			const ctx = getContext();
@@ -141,6 +157,7 @@ store( 'bsui/time-picker', {
 			if ( ctx.minute !== null ) {
 				ref.value = pad( ctx.minute );
 			}
+			fireChange( ref, ctx );
 		},
 	},
 } );

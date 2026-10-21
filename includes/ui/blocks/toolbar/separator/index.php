@@ -1,1 +1,4 @@
-<div role="separator" aria-orientation="vertical" data-orientation="vertical" data-bsui-toolbar-separator></div>
+<?php
+$orientation = 'vertical' === ( $context['bsui/toolbar']['orientation'] ?? 'horizontal' ) ? 'horizontal' : 'vertical';
+?>
+<div role="separator" aria-orientation="<?php echo esc_attr( $orientation ); ?>" data-orientation="<?php echo esc_attr( $orientation ); ?>" data-bsui-toolbar-separator></div>

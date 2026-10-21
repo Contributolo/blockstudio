@@ -98,6 +98,7 @@ store( 'bsui/slider', {
 		},
 	},
 	callbacks: {
+		syncValue() { window.__bsui.syncValue( 'bsui/slider', getContext, store ); },
 		syncPercent() {
 			var ctx = getContext();
 			var p = ctx.max > ctx.min ? ( ( ctx.value - ctx.min ) / ( ctx.max - ctx.min ) ) * 100 : 0;

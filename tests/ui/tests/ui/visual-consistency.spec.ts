@@ -1,13 +1,4 @@
 import { test, expect } from '@playwright/test';
-import * as fs from 'fs';
-import * as path from 'path';
-
-const SCREENSHOT_DIR = path.join(__dirname, '..', 'screenshots', 'components');
-
-test.beforeAll(async () => {
-	fs.mkdirSync(SCREENSHOT_DIR, { recursive: true });
-});
-
 test.beforeEach(async ({ page }) => {
 	await page.goto('/kitchen-sink/');
 	await page.waitForLoadState('networkidle');
@@ -74,10 +65,10 @@ test.describe('Component screenshots', () => {
 	};
 
 	for (const [, { selector, name }] of Object.entries(components)) {
-		test(`capture ${name}`, async ({ page }) => {
+		test(`capture ${name}`, async ({ page }, testInfo) => {
 			const el = page.locator(selector).first();
 			await expect(el).toBeVisible();
-			await el.screenshot({ path: path.join(SCREENSHOT_DIR, `${name}.png`), animations: 'disabled' });
+			await el.screenshot({ path: testInfo.outputPath(`${name}.png`), animations: 'disabled' });
 		});
 	}
 });

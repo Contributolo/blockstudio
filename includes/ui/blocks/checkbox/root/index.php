@@ -11,6 +11,7 @@ $control   = wp_unique_id( 'bsui-checkbox-' );
 	data-wp-interactive="bsui/checkbox"
 	data-wp-context='<?php echo esc_attr( wp_json_encode( array(
 		'checked'       => ! empty( $a['defaultChecked'] ),
+		'checkedBinding' => $checked,
 		'indeterminate' => ! empty( $a['indeterminate'] ),
 		'disabled'      => (bool) $disabled,
 		'value'         => (string) ( $a['value'] ?? 'on' ),

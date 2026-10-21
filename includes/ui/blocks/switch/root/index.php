@@ -11,6 +11,7 @@ $control   = wp_unique_id( 'bsui-switch-' );
 	data-wp-interactive="bsui/switch"
 	data-wp-context='<?php echo esc_attr( wp_json_encode( array(
 		'checked'        => ! empty( $a['defaultChecked'] ),
+		'checkedBinding' => $checked,
 		'disabled'       => (bool) $disabled,
 		'readOnly'       => ! empty( $a['readOnly'] ),
 		'required'       => ! empty( $a['required'] ),

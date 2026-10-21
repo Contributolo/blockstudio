@@ -136,6 +136,9 @@ jobs:
           cd wordpress
           wp plugin install ../blockstudio.zip --activate
 
+      - name: Verify updater with non-canonical CLI paths and an external plugin symlink
+        run: bash repo/tests/distribution/updater-cli.sh "$GITHUB_WORKSPACE/wordpress"
+
       - name: Install test theme with Timber
         run: |
           cp -r repo/tests/theme wordpress/wp-content/themes/blockstudio-test

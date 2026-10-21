@@ -312,7 +312,7 @@ class Ui {
 			}
 
 			foreach ( $attributes as $name => $value ) {
-				if ( null === $processor->get_attribute( $name ) ) {
+				if ( null !== $value && null === $processor->get_attribute( $name ) ) {
 					$processor->set_attribute( $name, $value );
 				}
 			}

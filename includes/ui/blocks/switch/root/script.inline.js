@@ -12,8 +12,10 @@ store( 'bsui/switch', {
 			return getContext().required ? 'true' : undefined;
 		},
 		get formValue() {
-			const { checked, checkedValue, uncheckedValue } = getContext();
-			return checked
+			const ctx = getContext();
+			const { checkedValue, uncheckedValue } = ctx;
+			const bound = window.__bsui.resolveBinding( ctx.checkedBinding, 'bsui/switch', getContext, store );
+			return ( bound === undefined ? ctx.checked : bound )
 				? ( checkedValue || 'on' )
 				: ( uncheckedValue || '' );
 		},

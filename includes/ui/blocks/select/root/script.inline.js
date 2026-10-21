@@ -33,7 +33,11 @@ function positionPopup( trigger, popup, isMulti ) {
 		const sizedRect = popup.getBoundingClientRect();
 		const optionRect = selectedOption.getBoundingClientRect();
 
-		let x = triggerRect.left + 1 - popupBorder - popupPadding;
+		const triggerStyles = getComputedStyle( trigger );
+		const optionStyles = getComputedStyle( selectedOption );
+		const triggerInset = parseFloat( triggerStyles.borderLeftWidth ) + parseFloat( triggerStyles.paddingLeft );
+		const optionInset = optionRect.left - sizedRect.left + parseFloat( optionStyles.borderLeftWidth ) + parseFloat( optionStyles.paddingLeft );
+		let x = triggerRect.left + triggerInset - optionInset;
 		const optionOffsetY = optionRect.top - sizedRect.top;
 		let y = triggerRect.top - optionOffsetY;
 

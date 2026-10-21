@@ -14,6 +14,7 @@ $percent     = $max > $min ? ( ( $value - $min ) / ( $max - $min ) ) * 100 : 0;
 	data-wp-interactive="bsui/slider"
 	data-wp-context='<?php echo esc_attr( wp_json_encode( array(
 		'value'       => (float) $value,
+		'valueBinding' => (string) ( $a['value'] ?? '' ),
 		'min'         => (float) $min,
 		'max'         => (float) $max,
 		'step'        => (float) $step,
@@ -21,6 +22,7 @@ $percent     = $max > $min ? ( ( $value - $min ) / ( $max - $min ) ) * 100 : 0;
 		'orientation' => $orientation,
 	) ) ); ?>'
 	<?php if ( $on_change ) echo 'data-wp-on--change="' . esc_attr( $on_change ) . '"'; ?>
+	<?php if ( ! empty( $a['value'] ) ) echo 'data-wp-watch--controlled="callbacks.syncValue"'; ?>
 >
 	<div
 		data-bsui-focus

@@ -1,5 +1,5 @@
 <block name="bsui/dialog">
-	<block name="bsui/dialog-trigger" label="Open Notes"></block>
+	<block name="bsui/dialog-trigger" trigger_label="Open Notes"></block>
 	<block name="bsui/dialog-backdrop"></block>
 	<block name="bsui/dialog-popup">
 		<h3>Notes</h3>

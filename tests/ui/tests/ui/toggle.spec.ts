@@ -29,4 +29,18 @@ test.describe( 'bsui/toggle', () => {
 		const label = page.locator( '[data-bsui-toggle]' ).first().locator( 'span' );
 		await expect( label ).toBeVisible();
 	} );
+
+	test( 'uncontrolled toggles change by pointer and keyboard without submitting forms', async ( { page } ) => {
+		const toggle = page.getByRole( 'button', { name: 'Default Toggle', exact: true } );
+		await expect( toggle ).toHaveAttribute( 'type', 'button' );
+		await toggle.click();
+		await expect( toggle ).toHaveAttribute( 'aria-pressed', 'true' );
+		await page.keyboard.press( 'Space' );
+		await expect( toggle ).toHaveAttribute( 'aria-pressed', 'false' );
+		await page.keyboard.press( 'Enter' );
+		await expect( toggle ).toHaveAttribute( 'aria-pressed', 'true' );
+		const pressed = page.getByRole( 'button', { name: 'Pressed Toggle', exact: true } );
+		await pressed.click();
+		await expect( pressed ).toHaveAttribute( 'aria-pressed', 'false' );
+	} );
 } );

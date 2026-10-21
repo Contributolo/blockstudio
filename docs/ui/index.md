@@ -260,6 +260,7 @@ add_filter('blockstudio/ui/button/variants-style', function($css) {
 
 ## Related
 
+- [UI Composition](/ui/composition), including controlled fields, field cards, and toolbar separators
 - [Programmatic Rendering](/docs/blocks/rendering)
 - [Components](/docs/blocks/components)
 - [Interactivity API](/docs/blocks/interactivity)

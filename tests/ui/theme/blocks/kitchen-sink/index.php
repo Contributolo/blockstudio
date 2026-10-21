@@ -24,6 +24,9 @@ wp_interactivity_state( 'app/kitchen-sink', array() );
 	data-app-kitchen-sink
 >
 <bs:bsui-stack direction="column" gap="12">
+<div data-wp-on--click="actions.reset" data-ks-reset>
+	<bs:bsui-button label="Reset controlled values" variant="secondary" />
+</div>
 <bs:bsui-stack direction="column" gap="3">
 	<bs:bsui-text variant="heading" tag="h2" content="Accordion" />
 	<bs:bsui-accordion defaultValue="a1">
@@ -230,7 +233,7 @@ wp_interactivity_state( 'app/kitchen-sink', array() );
 <bs:bsui-stack direction="column" gap="3">
 	<bs:bsui-text variant="heading" tag="h2" content="Checkbox" />
 	<bs:bsui-stack direction="column" gap="3" align="flex-start">
-		<bs:bsui-checkbox label="Accept terms and conditions" checked="context.checkboxOn" onChange="app/kitchen-sink::actions.setCheckbox" defaultChecked="true" />
+		<bs:bsui-checkbox name="terms" label="Accept terms and conditions" checked="app/kitchen-sink::context.checkboxOn" onChange="app/kitchen-sink::actions.setCheckbox" defaultChecked="true" />
 		<bs:bsui-checkbox defaultChecked="true" label="Send me emails" />
 
 	<div id="ks-checkbox" data-wp-text="context.checkboxOn" data-ks-value></div>
@@ -307,6 +310,7 @@ wp_interactivity_state( 'app/kitchen-sink', array() );
 	<bs:bsui-field-group variant="card">
 		<bs:bsui-field-group-title text="Account Settings" />
 		<bs:bsui-field-group-description text="Manage your account preferences." />
+		<bs:bsui-field-group-content>
 		<bs:bsui-field>
 			<bs:bsui-field-label text="Display Name" />
 			<bs:bsui-input type="text" placeholder="Enter display name" />
@@ -315,6 +319,7 @@ wp_interactivity_state( 'app/kitchen-sink', array() );
 			<bs:bsui-field-label text="Email" />
 			<bs:bsui-input type="email" placeholder="Enter email" />
 		</bs:bsui-field>
+		</bs:bsui-field-group-content>
 	</bs:bsui-field-group>
 </bs:bsui-stack>
 
@@ -398,7 +403,7 @@ wp_interactivity_state( 'app/kitchen-sink', array() );
 			</bs:bsui-field>
 			<bs:bsui-field invalid="true">
 				<bs:bsui-field-label text="Color" />
-				<bs:bsui-color-picker nameAlt="color" defaultValue="#6366f1" value="context.colorValue" onChange="app/kitchen-sink::actions.setColor" />
+				<bs:bsui-color-picker nameAlt="color" defaultValue="#6366f1" value="app/kitchen-sink::context.colorValue" onChange="app/kitchen-sink::actions.setColor" />
 				<bs:bsui-field-error text="Please select a valid color." />
 			</bs:bsui-field>
 			<bs:bsui-field invalid="true">
@@ -433,7 +438,7 @@ wp_interactivity_state( 'app/kitchen-sink', array() );
 			</bs:bsui-field>
 			<bs:bsui-field invalid="true">
 				<bs:bsui-field-label text="Time" />
-				<bs:bsui-time-picker nameAlt="time" defaultValue="14:30" step="15" value="context.timeValue" onChange="app/kitchen-sink::actions.setTime" />
+				<bs:bsui-time-picker nameAlt="time" defaultValue="14:30" step="15" value="app/kitchen-sink::context.timeValue" onChange="app/kitchen-sink::actions.setTime" />
 				<bs:bsui-field-error text="Please select a time." />
 			</bs:bsui-field>
 			<bs:bsui-field disabled="true">
@@ -447,7 +452,7 @@ wp_interactivity_state( 'app/kitchen-sink', array() );
 
 <bs:bsui-stack direction="column" gap="3">
 	<bs:bsui-text variant="heading" tag="h2" content="Color Picker" />
-	<bs:bsui-color-picker nameAlt="color" defaultValue="#6366f1" onChange="app/kitchen-sink::actions.setColor" />
+	<bs:bsui-color-picker nameAlt="color" defaultValue="#6366f1" value="app/kitchen-sink::context.colorValue" onChange="app/kitchen-sink::actions.setColor" />
 
 	<div id="ks-color" data-wp-text="context.colorValue" data-ks-value></div>
 </bs:bsui-stack>
@@ -466,7 +471,7 @@ wp_interactivity_state( 'app/kitchen-sink', array() );
 
 <bs:bsui-stack direction="column" gap="3">
 	<bs:bsui-text variant="heading" tag="h2" content="Input" />
-	<bs:bsui-input placeholder="Enter your email" type="email" value="context.inputValue" onChange="app/kitchen-sink::actions.setInput" />
+	<bs:bsui-input placeholder="Enter your email" type="email" value="app/kitchen-sink::context.inputValue" onChange="app/kitchen-sink::actions.setInput" />
 
 	<div id="ks-input" data-wp-text="context.inputValue" data-ks-value></div>
 </bs:bsui-stack>
@@ -553,7 +558,7 @@ wp_interactivity_state( 'app/kitchen-sink', array() );
 
 <bs:bsui-stack direction="column" gap="3">
 	<bs:bsui-text variant="heading" tag="h2" content="Number Field" />
-	<bs:bsui-number-field defaultValue="5" min="0" max="10" step="1" value="context.numberValue" onChange="app/kitchen-sink::actions.setNumber" />
+	<bs:bsui-number-field defaultValue="5" min="0" max="10" step="1" value="app/kitchen-sink::context.numberValue" onChange="app/kitchen-sink::actions.setNumber" />
 
 	<div id="ks-number" data-wp-text="context.numberValue" data-ks-value></div>
 </bs:bsui-stack>
@@ -567,7 +572,7 @@ wp_interactivity_state( 'app/kitchen-sink', array() );
 
 <bs:bsui-stack direction="column" gap="3">
 	<bs:bsui-text variant="heading" tag="h2" content="Password Input" />
-	<bs:bsui-password-input nameAlt="password" placeholder="Enter password" value="context.passwordValue" onChange="app/kitchen-sink::actions.setPassword" />
+	<bs:bsui-password-input nameAlt="password" placeholder="Enter password" value="app/kitchen-sink::context.passwordValue" onChange="app/kitchen-sink::actions.setPassword" />
 
 	<div id="ks-password" data-wp-text="context.passwordValue" data-ks-value></div>
 </bs:bsui-stack>
@@ -610,14 +615,14 @@ wp_interactivity_state( 'app/kitchen-sink', array() );
 
 <bs:bsui-stack direction="column" gap="3">
 	<bs:bsui-text variant="heading" tag="h2" content="Rating" />
-	<bs:bsui-rating nameAlt="rating" max="5" defaultValue="3" value="context.ratingValue" onChange="app/kitchen-sink::actions.setRating" />
+	<bs:bsui-rating nameAlt="rating" max="5" defaultValue="3" value="app/kitchen-sink::context.ratingValue" onChange="app/kitchen-sink::actions.setRating" />
 
 	<div id="ks-rating" data-wp-text="context.ratingValue" data-ks-value></div>
 </bs:bsui-stack>
 
 <bs:bsui-stack direction="column" gap="3">
 	<bs:bsui-text variant="heading" tag="h2" content="Radio" />
-	<bs:bsui-radio-group defaultValue="comfortable" value="context.radioValue" onChange="app/kitchen-sink::actions.setRadio">
+	<bs:bsui-radio-group defaultValue="comfortable" value="app/kitchen-sink::context.radioValue" onChange="app/kitchen-sink::actions.setRadio">
 		<bs:bsui-radio value="default" label="Default" />
 		<bs:bsui-radio value="comfortable" label="Comfortable" />
 		<bs:bsui-radio value="compact" label="Compact" />
@@ -627,15 +632,28 @@ wp_interactivity_state( 'app/kitchen-sink', array() );
 
 <bs:bsui-stack direction="column" gap="3">
 	<bs:bsui-text variant="heading" tag="h2" content="Select" />
-	<bs:bsui-select placeholder="Select a fruit" onChange="app/kitchen-sink::actions.setSelect">
-		<bs:bsui-select-trigger />
-		<bs:bsui-select-popup>
-			<bs:bsui-select-option value="apple" label="Apple" />
-			<bs:bsui-select-option value="banana" label="Banana" />
-			<bs:bsui-select-option value="cherry" label="Cherry" />
-			<bs:bsui-select-option value="grape" label="Grape" />
-		</bs:bsui-select-popup>
-	</bs:bsui-select>
+	<bs:bsui-stack gap="4" wrap="true" grow="true">
+		<bs:bsui-stack direction="column" gap="2">
+			<bs:bsui-text variant="label" content="Below trigger" />
+			<bs:bsui-select placeholder="Select a fruit" onChange="app/kitchen-sink::actions.setSelect">
+				<bs:bsui-select-trigger />
+				<bs:bsui-select-popup>
+					<bs:bsui-select-option value="apple" label="Apple" />
+					<bs:bsui-select-option value="banana" label="Banana" />
+					<bs:bsui-select-option value="cherry" label="Cherry" />
+					<bs:bsui-select-option value="grape" label="Grape" />
+				</bs:bsui-select-popup>
+			</bs:bsui-select>
+		</bs:bsui-stack>
+		<bs:bsui-stack direction="column" gap="2">
+			<bs:bsui-text variant="label" content="Selected option overlay" />
+			<bs:bsui-select
+				defaultValue="cherry"
+				onChange="app/kitchen-sink::actions.setSelect"
+				options='[{"value":"apple","label":"Apple"},{"value":"banana","label":"Banana"},{"value":"cherry","label":"Cherry"},{"value":"grape","label":"Grape"}]'
+			/>
+		</bs:bsui-stack>
+	</bs:bsui-stack>
 	<div id="ks-select" data-wp-text="context.selectValue" data-ks-value></div>
 </bs:bsui-stack>
 
@@ -657,7 +675,7 @@ wp_interactivity_state( 'app/kitchen-sink', array() );
 
 <bs:bsui-stack direction="column" gap="3">
 	<bs:bsui-text variant="heading" tag="h2" content="Slider" />
-	<bs:bsui-slider defaultValue="50" min="0" max="100" step="1" value="context.sliderValue" onChange="app/kitchen-sink::actions.setSlider" />
+	<bs:bsui-slider defaultValue="50" min="0" max="100" step="1" value="app/kitchen-sink::context.sliderValue" onChange="app/kitchen-sink::actions.setSlider" />
 
 	<div id="ks-slider" data-wp-text="context.sliderValue" data-ks-value></div>
 </bs:bsui-stack>
@@ -674,7 +692,7 @@ wp_interactivity_state( 'app/kitchen-sink', array() );
 <bs:bsui-stack direction="column" gap="3">
 	<bs:bsui-text variant="heading" tag="h2" content="Switch" />
 	<bs:bsui-stack direction="column" gap="3" align="flex-start">
-		<bs:bsui-switch label="Airplane Mode" checked="context.switchOn" onChange="app/kitchen-sink::actions.setSwitch" />
+		<bs:bsui-switch name="airplane" label="Airplane Mode" checked="app/kitchen-sink::context.switchOn" onChange="app/kitchen-sink::actions.setSwitch" />
 		<bs:bsui-switch defaultChecked="true" label="Notifications" />
 
 	<div id="ks-switch" data-wp-text="context.switchOn" data-ks-value></div>
@@ -720,14 +738,14 @@ wp_interactivity_state( 'app/kitchen-sink', array() );
 
 <bs:bsui-stack direction="column" gap="3">
 	<bs:bsui-text variant="heading" tag="h2" content="Textarea" />
-	<bs:bsui-textarea placeholder="Type your message here." rows="4" value="context.textareaValue" onChange="app/kitchen-sink::actions.setTextarea" />
+	<bs:bsui-textarea placeholder="Type your message here." rows="4" value="app/kitchen-sink::context.textareaValue" onChange="app/kitchen-sink::actions.setTextarea" />
 
 	<div id="ks-textarea" data-wp-text="context.textareaValue" data-ks-value></div>
 </bs:bsui-stack>
 
 <bs:bsui-stack direction="column" gap="3">
 	<bs:bsui-text variant="heading" tag="h2" content="Time Picker" />
-	<bs:bsui-time-picker nameAlt="time" defaultValue="14:30" step="15" value="context.timeValue" onChange="app/kitchen-sink::actions.setTime" />
+	<bs:bsui-time-picker nameAlt="time" defaultValue="14:30" step="15" value="app/kitchen-sink::context.timeValue" onChange="app/kitchen-sink::actions.setTime" />
 
 	<div id="ks-time" data-wp-text="context.timeValue" data-ks-value></div>
 </bs:bsui-stack>
@@ -749,7 +767,7 @@ wp_interactivity_state( 'app/kitchen-sink', array() );
 <bs:bsui-stack direction="column" gap="3">
 	<bs:bsui-text variant="heading" tag="h2" content="Toggle" />
 	<bs:bsui-stack gap="4">
-		<bs:bsui-toggle label="Bold" checked="context.toggleOn" onChange="app/kitchen-sink::actions.setToggle" />
+		<bs:bsui-toggle label="Bold" checked="app/kitchen-sink::context.toggleOn" onChange="app/kitchen-sink::actions.setToggle" />
 		<bs:bsui-toggle defaultPressed="true" label="Italic" />
 	</bs:bsui-stack>
 	<div id="ks-toggle" data-wp-text="context.toggleOn" data-ks-value></div>

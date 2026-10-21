@@ -1,6 +1,9 @@
 import { store, getContext, getElement } from '@wordpress/interactivity';
 
 store( 'bsui/color-picker', {
+	callbacks: {
+		syncValue() { window.__bsui.syncValue( 'bsui/color-picker', getContext, store ); },
+	},
 	actions: {
 		handleColorInput( event ) {
 			const ctx = getContext();

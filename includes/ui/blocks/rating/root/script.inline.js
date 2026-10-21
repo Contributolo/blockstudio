@@ -13,6 +13,13 @@ function updateStars( root, filled ) {
 }
 
 store( 'bsui/rating', {
+	callbacks: {
+		syncValue() {
+			window.__bsui.syncValue( 'bsui/rating', getContext, store );
+			const ctx = getContext();
+			updateStars( getElement().ref, ctx.hover || ctx.value );
+		},
+	},
 	state: {
 		get formValue() {
 			return String( getContext().value );
@@ -45,11 +52,3 @@ store( 'bsui/rating', {
 		},
 	},
 } );
-
-// Init stars on load.
-setTimeout( () => {
-	document.querySelectorAll( '[data-bsui-rating]' ).forEach( ( root ) => {
-		const value = parseInt( root.querySelector( 'input[type="hidden"]' )?.value || '0', 10 );
-		updateStars( root, value );
-	} );
-}, 0 );

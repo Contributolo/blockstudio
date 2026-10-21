@@ -9,8 +9,9 @@ store( 'bsui/checkbox', {
 		},
 		get formValue() {
 			const ctx = getContext();
-			if ( ctx.indeterminate ) return '';
-			return ctx.checked ? ( ctx.value || 'on' ) : '';
+			const bound = window.__bsui.resolveBinding( ctx.checkedBinding, 'bsui/checkbox', getContext, store );
+			if ( ctx.indeterminate && bound === undefined ) return '';
+			return ( bound === undefined ? ctx.checked : bound ) ? ( ctx.value || 'on' ) : '';
 		},
 	},
 	actions: {

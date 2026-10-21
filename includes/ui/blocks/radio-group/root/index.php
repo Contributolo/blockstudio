@@ -10,11 +10,13 @@ $on_change   = ! empty( $a['onChange'] ) ? $a['onChange'] : '';
 	data-wp-interactive="bsui/radio-group"
 	data-wp-context='<?php echo esc_attr( wp_json_encode( array(
 		'value'       => $default,
+		'valueBinding' => $value,
 		'disabled'    => $disabled,
 		'orientation' => $orientation,
 		'name'        => $name,
 	) ) ); ?>'
 	data-bsui-radio-group-root
+	<?php if ( $value ) echo 'data-wp-watch--controlled="callbacks.syncValue"'; ?>
 	role="radiogroup"
 	aria-orientation="<?php echo esc_attr( $orientation ); ?>"
 	data-wp-on--keydown="actions.handleKeyDown"

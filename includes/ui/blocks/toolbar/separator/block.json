@@ -3,5 +3,6 @@
 	"name": "bsui/toolbar-separator",
 	"title": "Toolbar Separator",
 	"parent": ["bsui/toolbar"],
+	"usesContext": ["bsui/toolbar"],
 	"blockstudio": {}
 }

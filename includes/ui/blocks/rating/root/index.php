@@ -9,10 +9,12 @@ $on_change = ! empty( $a['onChange'] ) ? $a['onChange'] : '';
 	data-wp-interactive="bsui/rating"
 	data-wp-context='<?php echo esc_attr( wp_json_encode( array(
 		'value' => $default,
+		'valueBinding' => (string) ( $a['value'] ?? '' ),
 		'hover' => 0,
 		'max'   => $max,
 	) ) ); ?>'
 	data-bsui-rating
+	data-wp-watch="callbacks.syncValue"
 	role="radiogroup"
 	aria-label="Rating"
 	<?php if ( $disabled ) echo 'data-disabled'; ?>

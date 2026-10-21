@@ -62,6 +62,24 @@ test.describe( 'bsui/select precision', () => {
 		await page.waitForSelector( '[data-bsui-select-root]' );
 	} );
 
+	for ( const width of [ 390, 1280 ] ) {
+		test( `toolbar selected label overlays its compact trigger at ${ width }px`, async ( { page }, testInfo ) => {
+			await page.setViewportSize( { width, height: 900 } );
+			await page.goto( '/showcase/' );
+			const toolbar = page.getByRole( 'toolbar' );
+			await toolbar.evaluate( element => element.scrollIntoView( { block: 'center' } ) );
+			const trigger = toolbar.locator( '[data-bsui-select-trigger]' );
+			await trigger.click();
+			await toolbar.getByRole( 'option', { name: 'Georgia', exact: true } ).click();
+			await expect( trigger ).toHaveText( 'Georgia' );
+			await trigger.click();
+			const selected = toolbar.locator( '[role="option"][aria-selected="true"]' );
+			await expect( selected ).toBeVisible();
+			await expect( async () => expectTextOverlay( trigger, selected ) ).toPass();
+			await page.screenshot( { path: testInfo.outputPath( 'toolbar-overlay.png' ) } );
+		} );
+	}
+
 	test( 'selected option label text overlays the trigger label text', async ( {
 		page,
 	} ) => {

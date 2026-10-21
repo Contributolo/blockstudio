@@ -1,5 +1,5 @@
 <block name="bsui/menu">
-	<block name="bsui/menu-trigger" label="Actions"></block>
+	<block name="bsui/menu-trigger" trigger_label="Actions"></block>
 	<block name="bsui/menu-popup">
 		<block name="bsui/menu-item" label="Edit"></block>
 		<block name="bsui/menu-item" label="Duplicate"></block>

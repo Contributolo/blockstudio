@@ -227,7 +227,7 @@ jobs:
           npx wp-env run cli wp theme activate theme
           npx wp-env run cli wp rewrite structure '/%postname%/' --hard
           npx wp-env run cli wp bs pages sync
-      - name: Run select and card regressions
+      - name: Run UI regressions
         run: npm run test:e2e:ui:regressions
       - name: Stop UI regression site
         if: always()

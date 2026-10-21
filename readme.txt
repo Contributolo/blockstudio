@@ -60,9 +60,16 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 * Fix: blocks rendered outside the main query receive their post ID from block context, preserving documented Query Loop behavior (#141)
 * Fix: REST editor previews set up the edited post consistently and isolate post state and permissions between batch entries (#143)
 * Fix: scoped updater dependencies recognize WordPress constants, functions, WP-CLI, and Debug Bar (#144)
+* Fix: WP-CLI loads the updater with dot segments in the WordPress path and plugins symlinked from outside WordPress (#155)
 * Fix: class-token previews find CSS rules for plain and escaped class names (#153)
 * Fix: bundled select popups fit narrow viewports and position correctly with long labels and reduced motion (#154)
 * Fix: bundled card titles, descriptions, and other shared text components load their required typography styles (#154)
+* Fix: bundled controlled fields follow parent value changes and resets, including checkbox and switch form values
+* Fix: number fields without explicit minimum or maximum values no longer clamp every edit to zero
+* Fix: standalone toggles respond to pointer and keyboard input, and disabled collapsible triggers disable their buttons
+* Fix: toolbar separators span the toolbar and follow its orientation without overflowing narrow viewports
+* Fix: selected select options align with compact toolbar triggers, and menubar items use consistent popup spacing and hover styles
+* Fix: field cards use an inset content surface with consistent header spacing and responsive field widths
 * Performance: ordinary blocks skip hidden field initialization, and new nested repeaters receive their minimum rows before insertion without extra undo steps (#151)
 * Performance: editor HTML and CSS formatters load on demand instead of in the initial bundle (#149)
 * Performance: superseded single-block preview requests are aborted without clearing the current preview (#150)
