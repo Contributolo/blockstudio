@@ -354,9 +354,45 @@ class Ui {
 		$style  = self::global_asset( $root . 'global-style.css', 'style', 'blockstudio-ui-global' );
 		$script = self::global_asset( $root . 'global-script.js', 'script', 'blockstudio-ui-global-script' );
 
+		$style .= self::shared_text_asset( $block_names, $html );
+
 		return array(
 			'style'  => $style,
 			'script' => $script,
+		);
+	}
+
+	/**
+	 * Close the text dependency of components that emit text attributes directly.
+	 *
+	 * @param array<string> $block_names Selected block names.
+	 * @param string        $html        Rendered HTML.
+	 *
+	 * @return string Dependency asset, unless its block already owns the asset.
+	 */
+	private static function shared_text_asset( array $block_names, string $html ): string {
+		if ( in_array( 'bsui/text', $block_names, true ) ) {
+			return '';
+		}
+
+		$owners = array( 'bsui/card-title', 'bsui/card-description', 'bsui/field-description', 'bsui/file-upload' );
+
+		if ( array() === array_intersect( $owners, $block_names )
+			&& ! preg_match( '/\bdata-bsui-text(?:[\s=>\/]|$)/', $html )
+		) {
+			return '';
+		}
+
+		$path = BLOCKSTUDIO_DIR . '/includes/ui/blocks/text/root/style.inline.css';
+
+		return (string) Assets::render_inline(
+			'style.inline.css',
+			array( 'path' => $path ),
+			array(
+				'name' => 'bsui/text',
+				'file' => array( 'dirname' => dirname( $path ) ),
+			),
+			true
 		);
 	}
 

@@ -1,12 +1,19 @@
-import { BlockstudioFieldsOptions } from '@/types/types';
+import { cloneDeep } from 'lodash-es';
+import type { BlockstudioFieldsOptions } from '@/types/types';
 
-type DefaultValue = string | number | boolean | BlockstudioFieldsOptions[];
+type DefaultValue =
+  | string
+  | number
+  | boolean
+  | BlockstudioFieldsOptions[]
+  | Record<string, unknown>[];
 
 type BlockstudioDefaults = {
   attributes: BlockstudioDefaults[];
-  default: BlockstudioFieldsOptions[] | boolean | string | number;
+  default: DefaultValue;
   field: string;
   id: string;
+  min?: number;
   options: BlockstudioFieldsOptions[];
   type: string;
 };
@@ -24,6 +31,27 @@ export const getDefaults = (
   const defaultSetter = (item: BlockstudioDefaults) => {
     if (!item.id) {
       return;
+    }
+
+    if (item.field === 'repeater') {
+      if (Object.prototype.hasOwnProperty.call(attributes, item.id)) {
+        defaults[item.id] = attributes[item.id] as DefaultValue;
+        return;
+      }
+
+      const rows = Array.isArray(item.default)
+        ? item.default
+        : Number.isInteger(item.min) && Number(item.min) > 0
+          ? Array.from({ length: Number(item.min) }, () => ({}))
+          : null;
+
+      if (rows) {
+        defaults[item.id] = rows.map((row) => ({
+          ...cloneDeep(getDefaults(item.attributes)),
+          ...cloneDeep(row),
+        }));
+        return;
+      }
     }
 
     if (attributes?.[item.id]) {

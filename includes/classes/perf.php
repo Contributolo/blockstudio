@@ -63,9 +63,13 @@ class Perf {
 			return;
 		}
 
-		// Start collecting immediately, gate output on capability later.
+		// Start collecting immediately so 'total' covers plugin load. The user
+		// is only known from init on, which still precedes the default build
+		// and render phases.
 		self::$active = true;
 		self::start( 'total' );
+
+		add_action( 'init', array( __CLASS__, 'maybe_deactivate' ), PHP_INT_MIN );
 
 		add_filter(
 			'blockstudio/buffer/output',
@@ -77,6 +81,22 @@ class Perf {
 			},
 			PHP_INT_MAX
 		);
+	}
+
+	/**
+	 * Stop profiling for requests that may not receive its output.
+	 *
+	 * @return void
+	 */
+	public static function maybe_deactivate(): void {
+		if ( ! self::$active || self::can_finalize() ) {
+			return;
+		}
+
+		self::$active  = false;
+		self::$starts  = array();
+		self::$metrics = array();
+		self::$groups  = array();
 	}
 
 	/**

@@ -20,8 +20,6 @@ import {
   link,
   code,
 } from '@wordpress/icons';
-import parserHtml from 'prettier/plugins/html';
-import prettier from 'prettier/standalone';
 import { Base } from '@/blocks/components/base';
 import { Code } from '@/blocks/components/fields/components/code';
 import { getWysiwygExtensions } from '@/blocks/utils/wysiwyg-extensions';
@@ -61,6 +59,8 @@ export const WYSIWYG = ({
   const [opensInNewTab, setOpensInNewTab] = useState(false);
   const [selection, setSelection] = useState<number[] | null>(null);
   const [val, setVal] = useState(value);
+  const latestValue = useRef(val);
+  latestValue.current = val;
 
   const editor = useEditor({
     extensions: getWysiwygExtensions(item),
@@ -103,19 +103,35 @@ export const WYSIWYG = ({
 
   useEffect(() => {
     if (!editor) return;
+    let cancelled = false;
+    const originalValue = latestValue.current;
 
     if (codeMode) {
       const formatHtml = async () => {
+        const [{ default: prettier }, { default: parserHtml }] =
+          await Promise.all([
+            import(
+              /* webpackChunkName: "blocks/prettier" */ 'prettier/standalone'
+            ),
+            import(
+              /* webpackChunkName: "blocks/prettier-html" */ 'prettier/plugins/html'
+            ),
+          ]);
         const formatted = await prettier.format(editor.getHTML(), {
           parser: 'html',
           plugins: [parserHtml],
         });
-        setVal(formatted);
+        if (!cancelled && latestValue.current === originalValue)
+          setVal(formatted);
       };
-      formatHtml();
+      // Formatting is optional; a failed chunk must not make content uneditable.
+      formatHtml().catch(() => {});
     } else {
       editor.commands.setContent(val);
     }
+    return () => {
+      cancelled = true;
+    };
   }, [codeMode, editor]);
 
   const headings = item?.toolbar?.tags?.headings || [];

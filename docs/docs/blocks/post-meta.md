@@ -11,7 +11,7 @@ meta_description: "Access post meta data in your block templates."
 
 # Post Meta
 
-Since block templates are just normal PHP files, you can use any PHP code you want in them. However, since blocks don't have access to the global `$post` variable inside the editor, [get_the_ID()](https://developer.wordpress.org/reference/functions/get_the_id/) and other functions that depend on the variable will only work on the frontend.
+Since block templates are just normal PHP files, you can use any PHP code you want in them. In the post editor, block previews are rendered with the edited post as the global `$post` variable, so [get_the_ID()](https://developer.wordpress.org/reference/functions/get_the_id/) and other functions that depend on it work there too. Editors without an edited post, such as the Site Editor, have no global `$post`.
 
 Blockstudio provides four different ways to access the current post ID in the editor and the frontend.
 

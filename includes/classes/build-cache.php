@@ -35,6 +35,17 @@ final class Build_Cache {
 	private const POPULATE_CACHE_VERSION_OPTION = 'blockstudio_populate_cache_version';
 
 	/**
+	 * Meta keys WordPress writes as editing and login bookkeeping.
+	 *
+	 * `_edit_lock` is rewritten when an editor opens and on every Heartbeat
+	 * tick while it stays open, `_edit_last` only next to a post save that
+	 * already invalidates, and `session_tokens` on every login and logout.
+	 *
+	 * @var string[]
+	 */
+	private const POPULATE_IGNORED_META_KEYS = array( '_edit_lock', '_edit_last', 'session_tokens' );
+
+	/**
 	 * Seconds a burst of content writes is coalesced into one choice refresh.
 	 *
 	 * A translation sync or import writes meta rows continuously; refreshing
@@ -102,6 +113,13 @@ final class Build_Cache {
 				'set_user_role',
 				'add_user_role',
 				'remove_user_role',
+			) as $hook
+		) {
+			add_action( $hook, array( __CLASS__, 'invalidate_populate_cache' ) );
+		}
+
+		foreach (
+			array(
 				'added_post_meta',
 				'updated_post_meta',
 				'deleted_post_meta',
@@ -113,7 +131,7 @@ final class Build_Cache {
 				'deleted_user_meta',
 			) as $hook
 		) {
-			add_action( $hook, array( __CLASS__, 'invalidate_populate_cache' ) );
+			add_action( $hook, array( __CLASS__, 'invalidate_populate_cache_for_meta' ), 10, 3 );
 		}
 	}
 
@@ -562,6 +580,32 @@ final class Build_Cache {
 			( function_exists( 'wp_is_post_revision' ) && wp_is_post_revision( $post_id ) ) ||
 			( function_exists( 'wp_is_post_autosave' ) && wp_is_post_autosave( $post_id ) )
 		) {
+			return;
+		}
+
+		self::invalidate_populate_cache();
+	}
+
+	/**
+	 * Invalidate populate cache for meta writes that can change query results.
+	 *
+	 * @param int|int[] $meta_id   Meta ID, or IDs for deletions.
+	 * @param int       $object_id Object ID.
+	 * @param string    $meta_key  Meta key.
+	 *
+	 * @return void
+	 */
+	public static function invalidate_populate_cache_for_meta( $meta_id, $object_id, $meta_key ): void {
+		/**
+		 * Filter meta keys whose writes never change populated choices.
+		 *
+		 * @since 7.7.6
+		 *
+		 * @param string[] $meta_keys Meta keys. Defaults to `_edit_lock`, `_edit_last` and `session_tokens`.
+		 */
+		$ignored = (array) apply_filters( 'blockstudio/cache/populate_ignored_meta_keys', self::POPULATE_IGNORED_META_KEYS );
+
+		if ( in_array( $meta_key, $ignored, true ) ) {
 			return;
 		}
 

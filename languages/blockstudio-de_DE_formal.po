@@ -136,6 +136,18 @@ msgstr "Funktion ist nicht aufrufbar."
 msgid "Blockstudio ignored invalid configuration values:"
 msgstr "Blockstudio hat ungültige Konfigurationswerte ignoriert:"
 
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: Linktext"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: URL"
+
 #: src/admin/components/database-records-table.tsx
 msgid "True"
 msgstr "Ja"

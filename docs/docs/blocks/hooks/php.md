@@ -931,6 +931,19 @@ add_filter('blockstudio/settings/dev/canvas/admin_bar', function() {
 
 <!-- GENERATED_SETTINGS_END -->
 
+## WPML
+
+### blockstudio/wpml/config/label
+
+Filters the label of each key that `wp bs wpml config` writes. See
+[Change the labels](/docs/dev/wpml#change-the-labels) for the context array.
+
+```php title="functions.php"
+add_filter('blockstudio/wpml/config/label', function($label, $context) {
+  return str_replace(' (optional)', '', $label);
+}, 10, 2);
+```
+
 ## Canvas
 
 ### blockstudio/canvas/inventory
@@ -1127,6 +1140,22 @@ window has passed. The default is `30`. Return `0` to refresh on every write.
 ```php title="functions.php"
 add_filter('blockstudio/cache/populate_debounce', function() {
   return 120;
+});
+```
+
+### blockstudio/cache/populate_ignored_meta_keys
+
+Filters meta keys whose writes never refresh populated choices. By default
+these are the keys WordPress writes as editing and login bookkeeping:
+`_edit_lock`, refreshed by the editor and the Heartbeat while a post is open,
+`_edit_last`, written next to a post save that already refreshes, and
+`session_tokens`, written on login and logout. Add keys that change often but
+never affect a populate query.
+
+```php title="functions.php"
+add_filter('blockstudio/cache/populate_ignored_meta_keys', function(array $keys) {
+  $keys[] = '_my_view_counter';
+  return $keys;
 });
 ```
 

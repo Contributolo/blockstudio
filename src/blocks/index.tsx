@@ -19,12 +19,12 @@ import '@/blocks/integrations/seo';
 import { store } from '@/blocks/store';
 import { transforms } from '@/blocks/transforms';
 import { isAllowedToRender } from '@/blocks/utils/is-allowed-to-render';
+import { needsFieldInitialization } from '@/blocks/utils/needs-field-initialization';
 import { sendEvents } from '@/blocks/utils/send-events';
 import { store as tailwindStore } from '@/tailwind/store';
 import { useTailwind } from '@/tailwind/use-tailwind';
 import { BlockstudioAttribute } from '@/types/block';
 import { BlockstudioBlock, BlockstudioBlockAttributes } from '@/types/types';
-import { css } from '@/utils/css';
 import { onSavePost } from '@/utils/on-save-post';
 import type { PreloadEntry } from '../canvas/types';
 
@@ -82,11 +82,19 @@ const registerSingleBlock = (block: BlockstudioBlock) => {
         clientId,
         inheritedSetAttributes,
       );
-      const [isLoaded, setIsLoaded] = useState(false);
+      const [isLoaded, setIsLoaded] = useState(
+        () =>
+          !needsFieldInitialization(
+            block.blockstudio?.attributes,
+            attributes.blockstudio?.attributes,
+          ),
+      );
       const [isExpandedEditorOpen, setIsExpandedEditorOpen] = useState(false);
 
       useEffect(() => {
-        setTimeout(() => setIsLoaded(true), 100);
+        if (isLoaded) return;
+        const timer = setTimeout(() => setIsLoaded(true), 100);
+        return () => clearTimeout(timer);
       }, []);
 
       const expandedEditorBlocks = [block, ...getMatches(block.name)];
@@ -95,7 +103,7 @@ const registerSingleBlock = (block: BlockstudioBlock) => {
         <>
           {!isLoaded &&
             createPortal(
-              <div css={css({ display: 'hidden' })}>
+              <div data-blockstudio-initialization style={{ display: 'none' }}>
                 <Fields
                   {...{
                     attributes,

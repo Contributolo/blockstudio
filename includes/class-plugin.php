@@ -244,6 +244,7 @@ class Plugin {
 	 * @return void
 	 */
 	private function init(): void {
+		$this->prime_option_caches();
 		$this->init_storage_system();
 
 		Translations::register();
@@ -403,6 +404,29 @@ class Plugin {
 				PHP_INT_MAX
 			);
 		}
+	}
+
+	/**
+	 * Load the options read during every request with one query.
+	 *
+	 * These options are not autoloaded, and some of them usually do not exist,
+	 * so without an object cache each read would be its own query. Priming also
+	 * records missing options, which get_option() then answers from cache.
+	 *
+	 * @return void
+	 */
+	private function prime_option_caches(): void {
+		wp_prime_option_caches(
+			array(
+				'blockstudio_settings',
+				'blockstudio_static_prerender_feature_state',
+				'blockstudio_build_lock_cleanup_version',
+				'blockstudio_pages_collection_manifests',
+				'blockstudio_collection_post_types_signature',
+				'blockstudio_populate_cache_version',
+				'blockstudio_pages_template_for',
+			)
+		);
 	}
 
 	/**

@@ -36,7 +36,7 @@ jobs:
       - name: Verify required files exist
         run: |
           cd build/blockstudio
-          for f in blockstudio.php bootstrap.php readme.txt vendor/autoload.php lib/runtime-autoload.php lib/tailwindphp-autoload.php includes/class-plugin.php; do
+          for f in blockstudio.php bootstrap.php readme.txt vendor/autoload.php lib/runtime-autoload.php lib/tailwindphp-autoload.php includes/class-plugin.php includes/admin/assets/blocks/index.tsx.js includes/admin/assets/blocks/prettier.js includes/admin/assets/blocks/prettier-html.js includes/admin/assets/blocks/prettier-postcss.js; do
             if [ ! -f "$f" ]; then
               echo "MISSING: $f"
               exit 1

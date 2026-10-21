@@ -28,6 +28,10 @@ if ( '' === $mode ) {
 			}
 		}
 	}
+	$process = proc_open( array( PHP_BINARY, __FILE__, $root, 'updater', $autoload ), array( STDIN, STDOUT, STDERR ), $pipes );
+	if ( ! is_resource( $process ) || 0 !== proc_close( $process ) ) {
+		exit( 1 );
+	}
 	exit( 0 );
 }
 
@@ -36,6 +40,10 @@ $assert = static function ( bool $condition, string $message ): void {
 		throw new RuntimeException( $message );
 	}
 };
+if ( 'updater' === $mode ) {
+	require __DIR__ . '/fixtures/updater-wordpress.php';
+	exit( 0 );
+}
 $public = array(
 	'League\\CommonMark\\GithubFlavoredMarkdownConverter',
 	'Symfony\\Component\\Yaml\\Yaml',

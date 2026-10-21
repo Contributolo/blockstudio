@@ -201,6 +201,48 @@ jobs:
           path: test-results/
           retention-days: 7
 
+  ui-regressions:
+    name: UI Regression Tests
+    runs-on: [self-hosted, Linux, X64, inline0-blockstudio]
+    timeout-minutes: 25
+    env:
+      COMPOSE_PROJECT_NAME: blockstudio-ui
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 20
+          cache: npm
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+      - run: scripts/ci/npm-ci.sh
+      - run: composer install --no-interaction
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+      - name: Start UI regression site
+        working-directory: tests/ui
+        run: |
+          npx wp-env start
+          npx wp-env run cli wp theme activate theme
+          npx wp-env run cli wp rewrite structure '/%postname%/' --hard
+          npx wp-env run cli wp bs pages sync
+      - name: Run select and card regressions
+        run: npm run test:e2e:ui:regressions
+      - name: Stop UI regression site
+        if: always()
+        working-directory: tests/ui
+        run: npx wp-env stop
+      - name: Upload UI regression artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-regression-results
+          path: |
+            test-results/
+            tests/ui/test-results/
+          retention-days: 7
+
   e2e-empty:
     name: E2E Tests (Empty Theme)
     runs-on: [self-hosted, Linux, X64, inline0-blockstudio]

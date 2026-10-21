@@ -524,7 +524,9 @@ not structural block discovery or compiled assets. Choices refresh separately
 under a fixed build-path lock. A burst of writes, such as a translation sync
 or an import, is coalesced: the first write after a quiet period refreshes
 immediately and the last write of the burst is reflected once thirty seconds
-have passed, adjustable with `blockstudio/cache/populate_debounce`. The editor
+have passed, adjustable with `blockstudio/cache/populate_debounce`. Meta that
+WordPress writes as bookkeeping, such as the post edit lock, does not count as a
+change; `blockstudio/cache/populate_ignored_meta_keys` extends that list. The editor
 always queries live options, so the window only affects cached choices read
 at render time. Source files and build settings still invalidate
 the structural cache normally. Overwriting choices does not rescan the cache
@@ -5497,6 +5499,27 @@ Blockstudio adds another environment variable that will come in handy for block 
 {% endif %}
 ```
 
+## Outside templates
+
+`$isEditor` and `$isPreview` exist only inside the template. Code that runs
+during the same render but outside the template, such as a theme helper called
+from a template or a filter like `blockstudio/blocks/components/rich_text/render`,
+can call `bs_is_editor()` and `bs_is_preview()`. They return the same values the
+template receives.
+
+```php
+function theme_card_title(string $title): string {
+  if ($title === '' && bs_is_editor()) {
+    return '<span class="placeholder">Add a title</span>';
+  }
+
+  return esc_html($title);
+}
+```
+
+Block tags always render frontend markup, so inside a block rendered from a
+block tag both functions return `false`, as `$isEditor` and `$isPreview` do.
+
 ### Context
 
 When blocks are used inside a loop (for example, a Query block), the block is executed once for each iteration of the loop. Blockstudio provides handy shortcuts for accessing the current loop and outer context.
@@ -5562,6 +5585,8 @@ The `$block` / `$b` variable contains:
 | `postType` | Current post type |
 | `context` | Loop context (when inside a Query block) |
 
+Inside a Query block, `postId` stays the post being viewed, while `$post_id` and `context.postId` follow the current loop item. When there is no queried post, for example in a REST request or WP-CLI, `postId` is the post the block is rendered for, taken from the `postId` block context or the global post.
+
 ## Parent Context
 
 When using `usesContext`, access parent block data via `$context`:
@@ -5583,7 +5608,7 @@ See InnerBlocks Context for more details.
 
 ### Post Meta
 
-Since block templates are just normal PHP files, you can use any PHP code you want in them. However, since blocks don't have access to the global `$post` variable inside the editor, get_the_ID() and other functions that depend on the variable will only work on the frontend.
+Since block templates are just normal PHP files, you can use any PHP code you want in them. In the post editor, block previews are rendered with the edited post as the global `$post` variable, so get_the_ID() and other functions that depend on it work there too. Editors without an edited post, such as the Site Editor, have no global `$post`.
 
 Blockstudio provides four different ways to access the current post ID in the editor and the frontend.
 
@@ -9047,6 +9072,19 @@ add_filter('blockstudio/settings/path', function() {
 });
 ```
 
+## WPML
+
+### blockstudio/wpml/config/label
+
+Filters the label of each key that `wp bs wpml config` writes. See
+Change the labels for the context array.
+
+```php
+add_filter('blockstudio/wpml/config/label', function($label, $context) {
+  return str_replace(' (optional)', '', $label);
+}, 10, 2);
+```
+
 ## Canvas
 
 ### blockstudio/canvas/inventory
@@ -9243,6 +9281,22 @@ window has passed. The default is `30`. Return `0` to refresh on every write.
 ```php
 add_filter('blockstudio/cache/populate_debounce', function() {
   return 120;
+});
+```
+
+### blockstudio/cache/populate_ignored_meta_keys
+
+Filters meta keys whose writes never refresh populated choices. By default
+these are the keys WordPress writes as editing and login bookkeeping:
+`_edit_lock`, refreshed by the editor and the Heartbeat while a post is open,
+`_edit_last`, written next to a post save that already refreshes, and
+`session_tokens`, written on login and logout. Add keys that change often but
+never affect a populate query.
+
+```php
+add_filter('blockstudio/cache/populate_ignored_meta_keys', function(array $keys) {
+  $keys[] = '_my_view_counter';
+  return $keys;
 });
 ```
 
@@ -13141,6 +13195,24 @@ Production performance in Blockstudio is one profile switch, a set of
 measurement tools to verify what it does, and two render techniques that keep
 repeated work out of the page.
 
+## Editor and Request Overhead
+
+The editor renders ordinary blocks without mounting an extra hidden field tree.
+New repeater rows are initialized from registered defaults, including nested
+minimum rows. Existing values are preserved. Editor asset fields and custom
+controls keep the initialization they need.
+
+HTML and CSS formatting code is loaded when the relevant editor control needs
+it. A newer single-block preview request cancels the previous browser request
+while keeping the displayed preview. Cancellation cannot guarantee that PHP
+stops a render that has already started on the server.
+
+On the server, files fields prime their attachment caches together, and blocks
+without matching extensions skip unused extension transformations. Common
+request options are primed together; ordinary frontend requests do not look up
+the editor asset-capture transient. These changes do not require a persistent
+object cache or a performance profile.
+
 ## Performance profiles
 
 `performance.profile` turns production frontend defaults on in one place:
@@ -13216,7 +13288,9 @@ add_filter('blockstudio/settings/dev/perf', '__return_true');
 ```
 
 The profiler only outputs data for logged-in users with `edit_posts`
-capability.
+capability. Requests that will not receive the output switch the profiler
+off at `init`, so the query parameter or the setting adds no measurement work
+to them.
 
 ### Output
 
@@ -15675,7 +15749,7 @@ The extension maps every Blockstudio field type to a concrete PHP type:
 
 The extension ships stubs for the full Blockstudio public API:
 
-- `bs_render_block()`, `bs_get_group()`, `bs_get_scoped_class()`, `bs_db_form()`
+- `bs_render_block()`, `bs_get_group()`, `bs_get_scoped_class()`, `bs_db_form()`, `bs_is_editor()`, `bs_is_preview()`
 - `Db::get()`, `Db::create()`, `Db::list()`, `Db::get_record()`, `Db::update()`, `Db::delete()`
 - `Settings::get()`, `Settings::get_all()`
 - `Field_Registry::instance()`, `Field_Registry::all()`, `Field_Registry::get()`
@@ -15936,7 +16010,7 @@ becomes:
 							<key name="title" label="Cards: Title" />
 							<key name="image" type="post-ids" sub-type="attachment" />
 							<key name="link">
-								<key name="title" label="Cards: Button" />
+								<key name="title" label="Cards: Button: Link text" />
 								<key name="url" type="link" label="Cards: Button: URL" />
 							</key>
 						</key>
@@ -15995,7 +16069,34 @@ as a CSS class.
 
 The `label` of each key is the field label, preceded by the labels of the
 enclosing repeaters and groups with an ID. WPML shows it as the field name in
-the translation editor.
+the translation editor. The two keys of a `link` field add `Link text` and
+`URL` to the label. These suffixes are translated into the site language, so
+run the command with the locale your translators work in.
+
+### Change the labels
+
+Field labels are written for the block editor and can carry hints such as
+"Image (optional)" that mean nothing in the translation editor. The
+`blockstudio/wpml/config/label` filter receives each label before it is
+written, with the context of the key:
+
+- `block`: the block name.
+- `path`: the storage path of the field below `blockstudio.attributes`, with
+  a level `*` for the rows of each repeater, for example `cards/*/link`.
+- `field`: the field definition.
+- `parents`: the labels of the enclosing repeaters and groups with an ID.
+- `part`: `text` for a text field, `title` or `url` for the two keys of a
+  link field.
+
+```php
+add_filter('blockstudio/wpml/config/label', function ($label, $context) {
+  return str_replace(' (optional)', '', $label);
+}, 10, 2);
+```
+
+Return an empty string to leave out the label of a key, so WPML shows the
+label of the block instead. A return value that is not a string keeps the
+original label. Run the command again after changing the filter.
 
 ### Fields with the same storage key
 

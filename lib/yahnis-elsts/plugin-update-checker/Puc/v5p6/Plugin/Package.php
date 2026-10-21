@@ -124,7 +124,7 @@ if (!class_exists(Package::class, \false)) {
                 $this->updateChecker->triggerError(sprintf("Can't to read the plugin header for '%s'. The file does not exist.", $this->updateChecker->pluginFile), \E_USER_WARNING);
                 return array();
             }
-            if (!function_exists('BlockstudioVendor\get_plugin_data')) {
+            if (!function_exists('get_plugin_data')) {
                 require_once ABSPATH . '/wp-admin/includes/plugin.php';
             }
             return get_plugin_data($this->pluginAbsolutePath, \false, \false);
@@ -143,16 +143,16 @@ if (!class_exists(Package::class, \false)) {
         {
             static $cachedResult = null;
             if ($cachedResult === null) {
-                if (!defined('BlockstudioVendor\WPMU_PLUGIN_DIR') || !is_string(WPMU_PLUGIN_DIR)) {
+                if (!defined('WPMU_PLUGIN_DIR') || !is_string(\WPMU_PLUGIN_DIR)) {
                     $cachedResult = \false;
                     return $cachedResult;
                 }
                 //Convert both paths to the canonical form before comparison.
-                $muPluginDir = realpath(WPMU_PLUGIN_DIR);
+                $muPluginDir = realpath(\WPMU_PLUGIN_DIR);
                 $pluginPath = realpath($this->pluginAbsolutePath);
                 //If realpath() fails, just normalize the syntax instead.
                 if ($muPluginDir === \false || $pluginPath === \false) {
-                    $muPluginDir = PucFactory::normalizePath(WPMU_PLUGIN_DIR);
+                    $muPluginDir = PucFactory::normalizePath(\WPMU_PLUGIN_DIR);
                     $pluginPath = PucFactory::normalizePath($this->pluginAbsolutePath);
                 }
                 $cachedResult = strpos($pluginPath, $muPluginDir) === 0;

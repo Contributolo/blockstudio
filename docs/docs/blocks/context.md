@@ -75,6 +75,8 @@ The `$block` / `$b` variable contains:
 | `postType` | Current post type |
 | `context` | Loop context (when inside a Query block) |
 
+Inside a Query block, `postId` stays the post being viewed, while `$post_id` and `context.postId` follow the current loop item. When there is no queried post, for example in a REST request or WP-CLI, `postId` is the post the block is rendered for, taken from the `postId` block context or the global post.
+
 ## Parent Context
 
 When using `usesContext`, access parent block data via `$context`:

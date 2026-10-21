@@ -539,6 +539,50 @@ if ( ! function_exists( 'bs_get_scoped_class' ) ) {
 	}
 }
 
+if ( ! function_exists( 'bs_is_editor' ) ) {
+	/**
+	 * Whether Blockstudio is rendering for the block editor canvas.
+	 *
+	 * Gives the value templates receive as $isEditor to code outside the
+	 * template, such as theme helpers called from a template or render
+	 * filters. False on the frontend, in the inserter preview, and inside
+	 * block tags, which always render frontend markup.
+	 *
+	 * @since 7.7.6
+	 *
+	 * @return bool True during an editor render.
+	 *
+	 * @example $show_hint = bs_is_editor() && empty( $title );
+	 *
+	 * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound -- Public API function.
+	 */
+	function bs_is_editor(): bool {
+		// phpcs:enable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
+		return Blockstudio\Block::is_render_mode( 'editor' );
+	}
+}
+
+if ( ! function_exists( 'bs_is_preview' ) ) {
+	/**
+	 * Whether Blockstudio is rendering for the block inserter preview.
+	 *
+	 * Gives the value templates receive as $isPreview to code outside the
+	 * template. False on the frontend and in the editor canvas.
+	 *
+	 * @since 7.7.6
+	 *
+	 * @return bool True during an inserter preview render.
+	 *
+	 * @example $items = bs_is_preview() ? array_slice( $items, 0, 3 ) : $items;
+	 *
+	 * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound -- Public API function.
+	 */
+	function bs_is_preview(): bool {
+		// phpcs:enable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
+		return Blockstudio\Block::is_render_mode( 'preview' );
+	}
+}
+
 if ( ! function_exists( 'blockstudio_pages' ) ) {
 	/**
 	 * Get registered file-based pages.

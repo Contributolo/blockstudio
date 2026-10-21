@@ -81,6 +81,12 @@ class Extensions {
 		$extensions = Build::extensions();
 		$matches    = self::get_matches( $block['blockName'], $extensions );
 
+		// Without a matching extension there are no definitions to transform,
+		// so no code field can ask for a selector either.
+		if ( empty( $matches ) ) {
+			return $block_content;
+		}
+
 		$attributes       = array();
 		$block_attributes = $block['attrs']['blockstudio']['attributes'] ?? array();
 
@@ -108,10 +114,6 @@ class Extensions {
 			false,
 			$attributes
 		);
-
-		if ( empty( $matches ) && ! ( $attribute_data['hasCodeSelector'] ?? false ) ) {
-			return $block_content;
-		}
 
 		$content = new WP_HTML_Tag_Processor( $block_content );
 

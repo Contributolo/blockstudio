@@ -132,8 +132,8 @@ if (!class_exists(PucFactory::class, \false)) {
         protected static function isPluginFile($absolutePath)
         {
             //Is the file inside the "plugins" or "mu-plugins" directory?
-            $pluginDir = self::normalizePath(WP_PLUGIN_DIR);
-            $muPluginDir = self::normalizePath(WPMU_PLUGIN_DIR);
+            $pluginDir = self::normalizePath(\WP_PLUGIN_DIR);
+            $muPluginDir = self::normalizePath(\WPMU_PLUGIN_DIR);
             if (strpos($absolutePath, $pluginDir) === 0 || strpos($absolutePath, $muPluginDir) === 0) {
                 return \true;
             }
@@ -143,7 +143,7 @@ if (!class_exists(PucFactory::class, \false)) {
             }
             //Does it have a valid plugin header?
             //This is a last-ditch check for plugins symlinked from outside the WP root.
-            if (function_exists('BlockstudioVendor\get_file_data')) {
+            if (function_exists('get_file_data')) {
                 $headers = get_file_data($absolutePath, array('Name' => 'Plugin Name'), 'plugin');
                 return !empty($headers['Name']);
             }

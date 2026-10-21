@@ -119,6 +119,14 @@ export const Fields = ({
     repeaterId = '',
     transform = false,
   ) => {
+    if (
+      portal &&
+      item.type !== 'repeater' &&
+      !(item.type === 'code' && (item.asset || extensions)) &&
+      !isCustomFieldTypeName(item.type)
+    )
+      return false;
+
     if (item.type === 'message')
       return <Message {...{ attributes, block }} value={item.value ?? ''} />;
 
@@ -232,7 +240,11 @@ export const Fields = ({
         item.type === 'checkbox' ||
         (item.type === 'select' && item.multiple === true);
 
-      if (stored || (stored === 0 && isMultipleOption)) {
+      if (
+        stored ||
+        (item.type === 'repeater' && stored !== undefined) ||
+        (stored === 0 && isMultipleOption)
+      ) {
         v = stored;
         val = v?.value || v;
       } else {
@@ -240,7 +252,11 @@ export const Fields = ({
       }
     }
 
-    if (item.type === 'repeater' && !v && !isDeleting.current) {
+    if (
+      item.type === 'repeater' &&
+      (v === undefined || v === '') &&
+      !isDeleting.current
+    ) {
       if (Array.isArray(item?.default) && item.default.length > 0) {
         v = item.default;
       } else if (item?.min && item.min >= 1) {

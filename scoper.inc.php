@@ -24,8 +24,12 @@ return array(
 	'expose-global-classes'   => false,
 	'expose-global-functions' => false,
 	'expose-global-constants' => false,
-	'exclude-classes'         => array( '/^WP_/', 'Plugin_Upgrader_Skin', 'Theme_Upgrader_Skin', 'Debug_Bar_Panel' ),
-	'exclude-functions'       => array( '/^wp_/' ),
+	// WordPress symbols stay global. The update checker also names them in
+	// defined(), function_exists() and class_exists() strings, which would
+	// otherwise be prefixed and never match.
+	'exclude-classes'         => array( '/^WP_/', 'Plugin_Upgrader_Skin', 'Theme_Upgrader_Skin', 'Debug_Bar', 'Debug_Bar_Panel' ),
+	'exclude-functions'       => array( '/^wp_/', '_cleanup_header_comment', 'get_core_updates', 'get_file_data', 'get_plugin_data', 'get_plugins', 'get_submit_button', 'get_user_locale' ),
+	'exclude-constants'       => array( '/^WP_/', 'WPMU_PLUGIN_DIR', 'DOING_CRON' ),
 	'patchers'                => array(
 		static function ( string $file, string $prefix, string $content ): string {
 			if ( 'load-v5p6.php' === basename( $file ) ) {

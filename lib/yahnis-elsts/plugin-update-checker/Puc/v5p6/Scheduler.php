@@ -46,7 +46,7 @@ if (!class_exists(Scheduler::class, \false)) {
                     //phpcs:ignore WordPress.WP.CronInterval.ChangeDetected -- WPCS fails to parse the callback.
                     add_filter('cron_schedules', array($this, '_addCustomSchedule'));
                 }
-                if (!wp_next_scheduled($this->cronHook) && !defined('BlockstudioVendor\WP_INSTALLING')) {
+                if (!wp_next_scheduled($this->cronHook) && !defined('WP_INSTALLING')) {
                     //Randomly offset the schedule to help prevent update server traffic spikes. Without this
                     //most checks may happen during times of day when people are most likely to install new plugins.
                     $upperLimit = max($this->checkPeriod * 3600 - 15 * 60, 1);
@@ -191,7 +191,7 @@ if (!class_exists(Scheduler::class, \false)) {
             } else if ($this->throttleRedundantChecks && $this->updateChecker->getUpdate() !== null) {
                 //Check less frequently if it's already known that an update is available.
                 $period = $this->throttledCheckPeriod * 3600;
-            } else if (defined('BlockstudioVendor\DOING_CRON') && constant('DOING_CRON')) {
+            } else if (defined('DOING_CRON') && constant('DOING_CRON')) {
                 //WordPress cron schedules are not exact, so let's do an update check even
                 //if slightly less than $checkPeriod hours have elapsed since the last check.
                 $cronFuzziness = 20 * 60;

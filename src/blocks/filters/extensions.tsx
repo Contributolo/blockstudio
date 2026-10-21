@@ -7,6 +7,7 @@ import { cloneDeep, isArray, set as lodashSet } from 'lodash-es';
 import { Fields } from '@/blocks/components/fields';
 import { getEditorDocument } from '@/blocks/utils/get-editor-document';
 import { joinListValues } from '@/blocks/utils/join-list-values';
+import { needsFieldInitialization } from '@/blocks/utils/needs-field-initialization';
 import { parseTemplate } from '@/blocks/utils/parse-template';
 import { selectors as selectorsTailwind } from '@/tailwind/store/selectors';
 import {
@@ -14,7 +15,6 @@ import {
   BlockstudioBlock,
   BlockstudioBlockAttributes,
 } from '@/types/types';
-import { css } from '@/utils/css';
 
 const extensions = window.blockstudioAdmin.data.extensions;
 const isCanvas = !!(window as any).blockstudioCanvas;
@@ -192,7 +192,20 @@ addFilter(
         ) {
           return;
         }
-        setTimeout(() => setIsLoaded(true), 100);
+        const needsInitialization = getMatches(props.name).some(
+          (block: BlockstudioBlock) =>
+            needsFieldInitialization(
+              block.blockstudio?.attributes,
+              attributes.blockstudio?.attributes,
+              true,
+            ),
+        );
+        if (!needsInitialization) {
+          setIsLoaded(true);
+          return;
+        }
+        const timer = setTimeout(() => setIsLoaded(true), 100);
+        return () => clearTimeout(timer);
       }, []);
 
       if (isLoaded) {
@@ -203,19 +216,27 @@ addFilter(
               (e: BlockstudioBlock, index: number) => {
                 return (
                   <>
-                    {createPortal(
-                      <div css={css({ display: 'none' })}>
-                        <Fields
-                          {...{ attributes, setAttributes }}
-                          clientId={props.clientId}
-                          block={e}
-                          extensions
-                          portal
-                        />
-                        <style>{`.blockstudio-fields .components-form-toggle__track, .blockstudio-fields .components-form-toggle__thumb { transition: none !important; }`}</style>
-                      </div>,
-                      document.body,
-                    )}
+                    {needsFieldInitialization(
+                      e.blockstudio?.attributes,
+                      attributes.blockstudio?.attributes,
+                      true,
+                    ) &&
+                      createPortal(
+                        <div
+                          data-blockstudio-initialization
+                          style={{ display: 'none' }}
+                        >
+                          <Fields
+                            {...{ attributes, setAttributes }}
+                            clientId={props.clientId}
+                            block={e}
+                            extensions
+                            portal
+                          />
+                          <style>{`.blockstudio-fields .components-form-toggle__track, .blockstudio-fields .components-form-toggle__thumb { transition: none !important; }`}</style>
+                        </div>,
+                        document.body,
+                      )}
                     <InspectorControls
                       key={index}
                       {...((

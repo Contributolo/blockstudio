@@ -14,6 +14,24 @@ Production performance in Blockstudio is one profile switch, a set of
 measurement tools to verify what it does, and two render techniques that keep
 repeated work out of the page.
 
+## Editor and Request Overhead
+
+The editor renders ordinary blocks without mounting an extra hidden field tree.
+New repeater rows are initialized from registered defaults, including nested
+minimum rows. Existing values are preserved. Editor asset fields and custom
+controls keep the initialization they need.
+
+HTML and CSS formatting code is loaded when the relevant editor control needs
+it. A newer single-block preview request cancels the previous browser request
+while keeping the displayed preview. Cancellation cannot guarantee that PHP
+stops a render that has already started on the server.
+
+On the server, files fields prime their attachment caches together, and blocks
+without matching extensions skip unused extension transformations. Common
+request options are primed together; ordinary frontend requests do not look up
+the editor asset-capture transient. These changes do not require a persistent
+object cache or a performance profile.
+
 ## Performance profiles
 
 `performance.profile` turns production frontend defaults on in one place:
@@ -89,7 +107,9 @@ add_filter('blockstudio/settings/dev/perf', '__return_true');
 ```
 
 The profiler only outputs data for logged-in users with `edit_posts`
-capability.
+capability. Requests that will not receive the output switch the profiler
+off at `init`, so the query parameter or the setting adds no measurement work
+to them.
 
 ### Output
 

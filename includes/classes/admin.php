@@ -207,11 +207,15 @@ class Admin {
 			: '';
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
+		if ( empty( $special_id ) ) {
+			return;
+		}
+
 		$expected_id = strtolower(
 			get_transient( 'blockstudio_editor_expected_capture_assets_id' )
 		);
 
-		if ( empty( $special_id ) || $special_id !== $expected_id ) {
+		if ( $special_id !== $expected_id ) {
 			return;
 		}
 

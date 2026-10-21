@@ -343,6 +343,8 @@ blockstudio_report_api_collisions(
 		'bs_render_data_attributes',
 		'bs_get_group',
 		'bs_get_scoped_class',
+		'bs_is_editor',
+		'bs_is_preview',
 		'blockstudio_pages',
 		'blockstudio_page_tree',
 		'blockstudio_page_children',

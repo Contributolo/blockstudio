@@ -152,8 +152,6 @@ class Rest {
 			function () {
 				$permission      = fn() => Admin::is_allowed();
 				$permission_edit = function ( WP_REST_Request $request ) {
-					global $post;
-
 					$post_id = (int) (
 						$request->get_param( 'postId' ) ??
 						$request->get_param( 'post_id' ) ??
@@ -161,9 +159,9 @@ class Rest {
 					);
 
 					if ( $post_id > 0 ) {
-						$post = get_post( $post_id ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- Setting post context for permission check.
+						$edited_post = get_post( $post_id );
 
-						if ( ! $post || ! current_user_can( 'edit_post', $post->ID ) ) {
+						if ( ! $edited_post || ! current_user_can( 'edit_post', $edited_post->ID ) ) {
 							return new WP_Error(
 								'block_cannot_read',
 								__(
@@ -349,11 +347,14 @@ class Rest {
 	 * @return array The populated attributes.
 	 */
 	public function attributes_populate( WP_REST_Request $arguments ): array {
-		$attributes = ( new Attribute_Builder() )->build(
-			array( $arguments->get_params() )
+		$post_id = (int) ( $arguments->get_param( 'postId' ) ?? $arguments->get_param( 'post_id' ) ?? 0 );
+		return $this->with_editor_context(
+			array_merge( $arguments->get_query_params(), array( 'postId' => $post_id ) ),
+			static function () use ( $arguments ): array {
+				$attributes = ( new Attribute_Builder() )->build( array( $arguments->get_params() ) );
+				return array_values( $attributes )[0]['options'] ?? array();
+			}
 		);
-
-		return array_values( $attributes )[0]['options'] ?? array();
 	}
 
 	/**
@@ -366,14 +367,11 @@ class Rest {
 	 * @return WP_Error|WP_HTTP_Response|WP_REST_Response The response.
 	 */
 	public function gutenberg_block_render( $request ) {
-		global $post;
-
-		$post_id = isset( $request['post_id'] ) ? (int) $request['post_id'] : 0;
-
-		if ( $post_id > 0 ) {
-			$post = get_post( $post_id ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- Setting post context for rendering.
-			setup_postdata( $post );
-		}
+		$post_id = (int) (
+			$request->get_param( 'postId' ) ??
+			$request->get_param( 'post_id' ) ??
+			0
+		);
 
 		$registry   = WP_Block_Type_Registry::get_instance();
 		$registered = $registry->get_registered( $request['name'] );
@@ -403,7 +401,7 @@ class Rest {
 		);
 
 		$data = array(
-			'rendered' => render_block( $block ),
+			'rendered' => $this->with_editor_context( array_merge( $request->get_query_params(), array( 'postId' => $post_id ) ), static fn (): string => render_block( $block ) ),
 		);
 
 		return rest_ensure_response( $data );
@@ -422,24 +420,77 @@ class Rest {
 		$blocks          = $request->get_param( 'data' );
 		$rendered_blocks = array();
 
+		if ( ! is_array( $blocks ) ) {
+			return new WP_Error( 'block_invalid', __( 'Invalid block.', 'blockstudio' ), array( 'status' => 400 ) );
+		}
+
 		foreach ( $blocks as $block ) {
-			$_GET       = $block['post'];
+			if ( ! is_array( $block ) || ! is_array( $block['post'] ?? null ) || ! is_array( $block['attributes'] ?? null ) || ! is_string( $block['name'] ?? null ) || ! is_string( $block['clientId'] ?? null ) ) {
+				continue;
+			}
+			$post_id = (int) ( $block['post']['postId'] ?? $block['post']['post_id'] ?? 0 );
+
+			// A rejected entry must never reach templates or inherit another entry's post.
+			if ( $post_id > 0 && ( ! get_post( $post_id ) || ! current_user_can( 'edit_post', $post_id ) ) ) {
+				continue;
+			}
+
 			$block_data = array(
 				'blockName'    => $block['name'],
 				'attrs'        => array_merge(
 					$block['attributes'],
 					array(
-						'_BLOCKSTUDIO_CONTEXT' => $block['context'],
+						'_BLOCKSTUDIO_CONTEXT' => $block['context'] ?? array(),
 					)
 				),
 				'innerHTML'    => '',
 				'innerContent' => array(),
 			);
 
-			$rendered_blocks[ $block['clientId'] ] = render_block( $block_data );
+			$rendered_blocks[ $block['clientId'] ] = $this->with_editor_context( array_merge( $block['post'], array( 'postId' => $post_id ) ), static fn (): string => render_block( $block_data ) );
 		}
 
 		return rest_ensure_response( $rendered_blocks );
+	}
+
+	/**
+	 * Run editor work without leaking its post or request state to other blocks.
+	 *
+	 * @template T
+	 * @param array         $params   Editor request parameters.
+	 * @param callable(): T $callback Editor work.
+	 * @return T Callback result.
+	 */
+	private function with_editor_context( array $params, callable $callback ): mixed {
+		$keys  = array( 'post', 'id', 'authordata', 'currentday', 'currentmonth', 'page', 'pages', 'multipage', 'more', 'numpages' );
+		$state = array();
+		foreach ( $keys as $key ) {
+			$state[ $key ] = array(
+				'exists' => array_key_exists( $key, $GLOBALS ),
+				'value'  => $GLOBALS[ $key ] ?? null,
+			);
+		}
+		$previous_get = $_GET; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Snapshot restored below.
+		try {
+			$_GET = $params;
+			foreach ( $keys as $key ) {
+				unset( $GLOBALS[ $key ] );
+			}
+			$GLOBALS['post'] = ! empty( $params['postId'] ) ? get_post( (int) $params['postId'] ) : null; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- Scoped editor render context.
+			if ( $GLOBALS['post'] instanceof \WP_Post ) {
+				setup_postdata( $GLOBALS['post'] );
+			}
+			return $callback();
+		} finally {
+			$_GET = $previous_get;
+			foreach ( $state as $key => $entry ) {
+				if ( $entry['exists'] ) {
+					$GLOBALS[ $key ] = $entry['value']; // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Restore WordPress loop globals.
+				} else {
+					unset( $GLOBALS[ $key ] );
+				}
+			}
+		}
 	}
 
 	/**

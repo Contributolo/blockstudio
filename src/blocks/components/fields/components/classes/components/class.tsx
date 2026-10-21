@@ -3,8 +3,6 @@ import CodeMirror from '@uiw/react-codemirror';
 import { Button } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
 import { cloneDeep, set } from 'lodash-es';
-import parserCss from 'prettier/plugins/postcss';
-import prettier from 'prettier/standalone';
 import { style } from '@/const/css';
 import { findCssRules } from '@/tailwind/utils/find-css-rules';
 import { BlockstudioBlockAttributes } from '@/types/types';
@@ -28,17 +26,34 @@ export const Class = ({
   const [cssRule, setCssRule] = useState('');
 
   useEffect(() => {
+    let cancelled = false;
+    const source = findCssRules(`.${CSS.escape(text)}`)?.[0] || '';
+    setCssRule('');
+    if (!source) return;
+
     const formatCss = async () => {
-      const formatted = await prettier.format(
-        findCssRules(`.${text}`)?.[0] || '',
-        {
-          parser: 'css',
-          plugins: [parserCss],
-        },
+      const [{ default: prettier }, { default: parserCss }] = await Promise.all(
+        [
+          import(
+            /* webpackChunkName: "blocks/prettier" */ 'prettier/standalone'
+          ),
+          import(
+            /* webpackChunkName: "blocks/prettier-postcss" */ 'prettier/plugins/postcss'
+          ),
+        ],
       );
-      setCssRule(formatted.trim().replaceAll('\\:', ':'));
+      const formatted = await prettier.format(source, {
+        parser: 'css',
+        plugins: [parserCss],
+      });
+      if (!cancelled) setCssRule(formatted.trim().replaceAll('\\:', ':'));
     };
-    formatCss();
+    formatCss().catch(() => {
+      if (!cancelled) setCssRule(source);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [text]);
 
   return (
@@ -126,6 +141,7 @@ export const Class = ({
               lineNumbers: false,
               foldGutter: false,
             }}
+            editable={false}
             extensions={[cssLang()]}
             value={cssRule}
           />

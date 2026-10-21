@@ -1,6 +1,6 @@
 {
   "name": "blockstudio",
-  "version": "7.7.5",
+  "version": "7.7.6",
   "description": "The block framework for WordPress",
   "private": true,
   "type": "module",
@@ -30,6 +30,7 @@
     "lint": "eslint src",
     "schemas:check": "node scripts/check-schemas.mjs",
     "test:e2e:empty": "playwright test --config=playwright.wp-env.empty.config.ts",
+    "test:e2e:ui:regressions": "playwright test --config=tests/ui/playwright.config.ts 'ui/(select[^/]*|card-assets)\\.spec\\.ts$'",
     "test:client": "node --import tsx --test tests/client/*.test.ts",
     "test:e2e": "playwright test --config=playwright.wp-env.config.ts; npm run wp-env:reset",
     "test:unit": "cd tests/wp-env && export COMPOSE_PROJECT_NAME=blockstudio && npx @wordpress/env run cli --env-cwd=/var/www/html/wp-content/plugins/blockstudio7 vendor/bin/phpunit",

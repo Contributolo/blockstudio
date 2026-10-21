@@ -571,6 +571,65 @@ class BuildCacheTest extends TestCase {
 		}
 	}
 
+	public function test_editing_and_login_bookkeeping_meta_does_not_rotate_the_populate_version(): void {
+		Build_Cache::init();
+		$before      = get_option( 'blockstudio_populate_cache_version', '0' );
+		$no_debounce = static fn(): int => 0;
+		$ignore      = static fn( array $keys ): array => array_merge( $keys, array( '_blockstudio_test_view_count' ) );
+		$post_id     = wp_insert_post( array( 'post_title' => 'Bookkeeping', 'post_status' => 'publish' ) );
+		$user_id     = wp_insert_user( array( 'user_login' => 'bookkeeping-' . wp_generate_password( 8, false ), 'user_pass' => wp_generate_password() ) );
+		$this->assertIsInt( $user_id );
+		add_filter( 'blockstudio/cache/populate_debounce', $no_debounce );
+		add_filter( 'blockstudio/cache/populate_ignored_meta_keys', $ignore );
+		try {
+			update_option( 'blockstudio_populate_cache_version', 'settled', false );
+			for ( $i = 0; $i < 3; ++$i ) {
+				update_post_meta( $post_id, '_edit_lock', ( time() + $i ) . ':1' );
+				update_post_meta( $post_id, '_edit_last', $i + 1 );
+				update_user_meta( $user_id, 'session_tokens', array( 'token' . $i => array( 'expiration' => time() + 60 ) ) );
+				update_post_meta( $post_id, '_blockstudio_test_view_count', $i );
+			}
+			delete_post_meta( $post_id, '_edit_lock' );
+			delete_user_meta( $user_id, 'session_tokens' );
+			$this->assertSame( 'settled', Build_Cache::get_populate_cache_version() );
+
+			update_post_meta( $post_id, '_blockstudio_test_price', 10 );
+			$this->assertNotSame( 'settled', Build_Cache::get_populate_cache_version(), 'Other meta writes still refresh populated choices.' );
+		} finally {
+			remove_filter( 'blockstudio/cache/populate_debounce', $no_debounce );
+			remove_filter( 'blockstudio/cache/populate_ignored_meta_keys', $ignore );
+			wp_delete_post( $post_id, true );
+			if ( ! function_exists( 'wp_delete_user' ) ) {
+				require_once ABSPATH . 'wp-admin/includes/user.php';
+			}
+			wp_delete_user( $user_id );
+			update_option( 'blockstudio_populate_cache_version', $before, false );
+		}
+	}
+
+	public function test_ignored_meta_keys_can_be_removed_and_save_post_still_invalidates(): void {
+		$before = get_option( 'blockstudio_populate_cache_version', '0' );
+		$no_debounce = static fn (): int => 0;
+		$ignore_none = static fn (): array => array();
+		add_filter( 'blockstudio/cache/populate_debounce', $no_debounce );
+		add_filter( 'blockstudio/cache/populate_ignored_meta_keys', $ignore_none );
+		try {
+			foreach ( array( '_edit_lock', '_edit_last', 'session_tokens' ) as $key ) {
+				update_option( 'blockstudio_populate_cache_version', 'settled', false );
+				Build_Cache::invalidate_populate_cache_for_meta( 1, 1, $key );
+				$this->assertNotSame( 'settled', Build_Cache::get_populate_cache_version(), $key );
+			}
+			remove_filter( 'blockstudio/cache/populate_ignored_meta_keys', $ignore_none );
+			update_option( 'blockstudio_populate_cache_version', 'settled', false );
+			do_action( 'save_post', 1 );
+			$this->assertNotSame( 'settled', Build_Cache::get_populate_cache_version() );
+		} finally {
+			remove_filter( 'blockstudio/cache/populate_debounce', $no_debounce );
+			remove_filter( 'blockstudio/cache/populate_ignored_meta_keys', $ignore_none );
+			update_option( 'blockstudio_populate_cache_version', $before, false );
+		}
+	}
+
 	public function test_language_specific_cache_namespaces_remain_isolated_and_repeatable(): void {
 		$language = '';
 		$filter = static function ( string $url ) use ( &$language ): string {

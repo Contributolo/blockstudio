@@ -11,6 +11,7 @@ use DOMDocument;
 use ErrorException;
 use Throwable;
 use Timber\Timber;
+use WP_Block;
 use WP_HTML_Tag_Processor;
 
 /**
@@ -1322,6 +1323,16 @@ class Block {
 		}
 		$selector_attribute = "data-assets='$selector_attribute_id'";
 
+		if ( ! $repeater ) {
+			$attachment_ids = array();
+			self::collect_attachment_ids( $attributes, false, $block_attributes, $disabled, $attachment_ids );
+
+			// One query for every attachment of the block instead of two per file.
+			if ( $attachment_ids ) {
+				_prime_post_caches( array_unique( $attachment_ids ), false, true );
+			}
+		}
+
 		foreach ( $attributes as $k => $v ) {
 			$att = self::attribute_definition( (string) $k, $repeater, $block_attributes );
 
@@ -1856,6 +1867,48 @@ class Block {
 	}
 
 	/**
+	 * Collect the attachment IDs that files fields will resolve, repeaters included.
+	 *
+	 * Fields returning plain IDs never load the attachment, so they are skipped.
+	 *
+	 * @param array      $attributes       The attributes.
+	 * @param array|bool $repeater         The repeater attributes, or false.
+	 * @param array      $block_attributes The block attributes.
+	 * @param array      $disabled         The disabled attribute keys.
+	 * @param array      $ids              The collected IDs (passed by reference).
+	 *
+	 * @return void
+	 */
+	private static function collect_attachment_ids(
+		array $attributes,
+		$repeater,
+		array $block_attributes,
+		array $disabled,
+		array &$ids
+	): void {
+		foreach ( $attributes as $k => $v ) {
+			$att  = self::attribute_definition( (string) $k, $repeater, $block_attributes );
+			$type = isset( $att['type'] ) ? ( $att['field'] ?? false ) : false;
+
+			if ( 'files' === $type && 'id' !== ( $att['returnFormat'] ?? 'value' ) ) {
+				foreach ( (array) $v as $id ) {
+					if ( is_numeric( $id ) && $id > 0 && ! in_array( $k . '_' . $id, $disabled, true ) ) {
+						$ids[] = (int) $id;
+					}
+				}
+			}
+
+			if ( 'repeater' === $type && is_array( $v ) ) {
+				foreach ( $v as $row ) {
+					if ( is_array( $row ) ) {
+						self::collect_attachment_ids( $row, $att['attributes'] ?? false, $block_attributes, array(), $ids );
+					}
+				}
+			}
+		}
+	}
+
+	/**
 	 * Transform a files value into the shape its return format asks for.
 	 *
 	 * @param array  $attributes    The attributes (passed by reference).
@@ -2184,6 +2237,22 @@ class Block {
 	}
 
 	/**
+	 * Whether Blockstudio renders in the given mode.
+	 *
+	 * Editor and inserter preview requests send the mode as blockstudioMode,
+	 * and internal renders set or clear it temporarily. render(),
+	 * bs_is_editor(), and bs_is_preview() all read it here.
+	 *
+	 * @param string $mode 'editor' or 'preview'.
+	 * @return bool Whether the current render mode is $mode.
+	 * @internal
+	 */
+	public static function is_render_mode( string $mode ): bool {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Compared against a fixed mode, not stored or output.
+		return isset( $_GET['blockstudioMode'] ) && $mode === $_GET['blockstudioMode'];
+	}
+
+	/**
 	 * Native render.
 	 *
 	 * @since 2.4.0
@@ -2202,20 +2271,29 @@ class Block {
 		$wp_block = '',
 		$content = ''
 	) {
-		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Reading query params for render mode detection.
-		$is_editor  =
-			isset( $_GET['blockstudioMode'] ) &&
-			'editor' === $_GET['blockstudioMode'];
-		$is_preview =
-			isset( $_GET['blockstudioMode'] ) &&
-			'preview' === $_GET['blockstudioMode'];
+		$is_editor  = self::is_render_mode( 'editor' );
+		$is_preview = self::is_render_mode( 'preview' );
 
-		$post_id   = isset( $_GET['postId'] )
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Reading query params for render context.
+		$context_post_id = $wp_block instanceof WP_Block
+			? (int) ( $wp_block->context['postId'] ?? 0 )
+			: 0;
+		$post_id         = isset( $_GET['postId'] )
 			? intval( $_GET['postId'] )
-			: get_the_ID();
-		$object_id = isset( $_GET['postId'] )
-			? intval( $_GET['postId'] )
-			: ( $is_editor ? $post_id : get_queried_object_id() );
+			: ( $context_post_id ? $context_post_id : get_the_ID() );
+		if ( isset( $_GET['postId'] ) ) {
+			$object_id = intval( $_GET['postId'] );
+		} elseif ( $is_editor ) {
+			$object_id = $post_id;
+		} else {
+			// Inside a Query Loop, $block['postId'] stays the queried post while
+			// $post_id follows the loop item. Without a queried object, as in a
+			// REST request or WP-CLI, it is the post being rendered.
+			$object_id = get_queried_object_id();
+			if ( ! $object_id ) {
+				$object_id = (int) $post_id;
+			}
+		}
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 		$name =

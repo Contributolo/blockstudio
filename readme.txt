@@ -3,7 +3,7 @@ Contributors: dnnsjsk
 Requires at least: 6.7
 Tested up to: 7.0.0
 Requires PHP: 8.2
-Stable tag: 7.7.5
+Stable tag: 7.7.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,24 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 * [Getting Started](https://blockstudio.dev/docs/getting-started)
 
 == Changelog ==
+
+= 7.7.6 =
+* New: `bs_is_editor()` and `bs_is_preview()` expose the same render mode as template variables to theme helpers and filters (#140)
+* New: WPML configuration uses translated link labels and supports custom translation-editor labels through `blockstudio/wpml/config/label` (#142)
+* Fix: blocks rendered outside the main query receive their post ID from block context, preserving documented Query Loop behavior (#141)
+* Fix: REST editor previews set up the edited post consistently and isolate post state and permissions between batch entries (#143)
+* Fix: scoped updater dependencies recognize WordPress constants, functions, WP-CLI, and Debug Bar (#144)
+* Fix: class-token previews find CSS rules for plain and escaped class names (#153)
+* Fix: bundled select popups fit narrow viewports and position correctly with long labels and reduced motion (#154)
+* Fix: bundled card titles, descriptions, and other shared text components load their required typography styles (#154)
+* Performance: ordinary blocks skip hidden field initialization, and new nested repeaters receive their minimum rows before insertion without extra undo steps (#151)
+* Performance: editor HTML and CSS formatters load on demand instead of in the initial bundle (#149)
+* Performance: superseded single-block preview requests are aborted without clearing the current preview (#150)
+* Performance: files fields prime attachment caches together instead of querying every file separately (#145)
+* Performance: blocks without matching extensions skip unused attribute transformations (#146)
+* Performance: editing locks and login bookkeeping no longer refresh populated choices; ignored meta keys are configurable (#147)
+* Performance: profiling stops early for visitors who cannot receive its output (#148)
+* Performance: per-request options load together, and ordinary frontend requests skip the editor capture transient lookup (#152)
 
 = 7.7.5 =
 * New: `bs_validate_block()` reports stored field problems without rendering or changing content, with an opt-in filter for custom resolvers (#135, #137)

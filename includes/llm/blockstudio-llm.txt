@@ -36,7 +36,7 @@ route: /docs/general/settings
 file: docs/docs/general/settings.md
 purpose: Configure Blockstudio with blockstudio.json or filters.
 settings: ai, assets/enqueue, blockEditor/blocks, blockEditor/media, blockEditor/patterns, blockTags, cache/path, content, dev, editor/formatOnSave, githooks, performance/measurement, performance/media/lazy, performance/media/rootMargin, performance/staticPrerender/ttl, phpstan, tailwind, themeDefaults, ui/enabled, users/roles
-hooks: blockstudio/cache/build_wait_budget, blockstudio/cache/context, blockstudio/cache/dir, blockstudio/cache/populate_debounce, blockstudio/cache/site_key, blockstudio/editor/canvas/body_class, blockstudio/performance/config, blockstudio/performance/measurement_enabled, blockstudio/settings/assets/enqueue, blockstudio/settings/block_editor/patterns/remote, blockstudio/settings/cache/path, blockstudio/settings/editor/formatOnSave, blockstudio/settings/ui/enabled
+hooks: blockstudio/cache/build_wait_budget, blockstudio/cache/context, blockstudio/cache/dir, blockstudio/cache/populate_debounce, blockstudio/cache/populate_ignored_meta_keys, blockstudio/cache/site_key, blockstudio/editor/canvas/body_class, blockstudio/performance/config, blockstudio/performance/measurement_enabled, blockstudio/settings/assets/enqueue, blockstudio/settings/block_editor/patterns/remote, blockstudio/settings/cache/path, blockstudio/settings/editor/formatOnSave, blockstudio/settings/ui/enabled
 php: Blockstudio\Patterns, Blockstudio\Performance_Measurement, Blockstudio\Runtime_Settings, Blockstudio\Settings, Performance_Measurement::snapshot(), Runtime_Settings::current(), Settings::errors(), Settings::fingerprint(), Settings::get_array(), Settings::get_bool(), Settings::get_int(), Settings::get_raw(), Settings::get_string(), Settings::reload(), bs_media_image()
 cli: wp bs cache, wp bs cache clear, wp bs cache status, wp bs content, wp bs settings
 
@@ -282,6 +282,8 @@ purpose: How Blockstudio integrates with SEO plugins for real-time content analy
 route: /docs/blocks/environment
 file: docs/docs/blocks/environment.md
 purpose: Conditionally render content based on the rendering context.
+hooks: blockstudio/blocks/components/rich_text/render
+php: bs_is_editor(), bs_is_preview()
 
 ### Context
 route: /docs/blocks/context
@@ -371,8 +373,9 @@ route: /docs/blocks/hooks/php
 file: docs/docs/blocks/hooks/php.md
 purpose: PHP filters and actions available in Blockstudio.
 settings: assets/process/scss, ui
-hooks: blockstudio/admin/enabled, blockstudio/assets/disable, blockstudio/assets/enable, blockstudio/assets/process/css/content, blockstudio/assets/process/js/content, blockstudio/assets/process/scss/import_paths, blockstudio/assets/process/scss/prelude, blockstudio/block_tags/builders, blockstudio/block_tags/prefixes, blockstudio/block_tags/renderers, blockstudio/block_tags/tag_aliases, blockstudio/blocks/attributes, blockstudio/blocks/attributes/populate, blockstudio/blocks/attributes/render, blockstudio/blocks/attributes/validate, blockstudio/blocks/components/inner_blocks/frontend/wrap, blockstudio/blocks/components/inner_blocks/render, blockstudio/blocks/components/rich_text/render, blockstudio/blocks/components/use_block_props/render, blockstudio/blocks/conditions, blockstudio/blocks/meta, blockstudio/blocks/render, blockstudio/buffer/enabled, blockstudio/buffer/output, blockstudio/cache/build_wait_budget, blockstudio/cache/context, blockstudio/cache/dir, blockstudio/cache/max_files_per_scope, blockstudio/cache/outcome, blockstudio/cache/populate_debounce, blockstudio/cache/protected_paths, blockstudio/cache/site_key, blockstudio/cache/watch_debounce, blockstudio/canvas/inventory, blockstudio/db/after_create, blockstudio/db/after_delete, blockstudio/db/after_update, blockstudio/db/before_create, blockstudio/db/before_delete, blockstudio/db/before_update, blockstudio/editor/canvas/body_class, blockstudio/error/exception, blockstudio/error/logged, blockstudio/init, blockstudio/init/$instance, blockstudio/init/before, blockstudio/init/before/$instance, blockstudio/parser/element_mapping, blockstudio/parser/renderers, blockstudio/path, blockstudio/render, blockstudio/render/dependencies, blockstudio/render/footer, blockstudio/render/head, blockstudio/rpc/after_call, blockstudio/rpc/before_call, blockstudio/runtime/identity, blockstudio/settings/path, blockstudio/static_prerender/cacheable_html, blockstudio/static_prerender/outcome, blockstudio/static_prerender/public_urls, blockstudio/static_prerender/render_internal, blockstudio/static_prerender/request_bypass, blockstudio/tailwind/cache_max_age, blockstudio/tailwind/cache_max_files, blockstudio/url
+hooks: blockstudio/admin/enabled, blockstudio/assets/disable, blockstudio/assets/enable, blockstudio/assets/process/css/content, blockstudio/assets/process/js/content, blockstudio/assets/process/scss/import_paths, blockstudio/assets/process/scss/prelude, blockstudio/block_tags/builders, blockstudio/block_tags/prefixes, blockstudio/block_tags/renderers, blockstudio/block_tags/tag_aliases, blockstudio/blocks/attributes, blockstudio/blocks/attributes/populate, blockstudio/blocks/attributes/render, blockstudio/blocks/attributes/validate, blockstudio/blocks/components/inner_blocks/frontend/wrap, blockstudio/blocks/components/inner_blocks/render, blockstudio/blocks/components/rich_text/render, blockstudio/blocks/components/use_block_props/render, blockstudio/blocks/conditions, blockstudio/blocks/meta, blockstudio/blocks/render, blockstudio/buffer/enabled, blockstudio/buffer/output, blockstudio/cache/build_wait_budget, blockstudio/cache/context, blockstudio/cache/dir, blockstudio/cache/max_files_per_scope, blockstudio/cache/outcome, blockstudio/cache/populate_debounce, blockstudio/cache/populate_ignored_meta_keys, blockstudio/cache/protected_paths, blockstudio/cache/site_key, blockstudio/cache/watch_debounce, blockstudio/canvas/inventory, blockstudio/db/after_create, blockstudio/db/after_delete, blockstudio/db/after_update, blockstudio/db/before_create, blockstudio/db/before_delete, blockstudio/db/before_update, blockstudio/editor/canvas/body_class, blockstudio/error/exception, blockstudio/error/logged, blockstudio/init, blockstudio/init/$instance, blockstudio/init/before, blockstudio/init/before/$instance, blockstudio/parser/element_mapping, blockstudio/parser/renderers, blockstudio/path, blockstudio/render, blockstudio/render/dependencies, blockstudio/render/footer, blockstudio/render/head, blockstudio/rpc/after_call, blockstudio/rpc/before_call, blockstudio/runtime/identity, blockstudio/settings/path, blockstudio/static_prerender/cacheable_html, blockstudio/static_prerender/outcome, blockstudio/static_prerender/public_urls, blockstudio/static_prerender/render_internal, blockstudio/static_prerender/request_bypass, blockstudio/tailwind/cache_max_age, blockstudio/tailwind/cache_max_files, blockstudio/url, blockstudio/wpml/config/label
 php: bs_validate_block()
+cli: wp bs wpml config
 
 ### JavaScript Hooks
 route: /docs/blocks/hooks/javascript
@@ -536,7 +539,7 @@ file: docs/docs/dev/phpstan.md
 purpose: Static analysis for Blockstudio projects with type-safe templates, schema validation, and hook checking.
 settings: blockTags/prefixes, githooks/commit, phpstan/configuration, phpstan/excludePaths, phpstan/preset, tailwind/enabled, ui/enabled
 hooks: blockstudio/fields, blockstudio/render, blockstudio/rendrr, blockstudio/settings/tailwind/enabled
-php: $a, $b, $c, Blockstudio\Db, Build::blocks(), Build::extensions(), Build::get_build_dir(), Db::create(), Db::delete(), Db::get(), Db::get_record(), Db::list(), Db::update(), Field_Registry::all(), Field_Registry::get(), Field_Registry::instance(), Settings::get(), Settings::get_all(), bs_db_form(), bs_get_group(), bs_get_scoped_class(), bs_render_block()
+php: $a, $b, $c, Blockstudio\Db, Build::blocks(), Build::extensions(), Build::get_build_dir(), Db::create(), Db::delete(), Db::get(), Db::get_record(), Db::list(), Db::update(), Field_Registry::all(), Field_Registry::get(), Field_Registry::instance(), Settings::get(), Settings::get_all(), bs_db_form(), bs_get_group(), bs_get_scoped_class(), bs_is_editor(), bs_is_preview(), bs_render_block()
 cli: vendor/bin/blockstudio-agents, vendor/bin/blockstudio-githooks, vendor/bin/blockstudio-phpstan, wp bs db schemas, wp bs prerender status
 
 ### AI Integration
@@ -557,6 +560,7 @@ php: Blockstudio\Inventory_Discovery_Source
 route: /docs/dev/wpml
 file: docs/docs/dev/wpml.md
 purpose: Generate the WPML language configuration that makes the text fields of Blockstudio blocks translatable.
+hooks: blockstudio/wpml/config/label
 cli: wp bs wpml config
 
 ## Docs / Dev / Migration
