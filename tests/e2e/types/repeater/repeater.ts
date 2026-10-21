@@ -80,6 +80,19 @@ testType('repeater', false, () => {
       testFunction: async (page: Page, _canvas: Frame) => {
         await page.click('text=Add repeater 1');
         await count(page, '.components-range-control', 5);
+        expect(
+          await page.evaluate(() => {
+            const block = (window as any).wp.data
+              .select('core/block-editor')
+              .getSelectedBlock();
+            return block.attributes.blockstudio.attributes.repeater[1]
+              .repeater;
+          }),
+        ).toEqual([
+          expect.objectContaining({
+            repeater: [{ range: 50 }, { range: 50 }],
+          }),
+        ]);
       },
     },
     {

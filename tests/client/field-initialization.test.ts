@@ -1,6 +1,9 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { getDefaults } from '../../src/blocks/utils/get-defaults';
+import {
+  getDefaults,
+  getRepeaterRowDefaults,
+} from '../../src/blocks/utils/get-defaults';
 import { needsFieldInitialization } from '../../src/blocks/utils/needs-field-initialization';
 
 const fields = [
@@ -43,6 +46,46 @@ test('default rows and nested object values are independent of their siblings an
     (getDefaults(fields) as typeof defaults).rows[0].nested[0].count,
     5,
   );
+});
+
+test('adding repeater rows initializes nested minimums instead of saving a false sentinel', () => {
+  const definitions = [
+    { id: 'body', field: 'wysiwyg', type: 'string', default: false },
+    { ...fields[0], default: false },
+  ] as Parameters<typeof getRepeaterRowDefaults>[0];
+  const row = getRepeaterRowDefaults(definitions);
+  assert.deepEqual(row, {
+    body: false,
+    rows: [
+      { title: 'Row', nested: [{ count: 5 }, { count: 5 }] },
+      { title: 'Row', nested: [{ count: 5 }, { count: 5 }] },
+    ],
+  });
+  const another = getRepeaterRowDefaults(definitions);
+  (row.rows as { nested: { count: number }[] }[])[0].nested[0].count = 20;
+  assert.deepEqual(another, getRepeaterRowDefaults(definitions));
+});
+
+test('added rows retain defaults in tabs and anonymous groups, excluding named groups', () => {
+  const definitions = [
+    {
+      type: 'tabs',
+      tabs: [{ attributes: [fields[0]] }],
+    },
+    {
+      type: 'group',
+      attributes: [{ id: 'title', type: 'string', default: 'Title' }],
+    },
+    {
+      id: 'ignored',
+      type: 'group',
+      attributes: [{ id: 'hidden', type: 'string', default: 'Hidden' }],
+    },
+  ] as Parameters<typeof getRepeaterRowDefaults>[0];
+  assert.deepEqual(getRepeaterRowDefaults(definitions), {
+    rows: getDefaults(fields).rows,
+    title: 'Title',
+  });
 });
 
 test('explicit repeater defaults override min and keep zero, false and empty values', () => {

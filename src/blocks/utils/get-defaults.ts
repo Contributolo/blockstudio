@@ -15,6 +15,7 @@ type BlockstudioDefaults = {
   id: string;
   min?: number;
   options: BlockstudioFieldsOptions[];
+  tabs?: { attributes?: BlockstudioDefaults[] }[];
   type: string;
 };
 
@@ -110,5 +111,33 @@ export const getDefaults = (
 
   defaultParser(block);
 
+  return defaults;
+};
+
+export const getRepeaterRowDefaults = (fields: BlockstudioDefaults[]) => {
+  const defaults: Record<string, DefaultValue> = {};
+
+  const applyDefaults = (items: BlockstudioDefaults[]) => {
+    items.forEach((item) => {
+      if (item.type === 'tabs') {
+        item.tabs?.forEach((tab) => applyDefaults(tab.attributes || []));
+        return;
+      }
+
+      if (item.type === 'group') {
+        if (!item.id) applyDefaults(item.attributes || []);
+        return;
+      }
+
+      if (!item.id) return;
+
+      defaults[item.id] =
+        item.field === 'repeater'
+          ? getDefaults([item])[item.id]
+          : cloneDeep(item.default || false);
+    });
+  };
+
+  applyDefaults(fields);
   return defaults;
 };

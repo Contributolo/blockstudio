@@ -23,6 +23,8 @@ for (const width of [320, 390]) {
       test.use({
         viewport: { width, height: 900 },
         contextOptions: { reducedMotion },
+        screenshot: 'only-on-failure',
+        trace: 'retain-on-failure',
       });
 
       for (const name of ['selected', 'plain', 'multiple']) {
@@ -35,6 +37,7 @@ for (const width of [320, 390]) {
           );
           const trigger = root.locator('[data-bsui-select-trigger]');
           const listbox = root.locator('[role="listbox"]');
+          expect((await trigger.boundingBox())!.y).toBeGreaterThan(160);
           await trigger.focus();
           await page.keyboard.press('ArrowDown');
           await expect(listbox).toBeVisible();
@@ -51,6 +54,7 @@ for (const width of [320, 390]) {
           }
 
           await page.evaluate(() => window.scrollBy(0, 80));
+          expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
           await expectPopupInViewport(page, listbox);
           await page.screenshot({ path: testInfo.outputPath('open.png') });
           await page.keyboard.press('Escape');

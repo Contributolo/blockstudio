@@ -39,7 +39,10 @@ import { Styles } from '@/blocks/components/styles';
 import { useBlockAttributes } from '@/blocks/hooks/use-block-attributes';
 import { createBlocks } from '@/blocks/utils/create-blocks';
 import { dispatch } from '@/blocks/utils/dispatch';
-import { getDefaults } from '@/blocks/utils/get-defaults';
+import {
+  getDefaults,
+  getRepeaterRowDefaults,
+} from '@/blocks/utils/get-defaults';
 import { isAllowedToRender } from '@/blocks/utils/is-allowed-to-render';
 import {
   findOption,
@@ -438,51 +441,7 @@ export const Fields = ({
         key,
       ) as BlockstudioBlock['blockstudio']['attributes'];
 
-      const obj: Record<string | number, Any> = {};
-      const applyDefaults = (
-        items: Array<BlockstudioAttribute & { default?: boolean }>,
-        groupId = '',
-      ) => {
-        items.forEach((e) => {
-          if (e.type === 'tabs') {
-            e.tabs?.forEach((tab) =>
-              applyDefaults(
-                (tab.attributes || []) as Array<
-                  BlockstudioAttribute & { default?: boolean }
-                >,
-                groupId,
-              ),
-            );
-            return;
-          }
-
-          if (e.type === 'group') {
-            if (e.id) {
-              return;
-            }
-
-            applyDefaults(
-              (e.attributes || []) as Array<
-                BlockstudioAttribute & { default?: boolean }
-              >,
-              groupId,
-            );
-            return;
-          }
-
-          if (!e.id) {
-            return;
-          }
-
-          obj[`${groupId}${e.id}`] = e?.default || false;
-        });
-      };
-
-      applyDefaults(
-        transformed.attributes as Array<
-          BlockstudioAttribute & { default?: boolean }
-        >,
-      );
+      const obj = getRepeaterRowDefaults(transformed.attributes);
 
       set(newAttributes, key, [...(values || []), obj]);
       setRepeater(newAttributes, getRepeaterKey(id));
