@@ -1,4 +1,4 @@
-import { execSync } from 'child_process';
+import { execFileSync } from 'child_process';
 import * as path from 'path';
 
 import { Page, expect, test } from '@playwright/test';
@@ -13,8 +13,14 @@ import {
 } from './utils/playwright-utils';
 
 const wpEnvDir = path.join(process.cwd(), 'tests/wp-env');
-const wpCli = (command: string) =>
-  execSync(`npx wp-env run cli -- ${command}`, { cwd: wpEnvDir, encoding: 'utf-8', timeout: 30000 });
+const wpEnvCli = path.join(process.cwd(), 'node_modules/@wordpress/env/bin/wp-env');
+const wpCli = (...args: string[]) =>
+  execFileSync(process.execPath, [wpEnvCli, 'run', 'cli', '--', 'wp', ...args], {
+    cwd: wpEnvDir,
+    encoding: 'utf-8',
+    // Cold SEO plugin activation can exceed 30 seconds on the shared runner.
+    timeout: 60_000,
+  });
 
 let page: Page;
 
@@ -22,8 +28,8 @@ test.describe.configure({ mode: 'serial' });
 
 test.beforeAll(async ({ browser }) => {
   // Ensure correct plugin state regardless of previous test runs
-  wpCli('wp plugin activate wordpress-seo');
-  wpCli('wp plugin deactivate seo-by-rank-math');
+  wpCli('plugin', 'activate', 'wordpress-seo');
+  wpCli('plugin', 'deactivate', 'seo-by-rank-math');
 
   page = await getSharedPage(browser);
   await resetPageState(page);
@@ -32,8 +38,8 @@ test.beforeAll(async ({ browser }) => {
 test.afterAll(async () => {
   // Always restore Yoast as the active SEO plugin
   try {
-    wpCli('wp plugin deactivate seo-by-rank-math');
-    wpCli('wp plugin activate wordpress-seo');
+    wpCli('plugin', 'deactivate', 'seo-by-rank-math');
+    wpCli('plugin', 'activate', 'wordpress-seo');
   } catch {
     // Best effort cleanup
   }
@@ -105,8 +111,8 @@ test.describe('seo - yoast', () => {
 
 test.describe('seo - rank math', () => {
   test('switch to rank math', async () => {
-    wpCli('wp plugin deactivate wordpress-seo');
-    wpCli('wp plugin activate seo-by-rank-math');
+    wpCli('plugin', 'deactivate', 'wordpress-seo');
+    wpCli('plugin', 'activate', 'seo-by-rank-math');
 
     await resetPageState(page);
     const canvas = await getEditorCanvas(page);
@@ -147,7 +153,7 @@ test.describe('seo - rank math', () => {
   });
 
   test('restore yoast', async () => {
-    wpCli('wp plugin deactivate seo-by-rank-math');
-    wpCli('wp plugin activate wordpress-seo');
+    wpCli('plugin', 'deactivate', 'seo-by-rank-math');
+    wpCli('plugin', 'activate', 'wordpress-seo');
   });
 });
