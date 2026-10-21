@@ -1,5 +1,7 @@
 import { test, expect, type Page, type Locator } from '@playwright/test';
 
+test.use({ screenshot: 'only-on-failure', trace: 'retain-on-failure' });
+
 async function expectPopupInViewport(page: Page, listbox: Locator) {
   await expect(async () => {
     const box = await listbox.boundingBox();
@@ -23,8 +25,6 @@ for (const width of [320, 390]) {
       test.use({
         viewport: { width, height: 900 },
         contextOptions: { reducedMotion },
-        screenshot: 'only-on-failure',
-        trace: 'retain-on-failure',
       });
 
       for (const name of ['selected', 'plain', 'multiple']) {
