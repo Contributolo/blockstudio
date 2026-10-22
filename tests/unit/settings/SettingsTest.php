@@ -33,6 +33,10 @@ class SettingsTest extends TestCase {
 		Settings::get_instance();
 	}
 
+	private function expire_file_check(): void {
+		( new ReflectionProperty( Settings::class, 'json_checked_at' ) )->setValue( null, 1 );
+	}
+
 	private function add_filter( string $name, callable $cb, int $priority = 10 ): void {
 		add_filter( $name, $cb, $priority );
 		$this->filter_callbacks[] = array( $name, $cb, $priority );
@@ -613,9 +617,11 @@ class SettingsTest extends TestCase {
 			$this->assertFalse( Settings::get_bool( 'ui/enabled' ) );
 
 			file_put_contents( $path, '{"ui":{"enabled":true}}' . "\n" );
+			$this->expire_file_check();
 			$this->assertTrue( Settings::get_bool( 'ui/enabled' ) );
 
 			unlink( $path );
+			$this->expire_file_check();
 			$this->assertFalse( Settings::get_bool( 'ui/enabled' ) );
 		} finally {
 			if ( is_file( $path ) ) {
@@ -782,9 +788,172 @@ class SettingsTest extends TestCase {
 		$this->assertNotEmpty( Settings::errors() );
 
 		file_put_contents( $path, "{\"ui\":{\"enabled\":true}}\n" );
+		$this->expire_file_check();
 		$this->assertTrue( Settings::get_bool( 'ui/enabled' ) );
 		$this->assertSame( array(), Settings::errors() );
 
 		unlink( $path );
+	}
+
+	public function test_settings_file_is_checked_once_per_interval(): void {
+		Settings_Counting_Stream::install( '{"ui":{"enabled":true}}' );
+		$this->add_filter( 'blockstudio/settings/path', static fn(): string => Settings_Counting_Stream::PATH );
+
+		try {
+			Settings::reload();
+			$this->assertTrue( Settings::get_bool( 'ui/enabled' ) );
+			$checked = Settings_Counting_Stream::$stats;
+			$this->assertGreaterThan( 0, $checked );
+
+			for ( $i = 0; $i < 50; $i++ ) {
+				Settings::get_bool( 'ui/enabled' );
+			}
+			$this->assertSame( $checked, Settings_Counting_Stream::$stats );
+
+			$this->expire_file_check();
+			Settings::get_bool( 'ui/enabled' );
+			$this->assertGreaterThan( $checked, Settings_Counting_Stream::$stats );
+		} finally {
+			Settings_Counting_Stream::uninstall();
+			Settings::reset();
+		}
+	}
+
+	public function test_settings_file_change_is_picked_up_after_the_interval(): void {
+		$path = wp_tempnam( 'blockstudio-settings-interval' );
+		$this->assertIsString( $path );
+		$this->add_filter( 'blockstudio/settings/path', static fn(): string => $path );
+
+		try {
+			file_put_contents( $path, '{"ui":{"enabled":false}}' . "\n" );
+			Settings::reload();
+			$this->assertFalse( Settings::get_bool( 'ui/enabled' ) );
+
+			file_put_contents( $path, '{"ui":{"enabled":true},"tailwind":{"enabled":false}}' . "\n" );
+			$this->assertFalse( Settings::get_bool( 'ui/enabled' ), 'A change inside the interval is not read yet.' );
+
+			$this->expire_file_check();
+			$this->assertTrue( Settings::get_bool( 'ui/enabled' ) );
+
+			file_put_contents( $path, '{"ui":{"enabled":false}}' . "\n" );
+			Settings::reload();
+			$this->assertFalse( Settings::get_bool( 'ui/enabled' ), 'reload() reads the file at once.' );
+		} finally {
+			unlink( $path );
+			Settings::reload();
+		}
+	}
+
+	public function test_another_settings_path_is_read_without_waiting_for_the_interval(): void {
+		$first  = wp_tempnam( 'blockstudio-settings-first' );
+		$second = wp_tempnam( 'blockstudio-settings-second' );
+		$this->assertIsString( $first );
+		$this->assertIsString( $second );
+		$path = $first;
+		$this->add_filter( 'blockstudio/settings/path', static function () use ( &$path ): string {
+			return $path;
+		} );
+
+		try {
+			file_put_contents( $first, '{"ui":{"enabled":false}}' . "\n" );
+			file_put_contents( $second, '{"ui":{"enabled":true}}' . "\n" );
+			Settings::reload();
+			$this->assertFalse( Settings::get_bool( 'ui/enabled' ) );
+
+			$path = $second;
+			$this->assertTrue( Settings::get_bool( 'ui/enabled' ) );
+		} finally {
+			unlink( $first );
+			unlink( $second );
+			Settings::reload();
+		}
+	}
+
+	public function test_saved_options_are_not_held_back_by_the_file_interval(): void {
+		$path     = trailingslashit( get_temp_dir() ) . 'missing-blockstudio-' . wp_generate_uuid4() . '.json';
+		$previous = get_option( 'blockstudio_settings', null );
+
+		$this->add_filter( 'blockstudio/settings/path', static fn(): string => $path );
+		update_option( 'blockstudio_settings', array( 'ui' => array( 'enabled' => false ) ), false );
+
+		try {
+			Settings::reload();
+			$this->assertFalse( Settings::get_bool( 'ui/enabled' ) );
+
+			update_option( 'blockstudio_settings', array( 'ui' => array( 'enabled' => true ) ), false );
+			$this->assertTrue( Settings::get_bool( 'ui/enabled' ) );
+		} finally {
+			if ( null === $previous ) {
+				delete_option( 'blockstudio_settings' );
+			} else {
+				update_option( 'blockstudio_settings', $previous, false );
+			}
+
+			Settings::reload();
+		}
+	}
+}
+
+/**
+ * In-memory stream that counts the stat calls made against one settings file.
+ */
+class Settings_Counting_Stream {
+
+	public const PATH = 'bssettings://settings.json';
+
+	public static int $stats = 0;
+
+	private static string $content = '';
+
+	public $context;
+
+	private int $position = 0;
+
+	public static function install( string $content ): void {
+		self::$stats   = 0;
+		self::$content = $content;
+		stream_wrapper_register( 'bssettings', self::class );
+	}
+
+	public static function uninstall(): void {
+		stream_wrapper_unregister( 'bssettings' );
+	}
+
+	public function url_stat( string $path, int $flags ) {
+		++self::$stats;
+
+		return $this->stream_stat();
+	}
+
+	public function stream_stat(): array {
+		return array(
+			'mode'  => 0100644,
+			'uid'   => getmyuid(),
+			'gid'   => getmygid(),
+			'size'  => strlen( self::$content ),
+			'mtime' => 1,
+			'ino'   => 1,
+		);
+	}
+
+	public function stream_open(): bool {
+		$this->position = 0;
+
+		return true;
+	}
+
+	public function stream_read( int $count ): string {
+		$chunk           = substr( self::$content, $this->position, $count );
+		$this->position += strlen( $chunk );
+
+		return $chunk;
+	}
+
+	public function stream_eof(): bool {
+		return $this->position >= strlen( self::$content );
+	}
+
+	public function stream_set_option(): bool {
+		return false;
 	}
 }

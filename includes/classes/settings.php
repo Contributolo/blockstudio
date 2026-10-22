@@ -342,6 +342,40 @@ class Settings {
 	private static ?string $json_fingerprint = null;
 
 	/**
+	 * Nanoseconds a file check is trusted before the settings file is read again.
+	 *
+	 * Settings::get() resolves the singleton on every read and a page makes
+	 * hundreds of them, so even the stat behind a stat signature adds up. A
+	 * request finishes inside this window, which makes it one check per
+	 * request, while a long-running process (WP-CLI, a queue worker) still
+	 * notices an edited file within a second.
+	 *
+	 * @var int
+	 */
+	private const JSON_CHECK_INTERVAL = 1000000000;
+
+	/**
+	 * Path the last file check was made for.
+	 *
+	 * @var string
+	 */
+	private static string $json_checked_path = '';
+
+	/**
+	 * Monotonic time of the last file check, 0 when none is trusted.
+	 *
+	 * @var int
+	 */
+	private static int $json_checked_at = 0;
+
+	/**
+	 * Result of the last file check: the JSON fingerprint, or null without a usable file.
+	 *
+	 * @var string|null
+	 */
+	private static ?string $json_checked_result = null;
+
+	/**
 	 * Get singleton instance.
 	 *
 	 * @return Settings|null The singleton instance.
@@ -877,6 +911,9 @@ class Settings {
 		self::$loaded_source_fingerprint = '';
 		self::$json_stat_signature       = null;
 		self::$json_fingerprint          = null;
+		self::$json_checked_path         = '';
+		self::$json_checked_at           = 0;
+		self::$json_checked_result       = null;
 	}
 
 	/**
@@ -893,10 +930,45 @@ class Settings {
 	/**
 	 * Fingerprint the active JSON file or options payload.
 	 *
+	 * The file is checked at most once per JSON_CHECK_INTERVAL. The options
+	 * payload is not covered by that window, so saved settings stay live.
+	 *
 	 * @return string Source fingerprint.
 	 */
 	private static function source_fingerprint(): string {
 		$path = self::json_path();
+		$now  = hrtime( true );
+
+		if (
+			0 === self::$json_checked_at ||
+			self::$json_checked_path !== $path ||
+			$now - self::$json_checked_at >= self::JSON_CHECK_INTERVAL
+		) {
+			self::$json_checked_result = self::json_source_fingerprint( $path );
+			self::$json_checked_path   = $path;
+			self::$json_checked_at     = $now;
+		}
+
+		if ( null !== self::$json_checked_result ) {
+			return self::$json_checked_result;
+		}
+
+		$options = function_exists( 'get_option' )
+			? get_option( 'blockstudio_settings', array() )
+			: array();
+		$encoded = wp_json_encode( $options, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+
+		return 'options:' . hash( 'sha256', is_string( $encoded ) ? $encoded : '' );
+	}
+
+	/**
+	 * Fingerprint the JSON file by looking at the file system.
+	 *
+	 * @param string $path The JSON file path.
+	 *
+	 * @return string|null The file fingerprint, or null without a readable file.
+	 */
+	private static function json_source_fingerprint( string $path ): ?string {
 		clearstatcache( true, $path );
 		$stat = false;
 
@@ -924,12 +996,7 @@ class Settings {
 		self::$json_stat_signature = null;
 		self::$json_fingerprint    = null;
 
-		$options = function_exists( 'get_option' )
-			? get_option( 'blockstudio_settings', array() )
-			: array();
-		$encoded = wp_json_encode( $options, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
-
-		return 'options:' . hash( 'sha256', is_string( $encoded ) ? $encoded : '' );
+		return null;
 	}
 }
 
