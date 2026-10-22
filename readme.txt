@@ -60,6 +60,7 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 * New: `bs_strip_render_markers()` removes registered block markers from HTML sent outside the buffered page without stripping other comments (#161)
 * Performance: files fields can resolve fewer image sizes through `blockstudio/blocks/attributes/files/sizes`, preserving WordPress image URL filters and existing output by default (#162)
 * Performance: post content primes files-field attachments across blocks, repeaters, and matching extensions in batches instead of loading each block's attachments separately (#163)
+* Performance: repeated settings reads reuse their file check for one second while explicit reloads, path changes, and database-only settings remain immediate (#164)
 * Fix: selects populated with dynamic attribute arguments preserve saved selections and their configured return formats when rendered (#156)
 * Fix: component-filter documentation describes the registered block argument and uses an HTML attribute string for `useBlockProps` (#159)
 * Fix: the bundled dependency inventory lists every packaged library for security and SBOM tooling (#158)

@@ -323,23 +323,36 @@ class Settings {
 	private static string $loaded_source_fingerprint = '';
 
 	/**
-	 * Stat signature the cached JSON fingerprint was computed from.
+	 * Nanoseconds a file check is trusted before the settings file is read again.
 	 *
-	 * Settings::get() resolves the singleton on every read, so hashing the
-	 * settings file each time costs more than the lookup it guards. Gating the
-	 * hash behind path, mtime, size and inode keeps the file a live source
-	 * without paying for it on every access.
+	 * A page can read settings hundreds of times. Reusing one content check
+	 * avoids repeated filesystem work, while long-running processes still
+	 * notice edits without trusting coarse file timestamps.
 	 *
-	 * @var string|null
+	 * @var int
 	 */
-	private static ?string $json_stat_signature = null;
+	private const JSON_CHECK_INTERVAL = 1000000000;
 
 	/**
-	 * Fingerprint cached against the current stat signature.
+	 * Path the last file check was made for.
+	 *
+	 * @var string
+	 */
+	private static string $json_checked_path = '';
+
+	/**
+	 * Monotonic time of the last file check, 0 when none is trusted.
+	 *
+	 * @var int|float
+	 */
+	private static int|float $json_checked_at = 0;
+
+	/**
+	 * Result of the last file check: the JSON fingerprint, or null without a usable file.
 	 *
 	 * @var string|null
 	 */
-	private static ?string $json_fingerprint = null;
+	private static ?string $json_checked_result = null;
 
 	/**
 	 * Get singleton instance.
@@ -875,8 +888,9 @@ class Settings {
 		self::$settings_raw              = array();
 		self::$errors                    = array();
 		self::$loaded_source_fingerprint = '';
-		self::$json_stat_signature       = null;
-		self::$json_fingerprint          = null;
+		self::$json_checked_path         = '';
+		self::$json_checked_at           = 0;
+		self::$json_checked_result       = null;
 	}
 
 	/**
@@ -893,36 +907,28 @@ class Settings {
 	/**
 	 * Fingerprint the active JSON file or options payload.
 	 *
+	 * The file is checked at most once per JSON_CHECK_INTERVAL. The options
+	 * payload is not covered by that window, so saved settings stay live.
+	 *
 	 * @return string Source fingerprint.
 	 */
 	private static function source_fingerprint(): string {
 		$path = self::json_path();
-		clearstatcache( true, $path );
-		$stat = false;
+		$now  = hrtime( true );
 
-		if ( is_file( $path ) ) {
-			$stat = @stat( $path ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- The file can disappear between the existence check and stat.
+		if (
+			0 === self::$json_checked_at ||
+			self::$json_checked_path !== $path ||
+			$now - self::$json_checked_at >= self::JSON_CHECK_INTERVAL
+		) {
+			self::$json_checked_result = self::json_source_fingerprint( $path );
+			self::$json_checked_path   = $path;
+			self::$json_checked_at     = $now;
 		}
 
-		if ( false !== $stat ) {
-			$signature = $path . ':' . $stat['mtime'] . ':' . $stat['size'] . ':' . $stat['ino'];
-
-			if ( $signature === self::$json_stat_signature && null !== self::$json_fingerprint ) {
-				return self::$json_fingerprint;
-			}
-
-			if ( is_file( $path ) && is_readable( $path ) ) {
-				$hash = hash_file( 'sha256', $path );
-
-				self::$json_stat_signature = $signature;
-				self::$json_fingerprint    = 'json:' . $path . ':' . ( is_string( $hash ) ? $hash : 'unreadable' );
-
-				return self::$json_fingerprint;
-			}
+		if ( null !== self::$json_checked_result ) {
+			return self::$json_checked_result;
 		}
-
-		self::$json_stat_signature = null;
-		self::$json_fingerprint    = null;
 
 		$options = function_exists( 'get_option' )
 			? get_option( 'blockstudio_settings', array() )
@@ -930,6 +936,26 @@ class Settings {
 		$encoded = wp_json_encode( $options, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 
 		return 'options:' . hash( 'sha256', is_string( $encoded ) ? $encoded : '' );
+	}
+
+	/**
+	 * Fingerprint the JSON file by looking at the file system.
+	 *
+	 * @param string $path The JSON file path.
+	 *
+	 * @return string|null The file fingerprint, or null without a readable file.
+	 */
+	private static function json_source_fingerprint( string $path ): ?string {
+		clearstatcache( true, $path );
+		if ( is_file( $path ) && is_readable( $path ) ) {
+			// Stat metadata can stay unchanged after a same-size edit or deployment.
+			$hash = @hash_file( 'sha256', $path ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- The file can disappear between the readability check and read.
+			if ( is_string( $hash ) ) {
+				return 'json:' . $path . ':' . $hash;
+			}
+		}
+
+		return null;
 	}
 }
 

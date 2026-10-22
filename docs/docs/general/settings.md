@@ -235,7 +235,11 @@ foreach (Settings::errors() as $error) {
 Use `Settings::get_raw()` when an integration needs only values explicitly
 declared by the active JSON or options source. `Settings::fingerprint()` returns
 a deterministic effective-settings identity. Long-running processes can call
-`Settings::reload()` explicitly; normal access invalidates automatically.
+`Settings::reload()` explicitly to read a file change immediately. Normal access
+checks the file at most once per second within a request or long-running PHP
+process, including same-size edits. Changing the configured path takes effect
+on the next read. When no JSON file is active, saved database settings are not
+delayed by this window.
 
 The resolved performance profile is available through
 `Blockstudio\Runtime_Settings::current()`. It supports slash or dot paths:

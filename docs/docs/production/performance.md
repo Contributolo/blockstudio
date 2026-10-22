@@ -44,6 +44,11 @@ Templates that do not need every image size can opt into a shorter list with
 The default files-field output is unchanged, and WordPress image URL filters
 still apply to the sizes that are requested.
 
+Repeated settings reads reuse their JSON-file check for one second within a
+request. Long-running processes still detect file changes, while explicit
+`Settings::reload()` reads them immediately. Database-only settings and changes
+to the configured settings path remain live on the next read.
+
 ## Performance profiles
 
 `performance.profile` turns production frontend defaults on in one place:
