@@ -1,4 +1,4 @@
-import { expect, Page, test } from '@playwright/test';
+import { BrowserContext, expect, Page, test } from '@playwright/test';
 import {
   getEditorCanvas,
   login,
@@ -7,11 +7,14 @@ import {
 } from '../../utils/playwright-utils';
 
 let page: Page;
+let context: BrowserContext;
 
 test.beforeEach(async ({ browser }) => {
-  page = await browser.newPage();
+  context = await browser.newContext({
+    viewport: { width: 1440, height: 1000 },
+  });
+  page = await context.newPage();
   page.on('dialog', (dialog) => dialog.accept());
-  await page.setViewportSize({ width: 1440, height: 1000 });
   await login(page);
   await resetPageState(page);
 });
@@ -19,7 +22,7 @@ test.beforeEach(async ({ browser }) => {
 test.afterEach(async () => {
   await resetPageState(page);
   await save(page);
-  await page.close();
+  await context.close();
 });
 
 test('dependent selects fetch options and preserve saved return formats in previews and on the frontend', async () => {
@@ -85,7 +88,7 @@ test('dependent selects fetch options and preserve saved return formats in previ
     const wp = (window as any).wp;
     return wp.apiFetch({ path: '/wp/v2/posts/1483?context=edit' });
   });
-  const frontend = await page.context().newPage();
+  const frontend = await context.newPage();
   try {
     const response = await frontend.goto(saved.link);
     expect(response?.status()).toBe(200);
