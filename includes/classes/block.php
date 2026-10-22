@@ -172,9 +172,8 @@ class Block {
 				isset( $populate['type'] ) &&
 				'query' === $populate['type'] &&
 				isset( $populate['query'] ) &&
-				( ( in_array( $populate['query'], $query_options, true ) &&
-					in_array( $value, $data['optionsPopulate'] ?? array(), true ) ) ||
-					$fetch )
+				in_array( $populate['query'], $query_options, true ) &&
+				( in_array( $value, $data['optionsPopulate'] ?? array(), true ) || $fetch )
 			) {
 				$is_object =
 					( isset( $populate['returnFormat']['value'] ) &&
@@ -1739,6 +1738,14 @@ class Block {
 			return;
 		}
 
+		// The editor resolves {attributes.*} arguments, the server cannot, so the stored selection is its own option.
+		if ( 'select' === $type && Populate::has_dynamic_arguments( $populate ) ) {
+			$populate['fetch'] = true;
+			$value             = $is_multiple_option
+				? array_map( array( self::class, 'stored_selection' ), $value )
+				: self::stored_selection( $value );
+		}
+
 		if ( ( 'select' === $type || 'radio' === $type ) && ! $is_multiple_option ) {
 			$attributes[ $key ] = self::get_option_value(
 				$att,
@@ -1775,6 +1782,25 @@ class Block {
 
 			$attributes[ $key ] = $new_values;
 		}
+	}
+
+	/**
+	 * Read a stored selection as an option.
+	 *
+	 * The editor stores a selection as `value` and `label`. A plain value written
+	 * outside the editor is its own label.
+	 *
+	 * @param mixed $selection The stored selection.
+	 *
+	 * @return array The selection as an option.
+	 */
+	private static function stored_selection( $selection ): array {
+		return is_array( $selection )
+			? $selection
+			: array(
+				'value' => $selection,
+				'label' => $selection,
+			);
 	}
 
 	/**

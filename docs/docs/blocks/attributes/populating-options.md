@@ -362,3 +362,7 @@ automatically.
 This works with all populate types (`query`, `function`, `custom`). Any value
 in the populate configuration containing `{attributes.*}` is resolved
 client-side with the current attribute value before the query runs.
+
+The server does not resolve these references, so a select with dynamic arguments
+passes the stored selection to the template as it was saved, with `returnFormat`
+applied and the label taken from the saved selection.

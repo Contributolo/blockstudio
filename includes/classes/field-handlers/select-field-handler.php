@@ -183,10 +183,7 @@ class Select_Field_Handler extends Abstract_Field_Handler {
 		if ( isset( $field['populate'] ) ) {
 			$populate_type    = $field['populate']['type'] ?? false;
 			$should_defer     = $is_fetch_populate && ! ( $field['fromEditor'] ?? false );
-			$has_dynamic_args = str_contains(
-				wp_json_encode( $field['populate'] ?? array() ),
-				'{attributes.'
-			);
+			$has_dynamic_args = Populate::has_dynamic_arguments( $field['populate'] );
 
 			if (
 				! $should_defer &&
