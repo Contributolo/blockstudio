@@ -362,7 +362,27 @@ class Block {
 			$sizes = get_intermediate_image_sizes();
 			if ( $sizes ) {
 				array_unshift( $sizes, 'full' );
+			}
 
+			/**
+			 * Filters the image sizes listed under `sizes` in a files field value.
+			 *
+			 * Every listed size costs one wp_get_attachment_image_src() call per
+			 * file. Return a shorter list to resolve fewer sizes, or an empty
+			 * array to skip them and get `null` under `sizes`.
+			 *
+			 * @since 7.7.7
+			 *
+			 * @param string[] $sizes Size names, 'full' first.
+			 * @param int      $id    The attachment ID.
+			 * @param string   $size  The size requested for the value's `url`.
+			 */
+			$sizes = apply_filters( 'blockstudio/blocks/attributes/files/sizes', $sizes, $id, $size );
+			$sizes = is_array( $sizes )
+				? array_unique( array_filter( $sizes, static fn( $name ): bool => is_string( $name ) && '' !== $name ) )
+				: array();
+
+			if ( $sizes ) {
 				foreach ( $sizes as $size ) {
 					$src = wp_get_attachment_image_src( $id, $size );
 					if ( $src ) {
