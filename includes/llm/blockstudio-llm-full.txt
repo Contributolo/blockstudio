@@ -2891,6 +2891,57 @@ attributes such as `anchor`, `className`, `lock`, `metadata` and `style` are
 never adopted as field values. When the same id appears in both places, the
 nested value wins.
 
+## Reading Attributes Programmatically
+
+Code that runs outside the template, such as structured data on `save_post`,
+exports, search indexing or a `render_block` filter, often needs a saved
+block's values as the template sees them. `bs_block_values()` returns them
+without rendering the block. Call it after block registration (`init` or
+later) with the complete `attrs` array from `parse_blocks()`:
+
+```php
+foreach (parse_blocks($post->post_content) as $block) {
+  $a = bs_block_values($block['blockName'], $block['attrs']);
+
+  if ($a === null) {
+    // Not a Blockstudio block, and no extension applies.
+    continue;
+  }
+
+  echo $a['title'];
+}
+```
+
+The result is the `$a` array of the template, keyed by field id:
+
+- Field defaults apply, and a repeater with `min` has its initial rows.
+- Top-level values and `blockstudio.attributes` are merged, and the nested
+  value wins. Only declared ids are read from the top level, and WordPress
+  drops a top-level value that does not match the field's registered type, for
+  example a select string, exactly as on render.
+- The fields of matching extensions are included, with
+  their defaults. An extension of a core or third-party block reads
+  `blockstudio.attributes` only, as on render.
+- Return formats are applied, so a select with `returnFormat` of `label` gives
+  the label and a files field gives the attachment data.
+- Disabled and empty fields are `false`, as in the template.
+
+`null` means that neither the block nor an extension is managed by Blockstudio.
+A Blockstudio block with no fields returns `[]`.
+
+The function runs the same transform as rendering, so it has the same side
+effects: files fields query the attachments, a block field that does not return
+`data` renders the referenced block, and the
+`blockstudio/blocks/attributes/render` filter runs for every value. It does not
+render the block's own template and does not resolve `innerBlocks`; walk them
+yourself. A code field keeps a generated `%selector%` id that differs between
+calls.
+
+There is no option for the stored values without the transform. Read the
+`attrs` array directly for those, or use
+`bs_validate_block()` to
+check them.
+
 ## Empty Values
 
 Attribute values return `false` if the field is empty or no option has been selected.
@@ -5816,6 +5867,9 @@ values are saved in the same `attrs.blockstudio.attributes` object as the
 block's own field values, so all ids share one namespace. If two extensions
 define the same id, both definitions are returned and edit the same value; on
 render, the definition of the extension registered later applies.
+
+To read the values of a saved block as its template receives them, use
+`bs_block_values()`.
 
 Use `bs_block_assets()` to
 inspect the block's discovered CSS and JavaScript. For a complete preview

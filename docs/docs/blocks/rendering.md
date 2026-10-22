@@ -145,6 +145,9 @@ block's own field values, so all ids share one namespace. If two extensions
 define the same id, both definitions are returned and edit the same value; on
 render, the definition of the extension registered later applies.
 
+To read the values of a saved block as its template receives them, use
+[`bs_block_values()`](/docs/blocks/attributes/rendering#reading-attributes-programmatically).
+
 Use [`bs_block_assets()`](/docs/blocks/assets#inspecting-a-blocks-assets) to
 inspect the block's discovered CSS and JavaScript. For a complete preview
 document, including nested blocks and shared runtime dependencies, use

@@ -169,7 +169,8 @@ hooks: blockstudio/blocks/attributes, blockstudio/blocks/attributes/render
 route: /docs/blocks/attributes/rendering
 file: docs/docs/blocks/attributes/rendering.md
 purpose: Access attribute values in your block templates.
-php: $a, bs_data_attributes(), bs_get_group(), bs_icon(), bs_render_data_attributes(), bs_render_icon()
+hooks: blockstudio/blocks/attributes/render
+php: $a, bs_block_values(), bs_data_attributes(), bs_get_group(), bs_icon(), bs_render_data_attributes(), bs_render_icon(), bs_validate_block()
 
 ### Block Attributes
 route: /docs/blocks/attributes/block-attributes
@@ -304,7 +305,7 @@ file: docs/docs/blocks/rendering.md
 purpose: Render Blockstudio blocks programmatically via PHP functions or HTML tags.
 settings: assets, blockTags, content, tailwind, ui
 hooks: blockstudio/attributes, blockstudio/block_tags/allow, blockstudio/block_tags/builders, blockstudio/block_tags/deny, blockstudio/block_tags/prefixes, blockstudio/block_tags/render, blockstudio/block_tags/renderers, blockstudio/block_tags/tag_aliases, blockstudio/blocks/attributes/validate, blockstudio/parser/element_mapping, blockstudio/parser/renderers, blockstudio/settings/block_tags/enabled
-php: $a, Batch_Render::reset(), Block_Tags::parse_inner_blocks(), Blockstudio\Batch_Render, Blockstudio\Block_Tags, Blockstudio\Render, Canvas::documents(), Render::composition(), Render::content(), Render::document(), Render::document_from_html(), Render::normalize(), bs_block(), bs_block_assets(), bs_block_extension_fields(), bs_block_fields(), bs_render_block(), bs_validate_block()
+php: $a, Batch_Render::reset(), Block_Tags::parse_inner_blocks(), Blockstudio\Batch_Render, Blockstudio\Block_Tags, Blockstudio\Render, Canvas::documents(), Render::composition(), Render::content(), Render::document(), Render::document_from_html(), Render::normalize(), bs_block(), bs_block_assets(), bs_block_extension_fields(), bs_block_fields(), bs_block_values(), bs_render_block(), bs_validate_block()
 cli: wp bs blocks validate
 
 ### Components

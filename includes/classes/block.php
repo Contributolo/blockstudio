@@ -12,6 +12,7 @@ use ErrorException;
 use Throwable;
 use Timber\Timber;
 use WP_Block;
+use WP_Block_Type_Registry;
 use WP_HTML_Tag_Processor;
 
 /**
@@ -2234,6 +2235,57 @@ class Block {
 		}
 
 		return $attribute_data;
+	}
+
+	/**
+	 * Resolve the values of a stored block as its template receives them.
+	 *
+	 * Runs the render-time steps without rendering: WordPress' check of the
+	 * top-level attributes against their registered types, declared defaults,
+	 * top-level values, `blockstudio.attributes` (which wins) and the fields of
+	 * matching extensions, then every return format. An extension of a core or
+	 * third-party block reads `blockstudio.attributes` only.
+	 *
+	 * Side effects are those of the transform. Files fields query attachments,
+	 * block fields that do not return `data` render the referenced block, and
+	 * the `blockstudio/blocks/attributes/render` filter runs per value.
+	 *
+	 * @since 7.7.7
+	 *
+	 * @param string $name  Block name.
+	 * @param array  $attrs Complete parsed block attributes.
+	 *
+	 * @return array<string, mixed>|null Values keyed by field id, or null when neither the block nor an extension is managed by Blockstudio.
+	 */
+	public static function values( string $name, array $attrs ): ?array {
+		$own        = Build::blocks()[ $name ] ?? null;
+		$extensions = self::extension_attributes( $name, Build::extensions() );
+		if ( ! is_object( $own ) && array() === $extensions ) {
+			return null;
+		}
+
+		// Same order as render: the block's own definition wins over an extension.
+		$definitions = ( is_object( $own ) && is_array( $own->attributes ?? null ) ? $own->attributes : array() ) + $extensions;
+		if ( is_object( $own ) ) {
+			// WordPress drops top-level values that fail the registered type
+			// and adds registered defaults before any render sees the attributes.
+			$registered = WP_Block_Type_Registry::get_instance()->get_registered( $name );
+			$attrs      = $registered ? $registered->prepare_attributes_for_render( $attrs ) : $attrs;
+		} else {
+			$attrs = array( 'blockstudio' => $attrs['blockstudio'] ?? array() );
+		}
+
+		$settings = is_array( $attrs['blockstudio'] ?? null ) ? $attrs['blockstudio'] : array();
+
+		$attrs['blockstudio'] = array(
+			'attributes' => is_array( $settings['attributes'] ?? null ) ? $settings['attributes'] : array(),
+			'disabled'   => is_array( $settings['disabled'] ?? null ) ? $settings['disabled'] : array(),
+		);
+		$block                = array( 'name' => $name );
+
+		self::transform( $attrs, $block, $name, false, false, $definitions );
+
+		return $attrs;
 	}
 
 	/**

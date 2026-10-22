@@ -220,6 +220,37 @@ if ( ! function_exists( 'bs_validate_block' ) ) {
 	}
 }
 
+if ( ! function_exists( 'bs_block_values' ) ) {
+	/**
+	 * Get the values of a stored block as its template receives them.
+	 *
+	 * Call after block registration. Supply the complete attrs array from
+	 * parse_blocks(), including blockstudio and top-level values. The result is
+	 * what `$a` holds in the template: defaults, top-level and nested values
+	 * (nested wins), matching extension fields, and every return format. It
+	 * does not render the block. An extension of a core or third-party block
+	 * reads blockstudio.attributes only.
+	 *
+	 * This runs the same transform as rendering, so files fields query
+	 * attachments, block fields that do not return data render the referenced
+	 * block, and the blockstudio/blocks/attributes/render filter runs per value.
+	 * Only this block is resolved; callers walk innerBlocks themselves.
+	 *
+	 * @since 7.7.7
+	 *
+	 * @param string $name  Block name, including extended core or third-party blocks.
+	 * @param array  $attrs Complete parsed block attributes.
+	 * @return array<string, mixed>|null Values keyed by field id, or null for an unmanaged block.
+	 * @example $values = bs_block_values( $block['blockName'], $block['attrs'] );
+	 *
+	 * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound -- Public API function.
+	 */
+	function bs_block_values( string $name, array $attrs ): ?array {
+		// phpcs:enable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
+		return \Blockstudio\Block::values( $name, $attrs );
+	}
+}
+
 if ( ! function_exists( 'bs_block_assets' ) ) {
 	/**
 	 * Inspect a registered block's discovered CSS and JavaScript assets.
