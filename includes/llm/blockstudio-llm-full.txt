@@ -8934,10 +8934,25 @@ add_filter('blockstudio/blocks/attributes/populate', function($options) {
 
 This filter allows you to adjust the output of the `useBlockProps` content.
 
+All component filters (`use_block_props`, `inner_blocks` and `rich_text`)
+receive the block as their last argument. `$block` is the `WP_Block_Type`
+registered for the block being rendered, so `$block->name` is the block name,
+for example `acme/hero`.
+
+`$props` is a string of HTML attributes, not an array. On the frontend it is the
+result of
+get_block_wrapper_attributes(),
+for example `class="wp-block-acme-hero my-class"`. In the editor it is the
+`class` attribute of the element. Return a string. In the editor only the
+`class` attribute of the returned string is applied.
+
 ```php
 add_filter('blockstudio/blocks/components/use_block_props/render', function($props, $block) {
-  $props['class'] .= ' my-custom-class';
-  return $props;
+  if ($block->name !== 'acme/hero') {
+    return $props;
+  }
+
+  return str_replace('class="', 'class="my-custom-class ', $props);
 }, 10, 2);
 ```
 
