@@ -32,6 +32,18 @@ request options are primed together; ordinary frontend requests do not look up
 the editor asset-capture transient. These changes do not require a persistent
 object cache or a performance profile.
 
+When post content contains saved Blockstudio field values, attachment caches
+are primed across its blocks before WordPress renders them, including nested
+blocks, repeaters, and matching extensions. IDs are deduplicated and loaded in
+batches of up to 500. Individual blocks still prime their own attachments when
+rendered outside `the_content`, when using defaults, or when rendering block
+references. Warm caches do not trigger another attachment query.
+
+Templates that do not need every image size can opt into a shorter list with
+[`blockstudio/blocks/attributes/files/sizes`](/docs/blocks/hooks/php#attributesfilessizes).
+The default files-field output is unchanged, and WordPress image URL filters
+still apply to the sizes that are requested.
+
 ## Performance profiles
 
 `performance.profile` turns production frontend defaults on in one place:

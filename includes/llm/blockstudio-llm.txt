@@ -461,7 +461,7 @@ route: /docs/production/performance
 file: docs/docs/production/performance.md
 purpose: Production frontend defaults, the built-in profiler, and the render techniques underneath.
 settings: assets, dev/perf, performance/measurement, performance/profile, tailwind
-hooks: blockstudio/performance/measurement_enabled, blockstudio/render/dependencies, blockstudio/settings/dev/perf
+hooks: blockstudio/blocks/attributes/files/sizes, blockstudio/performance/measurement_enabled, blockstudio/render/dependencies, blockstudio/settings/dev/perf
 php: Batch_Render::reset(), Blockstudio\Batch_Render, Blockstudio\Performance_Measurement, Performance_Measurement::snapshot(), Runtime_Settings::current()
 
 ### Static Prerendering
