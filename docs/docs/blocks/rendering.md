@@ -104,6 +104,35 @@ render several independent documents in one request should call
 `Blockstudio\Batch_Render::reset()` between them; `Canvas::documents()` does
 this automatically.
 
+## Rendering Outside the Page
+
+Blockstudio puts a `<!--blockstudio/namespace/slug-->` comment in front of
+every block it renders. On a frontend page the buffer reads these comments to
+see which blocks are present, loads their assets, and removes the comments
+before the response is sent.
+
+Output that does not pass through that buffer keeps the comments. This applies
+to REST responses, feeds, AJAX handlers, and HTML you store or send somewhere
+else after `do_blocks()`, `Render::content()`, or `bs_render_block()`. Use
+`bs_strip_render_markers()` to remove them:
+
+```php
+$html = bs_strip_render_markers(do_blocks($post->post_content));
+```
+
+The function removes the comments of registered Blockstudio blocks and leaves
+everything else untouched, including other HTML comments. It is the same code
+the page buffer uses. Call it after block registration (`init` or later).
+
+Do not strip markup that is still printed into a buffered frontend page. The
+page needs the comments to know which block assets to load, and Blockstudio
+removes them itself at the end.
+
+Removing the comments does not add assets. Block CSS and JavaScript files are
+only injected by the page buffer. Use
+[`bs_block_assets()`](/docs/blocks/assets#inspecting-a-blocks-assets) or
+`Render::document()` when the consumer needs them as well.
+
 ## Inspecting Blocks
 
 Use `bs_block_fields()` after block registration (on `init` or later) to get

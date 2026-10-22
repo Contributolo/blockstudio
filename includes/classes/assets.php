@@ -546,7 +546,6 @@ class Assets {
 
 		$blocks         = Build::data();
 		$blocks_native  = Build::blocks();
-		$ids            = array();
 		$blocks_on_page = array();
 		$asset_ids      = &self::$parsed_asset_ids;
 
@@ -562,8 +561,7 @@ class Assets {
 		$html   = preg_replace( $script_pattern, '', $html );
 
 		foreach ( $blocks as $block ) {
-			$id    = Block::comment( $block['name'] );
-			$ids[] = $id;
+			$id = Block::comment( $block['name'] );
 
 			if ( false !== stripos( $html, $id ) ) {
 				$blocks_on_page[ $block['name'] ] = $blocks_native[ $block['name'] ];
@@ -653,7 +651,7 @@ class Assets {
 		$footer = apply_filters( 'blockstudio/render/footer', $footer, $blocks_on_page );
 
 		$output = strtr(
-			str_replace( $ids, '', $html ),
+			Block::strip_comments( $html ),
 			array(
 				'</body>' => $footer . '</body>',
 				'</head>' => $head . '</head>',

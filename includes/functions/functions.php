@@ -583,6 +583,38 @@ if ( ! function_exists( 'bs_is_preview' ) ) {
 	}
 }
 
+if ( ! function_exists( 'bs_strip_render_markers' ) ) {
+	/**
+	 * Remove the comments Blockstudio puts in front of every rendered block.
+	 *
+	 * A block renders as `<!--blockstudio/namespace/slug-->` followed by its
+	 * markup. Blockstudio uses the comment to find the blocks on a page and
+	 * removes it from the buffered frontend response. Output that never goes
+	 * through that buffer keeps it: REST responses, feeds, AJAX handlers, or
+	 * `do_blocks()` and `bs_render_block()` results that are stored or sent
+	 * elsewhere. Call this on such output to get clean markup.
+	 *
+	 * Only comments of registered Blockstudio blocks are removed, so call it
+	 * after block registration (`init` or later). Do not call it on markup that
+	 * is still printed into a buffered page: the page needs the comments to
+	 * know which block assets to load.
+	 *
+	 * @since 7.7.7
+	 *
+	 * @param string $html Rendered HTML.
+	 *
+	 * @return string The HTML without block identity comments.
+	 *
+	 * @example $html = bs_strip_render_markers( do_blocks( $post->post_content ) );
+	 *
+	 * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound -- Public API function.
+	 */
+	function bs_strip_render_markers( string $html ): string {
+		// phpcs:enable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
+		return Blockstudio\Block::strip_comments( $html );
+	}
+}
+
 if ( ! function_exists( 'blockstudio_pages' ) ) {
 	/**
 	 * Get registered file-based pages.
