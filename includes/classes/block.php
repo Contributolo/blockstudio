@@ -145,6 +145,33 @@ class Block {
 	}
 
 	/**
+	 * Remove the block identity comments from rendered HTML.
+	 *
+	 * Every registered block is matched with the same string comment() emits,
+	 * so the page buffer and callers that render outside of it strip exactly
+	 * the same markers and nothing else.
+	 *
+	 * @since 7.7.7
+	 *
+	 * @param string $html The rendered HTML.
+	 *
+	 * @return string The HTML without block identity comments.
+	 */
+	public static function strip_comments( string $html ): string {
+		if ( ! str_contains( $html, '<!--blockstudio/' ) ) {
+			return $html;
+		}
+
+		$comments = array();
+
+		foreach ( Build::data() as $block ) {
+			$comments[] = self::comment( $block['name'] );
+		}
+
+		return str_replace( $comments, '', $html );
+	}
+
+	/**
 	 * Get option value.
 	 *
 	 * @since 3.0.4

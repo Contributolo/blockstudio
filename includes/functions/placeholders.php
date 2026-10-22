@@ -347,6 +347,7 @@ blockstudio_report_api_collisions(
 		'bs_is_editor',
 		'bs_is_preview',
 		'bs_is_buffering',
+		'bs_strip_render_markers',
 		'blockstudio_pages',
 		'blockstudio_page_tree',
 		'blockstudio_page_children',

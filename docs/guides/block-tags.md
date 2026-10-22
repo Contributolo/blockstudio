@@ -104,7 +104,10 @@ Rendering `acme/features` produces:
 ```
 
 Each Blockstudio block in the output is preceded by a
-`<!--blockstudio/namespace/slug-->` comment. The two syntaxes are equivalent. `<bs:acme-card>` encodes the block name in
+`<!--blockstudio/namespace/slug-->` comment. The page buffer removes it from the
+response; for output that skips the buffer, use
+[`bs_strip_render_markers()`](/docs/blocks/rendering#rendering-outside-the-page).
+The two syntaxes are equivalent. `<bs:acme-card>` encodes the block name in
 the tag, and `<block name="acme/card">` passes it as an attribute. Every other
 attribute becomes a field value, so `title` reaches the card template as
 `$a['title']`. Core blocks work too, rendered through WordPress with the

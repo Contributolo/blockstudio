@@ -578,6 +578,21 @@ class AssetsTest extends TestCase {
 		$this->assertStringContainsString( '<p>Content</p>', $result );
 	}
 
+	public function test_parse_output_removes_block_comments(): void {
+		$name = 'blockstudio/type-text';
+
+		if ( ! isset( Build::data()[ $name ] ) ) {
+			$this->markTestSkipped( "{$name} not registered." );
+		}
+
+		$html = '<html><head></head><body>' . Block::comment( $name ) . '<p>Content</p></body></html>';
+
+		$result = ( new Assets() )->parse_output( $html );
+
+		$this->assertStringNotContainsString( '<!--blockstudio/', $result );
+		$this->assertStringContainsString( '<body><p>Content</p>', $result );
+	}
+
 	public function test_parse_output_emits_each_bundled_ui_global_once(): void {
 		$name     = 'blockstudio-test/ui-global-dedupe';
 		$registry = Block_Registry::instance();
