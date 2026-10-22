@@ -10,6 +10,7 @@ let page: Page;
 
 test.beforeEach(async ({ browser }) => {
   page = await browser.newPage();
+  page.on('dialog', (dialog) => dialog.accept());
   await page.setViewportSize({ width: 1440, height: 1000 });
   await login(page);
   await resetPageState(page);
@@ -53,10 +54,14 @@ test('dependent selects fetch options and preserve saved return formats in previ
   };
 
   await expect.poll(readPreview).toEqual(expected);
-  const fields = page.locator(
-    '.blockstudio-fields .blockstudio-fields__field--select',
-  );
-  const single = fields.filter({ has: page.getByText('Single', { exact: true }) });
+  await preview.click();
+  const settings = page.getByRole('button', { name: 'Settings', exact: true });
+  if ((await settings.getAttribute('aria-pressed')) !== 'true') {
+    await settings.click();
+  }
+  await page.getByRole('tab', { name: 'Block', exact: true }).click();
+  const single = page.locator('.blockstudio-fields [data-id="single"]');
+  await expect(single).toBeVisible();
   await single.getByRole('combobox').fill('Item B');
   await single.getByRole('option', { name: 'Item B (post)', exact: true }).click();
   expected.single = 'b';
@@ -65,7 +70,7 @@ test('dependent selects fetch options and preserve saved return formats in previ
 
   const saved = await page.evaluate(async () => {
     const wp = (window as any).wp;
-    return wp.apiFetch({ path: '/wp/v2/pages/1483?context=edit' });
+    return wp.apiFetch({ path: '/wp/v2/posts/1483?context=edit' });
   });
   const frontend = await page.context().newPage();
   try {
@@ -77,7 +82,7 @@ test('dependent selects fetch options and preserve saved return formats in previ
     expect(JSON.parse(values!)).toEqual(expected);
     const after = await page.evaluate(async () => {
       return (window as any).wp.apiFetch({
-        path: '/wp/v2/pages/1483?context=edit',
+        path: '/wp/v2/posts/1483?context=edit',
       });
     });
     expect(after.content.raw).toBe(saved.content.raw);
