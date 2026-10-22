@@ -66,6 +66,8 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 * Fix: component-filter documentation describes the registered block argument and uses an HTML attribute string for `useBlockProps` (#159)
 * Fix: the bundled dependency inventory lists every packaged library for security and SBOM tooling (#158)
 * Fix: release downloads no longer include stale development source maps (#166)
+* Fix: files-field examples use the actual attachment keys and image-size dimensions (#167)
+* Fix: attribute render-filter examples handle one field value and register all three callback arguments (#167)
 
 = 7.7.6 =
 * New: `bs_is_editor()` and `bs_is_preview()` expose the same render mode as template variables to theme helpers and filters (#140)

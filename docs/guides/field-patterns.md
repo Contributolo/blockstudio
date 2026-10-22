@@ -506,12 +506,15 @@ Repeaters without `minimized` keep their existing expanded-by-default behavior.
   <img
     src="<?php echo esc_url( $a['image']['url'] ); ?>"
     alt="<?php echo esc_attr( $a['image']['alt'] ); ?>"
-    width="<?php echo esc_attr( $a['image']['width'] ); ?>"
-    height="<?php echo esc_attr( $a['image']['height'] ); ?>" />
+    <?php if ( isset( $a['image']['sizes']['full-width'], $a['image']['sizes']['full-height'] ) ) : ?>
+      width="<?php echo esc_attr( $a['image']['sizes']['full-width'] ); ?>"
+      height="<?php echo esc_attr( $a['image']['sizes']['full-height'] ); ?>"
+    <?php endif; ?>
+  />
 <?php endif; ?>
 ```
 
-The default `returnFormat` is `"object"`, which provides `url`, `alt`, `width`, `height`, `id`, `mime`, `type`, and `size`.
+The default `returnFormat` is `"object"`, which provides `ID`, `title`, `alt`, `caption`, `description`, `href`, `url`, and `sizes`. `sizes` holds the URL of every registered image size (`sizes['large']`) with its dimensions (`sizes['large-width']`, `sizes['large-height']`). See [Rendering Attributes](/docs/blocks/attributes/rendering#files) for the full list.
 
 ### Gallery with limit
 
@@ -569,7 +572,7 @@ Control what the files field returns:
 ```json
 // Full object (default)
 { "id": "photo", "type": "files", "returnFormat": "object", "multiple": false }
-// $a['photo']['url'], $a['photo']['alt'], $a['photo']['width'], etc.
+// $a['photo']['url'], $a['photo']['alt'], $a['photo']['sizes']['full-width'], etc.
 
 // Just the ID
 { "id": "photo", "type": "files", "returnFormat": "id", "multiple": false }

@@ -132,18 +132,36 @@ Attribute values return `false` if the field is empty or no option has been sele
 
 ### Files
 
-The files field returns an array with file data:
+By default (no `returnFormat`, or `"returnFormat": "object"`), the files field
+returns an array with the data of the attachment. With `"multiple": true` it
+returns a list of these arrays. A file whose attachment no longer exists is
+`false`.
 
+| Key | Description |
+|-----|-------------|
+| `ID` | The attachment ID. |
+| `title` | The attachment title. |
+| `alt` | The alt text. Falls back to the attachment title when empty. |
+| `caption` | The caption. |
+| `description` | The description. |
+| `href` | The permalink of the attachment page. |
+| `url` | The URL of the file. With the size dropdown (`"size": true`), the URL of the selected size. |
+| `sizes` | The URL and dimensions of every registered image size, see below. |
 
 #### PHP
 
 ```php title="index.php"
-<?php if ($a['image']) : ?>
+<?php if ($a['image']) :
+  $image = $a['image'];
+  $sizes = $image['sizes'] ?? [];
+?>
   <img
-    src="<?php echo $a['image']['url']; ?>"
-    alt="<?php echo $a['image']['alt']; ?>"
-    width="<?php echo $a['image']['width']; ?>"
-    height="<?php echo $a['image']['height']; ?>"
+    src="<?php echo esc_url($sizes['large'] ?? $image['url']); ?>"
+    alt="<?php echo esc_attr($image['alt']); ?>"
+    <?php if (isset($sizes['large-width'], $sizes['large-height'])) : ?>
+      width="<?php echo esc_attr($sizes['large-width']); ?>"
+      height="<?php echo esc_attr($sizes['large-height']); ?>"
+    <?php endif; ?>
   />
 <?php endif; ?>
 ```
@@ -153,13 +171,40 @@ The files field returns an array with file data:
 ```twig title="index.twig"
 {% if a.image %}
   <img
-    src="{{ a.image.url }}"
-    alt="{{ a.image.alt }}"
-    width="{{ a.image.width }}"
-    height="{{ a.image.height }}"
+    src="{{ (a.image.sizes.large ?? a.image.url)|e('html_attr') }}"
+    alt="{{ a.image.alt|e('html_attr') }}"
+    {% if a.image.sizes['large-width'] is defined and a.image.sizes['large-height'] is defined %}
+      width="{{ a.image.sizes['large-width']|e('html_attr') }}"
+      height="{{ a.image.sizes['large-height']|e('html_attr') }}"
+    {% endif %}
   />
 {% endif %}
 ```
+
+`sizes` has one entry per registered image size plus `full`: the URL under the
+size name, and the dimensions under `<size>-width` and `<size>-height`. A size
+WordPress has not generated for an attachment resolves to the original file with
+its dimensions. If WordPress cannot resolve an image or preview, the `sizes`
+key is absent. For example, a PDF without a generated preview has no `sizes`,
+but a PDF with preview metadata can have image sizes. `sizes` is `null` when
+no image sizes are registered or when the
+[`files/sizes` filter](/docs/blocks/hooks/php#attributesfilessizes) disables them.
+That filter can also shorten the map, so check a size exists before reading
+its dimensions, as in the examples above.
+
+The object has no `width`, `height`, `mime`, `type` or `size` keys. Read the
+dimensions from `sizes`, or use `ID` with functions such as
+`wp_get_attachment_image()` and `get_post_mime_type()`.
+
+#### Return formats
+
+`returnFormat` changes what the field returns:
+
+| `returnFormat` | Value |
+|----------------|-------|
+| `"object"` (default) | The array described above. |
+| `"id"` | The attachment ID as stored, or a list of IDs with `"multiple": true`. |
+| `"url"` | The URL as a string, or a list of URLs with `"multiple": true`. Images use the size set with `returnSize` (default `full`), other files their file URL. |
 
 ### Link
 

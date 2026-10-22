@@ -240,4 +240,26 @@ class BlockAttachmentSizesTest extends TestCase {
 		$this->assertSame( 1, $this->src_calls );
 		$this->assertSame( array( 'full', 'full-width', 'full-height' ), array_keys( $data['sizes'] ) );
 	}
+
+	public function test_non_image_attachments_without_preview_metadata_have_no_sizes_key(): void {
+		wp_update_post( array( 'ID' => $this->attachment_id, 'post_mime_type' => 'application/pdf' ) );
+		wp_update_attachment_metadata( $this->attachment_id, array( 'sizes' => array() ) );
+
+		$this->assertArrayNotHasKey( 'sizes', Block::get_attachment_data( $this->attachment_id ) );
+	}
+
+	public function test_a_pdf_with_a_generated_preview_can_have_image_sizes(): void {
+		wp_update_post( array( 'ID' => $this->attachment_id, 'post_mime_type' => 'application/pdf' ) );
+		update_post_meta( $this->attachment_id, '_wp_attached_file', '2026/10/attachment-sizes.pdf' );
+		wp_update_attachment_metadata(
+			$this->attachment_id,
+			array( 'sizes' => array( 'full' => array( 'file' => 'attachment-sizes-pdf.jpg', 'width' => 1200, 'height' => 800, 'mime-type' => 'image/jpeg' ) ) )
+		);
+
+		$data = Block::get_attachment_data( $this->attachment_id );
+
+		$this->assertStringEndsWith( 'attachment-sizes-pdf.jpg', $data['sizes']['full'] );
+		$this->assertSame( 1200, $data['sizes']['full-width'] );
+		$this->assertSame( 800, $data['sizes']['full-height'] );
+	}
 }
