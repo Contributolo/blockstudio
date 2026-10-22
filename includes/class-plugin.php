@@ -306,6 +306,8 @@ class Plugin {
 
 		Perf::init();
 
+		add_filter( 'the_content', array( Block::class, 'prime_content_attachments' ), 8 );
+
 		add_action(
 			'init',
 			function () {

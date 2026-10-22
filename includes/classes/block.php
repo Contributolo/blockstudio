@@ -1867,6 +1867,77 @@ class Block {
 	}
 
 	/**
+	 * Prime the attachments of every Blockstudio block in post content.
+	 *
+	 * Runs on `the_content` right before core's do_blocks(), so one query pair
+	 * loads the attachments of the whole content instead of one pair per
+	 * block. Blocks rendered outside of `the_content`, such as in widgets or
+	 * with bs_render_block(), still prime their own attachments in
+	 * transform_attributes(). The cache skips IDs it already holds, so that
+	 * second pass costs no query.
+	 *
+	 * @since 7.7.7
+	 *
+	 * @param string $content The post content.
+	 *
+	 * @return string The unchanged content.
+	 */
+	public static function prime_content_attachments( $content ) {
+		// Every Blockstudio field value is stored under this key, so content
+		// without it has nothing to prime and is not parsed a second time.
+		if ( ! is_string( $content ) || ! str_contains( $content, '"blockstudio"' ) ) {
+			return $content;
+		}
+
+		$ids = array();
+		self::collect_parsed_attachment_ids( parse_blocks( $content ), $ids );
+
+		foreach ( array_chunk( array_unique( $ids ), 500 ) as $chunk ) {
+			_prime_post_caches( $chunk, false, true );
+		}
+
+		return $content;
+	}
+
+	/**
+	 * Collect the attachment IDs that the files fields of parsed blocks will resolve.
+	 *
+	 * Reads the stored attributes with the definitions a render uses, so
+	 * blocks with extensions are covered too. Inner blocks are walked.
+	 *
+	 * @param array $blocks Blocks as returned by parse_blocks().
+	 * @param array $ids    The collected IDs (passed by reference).
+	 *
+	 * @return void
+	 */
+	private static function collect_parsed_attachment_ids( array $blocks, array &$ids ): void {
+		$registered = Build::blocks();
+		$extensions = Build::extensions();
+
+		foreach ( $blocks as $block ) {
+			$stored = $block['attrs']['blockstudio'] ?? null;
+			$name   = $stored['name'] ?? $block['blockName'] ?? null;
+
+			if ( is_string( $name ) && is_array( $stored['attributes'] ?? null ) ) {
+				$definitions = ( is_array( $registered[ $name ]->attributes ?? null ) ? $registered[ $name ]->attributes : array() ) +
+					self::extension_attributes( $name, $extensions );
+
+				self::collect_attachment_ids(
+					array_merge( array_intersect_key( $block['attrs'], $definitions ), $stored['attributes'] ),
+					false,
+					$definitions,
+					$stored['disabled'] ?? array(),
+					$ids
+				);
+			}
+
+			if ( ! empty( $block['innerBlocks'] ) ) {
+				self::collect_parsed_attachment_ids( $block['innerBlocks'], $ids );
+			}
+		}
+	}
+
+	/**
 	 * Collect the attachment IDs that files fields will resolve, repeaters included.
 	 *
 	 * Fields returning plain IDs never load the attachment, so they are skipped.
