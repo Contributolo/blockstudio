@@ -65,6 +65,7 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 * Fix: selects populated with dynamic attribute arguments preserve saved selections and their configured return formats when rendered (#156)
 * Fix: component-filter documentation describes the registered block argument and uses an HTML attribute string for `useBlockProps` (#159)
 * Fix: the bundled dependency inventory lists every packaged library for security and SBOM tooling (#158)
+* Fix: release downloads no longer include stale development source maps (#166)
 
 = 7.7.6 =
 * New: `bs_is_editor()` and `bs_is_preview()` expose the same render mode as template variables to theme helpers and filters (#140)

@@ -23,6 +23,11 @@ for path in node_modules tests docs evals src .github _reference .claude build p
   fi
 done
 composer install --working-dir=build/blockstudio --no-dev --optimize-autoloader --no-interaction
+if [ -n "$(find build/blockstudio -name '*.map' -print -quit)" ]; then
+  echo "Source maps leaked into release:" >&2
+  find build/blockstudio -name '*.map' >&2
+  exit 1
+fi
 php tests/distribution/dependencies.php build/blockstudio
 rm -f blockstudio.zip
 (cd build && zip -qr ../blockstudio.zip blockstudio/)

@@ -34,6 +34,9 @@ artifacts/
 .last-run.json
 *.tsbuildinfo
 
+# Source maps from dev builds (npm run dev); never part of the shipped assets
+includes/admin/assets/**/*.map
+
 # Package build (keep compiled assets for now)
 package/node_modules/
 package/.last-run.json
