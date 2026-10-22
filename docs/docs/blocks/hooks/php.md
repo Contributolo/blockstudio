@@ -132,14 +132,18 @@ add_filter('blockstudio/blocks/attributes', function($attribute, $block) {
 
 ### attributes/render
 
-This filter allows you to adjust the attributes of a block before it is
-rendered. See [Filtering](/docs/blocks/attributes/filtering) for more information.
+This filter adjusts the value of one field before it is passed to the block
+template. It runs once per field and receives three arguments: `$value` (the
+resolved value), `$key` (the field key, as used in `$a`) and `$block` (the block
+data array that templates receive as `$block` or `$b`). Register it with three
+accepted arguments. See [Filtering](/docs/blocks/attributes/filtering) for more
+information.
 
 ```php title="functions.php"
-add_filter('blockstudio/blocks/attributes/render', function($attributes, $block) {
-  // Modify attributes before rendering
-  return $attributes;
-}, 10, 2);
+add_filter('blockstudio/blocks/attributes/render', function($value, $key, $block) {
+  // Modify the value of one field before rendering.
+  return $value;
+}, 10, 3);
 ```
 
 ### attributes/validate

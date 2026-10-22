@@ -205,7 +205,7 @@ echo $a['photo']['url'];
 echo $a['photo']['alt'];
 ```
 
-Available properties: `url`, `id`, `alt`, `width`, `height`, `mime`, `type`, `size`.
+Available properties: `ID`, `title`, `alt`, `caption`, `description`, `href`, `url`, `sizes`. The dimensions are in `sizes`, for example `$a['photo']['sizes']['full-width']`.
 
 ### Select, radio, and checkbox
 
