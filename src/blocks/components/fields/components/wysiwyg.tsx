@@ -21,7 +21,7 @@ import {
   code,
 } from '@wordpress/icons';
 import { Base } from '@/blocks/components/base';
-import { Code } from '@/blocks/components/fields/components/code';
+import { Code } from '@/blocks/components/fields/lazy-fields';
 import { getWysiwygExtensions } from '@/blocks/utils/wysiwyg-extensions';
 import { getWysiwygLinkAttributes } from '@/blocks/utils/wysiwyg-link';
 import { Alignment, BlockstudioAttribute } from '@/types/block';

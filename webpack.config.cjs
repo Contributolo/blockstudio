@@ -2,6 +2,16 @@ const defaultConfig = require('@wordpress/scripts/config/webpack.config');
 const DependencyExtractionWebpackPlugin = require('@wordpress/dependency-extraction-webpack-plugin');
 const path = require('path');
 
+// Libraries of the lazily loaded field editors get stable, readable chunk names
+// instead of numeric ids. Only async chunks are touched, entries stay as they are.
+const vendorChunk = (name, packages, priority = 20) => ({
+  test: new RegExp(`[\\\\/]node_modules[\\\\/](${packages.join('|')})[\\\\/]`),
+  name: `blocks/${name}`,
+  chunks: 'async',
+  enforce: true,
+  priority,
+});
+
 module.exports = {
   ...defaultConfig,
   entry: {
@@ -29,6 +39,52 @@ module.exports = {
       '@/devtools': path.resolve(__dirname, 'src/devtools'),
       '@/canvas': path.resolve(__dirname, 'src/canvas'),
       '@/utils': path.resolve(__dirname, 'src/utils'),
+    },
+  },
+  optimization: {
+    ...defaultConfig.optimization,
+    splitChunks: {
+      ...defaultConfig.optimization.splitChunks,
+      cacheGroups: {
+        ...defaultConfig.optimization.splitChunks.cacheGroups,
+        codemirrorJavascript: vendorChunk(
+          'codemirror-javascript',
+          ['@codemirror/lang-javascript', '@lezer/javascript'],
+          30,
+        ),
+        codemirrorCss: vendorChunk(
+          'codemirror-css',
+          ['@codemirror/lang-css', '@lezer/css'],
+          30,
+        ),
+        codemirrorMarkup: vendorChunk(
+          'codemirror-markup',
+          [
+            '@codemirror/lang-(?:html|json|php)',
+            '@lezer/(?:html|json|php)',
+            '@uiw/codemirror-theme(?:s|-github)',
+          ],
+          30,
+        ),
+        codemirror: vendorChunk('codemirror', [
+          '@babel/runtime',
+          '@codemirror',
+          '@lezer',
+          '@marijn',
+          '@uiw',
+          'crelt',
+          'style-mod',
+        ]),
+        tiptap: vendorChunk('tiptap', [
+          '@floating-ui',
+          '@tiptap',
+          'fast-equals',
+          'linkifyjs',
+          'orderedmap',
+          'prosemirror-[^\\\\/]+',
+          'rope-sequence',
+        ]),
+      },
     },
   },
   plugins: [

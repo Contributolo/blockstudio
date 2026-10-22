@@ -413,7 +413,7 @@ msgstr ""
 msgid "Base"
 msgstr ""
 
-#: src/blocks/components/fields/components/code.tsx
+#: src/blocks/components/fields/components/code-popout.tsx
 msgid "Open in popup"
 msgstr ""
 

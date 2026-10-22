@@ -417,7 +417,7 @@ msgstr "Attribut hinzufügen"
 msgid "Base"
 msgstr "Basis"
 
-#: src/blocks/components/fields/components/code.tsx
+#: src/blocks/components/fields/components/code-popout.tsx
 msgid "Open in popup"
 msgstr "Im Pop-up öffnen"
 
