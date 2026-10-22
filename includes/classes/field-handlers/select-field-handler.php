@@ -300,12 +300,16 @@ class Select_Field_Handler extends Abstract_Field_Handler {
 				}
 			} elseif ( in_array( $type, array( 'checkbox', 'radio', 'select', 'token' ), true ) ) {
 				$default_select = array();
-				$default_values = is_array( $field[ $item ] )
+				$is_unresolved  = 'select' === $type && (
+					( $field['populate']['fetch'] ?? false ) ||
+					Populate::has_dynamic_arguments( $field['populate'] ?? array() )
+				);
+				$default_values = is_array( $field[ $item ] ) && ! ( $is_unresolved && array_key_exists( 'value', $field[ $item ] ) )
 					? $field[ $item ]
 					: array( $field[ $item ] );
 
 				foreach ( $default_values as $value ) {
-					if ( 'select' === $type && ( $field['populate']['fetch'] ?? false ) ) {
+					if ( $is_unresolved ) {
 						$default_value = is_array( $value ) && array_key_exists( 'value', $value )
 							? $value['value']
 							: $value;

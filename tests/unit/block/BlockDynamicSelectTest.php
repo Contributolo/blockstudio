@@ -489,6 +489,228 @@ class BlockDynamicSelectTest extends TestCase {
 		);
 	}
 
+	// default and fallback
+
+	public static function default_provider(): array {
+		$a = array(
+			'value' => 'a',
+			'label' => 'a',
+		);
+		$b = array(
+			'value' => 'b',
+			'label' => 'Item B',
+		);
+
+		return array(
+			'single scalar'      => array( false, 'a', $a ),
+			'single object'      => array(
+				false,
+				$b,
+				$b,
+			),
+			'multiple scalars'   => array(
+				true,
+				array( 'a', 'c' ),
+				array(
+					$a,
+					array(
+						'value' => 'c',
+						'label' => 'c',
+					),
+				),
+			),
+			'multiple objects'   => array( true, array( $b, $a ), array( $b, $a ) ),
+			'multiple one value' => array( true, 'a', array( $a ) ),
+		);
+	}
+
+	private function registered_attribute( bool $multiple, string $item, mixed $value ): array {
+		$built = ( new Attribute_Builder() )->build(
+			array(
+				array(
+					'id'       => 'items',
+					'type'     => 'select',
+					'multiple' => $multiple,
+					'populate' => $this->dynamic_function_populate(),
+					$item      => $value,
+				),
+			)
+		);
+
+		return $built['items'];
+	}
+
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'default_provider' )]
+	public function test_dynamic_select_registers_its_default( bool $multiple, mixed $default, mixed $expected ): void {
+		$this->assertSame( $expected, $this->registered_attribute( $multiple, 'default', $default )['default'] );
+	}
+
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'default_provider' )]
+	public function test_dynamic_select_registers_its_fallback( bool $multiple, mixed $fallback, mixed $expected ): void {
+		$this->assertSame( $expected, $this->registered_attribute( $multiple, 'fallback', $fallback )['fallback'] );
+	}
+
+	public function test_dynamic_select_renders_its_default_without_a_stored_value(): void {
+		$cases = array(
+			array( false, 'both', 'a', array( 'value' => 'a', 'label' => 'a' ) ),
+			array( false, 'value', array( 'value' => 'b', 'label' => 'Item B' ), 'b' ),
+			array( true, 'value', array( 'a', 'c' ), array( 'a', 'c' ) ),
+			array( true, 'label', array( array( 'value' => 'b', 'label' => 'Item B' ) ), array( 'Item B' ) ),
+		);
+
+		foreach ( $cases as list( $multiple, $format, $default, $expected ) ) {
+			$field = array(
+				'id'           => 'items',
+				'type'         => 'select',
+				'multiple'     => $multiple,
+				'returnFormat' => $format,
+				'default'      => $default,
+				'populate'     => $this->dynamic_function_populate(),
+			);
+			$built = ( new Attribute_Builder() )->build( array( $field ) );
+
+			$attributes = array();
+			$block      = array( 'name' => 'test/dynamic-select' );
+			Block::transform( $attributes, $block, 'test/dynamic-select', false, false, $built );
+
+			$this->assertSame( $expected, $attributes['items'] );
+		}
+	}
+
+	public function test_dynamic_select_renders_its_fallback_for_an_empty_value(): void {
+		$field = array(
+			'id'       => 'items',
+			'type'     => 'select',
+			'fallback' => 'a',
+			'populate' => $this->dynamic_function_populate(),
+		);
+		$built = ( new Attribute_Builder() )->build( array( $field ) );
+
+		$attributes = array( 'blockstudio' => array( 'attributes' => array( 'items' => '' ) ) );
+		$block      = array( 'name' => 'test/dynamic-select' );
+		Block::transform( $attributes, $block, 'test/dynamic-select', false, false, $built );
+
+		$this->assertSame(
+			array(
+				'value' => 'a',
+				'label' => 'a',
+			),
+			$attributes['items']
+		);
+	}
+
+	public function test_fetch_select_keeps_the_label_of_a_single_object_default(): void {
+		$object = array(
+			'value' => 'b',
+			'label' => 'Item B',
+		);
+		$built  = ( new Attribute_Builder() )->build(
+			array(
+				array(
+					'id'       => 'items',
+					'type'     => 'select',
+					'default'  => $object,
+					'populate' => array(
+						'type'  => 'query',
+						'query' => 'posts',
+						'fetch' => true,
+					),
+				),
+			)
+		);
+
+		$this->assertSame( $object, $built['items']['default'] );
+	}
+
+	public function test_static_select_default_and_fallback_still_map_through_the_options(): void {
+		$options = array(
+			array(
+				'value' => 'a',
+				'label' => 'Item A',
+			),
+			array(
+				'value' => 'b',
+				'label' => 'Item B',
+			),
+		);
+		$built   = ( new Attribute_Builder() )->build(
+			array(
+				array(
+					'id'       => 'single',
+					'type'     => 'select',
+					'options'  => $options,
+					'default'  => array(
+						'value' => 'a',
+						'label' => 'Stale label',
+					),
+					'fallback' => 'b',
+				),
+				array(
+					'id'       => 'multi',
+					'type'     => 'select',
+					'multiple' => true,
+					'options'  => $options,
+					'default'  => array( 'a', 'gone' ),
+				),
+			)
+		);
+
+		$this->assertSame( $options[0], $built['single']['default'] );
+		$this->assertSame( $options[1], $built['single']['fallback'] );
+		$this->assertSame(
+			array(
+				$options[0],
+				array(
+					'value' => false,
+					'label' => false,
+				),
+			),
+			$built['multi']['default']
+		);
+	}
+
+	public function test_populate_without_dynamic_arguments_still_maps_its_default_through_the_options(): void {
+		add_filter(
+			'blockstudio/blocks/attributes/populate',
+			static function ( array $options ): array {
+				$options['dynamic_select_default_test'] = array(
+					array(
+						'value' => 'a',
+						'label' => 'Item A',
+					),
+				);
+
+				return $options;
+			}
+		);
+
+		try {
+			$built = ( new Attribute_Builder() )->build(
+				array(
+					array(
+						'id'       => 'items',
+						'type'     => 'select',
+						'default'  => 'a',
+						'populate' => array(
+							'type'   => 'custom',
+							'custom' => 'dynamic_select_default_test',
+						),
+					),
+				)
+			);
+		} finally {
+			remove_all_filters( 'blockstudio/blocks/attributes/populate' );
+		}
+
+		$this->assertSame(
+			array(
+				'value' => 'a',
+				'label' => 'Item A',
+			),
+			$built['items']['default']
+		);
+	}
+
 	// Populate::has_dynamic_arguments()
 
 	public function test_has_dynamic_arguments_finds_references_at_any_depth(): void {
