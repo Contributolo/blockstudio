@@ -128,6 +128,14 @@
           "description": "Where compiled block assets are written. \"source\" writes a _dist directory beside the block, \"cache\" writes them under the Blockstudio cache directory so the source tree stays clean.",
           "descriptionFilter": "This filter allows you to control where compiled block assets are written.",
           "example": "cache"
+        },
+        "inlineLimit": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0,
+          "description": "Maximum total size in bytes of external block stylesheets printed inline in the head of a page. Stylesheets are inlined smallest first while the running total stays within the limit, the rest keep their link tag. 0 keeps every external stylesheet as a link. WordPress core uses 40000 for the same rule.",
+          "descriptionFilter": "This filter allows you to control how many bytes of external block CSS are inlined per page.",
+          "example": 40000
         }
       },
       "additionalProperties": false

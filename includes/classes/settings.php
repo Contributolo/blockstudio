@@ -31,6 +31,7 @@ namespace Blockstudio;
  * - assets/process/scss: Enable inline SCSS compilation
  * - assets/process/scssFiles: Enable .scss file compilation
  * - assets/output: Where compiled _dist output is written (source|cache)
+ * - assets/inlineLimit: Bytes of external block CSS printed inline per page (0 = off)
  * - editor/formatOnSave: Auto-format code in editor
  * - tailwind/enabled: Enable Tailwind CSS integration
  * - ui/enabled: Enable bundled UI components
@@ -88,20 +89,21 @@ class Settings {
 			'roles' => array(),
 		),
 		'assets'        => array(
-			'enqueue' => true,
-			'reset'   => array(
+			'enqueue'     => true,
+			'reset'       => array(
 				'enabled'   => false,
 				'fullWidth' => array(),
 			),
-			'minify'  => array(
+			'minify'      => array(
 				'css' => false,
 				'js'  => false,
 			),
-			'process' => array(
+			'process'     => array(
 				'scss'      => false,
 				'scssFiles' => true,
 			),
-			'output'  => 'source',
+			'output'      => 'source',
+			'inlineLimit' => 0,
 		),
 		'cache'         => array(
 			'enabled'        => true,

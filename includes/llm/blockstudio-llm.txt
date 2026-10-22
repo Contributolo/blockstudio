@@ -106,8 +106,8 @@ php: Render::document(), bs_block_assets(), bs_block_fields()
 route: /docs/blocks/assets/registering
 file: docs/docs/blocks/assets/registering.md
 purpose: Automatically enqueue CSS and JavaScript files for your blocks.
-settings: assets/enqueue
-hooks: blockstudio/buffer/output, blockstudio/render/head, blockstudio/settings
+settings: assets/enqueue, assets/inlineLimit, assets/minify/css
+hooks: blockstudio/buffer/output, blockstudio/render/head, blockstudio/settings, blockstudio/settings/assets/inline_limit
 php: bs_get_scoped_class()
 
 ### Processing Assets
