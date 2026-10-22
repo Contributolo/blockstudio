@@ -1408,6 +1408,11 @@ both.
 add_filter('blockstudio/buffer/enabled', '__return_false');
 ```
 
+Buffering is also off in the admin and in the Customizer preview. Call
+`bs_is_buffering()` from `wp_enqueue_scripts` or later to find out whether the
+current response is buffered. It returns `false` before the decision is made at
+`template_redirect`.
+
 ### output
 
 This filter receives the complete buffered HTML document before it is sent.
@@ -1455,7 +1460,8 @@ add_filter('blockstudio/render', function($content) {
 ### head
 
 This filter allows you to adjust the output of the `<head>` tag before it is
-being rendered.
+being rendered. It runs only when Blockstudio buffers the response, see
+[`bs_is_buffering()`](/docs/blocks/assets/registering#load-order).
 
 ```php title="functions.php"
 add_filter('blockstudio/render/head', function($content) {

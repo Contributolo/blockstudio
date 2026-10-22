@@ -158,6 +158,29 @@ add_filter('blockstudio/render/head', function($head) {
 });
 ```
 
+The `head` filter only runs when Blockstudio buffers the page. Buffering is off
+in the Customizer preview and when
+[`blockstudio/buffer/enabled`](/docs/blocks/hooks/php#enabled) returns `false`.
+`bs_is_buffering()` tells you which case you are in, so a theme can append its
+stylesheet through the filter when the page is buffered and enqueue it with
+WordPress otherwise. The answer is available from `wp_enqueue_scripts` on and is
+`false` before `template_redirect`.
+
+```php title="functions.php"
+add_action('wp_enqueue_scripts', function() {
+  $url = get_theme_file_uri('overrides.css');
+
+  if (bs_is_buffering()) {
+    add_filter('blockstudio/render/head', function($head) use ($url) {
+      return $head . '<link rel="stylesheet" href="' . esc_url($url) . '">';
+    });
+    return;
+  }
+
+  wp_enqueue_style('theme-overrides', $url);
+});
+```
+
 Use [`blockstudio/buffer/output`](/docs/blocks/hooks/php#output) if you need to
 rearrange the final document in a different way.
 

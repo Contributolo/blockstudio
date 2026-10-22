@@ -1682,6 +1682,29 @@ add_filter('blockstudio/render/head', function($head) {
 });
 ```
 
+The `head` filter only runs when Blockstudio buffers the page. Buffering is off
+in the Customizer preview and when
+`blockstudio/buffer/enabled` returns `false`.
+`bs_is_buffering()` tells you which case you are in, so a theme can append its
+stylesheet through the filter when the page is buffered and enqueue it with
+WordPress otherwise. The answer is available from `wp_enqueue_scripts` on and is
+`false` before `template_redirect`.
+
+```php
+add_action('wp_enqueue_scripts', function() {
+  $url = get_theme_file_uri('overrides.css');
+
+  if (bs_is_buffering()) {
+    add_filter('blockstudio/render/head', function($head) use ($url) {
+      return $head . '<link rel="stylesheet" href="' . esc_url($url) . '">';
+    });
+    return;
+  }
+
+  wp_enqueue_style('theme-overrides', $url);
+});
+```
+
 Use `blockstudio/buffer/output` if you need to
 rearrange the final document in a different way.
 
@@ -9549,6 +9572,11 @@ both.
 add_filter('blockstudio/buffer/enabled', '__return_false');
 ```
 
+Buffering is also off in the admin and in the Customizer preview. Call
+`bs_is_buffering()` from `wp_enqueue_scripts` or later to find out whether the
+current response is buffered. It returns `false` before the decision is made at
+`template_redirect`.
+
 ### output
 
 This filter receives the complete buffered HTML document before it is sent.
@@ -9596,7 +9624,8 @@ add_filter('blockstudio/render', function($content) {
 ### head
 
 This filter allows you to adjust the output of the `<head>` tag before it is
-being rendered.
+being rendered. It runs only when Blockstudio buffers the response, see
+`bs_is_buffering()`.
 
 ```php
 add_filter('blockstudio/render/head', function($content) {
@@ -15749,7 +15778,7 @@ The extension maps every Blockstudio field type to a concrete PHP type:
 
 The extension ships stubs for the full Blockstudio public API:
 
-- `bs_render_block()`, `bs_get_group()`, `bs_get_scoped_class()`, `bs_db_form()`, `bs_is_editor()`, `bs_is_preview()`
+- `bs_render_block()`, `bs_get_group()`, `bs_get_scoped_class()`, `bs_db_form()`, `bs_is_editor()`, `bs_is_preview()`, `bs_is_buffering()`
 - `Db::get()`, `Db::create()`, `Db::list()`, `Db::get_record()`, `Db::update()`, `Db::delete()`
 - `Settings::get()`, `Settings::get_all()`
 - `Field_Registry::instance()`, `Field_Registry::all()`, `Field_Registry::get()`

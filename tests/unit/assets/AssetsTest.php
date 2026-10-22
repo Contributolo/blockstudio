@@ -34,6 +34,23 @@ class AssetsTest extends TestCase {
 		$this->filter_callbacks[] = array( $name, $callback, $priority );
 	}
 
+	private function buffering_after_template_redirect(): bool {
+		$assets = new Assets();
+		$depth  = ob_get_level();
+
+		$assets->maybe_buffer_output();
+
+		$buffering = bs_is_buffering();
+
+		$this->assertSame( $buffering, ob_get_level() > $depth );
+
+		if ( ob_get_level() > $depth ) {
+			ob_end_clean();
+		}
+
+		return $buffering;
+	}
+
 	private function create_temporary_asset( string $filename, string $content ): string {
 		// Under wp-content so the asset resolves to a real URL; a path outside it
 		// has none, and an asset without a URL no longer renders a tag.
@@ -1010,6 +1027,43 @@ class AssetsTest extends TestCase {
 		}
 
 		$this->assertFalse( $started );
+	}
+
+	public function test_is_buffering_reports_a_buffered_frontend_response(): void {
+		$buffering = $this->buffering_after_template_redirect();
+
+		$this->assertTrue( $buffering );
+	}
+
+	public function test_is_buffering_is_false_when_the_buffer_filter_is_off(): void {
+		$this->add_filter( 'blockstudio/buffer/enabled', static fn(): bool => false );
+
+		$this->assertFalse( $this->buffering_after_template_redirect() );
+	}
+
+	public function test_is_buffering_is_false_in_the_admin(): void {
+		if ( ! function_exists( 'set_current_screen' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/class-wp-screen.php';
+			require_once ABSPATH . 'wp-admin/includes/screen.php';
+		}
+
+		set_current_screen( 'dashboard' );
+
+		try {
+			$buffering = $this->buffering_after_template_redirect();
+		} finally {
+			set_current_screen( 'front' );
+		}
+
+		$this->assertFalse( $buffering );
+	}
+
+	public function test_is_buffering_follows_the_latest_decision(): void {
+		$this->assertTrue( $this->buffering_after_template_redirect() );
+
+		$this->add_filter( 'blockstudio/buffer/enabled', static fn(): bool => false );
+
+		$this->assertFalse( $this->buffering_after_template_redirect() );
 	}
 
 	public function test_compile_once_publishes_a_cold_asset(): void {
