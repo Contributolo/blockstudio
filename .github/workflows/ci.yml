@@ -223,8 +223,7 @@ jobs:
       - name: Start UI regression site
         working-directory: tests/ui
         run: |
-          npx wp-env start
-          npx wp-env run cli wp theme activate theme
+          bash ../../scripts/ci/start-wp-env.sh ui
           npx wp-env run cli wp rewrite structure '/%postname%/' --hard
           npx wp-env run cli wp bs pages sync
       - name: Run UI regressions

@@ -13471,6 +13471,8 @@ not download these editors. Shared editor libraries are reused, and switching
 a WYSIWYG field to code mode loads the code editor only then. The first use
 may take longer on a slow connection; stored values and field defaults are
 available before these editors load. No configuration is required.
+Code fields that supply editor assets still initialize their styles or scripts
+without waiting for the code editor download.
 
 HTML and CSS formatting code also loads on demand. A newer single-block preview
 request cancels the previous browser request

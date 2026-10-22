@@ -1,18 +1,21 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+cd "$(dirname "$0")/../.."
+
 environment="${1:-main}"
 case "$environment" in
-	main) command='wp-env:start' ;;
-	empty) command='wp-env:empty:start' ;;
-	plugin|mu-plugin|composer-theme|composer-plugin) command="wp-env:implementations:${environment}:start" ;;
+	main) command=(npm run wp-env:start) ;;
+	ui) command=(npm --prefix tests/ui run wp-env:start) ;;
+	empty) command=(npm run wp-env:empty:start) ;;
+	plugin|mu-plugin|composer-theme|composer-plugin) command=(npm run "wp-env:implementations:${environment}:start") ;;
 	*) echo "Unknown wp-env environment: ${environment}" >&2; exit 64 ;;
 esac
 
 log=$(mktemp)
 trap 'rm -f "$log"' EXIT
 
-if npm run "$command" 2>&1 | tee "$log"; then
+if "${command[@]}" 2>&1 | tee "$log"; then
 	exit 0
 else
 	status=$?
@@ -24,4 +27,4 @@ if ! grep -Fq 'Error establishing a database connection' "$log"; then
 fi
 
 echo 'Retrying wp-env setup once after database initialization.' >&2
-npm run "$command"
+"${command[@]}"

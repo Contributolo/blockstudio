@@ -38,11 +38,6 @@ for (const { type, initial, latest, selector } of cases) {
   }) => {
     page.on('dialog', (dialog) => dialog.accept());
     const requests: string[] = [];
-    page.on('request', (request) => {
-      if (/\/blocks\/(?:field-|codemirror|tiptap)/.test(request.url())) {
-        requests.push(request.url());
-      }
-    });
     let release = () => {};
     const pending = new Promise<void>((resolve) => {
       release = resolve;
@@ -55,10 +50,17 @@ for (const { type, initial, latest, selector } of cases) {
     try {
       await login(page);
       await resetPageState(page);
+      await expect(page.locator('.blockstudio-fields')).toHaveCount(0);
+      page.on('request', (request) => {
+        if (/\/blocks\/(?:field-|codemirror|tiptap)/.test(request.url())) {
+          requests.push(request.url());
+        }
+      });
       const clientId = await page.evaluate(
         ({ type, initial }) => {
           const wp = (window as any).wp;
-          const block = wp.blocks.createBlock(`blockstudio/type-${type}`, {
+          const name = type === 'wysiwyg' ? 'wysiwyg-switch' : type;
+          const block = wp.blocks.createBlock(`blockstudio/type-${name}`, {
             blockstudio: { attributes: { [type]: initial } },
           });
           const editor = wp.data.dispatch('core/block-editor');
@@ -155,3 +157,35 @@ for (const { type, initial, latest, selector } of cases) {
     }
   });
 }
+
+test('an unselected asset field initializes scoped styles without downloading its code editor', async ({
+  page,
+}) => {
+  page.on('dialog', (dialog) => dialog.accept());
+  await login(page);
+  await resetPageState(page);
+  await expect(page.locator('.blockstudio-fields')).toHaveCount(0);
+  const editorRequests: string[] = [];
+  page.on('request', (request) => {
+    if (/\/blocks\/(?:field-code|codemirror)/.test(request.url()))
+      editorRequests.push(request.url());
+  });
+  const clientId = await page.evaluate(() => {
+    const wp = (window as any).wp;
+    const block = wp.blocks.createBlock('blockstudio/type-code-selector-asset');
+    const editor = wp.data.dispatch('core/block-editor');
+    editor.resetBlocks([block]);
+    editor.clearSelectedBlock();
+    return block.clientId;
+  });
+  const canvas = await getEditorCanvas(page);
+  const block = canvas.locator(`[data-block="${clientId}"]`);
+  await expect(block).toHaveCSS('background-color', 'rgb(0, 0, 0)');
+  expect(editorRequests).toEqual([]);
+  await page.evaluate(() =>
+    (window as any).wp.data.dispatch('core/block-editor').resetBlocks([]),
+  );
+  await expect(
+    canvas.locator(`style[id="blockstudio-${clientId}-code"]`),
+  ).toHaveCount(0);
+});

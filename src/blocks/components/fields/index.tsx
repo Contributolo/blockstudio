@@ -6,6 +6,7 @@ import { Base } from '@/blocks/components/base';
 import { Control } from '@/blocks/components/control';
 import { El } from '@/blocks/components/el';
 import { Checkbox } from '@/blocks/components/fields/components/checkbox';
+import { CodeAssets } from '@/blocks/components/fields/components/code-assets';
 import { CodeActions } from '@/blocks/components/fields/components/code-popout';
 import { Color } from '@/blocks/components/fields/components/color';
 import { Date } from '@/blocks/components/fields/components/date';
@@ -525,18 +526,18 @@ export const Fields = ({
       };
     };
 
-    if (extensions && portal) {
-      if (item.type === 'code') {
-        return (
-          <Code
+    if (portal && item.type === 'code') {
+      return (
+          <CodeAssets
             {...textProps()}
             {...{ clientId, extensions, repeaterId }}
             properties={props}
             item={item}
             inRepeater={repeaterId !== ''}
           />
-        );
-      }
+      );
+    }
+    if (extensions && portal) {
       return null;
     }
 

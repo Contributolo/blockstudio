@@ -157,6 +157,37 @@ test('media placeholder camelCase props and typed arrays survive native parsing'
   );
 });
 
+test('a stray quote after a value preserves the component and its valid props', () => {
+  const tag = `<MediaPlaceholder attribute="files" labels="{&quot;title&quot;:&quot;Test title&quot;}"" />`;
+  const expected = { attribute: 'files', labels: { title: 'Test title' } };
+  assert.deepEqual(getAttributes(tag, 'MediaPlaceholder'), expected);
+  const content = getInnerHTML(`<div>${tag}<p>After</p></div>`);
+  assert.match(content, /<p>After<\/p>/);
+  assert.deepEqual(getAttributes(content, 'MediaPlaceholder'), expected);
+  assert.match(
+    content.replace(getRegex('MediaPlaceholder', 'gs'), '<replaced>'),
+    /^<replaced><p>After<\/p>$/,
+  );
+});
+
+test('self-closing components with quoted angle brackets do not swallow siblings', () => {
+  const content = getInnerHTML(
+    `<div><RichText attribute="heading" placeholder="A > B" /><p>After</p></div>`,
+  );
+  assert.match(content, /<p>After<\/p>/);
+  assert.deepEqual(getAttributes(content, 'RichText'), {
+    attribute: 'heading',
+    placeholder: 'A > B',
+  });
+});
+
+test('an unterminated tag with many quoted values does not match', () => {
+  assert.equal(
+    getRegex('RichText').test('<RichText ' + '" value " '.repeat(1000)),
+    false,
+  );
+});
+
 test('inner HTML is the content of the first element', () => {
   assert.equal(
     getInnerHTML(
@@ -198,7 +229,9 @@ test('leading table fragments retain the fragment parsing context', () => {
 
 test('SVG namespaces and template contents keep their markup', () => {
   assert.equal(
-    getInnerHTML('<svg><linearGradient id="a"></linearGradient><foreignObject><p>A</p></foreignObject></svg>'),
+    getInnerHTML(
+      '<svg><linearGradient id="a"></linearGradient><foreignObject><p>A</p></foreignObject></svg>',
+    ),
     '<linearGradient id="a"></linearGradient><foreignObject><p>A</p></foreignObject>',
   );
   assert.equal(

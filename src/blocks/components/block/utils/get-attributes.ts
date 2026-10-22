@@ -93,6 +93,7 @@ export const getAttributes = (value: string, elementName: string) => {
   const parsed: Record<string, unknown> = {};
   Array.from(template.content.firstElementChild?.attributes ?? []).forEach(
     (attribute) => {
+      if (/["'<>/=\s]/.test(attribute.name)) return;
       parsed[writtenNames.get(attribute.name) ?? attribute.name] =
         attribute.value;
     },

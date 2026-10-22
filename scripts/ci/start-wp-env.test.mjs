@@ -41,6 +41,7 @@ esac
 test('successful setup runs once for every supported WordPress environment', () => {
 	const environments = {
 		main: 'wp-env:start',
+		ui: 'wp-env:start',
 		empty: 'wp-env:empty:start',
 		plugin: 'wp-env:implementations:plugin:start',
 		'mu-plugin': 'wp-env:implementations:mu-plugin:start',
@@ -50,7 +51,7 @@ test('successful setup runs once for every supported WordPress environment', () 
 	for (const [mode, command] of Object.entries(environments)) {
 		const result = runSetup('success', mode);
 		assert.equal(result.status, 0);
-		assert.deepEqual(result.commands, [`run ${command}`]);
+		assert.deepEqual(result.commands, [mode === 'ui' ? `--prefix tests/ui run ${command}` : `run ${command}`]);
 	}
 });
 
@@ -65,6 +66,18 @@ test('cold database setup gets one retry', () => {
 	assert.equal(result.status, 0);
 	assert.equal(result.commands.length, 2);
 	assert.match(result.stderr, /Retrying wp-env setup once/);
+});
+
+test('UI setup retries only a cold database error and preserves failures', () => {
+	const recovered = runSetup('database', 'ui');
+	assert.equal(recovered.status, 0);
+	assert.deepEqual(recovered.commands, Array(2).fill('--prefix tests/ui run wp-env:start'));
+	const permanent = runSetup('permanent', 'ui');
+	assert.equal(permanent.status, 7);
+	assert.equal(permanent.commands.length, 2);
+	const unrelated = runSetup('unrelated', 'ui');
+	assert.equal(unrelated.status, 9);
+	assert.equal(unrelated.commands.length, 1);
 });
 
 test('persistent database errors remain failures after one retry', () => {
