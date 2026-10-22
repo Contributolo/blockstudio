@@ -13420,6 +13420,9 @@ request. Long-running processes still detect file changes, while explicit
 `Settings::reload()` reads them immediately. Database-only settings and changes
 to the configured settings path remain live on the next read.
 
+Frontend `useBlockProps` handling shares the existing component-cleanup pass
+instead of rewriting its marker first. Editor marker handling is unchanged.
+
 ## Performance profiles
 
 `performance.profile` turns production frontend defaults on in one place:

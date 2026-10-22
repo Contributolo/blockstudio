@@ -732,8 +732,6 @@ class Block {
 		$has_attribute = self::content_has_component_cleanup_attribute( $content, $attributes_to_remove );
 
 		if ( $has_attribute ) {
-			$content = self::mark_block_props_roots( $content );
-
 			$doc = new DOMDocument();
 			libxml_use_internal_errors( true );
 			$doc->loadHTML(
@@ -747,6 +745,10 @@ class Block {
 			$elements = $doc->getElementsByTagName( '*' );
 			foreach ( $elements as $element ) {
 				if ( $element->hasAttribute( 'useblockprops' ) ) {
+					// The cleanup below keeps this attribute on input and
+					// textarea elements, so its value stays what it always was.
+					$element->setAttribute( 'useblockprops', 'true' );
+
 					$classes = $element->getAttribute( 'class' );
 
 					if ( $attribute_data['hasCodeSelector'] ?? false ) {
