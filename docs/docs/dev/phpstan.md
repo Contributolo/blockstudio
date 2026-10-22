@@ -706,7 +706,7 @@ The extension maps every Blockstudio field type to a concrete PHP type:
 
 The extension ships stubs for the full Blockstudio public API:
 
-- `bs_render_block()`, `bs_get_group()`, `bs_get_scoped_class()`, `bs_db_form()`, `bs_is_editor()`, `bs_is_preview()`, `bs_is_buffering()`
+- `bs_render_block()`, `bs_block_values()`, `bs_get_group()`, `bs_get_scoped_class()`, `bs_db_form()`, `bs_is_editor()`, `bs_is_preview()`, `bs_is_buffering()`
 - `Db::get()`, `Db::create()`, `Db::list()`, `Db::get_record()`, `Db::update()`, `Db::delete()`
 - `Settings::get()`, `Settings::get_all()`
 - `Field_Registry::instance()`, `Field_Registry::all()`, `Field_Registry::get()`

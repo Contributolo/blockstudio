@@ -169,7 +169,8 @@ hooks: blockstudio/blocks/attributes, blockstudio/blocks/attributes/render
 route: /docs/blocks/attributes/rendering
 file: docs/docs/blocks/attributes/rendering.md
 purpose: Access attribute values in your block templates.
-php: $a, bs_data_attributes(), bs_get_group(), bs_icon(), bs_render_data_attributes(), bs_render_icon()
+hooks: blockstudio/blocks/attributes/render
+php: $a, bs_block_values(), bs_data_attributes(), bs_get_group(), bs_icon(), bs_render_data_attributes(), bs_render_icon(), bs_validate_block()
 
 ### Block Attributes
 route: /docs/blocks/attributes/block-attributes
@@ -304,7 +305,7 @@ file: docs/docs/blocks/rendering.md
 purpose: Render Blockstudio blocks programmatically via PHP functions or HTML tags.
 settings: assets, blockTags, content, tailwind, ui
 hooks: blockstudio/attributes, blockstudio/block_tags/allow, blockstudio/block_tags/builders, blockstudio/block_tags/deny, blockstudio/block_tags/prefixes, blockstudio/block_tags/render, blockstudio/block_tags/renderers, blockstudio/block_tags/tag_aliases, blockstudio/blocks/attributes/validate, blockstudio/parser/element_mapping, blockstudio/parser/renderers, blockstudio/settings/block_tags/enabled
-php: $a, Batch_Render::reset(), Block_Tags::parse_inner_blocks(), Blockstudio\Batch_Render, Blockstudio\Block_Tags, Blockstudio\Render, Canvas::documents(), Render::composition(), Render::content(), Render::document(), Render::document_from_html(), Render::normalize(), bs_block(), bs_block_assets(), bs_block_extension_fields(), bs_block_fields(), bs_render_block(), bs_validate_block()
+php: $a, Batch_Render::reset(), Block_Tags::parse_inner_blocks(), Blockstudio\Batch_Render, Blockstudio\Block_Tags, Blockstudio\Render, Canvas::documents(), Render::composition(), Render::content(), Render::document(), Render::document_from_html(), Render::normalize(), bs_block(), bs_block_assets(), bs_block_extension_fields(), bs_block_fields(), bs_block_values(), bs_render_block(), bs_validate_block()
 cli: wp bs blocks validate
 
 ### Components
@@ -539,7 +540,7 @@ file: docs/docs/dev/phpstan.md
 purpose: Static analysis for Blockstudio projects with type-safe templates, schema validation, and hook checking.
 settings: blockTags/prefixes, githooks/commit, phpstan/configuration, phpstan/excludePaths, phpstan/preset, tailwind/enabled, ui/enabled
 hooks: blockstudio/fields, blockstudio/render, blockstudio/rendrr, blockstudio/settings/tailwind/enabled
-php: $a, $b, $c, Blockstudio\Db, Build::blocks(), Build::extensions(), Build::get_build_dir(), Db::create(), Db::delete(), Db::get(), Db::get_record(), Db::list(), Db::update(), Field_Registry::all(), Field_Registry::get(), Field_Registry::instance(), Settings::get(), Settings::get_all(), bs_db_form(), bs_get_group(), bs_get_scoped_class(), bs_is_buffering(), bs_is_editor(), bs_is_preview(), bs_render_block()
+php: $a, $b, $c, Blockstudio\Db, Build::blocks(), Build::extensions(), Build::get_build_dir(), Db::create(), Db::delete(), Db::get(), Db::get_record(), Db::list(), Db::update(), Field_Registry::all(), Field_Registry::get(), Field_Registry::instance(), Settings::get(), Settings::get_all(), bs_block_values(), bs_db_form(), bs_get_group(), bs_get_scoped_class(), bs_is_buffering(), bs_is_editor(), bs_is_preview(), bs_render_block()
 cli: vendor/bin/blockstudio-agents, vendor/bin/blockstudio-githooks, vendor/bin/blockstudio-phpstan, wp bs db schemas, wp bs prerender status
 
 ### AI Integration
