@@ -63,8 +63,21 @@ test('dependent selects fetch options and preserve saved return formats in previ
   const single = page.locator('.blockstudio-fields [data-id="single"]');
   await expect(single).toBeVisible();
   await single.getByRole('combobox').fill('Item B');
-  await single.getByRole('option', { name: 'Item B (post)', exact: true }).click();
+  await single
+    .getByRole('option', { name: 'Item B (post)', exact: true })
+    .click();
   expected.single = 'b';
+  await expect.poll(readPreview).toEqual(expected);
+  await page
+    .locator('.blockstudio-fields [data-id="kind"] select')
+    .selectOption('page');
+  expected.kind = 'page';
+  await expect.poll(readPreview).toEqual(expected);
+  await single.getByRole('combobox').fill('Item A');
+  await single
+    .getByRole('option', { name: 'Item A (page)', exact: true })
+    .click();
+  expected.single = 'a';
   await expect.poll(readPreview).toEqual(expected);
   await save(page);
 

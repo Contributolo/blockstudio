@@ -170,6 +170,16 @@ test('a stray quote after a value preserves the component and its valid props', 
   );
 });
 
+test('a stray component quote never consumes a following image with quoted attributes', () => {
+  const html = `<div><MediaPlaceholder attribute="files" labels="{&quot;title&quot;:&quot;Test title&quot;}"" /><img src="/test.jpg" alt="Selected image" /></div>`;
+  const content = getInnerHTML(html);
+  const match = content.match(getRegex('MediaPlaceholder'));
+  assert.ok(match);
+  assert.ok(!match[0].includes('<img'), match[0]);
+  const transformed = content.replace(getRegex('MediaPlaceholder', 'gs'), '');
+  assert.equal(transformed, '<img src="/test.jpg" alt="Selected image">');
+});
+
 test('self-closing components with quoted angle brackets do not swallow siblings', () => {
   const content = getInnerHTML(
     `<div><RichText attribute="heading" placeholder="A > B" /><p>After</p></div>`,

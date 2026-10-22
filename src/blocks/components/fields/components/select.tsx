@@ -13,7 +13,10 @@ import {
   isSameOptionValue,
   normalizeOptionValues,
 } from '@/blocks/utils/option-values';
-import { parseTemplate } from '@/blocks/utils/parse-template';
+import {
+  getPopulateRequest,
+  resolvePopulate,
+} from '@/blocks/utils/resolve-populate';
 import { BlockstudioAttribute } from '@/types/block';
 import {
   Any,
@@ -26,13 +29,6 @@ import { css } from '@/utils/css';
 const hasTemplateStrings = (obj: Any): boolean => {
   if (!obj) return false;
   return JSON.stringify(obj).includes('{attributes.');
-};
-
-const resolveTemplateArgs = (args: Any, attributes: Any): Any => {
-  if (!args) return args;
-  const str = JSON.stringify(args);
-  const resolved = parseTemplate(str, { attributes });
-  return JSON.parse(resolved);
 };
 
 const addSingleFetched = (
@@ -134,8 +130,8 @@ const AdvancedSelect = ({
           }));
         }
       } else {
-        const resolvedPopulate = hasDynamicArgs
-          ? resolveTemplateArgs(
+        const resolvedPopulate: Any = hasDynamicArgs
+          ? resolvePopulate(
               item?.populate || {},
               (attributes as Any)?.blockstudio?.attributes || {},
             )
@@ -147,17 +143,7 @@ const AdvancedSelect = ({
           data: {
             ...item,
             fromEditor: true,
-            populate: {
-              ...resolvedPopulate,
-              arguments: {
-                ...(resolvedPopulate.arguments || {}),
-                search:
-                  item?.populate?.query === 'users' && searchValue !== ''
-                    ? `*${searchValue}*`
-                    : searchValue,
-                s: searchValue,
-              },
-            },
+            populate: getPopulateRequest(resolvedPopulate, searchValue),
           },
         });
       }

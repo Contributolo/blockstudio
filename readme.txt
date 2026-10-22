@@ -59,6 +59,7 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 * New: `bs_block_values()` reads a stored block's transformed field values, defaults, and matching extension fields without running its template (#160)
 * New: `bs_strip_render_markers()` removes registered block markers from HTML sent outside the buffered page without stripping other comments (#161)
 * Fix: selects populated with dynamic attribute arguments preserve saved selections and their configured return formats when rendered (#156)
+* Fix: dependent populated fields resolve nested arguments and re-fetch options using the current editor values (#156)
 * Fix: component-filter documentation describes the registered block argument and uses an HTML attribute string for `useBlockProps` (#159)
 * Fix: the bundled dependency inventory lists every packaged library for security and SBOM tooling (#158)
 * Fix: release downloads no longer include stale development source maps (#166)

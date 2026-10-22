@@ -4173,7 +4173,7 @@ automatically.
           "type": "query",
           "query": "posts",
           "arguments": {
-            "post_type": "{attributes.post_type}",
+            "post_type": "{attributes.post_type.value}",
             "numberposts": 10
           }
         }
@@ -4186,6 +4186,19 @@ automatically.
 This works with all populate types (`query`, `function`, `custom`). Any value
 in the populate configuration containing `{attributes.*}` is resolved
 client-side with the current attribute value before the query runs.
+
+References use the editor's stored values. For a select option, use
+`{attributes.post_type.value}` for its value or
+`{attributes.post_type.label}` for its label; `returnFormat` controls the
+template value, not this stored editor shape.
+
+Nested arguments are resolved without serializing them into a template string.
+An argument consisting of one placeholder keeps its referenced type, including
+numbers, booleans, arrays, and objects. A placeholder embedded in other text
+produces a string. Missing references are left unchanged, and quoted or
+multiline values are sent intact.
+Function callbacks keep their positional argument lists. The editor adds
+WordPress search arguments only to `query` populates, not to function calls.
 
 ### Rendering Dependent Selections
 

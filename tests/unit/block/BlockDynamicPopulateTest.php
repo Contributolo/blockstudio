@@ -19,6 +19,43 @@ class BlockDynamicPopulateTest extends TestCase {
 
 	public static int $populate_calls = 0;
 
+	public function test_resolved_function_arguments_populate_options_through_rest(): void {
+		$original_user = get_current_user_id();
+		wp_set_current_user( 1 );
+		self::$populate_calls = 0;
+		try {
+			foreach ( array( 'post', 'page' ) as $kind ) {
+				$request = new WP_REST_Request( 'POST', '/blockstudio/v1/attributes/populate' );
+				$request->set_body_params(
+					array(
+						'id'         => 'items',
+						'type'       => 'select',
+						'fromEditor' => true,
+						'populate'   => array(
+							'type'      => 'function',
+							'function'  => 'blockstudio_unit_dependent_options',
+							'arguments' => array( $kind ),
+						),
+					)
+				);
+				$response = rest_do_request( $request );
+				$this->assertSame( 200, $response->get_status() );
+				$this->assertSame(
+					array(
+						array(
+							'value' => 'a',
+							'label' => 'Item A (' . $kind . ')',
+						),
+					),
+					$response->get_data()
+				);
+			}
+			$this->assertSame( 2, self::$populate_calls );
+		} finally {
+			wp_set_current_user( $original_user );
+		}
+	}
+
 	public function test_saved_dynamic_selects_reach_the_php_template_without_changing_content(): void {
 		$option = array( 'value' => 'a', 'label' => 'Item A (post)' );
 		$stored = array(
