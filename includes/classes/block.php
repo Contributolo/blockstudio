@@ -161,11 +161,20 @@ class Block {
 		$v,
 		array $populate = array()
 	) {
-		$fetch       = $populate['fetch'] ?? false;
-		$options_map = array();
-		$options     = $fetch ? array( $v ) : $data['options'] ?? array();
+		$fetch           = $populate['fetch'] ?? false;
+		$options_map     = array();
+		$dynamic_options = array() !== $populate && str_contains( (string) wp_json_encode( $populate ), '{attributes.' )
+			? Field_Type_Config::multiple_option_values( $v )
+			: array();
+		$options         = $fetch ? array( $v ) : ( $data['options'] ?? array() );
 
-		foreach ( $options as $option ) {
+		// Dependent options are resolved in the editor, not at registration.
+		// Known static options still override the saved label and value.
+		if ( ! $fetch && array() !== $dynamic_options ) {
+			$options = array_merge( $dynamic_options, $options );
+		}
+
+		foreach ( $options as $index => $option ) {
 			$value         = $option['value'] ?? false;
 			$query_options = array( 'posts', 'users', 'terms' );
 			if (
@@ -174,7 +183,7 @@ class Block {
 				isset( $populate['query'] ) &&
 				( ( in_array( $populate['query'], $query_options, true ) &&
 					in_array( $value, $data['optionsPopulate'] ?? array(), true ) ) ||
-					$fetch )
+					$fetch || isset( $dynamic_options[ $index ] ) )
 			) {
 				$is_object =
 					( isset( $populate['returnFormat']['value'] ) &&

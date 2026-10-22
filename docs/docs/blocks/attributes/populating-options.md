@@ -362,3 +362,28 @@ automatically.
 This works with all populate types (`query`, `function`, `custom`). Any value
 in the populate configuration containing `{attributes.*}` is resolved
 client-side with the current attribute value before the query runs.
+
+### Rendering Dependent Selections
+
+Dependent options are not loaded when the block is registered, because each
+block instance can have different arguments. Rendering uses the saved selection
+instead of discarding it against an empty option list. The populate callback is
+not executed again on the frontend.
+
+The field's `returnFormat` still applies:
+
+| `returnFormat` | Single select | Multiple select |
+|----------------|---------------|-----------------|
+| `value` (default) | The saved value, for example `"a"` | An array of saved values, for example `["a", "b"]` |
+| `label` | The saved label | An array of saved labels |
+| `both` | The saved `{value, label}` option | An array of saved options |
+
+For query-populated selections, values still resolve to the corresponding
+WordPress post, user, or term object unless `populate.returnFormat.value` is
+`"id"`. Labels come from the saved selection. If an imported selection has no
+label, its value is used as the label. A matching static option declared in
+`options` takes precedence over the saved option, so its current label applies.
+
+Empty selections remain `false` (or the field's configured `fallback`). This
+does not change validation of ordinary static options: a saved value that is no
+longer in a static option list still returns `false`.

@@ -583,6 +583,34 @@ if ( ! function_exists( 'bs_is_preview' ) ) {
 	}
 }
 
+if ( ! function_exists( 'bs_is_buffering' ) ) {
+	/**
+	 * Whether Blockstudio is buffering the current frontend response.
+	 *
+	 * When it is, block style and script tags are moved into the head and
+	 * footer of the finished page, and the `blockstudio/render/head` and
+	 * `blockstudio/render/footer` filters run. Use it to choose between
+	 * adding markup through those filters and enqueueing it with WordPress.
+	 * The decision is made at `template_redirect`, so the answer is reliable
+	 * from `wp_enqueue_scripts` on and false before that. It is also false in
+	 * the admin, in the Customizer preview, in requests that never reach
+	 * `template_redirect`, and when the `blockstudio/buffer/enabled` filter
+	 * returns false.
+	 *
+	 * @since 7.7.7
+	 *
+	 * @return bool True when the response is buffered.
+	 *
+	 * @example if ( ! bs_is_buffering() ) { wp_enqueue_style( 'theme-overrides' ); }
+	 *
+	 * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound -- Public API function.
+	 */
+	function bs_is_buffering(): bool {
+		// phpcs:enable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
+		return Blockstudio\Assets::is_buffering();
+	}
+}
+
 if ( ! function_exists( 'blockstudio_pages' ) ) {
 	/**
 	 * Get registered file-based pages.

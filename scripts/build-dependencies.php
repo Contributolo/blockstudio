@@ -128,7 +128,21 @@ try {
 		$native .= "if (!function_exists('" . $function . "')) {\n    function " . $function . "(mixed \$text): bool {\n        return \\BlockstudioVendor\\Symfony\\Polyfill\\Ctype\\Ctype::" . $function . "(\$text);\n    }\n}\n";
 	}
 	file_put_contents( $output . '/dependencies/native-functions.php', $native );
-	file_put_contents( $output . '/dependencies/versions.json', json_encode( array_map( static fn ( array $package ): string => $package['version'], $selected ), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR ) . "\n" );
+	// Every package under lib/ is listed, including the ones this script does not rebuild.
+	$bundled = array_keys( $selected );
+	foreach ( glob( $root . '/lib/*/*', GLOB_ONLYDIR ) as $directory ) {
+		$bundled[] = basename( dirname( $directory ) ) . '/' . basename( $directory );
+	}
+	$bundled = array_unique( $bundled );
+	sort( $bundled );
+	$versions = array();
+	foreach ( $bundled as $name ) {
+		if ( ! isset( $packages[ $name ] ) ) {
+			throw new RuntimeException( 'Bundled package is missing from composer.lock: ' . $name );
+		}
+		$versions[ $name ] = $packages[ $name ]['version'];
+	}
+	file_put_contents( $output . '/dependencies/versions.json', json_encode( $versions, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR ) . "\n" );
 
 	foreach ( array_merge( array_keys( $selected ), array( 'dependencies' ) ) as $name ) {
 		$source = $output . '/' . $name;

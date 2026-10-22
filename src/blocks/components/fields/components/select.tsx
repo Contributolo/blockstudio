@@ -383,7 +383,8 @@ export const Select = ({
       {item.stylisedUi ||
       item.multiple ||
       item?.populate?.fetch ||
-      item?.populate?.type === 'fetch' ? (
+      item?.populate?.type === 'fetch' ||
+      hasTemplateStrings(item?.populate) ? (
         <AdvancedSelect
           {...{
             ...rest,

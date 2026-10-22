@@ -5083,16 +5083,16 @@
         },
         {
             "name": "tailwindphp/tailwindphp",
-            "version": "v1.5.0",
+            "version": "v1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/inline0/tailwindphp.git",
-                "reference": "10f98d3f88ade239c9be870992c853fd216d87a0"
+                "reference": "f6787320e97877e2945e5a8c34233b2e18c83442"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/inline0/tailwindphp/zipball/10f98d3f88ade239c9be870992c853fd216d87a0",
-                "reference": "10f98d3f88ade239c9be870992c853fd216d87a0",
+                "url": "https://api.github.com/repos/inline0/tailwindphp/zipball/f6787320e97877e2945e5a8c34233b2e18c83442",
+                "reference": "f6787320e97877e2945e5a8c34233b2e18c83442",
                 "shasum": ""
             },
             "require": {
@@ -5148,7 +5148,8 @@
                     "src/plugin.php",
                     "src/plugin/plugins/typography-plugin.php",
                     "src/plugin/plugins/forms-plugin.php",
-                    "src/index.php"
+                    "src/index.php",
+                    "src/state-cache.php"
                 ],
                 "psr-4": {
                     "TailwindPHP\\": "src/"
@@ -5176,7 +5177,7 @@
                 "issues": "https://github.com/dnnsjsk/tailwindphp/issues",
                 "source": "https://github.com/dnnsjsk/tailwindphp"
             },
-            "time": "2026-07-17T23:37:24+00:00"
+            "time": "2026-07-22T06:45:43+00:00"
         },
         {
             "name": "thecodingmachine/safe",

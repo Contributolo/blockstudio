@@ -98,4 +98,19 @@ foreach ( $classes as $class => $file ) {
 		$assert( ! class_exists( $original ) && ! interface_exists( $original ) && ! trait_exists( $original ), 'Public dependency symbol leaked: ' . $original );
 	}
 }
+$versions = json_decode( file_get_contents( $root . '/lib/dependencies/versions.json' ), true, 512, JSON_THROW_ON_ERROR );
+$lock     = json_decode( file_get_contents( $root . '/composer.lock' ), true, 512, JSON_THROW_ON_ERROR );
+$locked   = array_column( array_merge( $lock['packages'], $lock['packages-dev'] ), 'version', 'name' );
+$bundled  = array();
+foreach ( glob( $root . '/lib/*/*', GLOB_ONLYDIR ) as $directory ) {
+	$bundled[] = basename( dirname( $directory ) ) . '/' . basename( $directory );
+}
+$missing = array_diff( $bundled, array_keys( $versions ) );
+$stale   = array_diff( array_keys( $versions ), $bundled );
+$assert( ! $missing, 'versions.json misses bundled packages: ' . implode( ', ', $missing ) );
+$assert( ! $stale, 'versions.json lists packages that are not bundled: ' . implode( ', ', $stale ) );
+foreach ( $versions as $package => $version ) {
+	$assert( is_string( $version ) && '' !== $version, 'versions.json has no version for ' . $package );
+	$assert( ( $locked[ $package ] ?? null ) === $version, 'versions.json disagrees with composer.lock for ' . $package );
+}
 echo 'Dependency isolation passed (' . $mode . ").\n";

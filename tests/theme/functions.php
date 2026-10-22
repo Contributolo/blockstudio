@@ -7,6 +7,13 @@
 
 require_once __DIR__ . '/test-helper.php';
 
+function blockstudio_test_dependent_options( $kind ): array {
+	return array(
+		array( 'value' => 'a', 'label' => 'Item A (' . $kind . ')' ),
+		array( 'value' => 'b', 'label' => 'Item B (' . $kind . ')' ),
+	);
+}
+
 add_action(
 	'after_setup_theme',
 	function () {

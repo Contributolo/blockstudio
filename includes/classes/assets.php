@@ -139,6 +139,16 @@ class Assets {
 	private static array $parsed_asset_ids = array();
 
 	/**
+	 * Whether the current frontend response is buffered.
+	 *
+	 * Set by maybe_buffer_output() at template_redirect, the one place that
+	 * decides it.
+	 *
+	 * @var bool
+	 */
+	private static bool $buffering = false;
+
+	/**
 	 * Request-local cache for compiled asset glob lookups.
 	 *
 	 * @var array
@@ -364,6 +374,8 @@ class Assets {
 	 * @return void
 	 */
 	public function maybe_buffer_output(): void {
+		self::$buffering = false;
+
 		if ( function_exists( 'is_customize_preview' ) && is_customize_preview() ) {
 			return;
 		}
@@ -389,7 +401,22 @@ class Assets {
 			return;
 		}
 
-		ob_start( array( $this, 'return_buffer' ) );
+		self::$buffering = ob_start( array( $this, 'return_buffer' ) );
+	}
+
+	/**
+	 * Whether Blockstudio is buffering the current frontend response.
+	 *
+	 * Reports the outcome of maybe_buffer_output(), which runs at template
+	 * redirect priority BUFFER_PRIORITY. Before that point nothing is buffered
+	 * yet, so the answer is false.
+	 *
+	 * @since 7.7.7
+	 *
+	 * @return bool True when the response is buffered.
+	 */
+	public static function is_buffering(): bool {
+		return self::$buffering;
 	}
 
 	/**

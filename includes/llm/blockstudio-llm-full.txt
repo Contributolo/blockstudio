@@ -1682,6 +1682,29 @@ add_filter('blockstudio/render/head', function($head) {
 });
 ```
 
+The `head` filter only runs when Blockstudio buffers the page. Buffering is off
+in the Customizer preview and when
+`blockstudio/buffer/enabled` returns `false`.
+`bs_is_buffering()` tells you which case you are in, so a theme can append its
+stylesheet through the filter when the page is buffered and enqueue it with
+WordPress otherwise. The answer is available from `wp_enqueue_scripts` on and is
+`false` before `template_redirect`.
+
+```php
+add_action('wp_enqueue_scripts', function() {
+  $url = get_theme_file_uri('overrides.css');
+
+  if (bs_is_buffering()) {
+    add_filter('blockstudio/render/head', function($head) use ($url) {
+      return $head . '<link rel="stylesheet" href="' . esc_url($url) . '">';
+    });
+    return;
+  }
+
+  wp_enqueue_style('theme-overrides', $url);
+});
+```
+
 Use `blockstudio/buffer/output` if you need to
 rearrange the final document in a different way.
 
@@ -4035,6 +4058,31 @@ automatically.
 This works with all populate types (`query`, `function`, `custom`). Any value
 in the populate configuration containing `{attributes.*}` is resolved
 client-side with the current attribute value before the query runs.
+
+### Rendering Dependent Selections
+
+Dependent options are not loaded when the block is registered, because each
+block instance can have different arguments. Rendering uses the saved selection
+instead of discarding it against an empty option list. The populate callback is
+not executed again on the frontend.
+
+The field's `returnFormat` still applies:
+
+| `returnFormat` | Single select | Multiple select |
+|----------------|---------------|-----------------|
+| `value` (default) | The saved value, for example `"a"` | An array of saved values, for example `["a", "b"]` |
+| `label` | The saved label | An array of saved labels |
+| `both` | The saved `{value, label}` option | An array of saved options |
+
+For query-populated selections, values still resolve to the corresponding
+WordPress post, user, or term object unless `populate.returnFormat.value` is
+`"id"`. Labels come from the saved selection. If an imported selection has no
+label, its value is used as the label. A matching static option declared in
+`options` takes precedence over the saved option, so its current label applies.
+
+Empty selections remain `false` (or the field's configured `fallback`). This
+does not change validation of ordinary static options: a saved value that is no
+longer in a static option list still returns `false`.
 
 #### Disabling Attributes
 
@@ -8934,10 +8982,25 @@ add_filter('blockstudio/blocks/attributes/populate', function($options) {
 
 This filter allows you to adjust the output of the `useBlockProps` content.
 
+All component filters (`use_block_props`, `inner_blocks` and `rich_text`)
+receive the block as their last argument. `$block` is the `WP_Block_Type`
+registered for the block being rendered, so `$block->name` is the block name,
+for example `acme/hero`.
+
+`$props` is a string of HTML attributes, not an array. On the frontend it is the
+result of
+get_block_wrapper_attributes(),
+for example `class="wp-block-acme-hero my-class"`. In the editor it is the
+`class` attribute of the element. Return a string. In the editor only the
+`class` attribute of the returned string is applied.
+
 ```php
 add_filter('blockstudio/blocks/components/use_block_props/render', function($props, $block) {
-  $props['class'] .= ' my-custom-class';
-  return $props;
+  if ($block->name !== 'acme/hero') {
+    return $props;
+  }
+
+  return str_replace('class="', 'class="my-custom-class ', $props);
 }, 10, 2);
 ```
 
@@ -9549,6 +9612,11 @@ both.
 add_filter('blockstudio/buffer/enabled', '__return_false');
 ```
 
+Buffering is also off in the admin and in the Customizer preview. Call
+`bs_is_buffering()` from `wp_enqueue_scripts` or later to find out whether the
+current response is buffered. It returns `false` before the decision is made at
+`template_redirect`.
+
 ### output
 
 This filter receives the complete buffered HTML document before it is sent.
@@ -9596,7 +9664,8 @@ add_filter('blockstudio/render', function($content) {
 ### head
 
 This filter allows you to adjust the output of the `<head>` tag before it is
-being rendered.
+being rendered. It runs only when Blockstudio buffers the response, see
+`bs_is_buffering()`.
 
 ```php
 add_filter('blockstudio/render/head', function($content) {
@@ -15749,7 +15818,7 @@ The extension maps every Blockstudio field type to a concrete PHP type:
 
 The extension ships stubs for the full Blockstudio public API:
 
-- `bs_render_block()`, `bs_get_group()`, `bs_get_scoped_class()`, `bs_db_form()`, `bs_is_editor()`, `bs_is_preview()`
+- `bs_render_block()`, `bs_get_group()`, `bs_get_scoped_class()`, `bs_db_form()`, `bs_is_editor()`, `bs_is_preview()`, `bs_is_buffering()`
 - `Db::get()`, `Db::create()`, `Db::list()`, `Db::get_record()`, `Db::update()`, `Db::delete()`
 - `Settings::get()`, `Settings::get_all()`
 - `Field_Registry::instance()`, `Field_Registry::all()`, `Field_Registry::get()`

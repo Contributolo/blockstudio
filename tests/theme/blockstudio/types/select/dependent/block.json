@@ -1,0 +1,66 @@
+{
+  "$schema": "https://blockstudio.dev/schema/block",
+  "apiVersion": 3,
+  "name": "blockstudio/type-select-dependent",
+  "title": "Dependent Select Test",
+  "category": "blockstudio-test-native",
+  "blockstudio": {
+    "attributes": [
+      {
+        "id": "kind",
+        "type": "select",
+        "label": "Kind",
+        "default": "post",
+        "options": [
+          { "value": "post", "label": "Post" },
+          { "value": "page", "label": "Page" }
+        ]
+      },
+      {
+        "id": "single",
+        "type": "select",
+        "label": "Single",
+        "options": [],
+        "populate": {
+          "type": "function",
+          "function": "blockstudio_test_dependent_options",
+          "arguments": ["{attributes.kind}"]
+        }
+      },
+      {
+        "id": "multiple",
+        "type": "select",
+        "label": "Multiple",
+        "multiple": true,
+        "options": [],
+        "populate": {
+          "type": "function",
+          "function": "blockstudio_test_dependent_options",
+          "arguments": ["{attributes.kind}"]
+        }
+      },
+      {
+        "id": "label",
+        "type": "select",
+        "label": "Label",
+        "returnFormat": "label",
+        "populate": {
+          "type": "function",
+          "function": "blockstudio_test_dependent_options",
+          "arguments": ["{attributes.kind}"]
+        }
+      },
+      {
+        "id": "both",
+        "type": "select",
+        "label": "Both",
+        "returnFormat": "both",
+        "populate": {
+          "type": "function",
+          "function": "blockstudio_test_dependent_options",
+          "arguments": ["{attributes.kind}"]
+        }
+      }
+    ]
+  }
+}

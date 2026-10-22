@@ -3,7 +3,7 @@ Contributors: dnnsjsk
 Requires at least: 6.7
 Tested up to: 7.0.0
 Requires PHP: 8.2
-Stable tag: 7.7.6
+Stable tag: 7.7.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,12 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 * [Getting Started](https://blockstudio.dev/docs/getting-started)
 
 == Changelog ==
+
+= 7.7.7 =
+* New: `bs_is_buffering()` reports whether Blockstudio is buffering the frontend response, so themes can choose the correct stylesheet loading path (#157)
+* Fix: selects populated with dynamic attribute arguments preserve saved selections and their configured return formats when rendered (#156)
+* Fix: component-filter documentation describes the registered block argument and uses an HTML attribute string for `useBlockProps` (#159)
+* Fix: the bundled dependency inventory lists every packaged library for security and SBOM tooling (#158)
 
 = 7.7.6 =
 * New: `bs_is_editor()` and `bs_is_preview()` expose the same render mode as template variables to theme helpers and filters (#140)
