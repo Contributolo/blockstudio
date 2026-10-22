@@ -70,6 +70,7 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 * Performance: repeated settings reads reuse their file check for one second while explicit reloads, path changes, and database-only settings remain immediate (#164)
 * Performance: frontend `useBlockProps` processing skips a redundant HTML pass while preserving editor markers and rendered markup (#165)
 * Performance: editor markup uses the browser's native parser to reduce the initial bundle while preserving component props, JSON values, and table fragments (#168)
+* Performance: code, classes, attributes, and WYSIWYG editors load on first use, keeping their shared libraries out of the initial editor download (#169)
 
 = 7.7.6 =
 * New: `bs_is_editor()` and `bs_is_preview()` expose the same render mode as template variables to theme helpers and filters (#140)

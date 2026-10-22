@@ -5,10 +5,8 @@ import { set, unset, result, isNumber, cloneDeep, get } from 'lodash-es';
 import { Base } from '@/blocks/components/base';
 import { Control } from '@/blocks/components/control';
 import { El } from '@/blocks/components/el';
-import { Attributes } from '@/blocks/components/fields/components/attributes';
 import { Checkbox } from '@/blocks/components/fields/components/checkbox';
-import { Classes } from '@/blocks/components/fields/components/classes';
-import { Code, CodeActions } from '@/blocks/components/fields/components/code';
+import { CodeActions } from '@/blocks/components/fields/components/code-popout';
 import { Color } from '@/blocks/components/fields/components/color';
 import { Date } from '@/blocks/components/fields/components/date';
 import { Datetime } from '@/blocks/components/fields/components/datetime';
@@ -28,7 +26,12 @@ import { Textarea } from '@/blocks/components/fields/components/textarea';
 import { Toggle } from '@/blocks/components/fields/components/toggle';
 import { Token } from '@/blocks/components/fields/components/token';
 import { Unit } from '@/blocks/components/fields/components/unit';
-import { WYSIWYG } from '@/blocks/components/fields/components/wysiwyg';
+import {
+  Attributes,
+  Classes,
+  Code,
+  WYSIWYG,
+} from '@/blocks/components/fields/lazy-fields';
 import {
   getFieldType,
   isCustomFieldTypeName,

@@ -13465,8 +13465,15 @@ Editor markup inspection uses the browser's inert fragment parser, reducing
 the initial JavaScript bundle. Component props keep their written camelCase
 names, and quoted values, JSON props, and table fragments remain supported.
 
-HTML and CSS formatting code is loaded when the relevant editor control needs
-it. A newer single-block preview request cancels the previous browser request
+Code, classes, attributes, and WYSIWYG field editors load when their controls
+first appear, rather than with the initial editor script. Unselected blocks do
+not download these editors. Shared editor libraries are reused, and switching
+a WYSIWYG field to code mode loads the code editor only then. The first use
+may take longer on a slow connection; stored values and field defaults are
+available before these editors load. No configuration is required.
+
+HTML and CSS formatting code also loads on demand. A newer single-block preview
+request cancels the previous browser request
 while keeping the displayed preview. Cancellation cannot guarantee that PHP
 stops a render that has already started on the server.
 

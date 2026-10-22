@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useContext } from 'react';
+import { useContext } from 'react';
 import {
   autocompletion,
   CompletionContext,
@@ -12,10 +12,8 @@ import { php } from '@codemirror/lang-php';
 import { githubDark, githubLight } from '@uiw/codemirror-theme-github';
 import CodeMirror from '@uiw/react-codemirror';
 import { useEffect, useRef, useState } from '@wordpress/element';
-import { external } from '@wordpress/icons';
-import { LabelAction } from '@/blocks/components/label';
+import { CodePopoutContext } from '@/blocks/components/fields/components/code-popout';
 import { useGetCssVariables } from '@/blocks/hooks/use-get-css-variables';
-import { usePopout } from '@/blocks/hooks/use-popout';
 import { getEditorDocument } from '@/blocks/utils/get-editor-document';
 import { style } from '@/const/index';
 import { BlockstudioAttribute } from '@/types/block';
@@ -45,42 +43,8 @@ const cssVariablesCompletion = (
   };
 };
 
-const CodePopoutContext = createContext<{
-  isOpen: boolean;
-  Popout: ({ children }: { children: ReactNode }) => ReactNode;
-} | null>(null);
-
 type CleanupElement = HTMLElement & {
   __blockstudioCleanupUnsubscribe?: () => void;
-};
-
-export const CodeActions = ({
-  item,
-  children,
-}: {
-  item: BlockstudioAttribute;
-  children: (props: { actions: LabelAction[] }) => ReactNode;
-}) => {
-  const { isOpen, open, close, Popout } = usePopout({
-    title: item.label || 'Code Editor',
-  });
-  const showPopout = item.popout === true;
-
-  const actions: LabelAction[] = showPopout
-    ? [
-        {
-          icon: external,
-          onClick: isOpen ? close : open,
-          label: __('Open in popup'),
-        },
-      ]
-    : [];
-
-  return (
-    <CodePopoutContext.Provider value={showPopout ? { isOpen, Popout } : null}>
-      {children({ actions })}
-    </CodePopoutContext.Provider>
-  );
 };
 
 export const Code = ({

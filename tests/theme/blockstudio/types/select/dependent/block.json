@@ -24,7 +24,7 @@
         "populate": {
           "type": "function",
           "function": "blockstudio_test_dependent_options",
-          "arguments": ["{attributes.kind}"]
+          "arguments": ["{attributes.kind.value}"]
         }
       },
       {
@@ -36,7 +36,7 @@
         "populate": {
           "type": "function",
           "function": "blockstudio_test_dependent_options",
-          "arguments": ["{attributes.kind}"]
+          "arguments": ["{attributes.kind.value}"]
         }
       },
       {
@@ -47,7 +47,7 @@
         "populate": {
           "type": "function",
           "function": "blockstudio_test_dependent_options",
-          "arguments": ["{attributes.kind}"]
+          "arguments": ["{attributes.kind.value}"]
         }
       },
       {
@@ -58,7 +58,7 @@
         "populate": {
           "type": "function",
           "function": "blockstudio_test_dependent_options",
-          "arguments": ["{attributes.kind}"]
+          "arguments": ["{attributes.kind.value}"]
         }
       }
     ]
