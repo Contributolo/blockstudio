@@ -142,6 +142,26 @@ add_filter('blockstudio/blocks/attributes/render', function($attributes, $block)
 }, 10, 2);
 ```
 
+### attributes/files/sizes
+
+A `files` field returns each image with a `sizes` array that holds the URL,
+width and height of `full` and of every registered image size, for example
+`$image['sizes']['thumbnail']` and `$image['sizes']['thumbnail-width']`. Each
+size is one `wp_get_attachment_image_src()` call per image, so its filters still
+apply. Templates that never read `sizes` can drop or shorten the list.
+
+```php title="functions.php"
+add_filter('blockstudio/blocks/attributes/files/sizes', function($sizes, $id, $size) {
+  // Keep only two sizes. Return an empty array to skip them, `sizes` is then null.
+  return ['full', 'large'];
+}, 10, 3);
+```
+
+`$sizes` is the list of size names, `full` first. `$id` is the attachment ID
+and `$size` the size requested for the value's `url`. The filter changes the
+`sizes` array of every files value in the request. Without it the array is
+unchanged.
+
 ### attributes/validate
 
 Adjust findings from explicit [`bs_validate_block()`](/docs/blocks/rendering#validating-stored-values)
