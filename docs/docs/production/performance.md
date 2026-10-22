@@ -21,6 +21,10 @@ New repeater rows are initialized from registered defaults, including nested
 minimum rows. Existing values are preserved. Editor asset fields and custom
 controls keep the initialization they need.
 
+Editor markup inspection uses the browser's inert fragment parser, reducing
+the initial JavaScript bundle. Component props keep their written camelCase
+names, and quoted values, JSON props, and table fragments remain supported.
+
 HTML and CSS formatting code is loaded when the relevant editor control needs
 it. A newer single-block preview request cancels the previous browser request
 while keeping the displayed preview. Cancellation cannot guarantee that PHP

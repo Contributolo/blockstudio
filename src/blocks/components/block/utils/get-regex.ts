@@ -1,3 +1,6 @@
 export const getRegex = (elementName: string, flag = 's') => {
-  return new RegExp(`<${elementName}\\s*(.*?)\\s*\\/?\\>`, flag);
+  return new RegExp(
+    `<${elementName}(?=[\\s/>])((?:"[^"]*"|'[^']*'|[^'">])*?)\\/?>`,
+    flag,
+  );
 };

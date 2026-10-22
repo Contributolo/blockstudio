@@ -1,13 +1,12 @@
-import { parseFragment, serialize, DefaultTreeAdapterMap } from 'parse5';
-
 export const getInnerHTML = (htmlString: string) => {
   htmlString = htmlString.replace(/<(\w+)([^>]*)\s?\/>/g, '<$1$2></$1>');
 
-  const fragment = parseFragment(htmlString).childNodes.filter(
-    (node) => node.nodeName !== '#text' && node.nodeName !== '#comment',
-  )[0] as DefaultTreeAdapterMap['parentNode'];
+  // A template parses a fragment like the spec's fragment algorithm and keeps
+  // its content inert, so nothing loads while the markup is inspected.
+  const template = document.createElement('template');
+  template.innerHTML = htmlString;
 
-  let element = serialize(fragment);
+  let element = template.content.firstElementChild?.innerHTML ?? '';
 
   element = element
     .replaceAll(/<innerblocks([^>]*)>\s*<\/innerblocks>/g, '<InnerBlocks$1 />')
