@@ -1224,6 +1224,21 @@ add_filter('blockstudio/cache/max_files_per_scope', function($maximum, $scope) {
 }, 10, 2);
 ```
 
+### blockstudio/cache/compress
+
+Filters whether a cache payload is written as a compressed serialized string
+instead of a plain PHP array. A process that serves included files from OPcache
+shared memory writes plain arrays, which OPcache compiles once and returns
+without parsing or copying on later requests. Other processes, such as WP-CLI
+without `opcache.enable_cli`, write the compressed form. Return `false` when the
+cache is warmed from such a process for web workers that use OPcache.
+
+```php title="functions.php"
+add_filter('blockstudio/cache/compress', function($compress, $scope) {
+  return $scope === 'runtime' ? false : $compress;
+}, 10, 2);
+```
+
 ### blockstudio/cache/protected_paths
 
 Cache paths retention pruning must never evict. Blockstudio seeds it with

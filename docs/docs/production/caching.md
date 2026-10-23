@@ -92,6 +92,15 @@ payload immediately instead of serving raw CSS or dropping SCSS until the
 window expires. Set the debounce to `0` when a production-like environment is
 also used for active file authoring.
 
+Cache payloads are PHP files. When the writing process serves includes from
+OPcache shared memory, a payload is a plain array: OPcache compiles it once, and
+every later request reads the shared array without parsing or copying it.
+Without OPcache, a payload is a compressed serialized string, which is cheaper
+to restore than parsing a large array literal on every request. The
+`blockstudio/cache/compress` filter overrides that choice, for example when
+WP-CLI without `opcache.enable_cli` warms the cache for web workers that use
+OPcache.
+
 ## Concurrency and retention
 
 Cold cache keys use a single-flight lock. One request builds the payload while

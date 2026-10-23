@@ -25,7 +25,7 @@ final class Build_Cache {
 	 *
 	 * @var int
 	 */
-	private const VERSION = 6;
+	private const VERSION = 7;
 
 	/**
 	 * Option storing the database-backed populate cache version.
@@ -754,7 +754,7 @@ final class Build_Cache {
 		$file                    = self::get_cache_file( $scope, $key );
 		$is_new                  = ! is_file( $file );
 		$tmp                     = $file . '.tmp-' . wp_generate_uuid4();
-		$contents                = self::export_payload( $payload );
+		$contents                = self::export_payload( $payload, $scope );
 
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- Writing local cache file.
 		if ( false === file_put_contents( $tmp, $contents, LOCK_EX ) ) {
@@ -850,16 +850,34 @@ final class Build_Cache {
 	/**
 	 * Export a cache payload as a guarded PHP file.
 	 *
-	 * Compressed serialization keeps large build payloads from becoming huge PHP
-	 * array literals, which are expensive for PHP to parse and can exhaust CLI
-	 * memory on large sites.
+	 * With OPcache, a plain array file is compiled once into shared memory and
+	 * every later include returns that immutable array without parsing or
+	 * copying it. Without OPcache, the array literal is parsed on every include,
+	 * which costs more time and memory than inflating a compressed serialized
+	 * payload, so those processes keep the compressed form.
 	 *
-	 * @param array $payload Payload to export.
+	 * @param array  $payload Payload to export.
+	 * @param string $scope   Cache scope.
 	 *
 	 * @return string PHP file contents.
 	 */
-	private static function export_payload( array $payload ): string {
-		if ( function_exists( 'gzcompress' ) ) {
+	private static function export_payload( array $payload, string $scope ): string {
+		/**
+		 * Filter whether a cache payload is written in compressed form.
+		 *
+		 * Compression is the default when this process does not keep included
+		 * files in OPcache shared memory, for example WP-CLI without
+		 * opcache.enable_cli. Hosts that warm the cache from such a process
+		 * for web workers that do use OPcache can return false.
+		 *
+		 * @since 7.7.8
+		 *
+		 * @param bool   $compress Whether to compress the payload.
+		 * @param string $scope    Cache scope.
+		 */
+		$compress = (bool) apply_filters( 'blockstudio/cache/compress', ! self::opcache_caches_includes(), $scope );
+
+		if ( $compress && function_exists( 'gzcompress' ) ) {
 			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize -- Internal cache payload with no user-provided execution.
 			$compressed = gzcompress( serialize( $payload ), 1 );
 
@@ -871,8 +889,21 @@ final class Build_Cache {
 			}
 		}
 
-		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export -- Fallback cache format when zlib is unavailable.
+		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export -- Plain array cache format for OPcache, and the fallback when zlib is unavailable.
 		return "<?php\nif ( ! defined( 'ABSPATH' ) ) { exit; }\nreturn " . var_export( $payload, true ) . ";\n";
+	}
+
+	/**
+	 * Check whether this process keeps included files in OPcache shared memory.
+	 *
+	 * @return bool Whether included cache files are served from OPcache.
+	 */
+	private static function opcache_caches_includes(): bool {
+		$enabled = 'cli' === PHP_SAPI ? 'opcache.enable_cli' : 'opcache.enable';
+
+		return filter_var( ini_get( 'opcache.enable' ), FILTER_VALIDATE_BOOLEAN )
+			&& filter_var( ini_get( $enabled ), FILTER_VALIDATE_BOOLEAN )
+			&& ! filter_var( ini_get( 'opcache.file_cache_only' ), FILTER_VALIDATE_BOOLEAN );
 	}
 
 	/**
