@@ -18,7 +18,13 @@ test('small external stylesheets can inline without changing applied styles and 
   expect((await page.goto(url))?.status()).toBe(200);
   await expect(page.locator(`style#${id}`)).toHaveCount(1);
   await expect(page.locator(`link#${id}`)).toHaveCount(0);
-  await expect(page.locator(`style#${id}`)).toContainText('background');
+  const stylesheet = page.locator(`style#${id}`);
+  expect(await stylesheet.textContent()).toContain('background');
+  expect(
+    await stylesheet.evaluate(
+      (element) => (element as HTMLStyleElement).sheet?.cssRules.length ?? 0,
+    ),
+  ).toBeGreaterThan(0);
   expect(
     await page
       .locator('body')

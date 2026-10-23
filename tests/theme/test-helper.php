@@ -85,9 +85,9 @@ add_action(
 					}
 					$post = get_post( $post_id );
 					return array(
-						'paths' => $paths,
-						'content' => $post->post_content,
-						'modified' => $post->post_modified_gmt,
+						'paths'       => $paths,
+						'content'     => $post->post_content,
+						'modified'    => $post->post_modified_gmt,
 						'fingerprint' => get_post_meta( $post_id, '_blockstudio_page_fingerprint', true ),
 					);
 				},
