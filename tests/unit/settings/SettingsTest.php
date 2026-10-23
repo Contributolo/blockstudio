@@ -919,6 +919,65 @@ class SettingsTest extends TestCase {
 			Settings::reload();
 		}
 	}
+
+	// Fingerprint
+
+	private function expected_fingerprint( array $settings ): string {
+		return hash( 'sha256', (string) wp_json_encode( $settings, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) );
+	}
+
+	public function test_fingerprint_hashes_the_resolved_settings(): void {
+		$this->assertSame( $this->expected_fingerprint( Settings::get_all() ), Settings::fingerprint() );
+		$this->assertSame( Settings::fingerprint(), Settings::fingerprint() );
+	}
+
+	public function test_fingerprint_follows_changed_settings(): void {
+		$before   = Settings::fingerprint();
+		$settings = Settings::get_all();
+
+		$settings['tailwind']['enabled'] = ! ( $settings['tailwind']['enabled'] ?? false );
+		( new ReflectionProperty( Settings::class, 'settings' ) )->setValue( null, $settings );
+
+		$this->assertNotSame( $before, Settings::fingerprint() );
+		$this->assertSame( $this->expected_fingerprint( $settings ), Settings::fingerprint() );
+	}
+
+	public function test_fingerprint_follows_a_reload(): void {
+		$before = Settings::fingerprint();
+
+		$this->add_filter(
+			'blockstudio/settings/tailwind/enabled',
+			static function ( $value ) {
+				return ! $value;
+			}
+		);
+		Settings::reload();
+
+		$this->assertNotSame( $before, Settings::fingerprint() );
+		$this->assertSame( $this->expected_fingerprint( Settings::get_all() ), Settings::fingerprint() );
+	}
+
+	public function test_fingerprint_tracks_in_place_object_changes_without_memoizing_them(): void {
+		$settings = Settings::get_all();
+		$object = (object) array( 'value' => 1 );
+		$settings['custom'] = $object;
+		( new ReflectionProperty( Settings::class, 'settings' ) )->setValue( null, $settings );
+		$before = Settings::fingerprint();
+		$object->value = 2;
+		$this->assertNotSame( $before, Settings::fingerprint() );
+		$this->assertSame( $this->expected_fingerprint( $settings ), Settings::fingerprint() );
+	}
+
+	public function test_fingerprint_tracks_nested_php_references_without_memoizing_them(): void {
+		$settings = Settings::get_all();
+		$limit = 10;
+		$settings['assets']['inlineLimit'] = &$limit;
+		( new ReflectionProperty( Settings::class, 'settings' ) )->setValue( null, $settings );
+		$before = Settings::fingerprint();
+		$limit = 20;
+		$this->assertNotSame( $before, Settings::fingerprint() );
+		$this->assertSame( $this->expected_fingerprint( $settings ), Settings::fingerprint() );
+	}
 }
 
 /**

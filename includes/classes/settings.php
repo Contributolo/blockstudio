@@ -357,6 +357,20 @@ class Settings {
 	private static ?string $json_checked_result = null;
 
 	/**
+	 * Settings the cached fingerprint was computed from.
+	 *
+	 * @var array|null
+	 */
+	private static ?array $fingerprint_settings = null;
+
+	/**
+	 * Cached fingerprint of the settings above.
+	 *
+	 * @var string
+	 */
+	private static string $fingerprint = '';
+
+	/**
 	 * Get singleton instance.
 	 *
 	 * @return Settings|null The singleton instance.
@@ -379,6 +393,8 @@ class Settings {
 	 * Constructor.
 	 */
 	public function __construct() {
+		self::$fingerprint_settings      = null;
+		self::$fingerprint               = '';
 		static::$settings                = static::$defaults;
 		static::$settings_filters        = static::$defaults;
 		static::$settings_options        = array();
@@ -870,9 +886,44 @@ class Settings {
 	 */
 	public static function fingerprint(): string {
 		self::get_instance();
+
+		// Runtime paths ask for the fingerprint dozens of times per request.
+		// Comparing with the array it was computed from is constant time while
+		// the settings are unchanged (same array in memory) and still catches
+		// every change, so the JSON encoding and hashing run once per version.
+		if ( static::$settings === self::$fingerprint_settings ) {
+			return self::$fingerprint;
+		}
+
 		$encoded = wp_json_encode( static::$settings, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 
-		return hash( 'sha256', is_string( $encoded ) ? $encoded : '' );
+		self::$fingerprint_settings = self::can_memoize_fingerprint( static::$settings ) ? static::$settings : null;
+		self::$fingerprint          = hash( 'sha256', is_string( $encoded ) ? $encoded : '' );
+
+		return self::$fingerprint;
+	}
+
+	/**
+	 * Shared references and objects can mutate without an array copy.
+	 *
+	 * @param array $settings Resolved values to snapshot.
+	 * @return bool Whether PHP's copy-on-write comparison can detect every change.
+	 */
+	private static function can_memoize_fingerprint( array $settings ): bool {
+		foreach ( array_keys( $settings ) as $key ) {
+			if ( null !== \ReflectionReference::fromArrayElement( $settings, $key ) ) {
+				return false;
+			}
+			$value = $settings[ $key ];
+			if ( is_array( $value ) ) {
+				if ( ! self::can_memoize_fingerprint( $value ) ) {
+					return false;
+				}
+			} elseif ( null !== $value && ! is_scalar( $value ) ) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -893,6 +944,8 @@ class Settings {
 		self::$json_checked_path         = '';
 		self::$json_checked_at           = 0;
 		self::$json_checked_result       = null;
+		self::$fingerprint_settings      = null;
+		self::$fingerprint               = '';
 	}
 
 	/**
