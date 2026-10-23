@@ -7,7 +7,7 @@ testType('color', '"color":{"name":"red","value":"#f00","slug":"red"}', () => {
       description: 'change color',
       testFunction: async (page: Page, _canvas: Frame) => {
         await page.click(
-          '.blockstudio-fields__field--color [aria-label="blue"]'
+          '.blockstudio-fields__field--color [aria-label="blue"]',
         );
         await saveAndReload(page);
       },
@@ -19,7 +19,7 @@ testType('color', '"color":{"name":"red","value":"#f00","slug":"red"}', () => {
         await count(
           page,
           '.blockstudio-fields__field--color [aria-label="blue"]',
-          1
+          1,
         );
       },
     },

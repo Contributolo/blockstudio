@@ -5,11 +5,10 @@ WordPress block framework plugin. v7 modernization with 100% WordPress Coding St
 ## Quick Reference
 
 ```bash
-# Run unit tests (PHPUnit inside wp-env)
-npm run wp-env:start && npm run test:unit
-
-# Run E2E tests (browser automation)
-npm run wp-env:start && npm run test:e2e
+# Local static checks (no containers or browsers)
+npm run lint
+npm run typecheck
+npm run runtime:check
 
 # Check coding standards
 composer cs
@@ -17,7 +16,11 @@ composer cs
 
 ## Testing - IMPORTANT
 
-There is one active test system:
+Full suites and all E2E tests run in GitHub CI only. Do not run `npm run check`,
+the full client/PHP/registry suites, Playwright, or screenshot scripts locally.
+Focused non-E2E tests are allowed, for example
+`node --test scripts/tests/build.test.ts`. Builds, formatting, lint, types,
+and documentation/schema checks can run locally.
 
 ### E2E Tests (wp-env)
 
@@ -25,7 +28,8 @@ There is one active test system:
 
 **Technology:** wp-env (full WordPress with Docker)
 
-**Commands:**
+**CI commands (not local):**
+
 ```bash
 npm run wp-env:start        # Start wp-env (port 8888)
 npm run test:e2e            # Run all E2E tests
@@ -85,6 +89,7 @@ JSON Schemas are stored as deterministic JSON files in `schemas/`:
 - `/schema/extend` - Block extension schema
 
 When adding new field properties:
+
 1. Update the appropriate JSON file in `schemas/` and its checksum in `schemas/manifest.json`
 2. Add TypeScript type to `src/types/block.ts`
 3. Run `npm run schemas:check` and `npm run types`
@@ -117,17 +122,27 @@ section markers in Markdown files.
 - **No banner comments**: never use decorative separator lines like `// ==========`, `// -----`, `// ===== SECTION =====`, etc. Exception: in large test files with many assertions, a single `// Section Name` line is fine to separate groups.
 - **No em dashes**: never use em dashes in code, docs, or copy. Use periods, commas, colons, or rewrite the sentence.
 
+## Tooling
+
+- Use Node from `.nvmrc`; install with `npm ci` and `npm ci --prefix packages/registry`.
+- Repository scripts/configs are TypeScript, run directly with Node. Keep syntax erasable and imports explicit (`.ts`, `import type`).
+- Use the Effect runtime in `scripts/lib/` for CLI boundaries, scoped processes and temporary files. Keep pure parsers ordinary TypeScript.
+- Oxfmt owns formatting; Oxlint owns lint. PHP remains PHPCS/PHPStan. Prettier remains a browser formatting dependency, not the repository formatter.
+- Edit UI behavior in `src/ui/` and frontend helpers in `src/runtime/`; run `npm run build:runtime` and commit the generated JS at its original `includes/` path.
+- Do not convert JavaScript test fixtures or vendor code. `audit:tooling` enforces the explicit exceptions and checked TS project coverage.
+- `npm run build` retains the WordPress webpack pipeline, externals and `.asset.php` manifests.
+
 ## CI
 
-- The complete CI suite runs on every push to `main` and `7.*` branches.
-- Browser coverage runs in isolated GitHub-hosted WordPress environments: 16 main-suite shards plus one empty-theme job.
+- The complete CI suite runs on every push to `main`, `7.*`, and `tooling-upgrade`.
+- Main CI uses the existing self-hosted Blockstudio runners: four main-suite shards, empty-theme coverage, and UI regressions. Distribution and release packaging retain their existing runners.
 - Commit-message tags such as `[all]`, `[e2e]`, and `[unit]` do not gate jobs. `[all]` remains a release-validation convention only.
 
 ## Key Rules for Claude
 
 1. **NEVER COMMIT WITHOUT TESTING** - Always run and verify tests pass before committing, unless explicitly instructed otherwise.
 2. **DEBUG UNTIL SOLVED** - When a test fails, debug with temporary logging, screenshots, and other debugging tools until the problem is resolved.
-3. **Run tests** after changes: `npm run test:e2e`
+3. **CI owns full testing** - No local E2E or full-suite runs. Use focused non-E2E checks locally, then push and inspect every CI job.
 4. **Never modify `_reference/`** - read-only legacy baseline
 5. **100% WordPress Coding Standards** - no exceptions
 6. **One class at a time** - migrate and test incrementally
@@ -137,29 +152,29 @@ section markers in Markdown files.
 
 ## Commands
 
-| Command | Description |
-|---------|-------------|
-| `npm run wp-env:start` | Start wp-env for E2E tests (port 8888) |
-| `npm run wp-env:stop` | Stop wp-env |
-| `npm run wp-env:reset` | Reset wp-env + seed test data |
-| `npm run test:unit` | Run PHPUnit tests inside wp-env |
-| `npm run test:e2e` | Run all E2E tests |
-| `npm run catalog:blocks` | Run catalog block test |
-| `composer cs` | Check PHPCS |
-| `composer cs:fix` | Auto-fix PHPCS issues |
-| `npm run i18n` | Update `languages/` after changing translatable strings |
+| Command                  | Description                                             |
+| ------------------------ | ------------------------------------------------------- |
+| `npm run wp-env:start`   | Start wp-env for E2E tests (port 8888)                  |
+| `npm run wp-env:stop`    | Stop wp-env                                             |
+| `npm run wp-env:reset`   | Reset wp-env + seed test data                           |
+| `npm run test:unit`      | Run PHPUnit tests inside wp-env                         |
+| `npm run test:e2e`       | Run all E2E tests                                       |
+| `npm run catalog:blocks` | Run catalog block test                                  |
+| `composer cs`            | Check PHPCS                                             |
+| `composer cs:fix`        | Auto-fix PHPCS issues                                   |
+| `npm run i18n`           | Update `languages/` after changing translatable strings |
 
 ### Docs Commands
 
-| Command | Description |
-|---------|-------------|
-| `npm run docs:check` | Validate all portable Markdown collections |
-| `npm run docs:generate` | Refresh schema-generated documentation |
-| `npm run schemas:check` | Validate and checksum the static schemas |
-| `npm run build:llm` | Rebuild the bundled LLM context |
+| Command                 | Description                                |
+| ----------------------- | ------------------------------------------ |
+| `npm run docs:check`    | Validate all portable Markdown collections |
+| `npm run docs:generate` | Refresh schema-generated documentation     |
+| `npm run schemas:check` | Validate and checksum the static schemas   |
+| `npm run build:llm`     | Rebuild the bundled LLM context            |
 
 ## Ports
 
-| Server | Port |
-|--------|------|
+| Server       | Port |
+| ------------ | ---- |
 | wp-env (E2E) | 8888 |

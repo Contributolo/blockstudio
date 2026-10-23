@@ -1,43 +1,31 @@
-import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'fs';
-import { dirname, resolve } from 'path';
-import { fileURLToPath } from 'url';
-import { execFileSync } from 'child_process';
+import { Effect, FileSystem } from 'effect';
+import { resolve } from 'node:path';
+import { command } from './lib/command.ts';
+import { writeAtomic } from './lib/files.ts';
+import { main } from './lib/runtime.ts';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const root = resolve(__dirname, '..');
-const tmpDir = resolve(root, '.tmp-schemas');
-const schemasDir = resolve(root, 'schemas');
+const root = resolve(import.meta.dirname, '..');
 
-(() => {
-  const blockstudio = JSON.parse(
-    readFileSync(resolve(schemasDir, 'blockstudio.json'), 'utf-8'),
-  );
-  const schema = JSON.parse(
-    readFileSync(resolve(schemasDir, 'block.json'), 'utf-8'),
-  );
-
-  mkdirSync(tmpDir, { recursive: true });
-
-  const blockJson = resolve(tmpDir, 'block.json');
-  const blockstudioJson = resolve(tmpDir, 'blockstudio.json');
-
-  try {
-    writeFileSync(blockJson, JSON.stringify(schema));
-    writeFileSync(blockstudioJson, JSON.stringify(blockstudio));
-
-    execFileSync(
-      'quicktype',
-      [blockJson, '-s', 'schema', '-o', 'src/types/block.ts'],
-      { cwd: root, stdio: 'inherit' },
-    );
-    execFileSync(
-      'quicktype',
-      [blockstudioJson, '-s', 'schema', '-o', 'src/types/blockstudio.ts'],
-      { cwd: root, stdio: 'inherit' },
-    );
-
+export const generateTypes = Effect.scoped(
+  Effect.gen(function* () {
+    const fs = yield* FileSystem.FileSystem;
+    const temporary = yield* fs.makeTempDirectoryScoped({
+      prefix: 'blockstudio-types-',
+    });
+    for (const name of ['block', 'blockstudio']) {
+      const output = resolve(temporary, `${name}.ts`);
+      yield* command(
+        resolve(root, 'node_modules/.bin/quicktype'),
+        [resolve(root, `schemas/${name}.json`), '-s', 'schema', '-o', output],
+        { cwd: root, inherit: true },
+      );
+      yield* writeAtomic(
+        resolve(root, `src/types/${name}.ts`),
+        yield* fs.readFile(output),
+      );
+    }
     console.log('Generated src/types/block.ts and src/types/blockstudio.ts');
-  } finally {
-    rmSync(tmpDir, { recursive: true, force: true });
-  }
-})();
+  }),
+);
+
+if (import.meta.main) main(generateTypes);

@@ -9,7 +9,7 @@ testType('datetime', '"datetime":"2023-03-14T11:14:03"', () => {
         await canvas.click('[data-type="blockstudio/type-datetime"]');
         await page.fill(
           '.blockstudio-fields__field--datetime .components-datetime__time-field-hours-input input',
-          '11'
+          '11',
         );
         await saveAndReload(page);
       },
@@ -20,8 +20,8 @@ testType('datetime', '"datetime":"2023-03-14T11:14:03"', () => {
         await canvas.click('[data-type="blockstudio/type-datetime"]');
         await expect(
           page.locator(
-            '.blockstudio-fields__field--datetime .components-datetime__time-field-hours-input input'
-          )
+            '.blockstudio-fields__field--datetime .components-datetime__time-field-hours-input input',
+          ),
         ).toHaveValue('11');
       },
     },

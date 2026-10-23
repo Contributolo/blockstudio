@@ -1,16 +1,16 @@
-import chalk from "chalk";
-import { loadConfig } from "../config/loader.js";
-import type { Registry } from "../config/schema.js";
-import { resolveRegistryRef } from "../config/schema.js";
-import { fetchRegistry, clearCache } from "../registry/fetcher.js";
+import chalk from 'chalk';
+import { loadConfig } from '../config/loader.js';
+import type { Registry } from '../config/schema.js';
+import { resolveRegistryRef } from '../config/schema.js';
+import { fetchRegistry, clearCache } from '../registry/fetcher.js';
 import {
   resolveBlock,
   findBlockAcrossRegistries,
   type RegistryMatch,
-} from "../registry/resolver.js";
-import { downloadBlocks } from "../registry/downloader.js";
-import { writeBlocks, exists } from "../utils/fs.js";
-import { getTargetDir, getBlockDir } from "../utils/paths.js";
+} from '../registry/resolver.js';
+import { downloadBlocks } from '../registry/downloader.js';
+import { writeBlocks, exists } from '../utils/fs.js';
+import { getTargetDir, getBlockDir } from '../utils/paths.js';
 
 export type AddOptions = {
   cwd: string;
@@ -19,8 +19,11 @@ export type AddOptions = {
   onConflict?: (matches: RegistryMatch[]) => Promise<RegistryMatch>;
 };
 
-export function parseBlockArg(arg: string): { namespace?: string; name: string } {
-  const parts = arg.split("/");
+export function parseBlockArg(arg: string): {
+  namespace?: string;
+  name: string;
+} {
+  const parts = arg.split('/');
   if (parts.length === 2) {
     return { namespace: parts[0], name: parts[1] };
   }
@@ -39,7 +42,7 @@ export async function runAdd(
   const registryNames = Object.keys(config.registries);
   if (registryNames.length === 0) {
     throw new Error(
-      "No registries configured in blocks.json. Add a registry first.",
+      'No registries configured in blocks.json. Add a registry first.',
     );
   }
 
@@ -66,7 +69,7 @@ export async function runAdd(
       registry = registries.get(namespace)!;
       if (!registry) {
         throw new Error(
-          `Registry "${namespace}" not found. Available: ${registryNames.join(", ")}`,
+          `Registry "${namespace}" not found. Available: ${registryNames.join(', ')}`,
         );
       }
       registryName = namespace;
@@ -81,9 +84,7 @@ export async function runAdd(
       const matches = findBlockAcrossRegistries(name, registries, headersMap);
 
       if (matches.length === 0) {
-        throw new Error(
-          `Block "${name}" not found in any registry.`,
-        );
+        throw new Error(`Block "${name}" not found in any registry.`);
       }
 
       let match: RegistryMatch;
@@ -95,7 +96,7 @@ export async function runAdd(
         match = matches[0];
       } else {
         throw new Error(
-          `Block "${name}" found in multiple registries: ${matches.map((m) => m.registryName).join(", ")}. Specify one: blockstudio add ${matches[0].registryName}/${name}`,
+          `Block "${name}" found in multiple registries: ${matches.map((m) => m.registryName).join(', ')}. Specify one: blockstudio add ${matches[0].registryName}/${name}`,
         );
       }
 
@@ -110,7 +111,7 @@ export async function runAdd(
       const blockDir = getBlockDir(config, configDir, block.name);
       if (await exists(blockDir)) {
         if (options.dryRun) {
-          console.log(chalk.yellow("Would overwrite"), block.name);
+          console.log(chalk.yellow('Would overwrite'), block.name);
           continue;
         }
         if (!options.yes) {
@@ -122,19 +123,22 @@ export async function runAdd(
     }
 
     if (options.dryRun) {
-      console.log(chalk.blue("Would install:"));
+      console.log(chalk.blue('Would install:'));
       for (const block of resolved) {
         console.log(`  ${block.name} (${block.files.length} files)`);
       }
       continue;
     }
 
-    console.log(chalk.blue("Downloading"), `${registryName}/${name}...`);
+    console.log(chalk.blue('Downloading'), `${registryName}/${name}...`);
     const downloaded = await downloadBlocks(resolved);
     const written = await writeBlocks(downloaded, targetDir);
 
     for (const [blockName, files] of written) {
-      console.log(chalk.green("Installed"), `${blockName} (${files.length} files)`);
+      console.log(
+        chalk.green('Installed'),
+        `${blockName} (${files.length} files)`,
+      );
     }
   }
 }

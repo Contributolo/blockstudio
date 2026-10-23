@@ -24,7 +24,10 @@ interface PositionCache {
 }
 
 let cache: PositionCache | null = null;
-let visibilityCache = new WeakMap<Element, { isVisible: boolean; timestamp: number }>();
+let visibilityCache = new WeakMap<
+  Element,
+  { isVisible: boolean; timestamp: number }
+>();
 
 const isDevtoolsElement = (element: Element): boolean => {
   if (element.hasAttribute('data-blockstudio-devtools')) return true;
@@ -35,7 +38,10 @@ const isDevtoolsElement = (element: Element): boolean => {
   );
 };
 
-const isElementVisible = (element: Element, computedStyle?: CSSStyleDeclaration): boolean => {
+const isElementVisible = (
+  element: Element,
+  computedStyle?: CSSStyleDeclaration,
+): boolean => {
   const style = computedStyle || window.getComputedStyle(element);
   return (
     style.display !== 'none' &&
@@ -54,7 +60,10 @@ const isDevToolsOverlay = (computedStyle: CSSStyleDeclaration): boolean => {
   );
 };
 
-const isFullViewportOverlay = (element: Element, computedStyle: CSSStyleDeclaration): boolean => {
+const isFullViewportOverlay = (
+  element: Element,
+  computedStyle: CSSStyleDeclaration,
+): boolean => {
   const position = computedStyle.position;
   if (position !== 'fixed' && position !== 'absolute') return false;
 
@@ -111,7 +120,8 @@ const getSelectionAtPoint = (x: number, y: number): SelectionResult | null => {
   if (cache) {
     const dx = Math.abs(x - cache.x);
     const dy = Math.abs(y - cache.y);
-    const isPositionClose = dx <= CACHE_DISTANCE_THRESHOLD && dy <= CACHE_DISTANCE_THRESHOLD;
+    const isPositionClose =
+      dx <= CACHE_DISTANCE_THRESHOLD && dy <= CACHE_DISTANCE_THRESHOLD;
     const isWithinThrottle = now - cache.timestamp < CACHE_THROTTLE_MS;
     if (isPositionClose || isWithinThrottle) {
       return cache.result;

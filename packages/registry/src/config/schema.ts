@@ -1,11 +1,11 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const blockEntrySchema = z.object({
   name: z.string().min(1),
   title: z.string().optional(),
   description: z.string().optional(),
   category: z.string().optional(),
-  type: z.enum(["blockstudio", "create-block", "wordpress"]).optional(),
+  type: z.enum(['blockstudio', 'create-block', 'wordpress']).optional(),
   dependencies: z.array(z.string()).optional(),
   files: z.array(z.string()).min(1),
 });
@@ -25,7 +25,10 @@ const registryRefObjectSchema = z.object({
   headers: z.record(z.string()).optional(),
 });
 
-const registryRefSchema = z.union([registryRefStringSchema, registryRefObjectSchema]);
+const registryRefSchema = z.union([
+  registryRefStringSchema,
+  registryRefObjectSchema,
+]);
 
 export const configSchema = z.object({
   $schema: z.string().optional(),
@@ -42,7 +45,7 @@ export function resolveRegistryRef(ref: RegistryRef): {
   url: string;
   headers: Record<string, string>;
 } {
-  if (typeof ref === "string") {
+  if (typeof ref === 'string') {
     return { url: ref, headers: {} };
   }
 

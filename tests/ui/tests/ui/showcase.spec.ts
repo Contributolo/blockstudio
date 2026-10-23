@@ -258,7 +258,9 @@ for (const width of [390, 1280]) {
       await expect(time.locator('input[type="hidden"]')).toHaveValue('00:00');
     });
 
-    test('menubar and submenu items use the standard menu row spacing', async ({ page }, testInfo) => {
+    test('menubar and submenu items use the standard menu row spacing', async ({
+      page,
+    }, testInfo) => {
       const menu = section(page, 'Menubar').locator('[data-bsui-menubar]');
       await menu.locator('[data-bsui-menubar-trigger]').first().click();
       const item = menu.getByRole('menuitem', { name: 'New Tab', exact: true });
@@ -276,7 +278,9 @@ for (const width of [390, 1280]) {
     test('select, phone, date and OTP publish their actual edited values', async ({
       page,
     }) => {
-      const select = section(page, 'Select').locator('[data-bsui-select-root]').first();
+      const select = section(page, 'Select')
+        .locator('[data-bsui-select-root]')
+        .first();
       await select.locator('[data-bsui-select-trigger]').click();
       await select.getByRole('option', { name: 'Banana', exact: true }).click();
       await expect(page.locator('#ks-select')).toHaveText('banana');

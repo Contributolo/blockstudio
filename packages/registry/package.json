@@ -8,6 +8,7 @@
   },
   "type": "module",
   "scripts": {
+    "typecheck": "tsc -p tsconfig.check.json",
     "build": "tsup",
     "dev": "tsup --watch",
     "test": "npm run build && vitest run",

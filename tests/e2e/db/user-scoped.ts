@@ -36,7 +36,7 @@ test.describe('DB User Scoped', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce }
+      { route: ROUTE, nonce },
     );
     expect(r.s).toBe(200);
     expect(r.b.title).toBe('My Todo');
@@ -53,7 +53,7 @@ test.describe('DB User Scoped', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce }
+      { route: ROUTE, nonce },
     );
     expect(r.s).toBe(200);
     expect(r.b.length).toBeGreaterThan(0);
@@ -70,7 +70,7 @@ test.describe('DB User Scoped', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce, id }
+      { route: ROUTE, nonce, id },
     );
     expect(r.s).toBe(200);
     expect(r.b.title).toBe('My Todo');
@@ -86,7 +86,7 @@ test.describe('DB User Scoped', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce, id }
+      { route: ROUTE, nonce, id },
     );
     expect(r.s).toBe(200);
     expect(r.b.title).toBe('Updated Todo');
@@ -102,7 +102,7 @@ test.describe('DB User Scoped', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce, id }
+      { route: ROUTE, nonce, id },
     );
     expect(r.s).toBe(200);
     expect(Number(r.b.user_id)).not.toBe(9999);
@@ -117,7 +117,7 @@ test.describe('DB User Scoped', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce, id }
+      { route: ROUTE, nonce, id },
     );
     expect(r.s).toBe(200);
     expect(r.b.deleted).toBe(true);
@@ -132,7 +132,7 @@ test.describe('DB User Scoped', () => {
         });
         return res.status;
       },
-      { route: ROUTE, nonce, id }
+      { route: ROUTE, nonce, id },
     );
     expect(r).toBe(404);
   });

@@ -6,12 +6,13 @@ export interface CodeBlock {
 
 export function extractCodeBlocks(text: string): CodeBlock[] {
   const blocks: CodeBlock[] = [];
-  const regex = /```(\w*)\s*(?:filename=["']?([^"'\n]+)["']?)?\s*\n([\s\S]*?)```/g;
+  const regex =
+    /```(\w*)\s*(?:filename=["']?([^"'\n]+)["']?)?\s*\n([\s\S]*?)```/g;
 
   let match;
   while ((match = regex.exec(text)) !== null) {
-    const language = match[1] || "";
-    const filename = match[2] || "";
+    const language = match[1] || '';
+    const filename = match[2] || '';
     const content = match[3].trim();
     blocks.push({ language, filename, content });
   }
@@ -21,7 +22,7 @@ export function extractCodeBlocks(text: string): CodeBlock[] {
 
 export function extractByLanguage(text: string, lang: string): CodeBlock[] {
   return extractCodeBlocks(text).filter(
-    (b) => b.language.toLowerCase() === lang.toLowerCase()
+    (b) => b.language.toLowerCase() === lang.toLowerCase(),
   );
 }
 
@@ -29,12 +30,12 @@ export function extractByFilename(text: string, pattern: string): CodeBlock[] {
   return extractCodeBlocks(text).filter(
     (b) =>
       b.filename.toLowerCase().includes(pattern.toLowerCase()) ||
-      b.filename.toLowerCase().endsWith(pattern.toLowerCase())
+      b.filename.toLowerCase().endsWith(pattern.toLowerCase()),
   );
 }
 
 export function extractFirstJson(text: string): unknown | null {
-  const blocks = extractByLanguage(text, "json");
+  const blocks = extractByLanguage(text, 'json');
   if (blocks.length === 0) return null;
   try {
     return JSON.parse(blocks[0].content);
@@ -44,7 +45,7 @@ export function extractFirstJson(text: string): unknown | null {
 }
 
 export function extractAllJson(text: string): unknown[] {
-  return extractByLanguage(text, "json")
+  return extractByLanguage(text, 'json')
     .map((b) => {
       try {
         return JSON.parse(b.content);
@@ -56,6 +57,6 @@ export function extractAllJson(text: string): unknown[] {
 }
 
 export function extractFirstPhp(text: string): string | null {
-  const blocks = extractByLanguage(text, "php");
+  const blocks = extractByLanguage(text, 'php');
   return blocks.length > 0 ? blocks[0].content : null;
 }

@@ -25,7 +25,9 @@ test.describe('Duplicate block attributes (issue #22)', () => {
       waitUntil: 'domcontentloaded',
     });
 
-    const modalClose = page.locator('.components-modal__header button[aria-label="Close"]');
+    const modalClose = page.locator(
+      '.components-modal__header button[aria-label="Close"]',
+    );
     if (await modalClose.isVisible({ timeout: 2000 }).catch(() => false)) {
       await modalClose.click();
     }

@@ -47,9 +47,12 @@ test.describe('RichText Preload Class Identity', () => {
         if (!bs?.blockstudioBlocks) return false;
         const blocks = bs.blockstudioBlocks;
         const entries = Array.isArray(blocks) ? blocks : Object.values(blocks);
-        return (entries as any[]).filter(
-          (e: any) => e.blockName === 'blockstudio/type-preload-richtext-class',
-        ).length === 2;
+        return (
+          (entries as any[]).filter(
+            (e: any) =>
+              e.blockName === 'blockstudio/type-preload-richtext-class',
+          ).length === 2
+        );
       },
       { timeout: 30000 },
     );
@@ -57,7 +60,9 @@ test.describe('RichText Preload Class Identity', () => {
     const entries = await page.evaluate(() => {
       const raw = (window as any).blockstudio.blockstudioBlocks;
       return ((Array.isArray(raw) ? raw : Object.values(raw)) as any[])
-        .filter((e: any) => e.blockName === 'blockstudio/type-preload-richtext-class')
+        .filter(
+          (e: any) => e.blockName === 'blockstudio/type-preload-richtext-class',
+        )
         .map((e: any) => ({
           content: e.attributes?.blockstudio?.attributes?.content,
           cssClass: e.attributes?.blockstudio?.attributes?.cssClass,
@@ -89,17 +94,23 @@ test.describe('RichText Preload Class Identity', () => {
     await page.reload();
     const canvas = await getEditorCanvas(page);
 
-    await expect(canvas.locator('.preload-richtext-small')).toHaveText(SMALL_TEXT);
-    await expect(canvas.locator('.preload-richtext-large')).toHaveText(LARGE_TEXT);
+    await expect(canvas.locator('.preload-richtext-small')).toHaveText(
+      SMALL_TEXT,
+    );
+    await expect(canvas.locator('.preload-richtext-large')).toHaveText(
+      LARGE_TEXT,
+    );
 
     await expect
       .poll(
         () =>
-          canvas.locator('p', { hasText: SMALL_TEXT }).evaluate((el) =>
-            Array.from(el.classList).filter((className) =>
-              className.startsWith('preload-richtext-'),
+          canvas
+            .locator('p', { hasText: SMALL_TEXT })
+            .evaluate((el) =>
+              Array.from(el.classList).filter((className) =>
+                className.startsWith('preload-richtext-'),
+              ),
             ),
-          ),
         { timeout: 30000 },
       )
       .toEqual(['preload-richtext-small']);
@@ -107,11 +118,13 @@ test.describe('RichText Preload Class Identity', () => {
     await expect
       .poll(
         () =>
-          canvas.locator('p', { hasText: LARGE_TEXT }).evaluate((el) =>
-            Array.from(el.classList).filter((className) =>
-              className.startsWith('preload-richtext-'),
+          canvas
+            .locator('p', { hasText: LARGE_TEXT })
+            .evaluate((el) =>
+              Array.from(el.classList).filter((className) =>
+                className.startsWith('preload-richtext-'),
+              ),
             ),
-          ),
         { timeout: 30000 },
       )
       .toEqual(['preload-richtext-large']);

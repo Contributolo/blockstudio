@@ -16,12 +16,12 @@ testType('storage-option', false, () => {
       description: 'check values persist after reload',
       testFunction: async (page: Page, canvas: Frame) => {
         await canvas.click('[data-type="blockstudio/type-storage-option"]');
-        await expect(
-          page.locator('[data-id="option_text"] input')
-        ).toHaveValue('option test value');
-        await expect(
-          page.locator('[data-id="all_storage"] input')
-        ).toHaveValue('all storage test');
+        await expect(page.locator('[data-id="option_text"] input')).toHaveValue(
+          'option test value',
+        );
+        await expect(page.locator('[data-id="all_storage"] input')).toHaveValue(
+          'all storage test',
+        );
       },
     },
   ];

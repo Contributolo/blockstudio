@@ -1,11 +1,9 @@
 import { createRoot } from 'react-dom/client';
-
 import {
   setDefaultBlockName,
   setFreeformContentHandlerName,
   setUnregisteredTypeHandlerName,
 } from '@wordpress/blocks';
-
 import { Canvas } from './canvas';
 import './store';
 

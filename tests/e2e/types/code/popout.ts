@@ -27,9 +27,9 @@ testType('code-popout', '"code":".selector { display: block; }"', () => {
         await popup.keyboard.press('Backspace');
         await popup.keyboard.type('.changed { color: red; }');
 
-        await expect(page.locator('.blockstudio-fields__field--code .cm-line').nth(0)).toHaveText(
-          '.changed { color: red; }'
-        );
+        await expect(
+          page.locator('.blockstudio-fields__field--code .cm-line').nth(0),
+        ).toHaveText('.changed { color: red; }');
 
         await popup.close();
       },

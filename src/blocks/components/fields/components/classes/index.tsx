@@ -1,6 +1,4 @@
-import {
-  FormTokenField,
-} from '@wordpress/components';
+import { FormTokenField } from '@wordpress/components';
 import { useDispatch } from '@wordpress/data';
 import { useEffect, useRef, useState } from '@wordpress/element';
 import { cloneDeep, set } from 'lodash-es';

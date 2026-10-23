@@ -34,12 +34,16 @@ test.describe('interactivity: server state', () => {
 
   test('save and visit frontend', async () => {
     await save(page);
-    await page.goto('http://localhost:8888/?p=1483', { waitUntil: 'domcontentloaded' });
+    await page.goto('http://localhost:8888/?p=1483', {
+      waitUntil: 'domcontentloaded',
+    });
     await page.waitForLoadState('networkidle');
   });
 
   test('frontend: server message renders', async () => {
-    await expect(page.locator('#server-message')).toHaveText('Hello from server state');
+    await expect(page.locator('#server-message')).toHaveText(
+      'Hello from server state',
+    );
   });
 
   test('frontend: server count renders', async () => {

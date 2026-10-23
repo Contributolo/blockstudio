@@ -17,13 +17,21 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.4"
+          php-version: '8.4'
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: scripts/ci/npm-ci.sh
+      - run: npm run runtime:check
 
       - name: Install build dependencies
         run: composer install --no-interaction
 
       - name: Create release zip
-        run: bash scripts/build-release.sh
+        run: npm run build:release
 
       - name: Upload release asset
         run: gh release upload "${{ github.event.release.tag_name }}" blockstudio.zip --clobber

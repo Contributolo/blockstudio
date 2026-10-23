@@ -35,7 +35,7 @@ test.describe('DB Multiple Schemas', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: CONTACTS, nonce }
+      { route: CONTACTS, nonce },
     );
     expect(r.s).toBe(200);
     expect(r.b.name).toBe('Alice');
@@ -52,7 +52,7 @@ test.describe('DB Multiple Schemas', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: NOTES, nonce }
+      { route: NOTES, nonce },
     );
     expect(r.s).toBe(200);
     expect(r.b.body).toBe('First note');
@@ -61,17 +61,23 @@ test.describe('DB Multiple Schemas', () => {
   test('schemas are independent', async () => {
     const contacts = await page.evaluate(
       async ({ route, nonce }) => {
-        const res = await fetch(route, { method: 'GET', headers: { 'X-WP-Nonce': nonce } });
+        const res = await fetch(route, {
+          method: 'GET',
+          headers: { 'X-WP-Nonce': nonce },
+        });
         return res.json();
       },
-      { route: CONTACTS, nonce }
+      { route: CONTACTS, nonce },
     );
     const notes = await page.evaluate(
       async ({ route, nonce }) => {
-        const res = await fetch(route, { method: 'GET', headers: { 'X-WP-Nonce': nonce } });
+        const res = await fetch(route, {
+          method: 'GET',
+          headers: { 'X-WP-Nonce': nonce },
+        });
         return res.json();
       },
-      { route: NOTES, nonce }
+      { route: NOTES, nonce },
     );
     expect(contacts.some((r: any) => r.name === 'Alice')).toBe(true);
     expect(notes.some((r: any) => r.body === 'First note')).toBe(true);

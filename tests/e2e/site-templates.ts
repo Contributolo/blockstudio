@@ -150,9 +150,13 @@ test.describe('File-based Site Editor templates', () => {
       'Blockstudio Site Template',
     );
 
-    const reset = await api(`/wp/v2/templates/${TEMPLATE_ID}?context=edit`, 'POST', {
-      source: 'theme',
-    });
+    const reset = await api(
+      `/wp/v2/templates/${TEMPLATE_ID}?context=edit`,
+      'POST',
+      {
+        source: 'theme',
+      },
+    );
 
     expect(reset.status).toBe(200);
     expect(reset.body.source).toBe('theme');

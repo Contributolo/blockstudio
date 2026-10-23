@@ -32,11 +32,16 @@ test.describe('DB SQLite Storage', () => {
         const res = await fetch(route, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': nonce },
-          body: JSON.stringify({ title: 'SQLite Row', count: 42, score: 9.99, active: true }),
+          body: JSON.stringify({
+            title: 'SQLite Row',
+            count: 42,
+            score: 9.99,
+            active: true,
+          }),
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce }
+      { route: ROUTE, nonce },
     );
     expect(r.s).toBe(200);
     expect(r.b.title).toBe('SQLite Row');
@@ -56,7 +61,7 @@ test.describe('DB SQLite Storage', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce, id }
+      { route: ROUTE, nonce, id },
     );
     expect(r.s).toBe(200);
     expect(r.b.title).toBe('SQLite Row');
@@ -71,7 +76,7 @@ test.describe('DB SQLite Storage', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce }
+      { route: ROUTE, nonce },
     );
     expect(r.s).toBe(200);
     expect(Array.isArray(r.b)).toBe(true);
@@ -87,7 +92,7 @@ test.describe('DB SQLite Storage', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce }
+      { route: ROUTE, nonce },
     );
     expect(r.s).toBe(200);
     expect(r.b.every((row: any) => row.title === 'SQLite Row')).toBe(true);
@@ -103,7 +108,7 @@ test.describe('DB SQLite Storage', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce, id }
+      { route: ROUTE, nonce, id },
     );
     expect(r.s).toBe(200);
     expect(r.b.title).toBe('Updated SQLite');
@@ -119,7 +124,7 @@ test.describe('DB SQLite Storage', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce, id }
+      { route: ROUTE, nonce, id },
     );
     expect(r.s).toBe(200);
     expect(r.b.deleted).toBe(true);
@@ -134,7 +139,7 @@ test.describe('DB SQLite Storage', () => {
         });
         return res.status;
       },
-      { route: ROUTE, nonce, id }
+      { route: ROUTE, nonce, id },
     );
     expect(r).toBe(404);
   });

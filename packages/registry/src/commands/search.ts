@@ -1,8 +1,8 @@
-import chalk from "chalk";
-import { loadConfig } from "../config/loader.js";
-import { resolveRegistryRef } from "../config/schema.js";
-import { fetchRegistry, clearCache } from "../registry/fetcher.js";
-import type { BlockEntry } from "../config/schema.js";
+import chalk from 'chalk';
+import { loadConfig } from '../config/loader.js';
+import { resolveRegistryRef } from '../config/schema.js';
+import type { BlockEntry } from '../config/schema.js';
+import { fetchRegistry, clearCache } from '../registry/fetcher.js';
 
 type SearchResult = {
   block: BlockEntry;
@@ -13,8 +13,8 @@ type SearchResult = {
 function scoreMatch(query: string, block: BlockEntry): number {
   const q = query.toLowerCase();
   const name = block.name.toLowerCase();
-  const title = (block.title ?? "").toLowerCase();
-  const desc = (block.description ?? "").toLowerCase();
+  const title = (block.title ?? '').toLowerCase();
+  const desc = (block.description ?? '').toLowerCase();
 
   if (name === q) return 100;
   if (name.startsWith(q)) return 80;
@@ -60,8 +60,8 @@ export async function runSearch(
 
   for (const { block, registryName } of results) {
     console.log(
-      `  ${chalk.green(registryName + "/" + block.name)}` +
-        (block.title ? chalk.dim(` - ${block.title}`) : ""),
+      `  ${chalk.green(registryName + '/' + block.name)}` +
+        (block.title ? chalk.dim(` - ${block.title}`) : ''),
     );
     if (block.description) {
       console.log(chalk.dim(`    ${block.description}`));

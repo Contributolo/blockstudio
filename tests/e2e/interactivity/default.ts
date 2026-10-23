@@ -36,7 +36,10 @@ test.describe('interactivity', () => {
 
   test('save and reload editor', async () => {
     await save(page);
-    await page.goto('http://localhost:8888/wp-admin/post.php?post=1483&action=edit', { waitUntil: 'domcontentloaded' });
+    await page.goto(
+      'http://localhost:8888/wp-admin/post.php?post=1483&action=edit',
+      { waitUntil: 'domcontentloaded' },
+    );
     const canvas = await getEditorCanvas(page);
     await canvas
       .locator('[data-wp-interactive="blockstudioTest"][data-wp-processed]')
@@ -68,7 +71,9 @@ test.describe('interactivity', () => {
     const canvas = await getEditorCanvas(page);
     await canvas.locator('[data-wp-interactive="blockstudioTest"]').click();
     await openSidebar(page);
-    const input = page.locator('.blockstudio-fields input[type="text"]').first();
+    const input = page
+      .locator('.blockstudio-fields input[type="text"]')
+      .first();
     await input.fill('Changed value');
     await delay(2000);
     await canvas
@@ -87,7 +92,9 @@ test.describe('interactivity', () => {
   });
 
   test('visit frontend', async () => {
-    await page.goto('http://localhost:8888/?p=1483', { waitUntil: 'domcontentloaded' });
+    await page.goto('http://localhost:8888/?p=1483', {
+      waitUntil: 'domcontentloaded',
+    });
     await page.waitForLoadState('networkidle');
   });
 

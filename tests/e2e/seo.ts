@@ -1,6 +1,5 @@
 import { execFileSync } from 'child_process';
 import * as path from 'path';
-
 import { Page, expect, test } from '@playwright/test';
 import {
   addBlock,
@@ -13,14 +12,21 @@ import {
 } from './utils/playwright-utils';
 
 const wpEnvDir = path.join(process.cwd(), 'tests/wp-env');
-const wpEnvCli = path.join(process.cwd(), 'node_modules/@wordpress/env/bin/wp-env');
+const wpEnvCli = path.join(
+  process.cwd(),
+  'node_modules/@wordpress/env/bin/wp-env',
+);
 const wpCli = (...args: string[]) =>
-  execFileSync(process.execPath, [wpEnvCli, 'run', 'cli', '--', 'wp', ...args], {
-    cwd: wpEnvDir,
-    encoding: 'utf-8',
-    // Cold SEO plugin activation can exceed 30 seconds on the shared runner.
-    timeout: 60_000,
-  });
+  execFileSync(
+    process.execPath,
+    [wpEnvCli, 'run', 'cli', '--', 'wp', ...args],
+    {
+      cwd: wpEnvDir,
+      encoding: 'utf-8',
+      // Cold SEO plugin activation can exceed 30 seconds on the shared runner.
+      timeout: 60_000,
+    },
+  );
 
 let page: Page;
 
@@ -58,9 +64,7 @@ test.describe('seo - yoast', () => {
 
     const plugins = await page.evaluate(() => {
       const app = (window as any).YoastSEO?.app;
-      return app?.pluggable?.plugins
-        ? Object.keys(app.pluggable.plugins)
-        : [];
+      return app?.pluggable?.plugins ? Object.keys(app.pluggable.plugins) : [];
     });
 
     expect(plugins).toContain('blockstudioSeoIntegration');
@@ -95,7 +99,9 @@ test.describe('seo - yoast', () => {
     const seoContent = await page.evaluate(() => {
       const wp = (window as any).wp;
       const blocks = wp.data.select('core/block-editor').getBlocks();
-      const bsBlock = blocks.find((b: any) => b.name.startsWith('blockstudio/'));
+      const bsBlock = blocks.find((b: any) =>
+        b.name.startsWith('blockstudio/'),
+      );
       if (!bsBlock) return null;
       return {
         disabled: bsBlock.attributes?.blockstudio?.disabled || [],
@@ -123,7 +129,10 @@ test.describe('seo - rank math', () => {
     await page.waitForFunction(
       () => {
         const win = window as any;
-        return !!win.wp?.hooks?.hasFilter?.('rank_math_content', 'blockstudio/seo');
+        return !!win.wp?.hooks?.hasFilter?.(
+          'rank_math_content',
+          'blockstudio/seo',
+        );
       },
       { timeout: 15000 },
     );

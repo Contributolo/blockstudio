@@ -1,7 +1,7 @@
-import chalk from "chalk";
-import { loadConfig } from "../config/loader.js";
-import { resolveRegistryRef } from "../config/schema.js";
-import { fetchRegistry, clearCache } from "../registry/fetcher.js";
+import chalk from 'chalk';
+import { loadConfig } from '../config/loader.js';
+import { resolveRegistryRef } from '../config/schema.js';
+import { fetchRegistry, clearCache } from '../registry/fetcher.js';
 
 export type ListOptions = {
   cwd: string;
@@ -18,7 +18,7 @@ export async function runList(options: ListOptions): Promise<void> {
     : Object.keys(config.registries);
 
   if (names.length === 0) {
-    console.log("No registries configured.");
+    console.log('No registries configured.');
     return;
   }
 
@@ -26,39 +26,42 @@ export async function runList(options: ListOptions): Promise<void> {
     const ref = config.registries[name];
     if (!ref) {
       throw new Error(
-        `Registry "${name}" not found. Available: ${Object.keys(config.registries).join(", ")}`,
+        `Registry "${name}" not found. Available: ${Object.keys(config.registries).join(', ')}`,
       );
     }
 
     const { url, headers } = resolveRegistryRef(ref);
     const registry = await fetchRegistry(url, headers);
 
-    console.log(chalk.bold(`\n${name}`) + chalk.dim(` (${registry.blocks.length} blocks)`));
+    console.log(
+      chalk.bold(`\n${name}`) +
+        chalk.dim(` (${registry.blocks.length} blocks)`),
+    );
     console.log();
 
     const nameWidth = Math.max(...registry.blocks.map((b) => b.name.length), 4);
     const titleWidth = Math.max(
-      ...registry.blocks.map((b) => (b.title ?? "").length),
+      ...registry.blocks.map((b) => (b.title ?? '').length),
       5,
     );
 
     console.log(
       chalk.dim(
-        "  " +
-          "Name".padEnd(nameWidth + 2) +
-          "Title".padEnd(titleWidth + 2) +
-          "Category".padEnd(14) +
-          "Type",
+        '  ' +
+          'Name'.padEnd(nameWidth + 2) +
+          'Title'.padEnd(titleWidth + 2) +
+          'Category'.padEnd(14) +
+          'Type',
       ),
     );
 
     for (const block of registry.blocks) {
       console.log(
-        "  " +
+        '  ' +
           block.name.padEnd(nameWidth + 2) +
-          (block.title ?? "").padEnd(titleWidth + 2) +
-          (block.category ?? "").padEnd(14) +
-          (block.type ?? ""),
+          (block.title ?? '').padEnd(titleWidth + 2) +
+          (block.category ?? '').padEnd(14) +
+          (block.type ?? ''),
       );
     }
   }

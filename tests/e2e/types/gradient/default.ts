@@ -10,7 +10,7 @@ testType(
         description: 'change gradient',
         testFunction: async (page: Page, _canvas: Frame) => {
           await page.click(
-            '.blockstudio-fields__field--gradient [aria-label="Gradient: Rastafarie"]'
+            '.blockstudio-fields__field--gradient [aria-label="Gradient: Rastafarie"]',
           );
           await saveAndReload(page);
         },
@@ -22,10 +22,10 @@ testType(
           await count(
             page,
             '.blockstudio-fields__field--gradient [aria-label="Gradient: Rastafarie"]',
-            1
+            1,
           );
         },
       },
     ];
-  }
+  },
 );

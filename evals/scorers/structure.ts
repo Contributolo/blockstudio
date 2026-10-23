@@ -1,30 +1,30 @@
-import type { Scorer } from "../types.ts";
+import type { Scorer } from '../types.ts';
 import {
   extractByLanguage,
   extractByFilename,
   extractCodeBlocks,
-} from "../utils/extract.ts";
+} from '../utils/extract.ts';
 
 function stripJsonComments(text: string): string {
   return text
-    .split("\n")
-    .filter((line) => !line.trimStart().startsWith("//"))
-    .join("\n");
+    .split('\n')
+    .filter((line) => !line.trimStart().startsWith('//'))
+    .join('\n');
 }
 
 function findJsonObject(
   output: string,
-  filenameHint: string
+  filenameHint: string,
 ): Record<string, unknown> | null {
   let blocks = extractByFilename(output, filenameHint);
   if (blocks.length === 0) {
-    blocks = extractByLanguage(output, "json");
+    blocks = extractByLanguage(output, 'json');
   }
 
   for (const block of blocks) {
     try {
       const parsed = JSON.parse(stripJsonComments(block.content));
-      if (typeof parsed === "object" && parsed !== null) {
+      if (typeof parsed === 'object' && parsed !== null) {
         return parsed as Record<string, unknown>;
       }
     } catch {
@@ -35,11 +35,11 @@ function findJsonObject(
 }
 
 function getNestedValue(obj: unknown, path: string): unknown {
-  const parts = path.split(".");
+  const parts = path.split('.');
   let current = obj;
   for (const part of parts) {
     if (current === null || current === undefined) return undefined;
-    if (typeof current !== "object") return undefined;
+    if (typeof current !== 'object') return undefined;
     current = (current as Record<string, unknown>)[part];
   }
   return current;
@@ -48,9 +48,9 @@ function getNestedValue(obj: unknown, path: string): unknown {
 function collectFieldTypes(attrs: unknown[]): string[] {
   const types: string[] = [];
   for (const attr of attrs) {
-    if (typeof attr !== "object" || attr === null) continue;
+    if (typeof attr !== 'object' || attr === null) continue;
     const a = attr as Record<string, unknown>;
-    if (typeof a.type === "string") {
+    if (typeof a.type === 'string') {
       types.push(a.type);
     }
     if (Array.isArray(a.attributes)) {
@@ -58,7 +58,7 @@ function collectFieldTypes(attrs: unknown[]): string[] {
     }
     if (Array.isArray(a.tabs)) {
       for (const tab of a.tabs) {
-        if (typeof tab === "object" && tab !== null) {
+        if (typeof tab === 'object' && tab !== null) {
           const t = tab as Record<string, unknown>;
           if (Array.isArray(t.attributes)) {
             types.push(...collectFieldTypes(t.attributes));
@@ -73,9 +73,9 @@ function collectFieldTypes(attrs: unknown[]): string[] {
 function collectFieldIds(attrs: unknown[]): string[] {
   const ids: string[] = [];
   for (const attr of attrs) {
-    if (typeof attr !== "object" || attr === null) continue;
+    if (typeof attr !== 'object' || attr === null) continue;
     const a = attr as Record<string, unknown>;
-    if (typeof a.id === "string") {
+    if (typeof a.id === 'string') {
       ids.push(a.id);
     }
     if (Array.isArray(a.attributes)) {
@@ -83,7 +83,7 @@ function collectFieldIds(attrs: unknown[]): string[] {
     }
     if (Array.isArray(a.tabs)) {
       for (const tab of a.tabs) {
-        if (typeof tab === "object" && tab !== null) {
+        if (typeof tab === 'object' && tab !== null) {
           const t = tab as Record<string, unknown>;
           if (Array.isArray(t.attributes)) {
             ids.push(...collectFieldIds(t.attributes));
@@ -97,17 +97,17 @@ function collectFieldIds(attrs: unknown[]): string[] {
 
 export function hasFieldTypes(...expectedTypes: string[]): Scorer {
   return (output: string) => {
-    const json = findJsonObject(output, "block.json");
+    const json = findJsonObject(output, 'block.json');
     if (!json) {
-      return { name: "FieldTypes", score: 0, details: "No JSON found" };
+      return { name: 'FieldTypes', score: 0, details: 'No JSON found' };
     }
 
     const blockstudio = json.blockstudio as Record<string, unknown> | undefined;
     if (!blockstudio || !Array.isArray(blockstudio.attributes)) {
       return {
-        name: "FieldTypes",
+        name: 'FieldTypes',
         score: 0,
-        details: "No blockstudio.attributes",
+        details: 'No blockstudio.attributes',
       };
     }
 
@@ -126,26 +126,26 @@ export function hasFieldTypes(...expectedTypes: string[]): Scorer {
     const score = expectedTypes.length > 0 ? found / expectedTypes.length : 0;
     const details =
       missing.length > 0
-        ? `${found}/${expectedTypes.length}. Missing: ${missing.join(", ")}`
+        ? `${found}/${expectedTypes.length}. Missing: ${missing.join(', ')}`
         : `${found}/${expectedTypes.length} found`;
 
-    return { name: "FieldTypes", score, details };
+    return { name: 'FieldTypes', score, details };
   };
 }
 
 export function hasFieldIds(...expectedIds: string[]): Scorer {
   return (output: string) => {
-    const json = findJsonObject(output, "block.json");
+    const json = findJsonObject(output, 'block.json');
     if (!json) {
-      return { name: "FieldIds", score: 0, details: "No JSON found" };
+      return { name: 'FieldIds', score: 0, details: 'No JSON found' };
     }
 
     const blockstudio = json.blockstudio as Record<string, unknown> | undefined;
     if (!blockstudio || !Array.isArray(blockstudio.attributes)) {
       return {
-        name: "FieldIds",
+        name: 'FieldIds',
         score: 0,
-        details: "No blockstudio.attributes",
+        details: 'No blockstudio.attributes',
       };
     }
 
@@ -164,10 +164,10 @@ export function hasFieldIds(...expectedIds: string[]): Scorer {
     const score = expectedIds.length > 0 ? found / expectedIds.length : 0;
     const details =
       missing.length > 0
-        ? `${found}/${expectedIds.length}. Missing: ${missing.join(", ")}`
+        ? `${found}/${expectedIds.length}. Missing: ${missing.join(', ')}`
         : `${found}/${expectedIds.length} found`;
 
-    return { name: "FieldIds", score, details };
+    return { name: 'FieldIds', score, details };
   };
 }
 
@@ -184,7 +184,7 @@ export function requiredFiles(...filenames: string[]): Scorer {
       const hasBlock = blocks.some(
         (b) =>
           b.filename.toLowerCase().includes(lower) ||
-          b.language.toLowerCase() === lower.replace(".", "")
+          b.language.toLowerCase() === lower.replace('.', ''),
       );
       const mentioned = allContent.includes(lower);
 
@@ -198,10 +198,10 @@ export function requiredFiles(...filenames: string[]): Scorer {
     const score = filenames.length > 0 ? found / filenames.length : 0;
     const details =
       missing.length > 0
-        ? `${found}/${filenames.length}. Missing: ${missing.join(", ")}`
+        ? `${found}/${filenames.length}. Missing: ${missing.join(', ')}`
         : `${found}/${filenames.length} found`;
 
-    return { name: "Files", score, details };
+    return { name: 'Files', score, details };
   };
 }
 
@@ -212,7 +212,7 @@ export function hasProperties(
   return (output: string) => {
     const json = findJsonObject(output, filenameHint);
     if (!json) {
-      return { name: "Properties", score: 0, details: "No JSON found" };
+      return { name: 'Properties', score: 0, details: 'No JSON found' };
     }
 
     let passed = 0;
@@ -232,7 +232,7 @@ export function hasProperties(
           passed++;
         } else {
           failures.push(
-            `${check.path}: expected ${JSON.stringify(check.value)}, got ${JSON.stringify(actual)}`
+            `${check.path}: expected ${JSON.stringify(check.value)}, got ${JSON.stringify(actual)}`,
           );
         }
       }
@@ -241,20 +241,21 @@ export function hasProperties(
     const score = checks.length > 0 ? passed / checks.length : 0;
     const details =
       failures.length > 0
-        ? `${passed}/${checks.length}. ${failures.join("; ")}`
+        ? `${passed}/${checks.length}. ${failures.join('; ')}`
         : `${passed}/${checks.length} passed`;
 
-    return { name: "Properties", score, details };
+    return { name: 'Properties', score, details };
   };
 }
 
 export function hasConditions(): Scorer {
   return (output: string) => {
-    const json = findJsonObject(output, "block.json") ||
-      findJsonObject(output, "extend.json") ||
-      findJsonObject(output, ".json");
+    const json =
+      findJsonObject(output, 'block.json') ||
+      findJsonObject(output, 'extend.json') ||
+      findJsonObject(output, '.json');
     if (!json) {
-      return { name: "Conditions", score: 0, details: "No JSON found" };
+      return { name: 'Conditions', score: 0, details: 'No JSON found' };
     }
 
     const content = JSON.stringify(json);
@@ -263,46 +264,46 @@ export function hasConditions(): Scorer {
       content.includes('"operator"') || content.includes('"=="');
 
     if (hasConditionsKey && hasOperator) {
-      return { name: "Conditions", score: 1, details: "Conditions found" };
+      return { name: 'Conditions', score: 1, details: 'Conditions found' };
     }
     if (hasConditionsKey) {
       return {
-        name: "Conditions",
+        name: 'Conditions',
         score: 0.5,
-        details: "conditions key found but no operator",
+        details: 'conditions key found but no operator',
       };
     }
     return {
-      name: "Conditions",
+      name: 'Conditions',
       score: 0,
-      details: "No conditions found",
+      details: 'No conditions found',
     };
   };
 }
 
 export function hasSwitch(): Scorer {
   return (output: string) => {
-    const json = findJsonObject(output, "block.json");
+    const json = findJsonObject(output, 'block.json');
     if (!json) {
-      return { name: "Switch", score: 0, details: "No JSON found" };
+      return { name: 'Switch', score: 0, details: 'No JSON found' };
     }
 
     const content = JSON.stringify(json);
     const hasSwitchKey = content.includes('"switch"');
 
     return {
-      name: "Switch",
+      name: 'Switch',
       score: hasSwitchKey ? 1 : 0,
-      details: hasSwitchKey ? "switch property found" : "No switch found",
+      details: hasSwitchKey ? 'switch property found' : 'No switch found',
     };
   };
 }
 
 export function hasStorage(): Scorer {
   return (output: string) => {
-    const json = findJsonObject(output, "block.json");
+    const json = findJsonObject(output, 'block.json');
     if (!json) {
-      return { name: "Storage", score: 0, details: "No JSON found" };
+      return { name: 'Storage', score: 0, details: 'No JSON found' };
     }
 
     const content = JSON.stringify(json);
@@ -314,30 +315,30 @@ export function hasStorage(): Scorer {
     const found: string[] = [];
     if (hasStorageKey) {
       score += 0.5;
-      found.push("storage key");
+      found.push('storage key');
     }
     if (hasPostMeta || hasOption) {
       score += 0.5;
-      found.push(hasPostMeta ? "postMeta" : "option");
+      found.push(hasPostMeta ? 'postMeta' : 'option');
     }
 
     return {
-      name: "Storage",
+      name: 'Storage',
       score,
-      details: found.length > 0 ? found.join(", ") : "No storage found",
+      details: found.length > 0 ? found.join(', ') : 'No storage found',
     };
   };
 }
 
 export function extensionStructure(
   targetBlock: string,
-  minFields: number
+  minFields: number,
 ): Scorer {
   return (output: string) => {
-    const json = findJsonObject(output, "extend.json") ||
-      findJsonObject(output, ".json");
+    const json =
+      findJsonObject(output, 'extend.json') || findJsonObject(output, '.json');
     if (!json) {
-      return { name: "Extension", score: 0, details: "No JSON found" };
+      return { name: 'Extension', score: 0, details: 'No JSON found' };
     }
 
     let passed = 0;
@@ -347,13 +348,13 @@ export function extensionStructure(
     const blockstudio = json.blockstudio as Record<string, unknown> | undefined;
     if (blockstudio?.extend === true) {
       passed++;
-      checks.push("extend=true");
+      checks.push('extend=true');
     } else {
-      checks.push("missing extend=true");
+      checks.push('missing extend=true');
     }
 
     const name = json.name;
-    const nameStr = Array.isArray(name) ? name.join(",") : String(name || "");
+    const nameStr = Array.isArray(name) ? name.join(',') : String(name || '');
     if (nameStr.includes(targetBlock)) {
       passed++;
       checks.push(`targets ${targetBlock}`);
@@ -370,20 +371,24 @@ export function extensionStructure(
         checks.push(`only ${ids.length} fields (need ${minFields})`);
       }
     } else {
-      checks.push("no attributes array");
+      checks.push('no attributes array');
     }
 
-    return { name: "Extension", score: passed / total, details: checks.join("; ") };
+    return {
+      name: 'Extension',
+      score: passed / total,
+      details: checks.join('; '),
+    };
   };
 }
 
 export function configStructure(...paths: string[]): Scorer {
   return (output: string) => {
     const json =
-      findJsonObject(output, "blockstudio.json") ||
-      findJsonObject(output, ".json");
+      findJsonObject(output, 'blockstudio.json') ||
+      findJsonObject(output, '.json');
     if (!json) {
-      return { name: "Config", score: 0, details: "No JSON found" };
+      return { name: 'Config', score: 0, details: 'No JSON found' };
     }
 
     let found = 0;
@@ -401,20 +406,19 @@ export function configStructure(...paths: string[]): Scorer {
     const score = paths.length > 0 ? found / paths.length : 0;
     const details =
       missing.length > 0
-        ? `${found}/${paths.length}. Missing: ${missing.join(", ")}`
+        ? `${found}/${paths.length}. Missing: ${missing.join(', ')}`
         : `${found}/${paths.length} found`;
 
-    return { name: "Config", score, details };
+    return { name: 'Config', score, details };
   };
 }
 
 export function patternStructure(...requiredKeys: string[]): Scorer {
   return (output: string) => {
     const json =
-      findJsonObject(output, "pattern.json") ||
-      findJsonObject(output, ".json");
+      findJsonObject(output, 'pattern.json') || findJsonObject(output, '.json');
     if (!json) {
-      return { name: "Pattern", score: 0, details: "No JSON found" };
+      return { name: 'Pattern', score: 0, details: 'No JSON found' };
     }
 
     let found = 0;
@@ -432,9 +436,9 @@ export function patternStructure(...requiredKeys: string[]): Scorer {
     const score = requiredKeys.length > 0 ? found / requiredKeys.length : 0;
     const details =
       missing.length > 0
-        ? `${found}/${requiredKeys.length}. Missing: ${missing.join(", ")}`
+        ? `${found}/${requiredKeys.length}. Missing: ${missing.join(', ')}`
         : `${found}/${requiredKeys.length} found`;
 
-    return { name: "Pattern", score, details };
+    return { name: 'Pattern', score, details };
   };
 }

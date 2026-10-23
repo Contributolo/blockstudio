@@ -93,7 +93,9 @@ test.describe('Block Preloading', () => {
         const bs = (window as any).blockstudio;
         if (!bs?.blockstudioBlocks) return false;
         const blocks = bs.blockstudioBlocks;
-        return Array.isArray(blocks) ? blocks.length > 0 : Object.keys(blocks).length > 0;
+        return Array.isArray(blocks)
+          ? blocks.length > 0
+          : Object.keys(blocks).length > 0;
       },
       { timeout: 30000 },
     );
@@ -103,9 +105,7 @@ test.describe('Block Preloading', () => {
       const entries = (Array.isArray(raw) ? raw : Object.values(raw)) as any[];
       return {
         count: entries.length,
-        blockNames: [
-          ...new Set(entries.map((e: any) => e.blockName)),
-        ],
+        blockNames: [...new Set(entries.map((e: any) => e.blockName))],
         allHaveRendered: entries.every(
           (e: any) => typeof e.rendered === 'string' && e.rendered.length > 0,
         ),
@@ -121,9 +121,7 @@ test.describe('Block Preloading', () => {
     expect(data.blockNames).toContain(
       'blockstudio/component-innerblocks-bare-spaceless',
     );
-    expect(data.blockNames).toContain(
-      'blockstudio/component-innerblocks-bare',
-    );
+    expect(data.blockNames).toContain('blockstudio/component-innerblocks-bare');
     // Array format stores every block instance (no deduplication)
     expect(data.count).toBeGreaterThanOrEqual(TOTAL_BLOCKS);
   });

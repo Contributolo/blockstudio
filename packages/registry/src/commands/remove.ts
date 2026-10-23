@@ -1,7 +1,7 @@
-import chalk from "chalk";
-import { loadConfig } from "../config/loader.js";
-import { exists, removeBlock } from "../utils/fs.js";
-import { getBlockDir, getTargetDir } from "../utils/paths.js";
+import chalk from 'chalk';
+import { loadConfig } from '../config/loader.js';
+import { exists, removeBlock } from '../utils/fs.js';
+import { getBlockDir, getTargetDir } from '../utils/paths.js';
 
 export type RemoveOptions = {
   cwd: string;
@@ -27,5 +27,5 @@ export async function runRemove(
   }
 
   await removeBlock(blockName, targetDir);
-  console.log(chalk.green("Removed"), blockName);
+  console.log(chalk.green('Removed'), blockName);
 }

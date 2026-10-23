@@ -22,7 +22,9 @@ test.describe('Native WP Block', () => {
       waitUntil: 'domcontentloaded',
     });
 
-    const block = page.locator('.wp-block-create-block-blockstudio-test-native');
+    const block = page.locator(
+      '.wp-block-create-block-blockstudio-test-native',
+    );
     await expect(block).toBeVisible();
     await expect(block).toContainText('hello from a dynamic block');
   });

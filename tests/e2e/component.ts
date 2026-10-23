@@ -20,7 +20,7 @@ test.describe('Component', () => {
   test('does not appear in editor inserter', async () => {
     await page.goto(
       'http://localhost:8888/wp-admin/post-new.php?post_type=page',
-      { waitUntil: 'domcontentloaded' }
+      { waitUntil: 'domcontentloaded' },
     );
 
     await page.waitForSelector('iframe[name="editor-canvas"]', {
@@ -32,9 +32,7 @@ test.describe('Component', () => {
     // Dismiss welcome modal if present.
     const modalOverlay = await page.$('.components-modal__screen-overlay');
     if (modalOverlay) {
-      await page.click(
-        '.components-modal__header .components-button.has-icon'
-      );
+      await page.click('.components-modal__header .components-button.has-icon');
       await page.waitForSelector('.components-modal__screen-overlay', {
         state: 'hidden',
         timeout: 5000,
@@ -48,7 +46,7 @@ test.describe('Component', () => {
     await delay(1000);
 
     const result = page.locator(
-      '.block-editor-block-types-list__list-item:has-text("Component Test")'
+      '.block-editor-block-types-list__list-item:has-text("Component Test")',
     );
     await expect(result).toHaveCount(0);
   });
@@ -74,7 +72,7 @@ test.describe('Component', () => {
     const block = page.locator('.bs-component', { hasText: 'PHP Rendered' });
     await expect(block).toBeVisible();
     await expect(block.locator('.comp-content')).toHaveText(
-      'Via bs_render_block'
+      'Via bs_render_block',
     );
   });
 
@@ -88,9 +86,11 @@ test.describe('Component', () => {
   test('renders nested bs_render_block() output in editor preview', async () => {
     await page.goto(
       'http://localhost:8888/wp-admin/post-new.php?post_type=page',
-      { waitUntil: 'domcontentloaded' }
+      { waitUntil: 'domcontentloaded' },
     );
-    await page.waitForFunction(() => Boolean((window as any).blockstudioAdmin?.nonceRest));
+    await page.waitForFunction(() =>
+      Boolean((window as any).blockstudioAdmin?.nonceRest),
+    );
 
     const result = await page.evaluate(async () => {
       const res = await fetch(
@@ -111,7 +111,7 @@ test.describe('Component', () => {
               },
             },
           }),
-        }
+        },
       );
 
       return { status: res.status, body: await res.json() };
@@ -127,9 +127,11 @@ test.describe('Component', () => {
   test('expands allowedBlocks tokens before editor handoff', async () => {
     await page.goto(
       'http://localhost:8888/wp-admin/post-new.php?post_type=page',
-      { waitUntil: 'domcontentloaded' }
+      { waitUntil: 'domcontentloaded' },
     );
-    await page.waitForFunction(() => Boolean((window as any).blockstudioAdmin?.nonceRest));
+    await page.waitForFunction(() =>
+      Boolean((window as any).blockstudioAdmin?.nonceRest),
+    );
 
     const result = await page.evaluate(async () => {
       const res = await fetch(
@@ -144,7 +146,7 @@ test.describe('Component', () => {
             context: 'edit',
             attributes: {},
           }),
-        }
+        },
       );
 
       return { status: res.status, body: await res.json() };
@@ -154,7 +156,9 @@ test.describe('Component', () => {
     expect(result.body.rendered).toContain('allowedBlocks');
     expect(result.body.rendered).toMatch(/core\\?\/paragraph/);
     expect(result.body.rendered).toMatch(/blockstudio\\?\/type-text/);
-    expect(result.body.rendered).not.toContain('category:blockstudio-test-native');
+    expect(result.body.rendered).not.toContain(
+      'category:blockstudio-test-native',
+    );
   });
 
   test('loads component CSS asset', async () => {
@@ -163,7 +167,7 @@ test.describe('Component', () => {
     });
 
     const styleTag = page.locator(
-      'link[id*="type-component"][rel="stylesheet"]'
+      'link[id*="type-component"][rel="stylesheet"]',
     );
     await expect(styleTag.first()).toBeAttached();
   });

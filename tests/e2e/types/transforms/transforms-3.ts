@@ -8,13 +8,13 @@ testType('transforms-3', '"text":19', () => {
       testFunction: async (page: Page, canvas: Frame) => {
         await canvas.click('[data-type="blockstudio/type-transforms-3"]');
         await page.click(
-          '.block-editor-block-toolbar__block-controls .components-dropdown-menu__toggle'
+          '.block-editor-block-toolbar__block-controls .components-dropdown-menu__toggle',
         );
         await expect(
-          page.getByRole('menuitem', { name: /Native Transforms 1/ })
+          page.getByRole('menuitem', { name: /Native Transforms 1/ }),
         ).toHaveCount(0);
         await expect(
-          page.getByRole('menuitem', { name: /Native Transforms 2/ })
+          page.getByRole('menuitem', { name: /Native Transforms 2/ }),
         ).toHaveCount(0);
       },
     },

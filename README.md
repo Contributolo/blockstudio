@@ -68,6 +68,7 @@ composer require blockstudio/blockstudio
 3. Add a block:
 
 **block.json**
+
 ```json
 {
   "$schema": "https://blockstudio.dev/schema/block",
@@ -83,6 +84,7 @@ composer require blockstudio/blockstudio
 ```
 
 **index.php**
+
 ```php
 <section useBlockProps class="hero">
   <h1><?php echo $a['heading']; ?></h1>
@@ -127,10 +129,55 @@ not regenerate. SBOM and security tooling can read it instead of reconstructing
 the list from the lockfile and the directory tree. `composer test:dependencies`
 fails if a package under `lib/` is missing from it.
 
-`bash scripts/build-release.sh` uses that check, stages a production-only
+`npm run build:release` uses that check, stages a production-only
 Composer autoloader, tests isolation with conflicting public libraries in both
 load orders, and creates `blockstudio.zip`. Distribution CI and release packaging
 use the same script. This command only builds an archive; it does not publish.
+
+## Repository Tooling
+
+Use the Node version in `.nvmrc` with npm. These are contributor requirements;
+the installed WordPress plugin does not require Node or Effect.
+
+```bash
+nvm use
+npm ci
+npm ci --prefix packages/registry
+npm run lint
+npm run typecheck
+npm run format:check
+npm run build
+```
+
+Scripts and configuration are TypeScript. Node runs the tooling directly,
+while webpack still builds the React editor through `@wordpress/scripts`,
+preserving WordPress externals, asset manifests, entry paths and lazy chunks.
+TypeScript 5.9 remains available for generators that use its compiler API.
+
+The shared Effect tooling in `scripts/lib/` handles typed failures, child-process
+lifetimes, HTTP status checking and scoped temporary files. Generator/parser
+code stays synchronous where it is a short deterministic local operation.
+The dependency-install bootstrap stays dependency-free shell; PHP dependency
+scoping and its Composer bootstrap stay PHP/shell. Effect is never shipped to
+the browser or in the release ZIP.
+
+Oxfmt replaces repository Prettier formatting. Oxlint replaces ESLint, including
+typed dot-notation checking and a small `eslint-plugin-react` compatibility
+bridge for `no-deprecated`. Prettier itself stays installed because the editor
+formats HTML/CSS in the browser. PHP coding standards are unchanged.
+
+Author bundled UI scripts in `src/ui/` and frontend helpers in `src/runtime/`.
+`npm run build:runtime` emits their existing `.js` and `.inline.js` paths under
+`includes/`, without bundling or rewriting WordPress/CDN imports. Commit those
+outputs alongside source changes. `npm run runtime:check` rejects stale or
+unowned outputs, and `npm run audit:tooling` rejects unchecked TypeScript and
+unexpected handwritten JavaScript. Deliberate JS asset fixtures and scoped
+vendor libraries remain unchanged; generated JS is still required by WordPress.
+
+Full suites and all browser tests run in GitHub CI only. Local validation is
+limited to static checks, builds, and focused non-E2E tests. `npm run check` is
+the CI aggregate, not a local preflight. CI also builds the WordPress assets and
+checks ZIP/Composer installations before a tooling candidate can be merged.
 
 ## License
 

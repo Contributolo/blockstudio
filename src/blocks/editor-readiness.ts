@@ -9,8 +9,7 @@ type EditorBlock = {
 const PENDING_CLASS = 'blockstudio-editor-enhance-pending';
 const READY_CLASS = 'blockstudio-editor-enhance-ready';
 const LOCKED_CLASS = 'blockstudio-editor-enhance-locked';
-const SCROLLBAR_WIDTH_PROPERTY =
-  '--blockstudio-editor-enhance-scrollbar-width';
+const SCROLLBAR_WIDTH_PROPERTY = '--blockstudio-editor-enhance-scrollbar-width';
 const SETTLE_DELAY_MS = 1000;
 const REVEAL_AFTER_UNLOCK_DELAY_MS = 250;
 const REVEAL_TRANSITION_MS = 250;

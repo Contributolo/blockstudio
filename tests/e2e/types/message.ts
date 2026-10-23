@@ -11,7 +11,7 @@ testType('message', '"text":false', () => {
         await count(
           page,
           'text=Block name is blockstudio/type-message! Text value is: test',
-          1
+          1,
         );
       },
     },

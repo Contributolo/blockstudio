@@ -1,5 +1,5 @@
-import { join, resolve } from "node:path";
-import type { Config } from "../config/schema.js";
+import { join, resolve } from 'node:path';
+import type { Config } from '../config/schema.js';
 
 export function getTargetDir(config: Config, configDir: string): string {
   return resolve(configDir, config.directory);

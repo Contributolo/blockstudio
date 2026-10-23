@@ -16,7 +16,7 @@ testType('toggle', '"toggle":true', () => {
       testFunction: async (page: Page, canvas: Frame) => {
         await canvas.click('[data-type="blockstudio/type-toggle"]');
         await expect(
-          page.locator('.blockstudio-fields__field--toggle input')
+          page.locator('.blockstudio-fields__field--toggle input'),
         ).not.toBeChecked();
       },
     },

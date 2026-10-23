@@ -22,7 +22,7 @@ test.afterAll(async () => {
 async function assertSameInnerHTML(
   page: Page,
   bsSelector: string,
-  blockSelector: string
+  blockSelector: string,
 ) {
   const bsHtml = await page.locator(bsSelector).innerHTML();
   const blockHtml = await page.locator(blockSelector).innerHTML();
@@ -65,7 +65,7 @@ test.describe('Block Tags Kitchen Sink', () => {
     await assertSameInnerHTML(
       page,
       '.ks-preformatted-bs',
-      '.ks-preformatted-block'
+      '.ks-preformatted-block',
     );
   });
 
@@ -78,11 +78,7 @@ test.describe('Block Tags Kitchen Sink', () => {
   });
 
   test('core/separator: bs and block identical', async () => {
-    await assertSameInnerHTML(
-      page,
-      '.ks-separator-bs',
-      '.ks-separator-block'
-    );
+    await assertSameInnerHTML(page, '.ks-separator-bs', '.ks-separator-block');
   });
 
   test('core/spacer: bs and block identical', async () => {
@@ -125,7 +121,7 @@ test.describe('Block Tags Kitchen Sink', () => {
     await assertSameInnerHTML(
       page,
       '.ks-social-links-bs',
-      '.ks-social-links-block'
+      '.ks-social-links-block',
     );
   });
 

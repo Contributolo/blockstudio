@@ -3,7 +3,7 @@ import { openSidebar, testType, text } from '../../utils/playwright-utils';
 
 const input = (page: Page) =>
   page.locator(
-    '.blockstudio-fields .blockstudio-fields__field--select .components-select-control__input'
+    '.blockstudio-fields .blockstudio-fields__field--select .components-select-control__input',
   );
 
 testType('select-empty', '"choice":false', () => {

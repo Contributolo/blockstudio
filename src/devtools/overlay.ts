@@ -118,13 +118,7 @@ const drawRoundedRectangle = (
   context.globalAlpha = opacity;
   context.beginPath();
   if (clampedCornerRadius > 0) {
-    context.roundRect(
-      rectX,
-      rectY,
-      rectWidth,
-      rectHeight,
-      clampedCornerRadius,
-    );
+    context.roundRect(rectX, rectY, rectWidth, rectHeight, clampedCornerRadius);
   } else {
     context.rect(rectX, rectY, rectWidth, rectHeight);
   }
@@ -242,7 +236,12 @@ const compositeAllLayers = (): void => {
   renderElementLayer();
   renderGrabbedLayer();
 
-  const layerRenderOrder: LayerName[] = ['crosshair', 'selection', 'element', 'grabbed'];
+  const layerRenderOrder: LayerName[] = [
+    'crosshair',
+    'selection',
+    'element',
+    'grabbed',
+  ];
   for (const layerName of layerRenderOrder) {
     const layer = layers[layerName];
     if (layer.canvas) {

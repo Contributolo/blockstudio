@@ -120,9 +120,7 @@ test.describe('File-based Pages', () => {
     test('code block with content', async () => {
       const code = page.locator('.wp-block-code');
       await expect(code).toBeVisible();
-      await expect(code.locator('code')).toContainText(
-        'const hello = "world"',
-      );
+      await expect(code.locator('code')).toContainText('const hello = "world"');
     });
 
     test('preformatted block preserves whitespace', async () => {
@@ -142,9 +140,7 @@ test.describe('File-based Pages', () => {
     // Media Blocks
 
     test('image block with src and alt', async () => {
-      const image = page.locator(
-        '.wp-block-image img[alt="Sample image"]',
-      );
+      const image = page.locator('.wp-block-image img[alt="Sample image"]');
       await expect(image).toBeVisible();
       await expect(image).toHaveAttribute('src', /picsum\.photos\/800/);
     });
@@ -205,15 +201,9 @@ test.describe('File-based Pages', () => {
     });
 
     test('row group renders with flex layout', async () => {
-      await expect(
-        page.getByText('Item 1', { exact: true }),
-      ).toBeVisible();
-      await expect(
-        page.getByText('Item 2', { exact: true }),
-      ).toBeVisible();
-      await expect(
-        page.getByText('Item 3', { exact: true }),
-      ).toBeVisible();
+      await expect(page.getByText('Item 1', { exact: true })).toBeVisible();
+      await expect(page.getByText('Item 2', { exact: true })).toBeVisible();
+      await expect(page.getByText('Item 3', { exact: true })).toBeVisible();
     });
 
     test('stack group renders with vertical layout', async () => {
@@ -236,15 +226,11 @@ test.describe('File-based Pages', () => {
       await expect(
         page.getByRole('heading', { name: 'Column 3' }),
       ).toBeVisible();
-      await expect(
-        page.getByText('Content in the first column'),
-      ).toBeVisible();
+      await expect(page.getByText('Content in the first column')).toBeVisible();
       await expect(
         page.getByText('Content in the second column'),
       ).toBeVisible();
-      await expect(
-        page.getByText('Content in the third column'),
-      ).toBeVisible();
+      await expect(page.getByText('Content in the third column')).toBeVisible();
     });
 
     test('separator renders as hr', async () => {
@@ -319,9 +305,7 @@ test.describe('File-based Pages', () => {
         mediaText.locator('.wp-block-media-text__media img'),
       ).toHaveAttribute('src', /picsum\.photos/);
       await expect(mediaText).toContainText('Media & Text Content');
-      await expect(mediaText).toContainText(
-        'text content next to the media',
-      );
+      await expect(mediaText).toContainText('text content next to the media');
     });
 
     // Accordion Blocks
@@ -329,9 +313,9 @@ test.describe('File-based Pages', () => {
     test('accordion with two items', async () => {
       const accordion = page.locator('.wp-block-accordion');
       await expect(accordion).toBeVisible();
-      await expect(
-        accordion.locator('.wp-block-accordion-item'),
-      ).toHaveCount(2);
+      await expect(accordion.locator('.wp-block-accordion-item')).toHaveCount(
+        2,
+      );
     });
 
     test('accordion headings with toggle buttons', async () => {
@@ -495,9 +479,8 @@ test.describe('File-based Pages', () => {
 
     test('correct number of top-level blocks', async () => {
       const count = await page.evaluate(() => {
-        return (window as any).wp.data
-          .select('core/block-editor')
-          .getBlocks().length;
+        return (window as any).wp.data.select('core/block-editor').getBlocks()
+          .length;
       });
 
       expect(count).toBeGreaterThanOrEqual(1);
@@ -735,9 +718,8 @@ test.describe('File-based Pages', () => {
 
         function find(block: any): number | null {
           if (block.name === 'core/gallery') {
-            return block.innerBlocks.filter(
-              (b: any) => b.name === 'core/image',
-            ).length;
+            return block.innerBlocks.filter((b: any) => b.name === 'core/image')
+              .length;
           }
           if (block.innerBlocks) {
             for (const inner of block.innerBlocks) {
@@ -995,27 +977,17 @@ test.describe('File-based Pages (Twig)', () => {
 
   test('twig template processed correctly', async () => {
     await expect(
-      page.getByText(
-        'This page uses a Twig template with TWIG support.',
-      ),
+      page.getByText('This page uses a Twig template with TWIG support.'),
     ).toBeVisible();
 
     const currentYear = new Date().getFullYear().toString();
-    await expect(
-      page.getByText(`Current year: ${currentYear}`),
-    ).toBeVisible();
+    await expect(page.getByText(`Current year: ${currentYear}`)).toBeVisible();
   });
 
   test('twig loop generates list items', async () => {
-    await expect(
-      page.getByText('Twig item 1', { exact: true }),
-    ).toBeVisible();
-    await expect(
-      page.getByText('Twig item 2', { exact: true }),
-    ).toBeVisible();
-    await expect(
-      page.getByText('Twig item 3', { exact: true }),
-    ).toBeVisible();
+    await expect(page.getByText('Twig item 1', { exact: true })).toBeVisible();
+    await expect(page.getByText('Twig item 2', { exact: true })).toBeVisible();
+    await expect(page.getByText('Twig item 3', { exact: true })).toBeVisible();
   });
 
   test('twig headings render all levels', async () => {
@@ -1033,9 +1005,7 @@ test.describe('File-based Pages (Twig)', () => {
 
   test('twig quote and pullquote render', async () => {
     await expect(page.getByText('This is a Twig blockquote')).toBeVisible();
-    await expect(
-      page.getByText('Twig pullquote for emphasis'),
-    ).toBeVisible();
+    await expect(page.getByText('Twig pullquote for emphasis')).toBeVisible();
   });
 
   test('twig code and preformatted blocks render', async () => {
@@ -1070,9 +1040,7 @@ test.describe('File-based Pages (Twig)', () => {
   test('twig interactive blocks render', async () => {
     const details = page.locator('.wp-block-details');
     await expect(details).toBeVisible();
-    await expect(details.locator('summary')).toHaveText(
-      'Twig expand details',
-    );
+    await expect(details.locator('summary')).toHaveText('Twig expand details');
 
     await expect(page.locator('.wp-block-table')).toBeVisible();
   });
@@ -1096,9 +1064,7 @@ test.describe('File-based Pages (Twig)', () => {
   });
 
   test('twig additional parser paths render', async () => {
-    await expect(
-      page.getByText('Twig section group paragraph'),
-    ).toBeVisible();
+    await expect(page.getByText('Twig section group paragraph')).toBeVisible();
     await expect(
       page.locator('.wp-block-image img[alt="Twig figure image"]'),
     ).toBeVisible();
@@ -1151,27 +1117,17 @@ test.describe('File-based Pages (Blade)', () => {
 
   test('blade template processed correctly', async () => {
     await expect(
-      page.getByText(
-        'This page uses a Blade template with BLADE support.',
-      ),
+      page.getByText('This page uses a Blade template with BLADE support.'),
     ).toBeVisible();
 
     const currentYear = new Date().getFullYear().toString();
-    await expect(
-      page.getByText(`Current year: ${currentYear}`),
-    ).toBeVisible();
+    await expect(page.getByText(`Current year: ${currentYear}`)).toBeVisible();
   });
 
   test('blade loop generates list items', async () => {
-    await expect(
-      page.getByText('Blade item 1', { exact: true }),
-    ).toBeVisible();
-    await expect(
-      page.getByText('Blade item 2', { exact: true }),
-    ).toBeVisible();
-    await expect(
-      page.getByText('Blade item 3', { exact: true }),
-    ).toBeVisible();
+    await expect(page.getByText('Blade item 1', { exact: true })).toBeVisible();
+    await expect(page.getByText('Blade item 2', { exact: true })).toBeVisible();
+    await expect(page.getByText('Blade item 3', { exact: true })).toBeVisible();
   });
 
   test('blade headings render all levels', async () => {
@@ -1189,9 +1145,7 @@ test.describe('File-based Pages (Blade)', () => {
 
   test('blade quote and pullquote render', async () => {
     await expect(page.getByText('This is a Blade blockquote')).toBeVisible();
-    await expect(
-      page.getByText('Blade pullquote for emphasis'),
-    ).toBeVisible();
+    await expect(page.getByText('Blade pullquote for emphasis')).toBeVisible();
   });
 
   test('blade code and preformatted blocks render', async () => {
@@ -1226,9 +1180,7 @@ test.describe('File-based Pages (Blade)', () => {
   test('blade interactive blocks render', async () => {
     const details = page.locator('.wp-block-details');
     await expect(details).toBeVisible();
-    await expect(details.locator('summary')).toHaveText(
-      'Blade expand details',
-    );
+    await expect(details.locator('summary')).toHaveText('Blade expand details');
 
     await expect(page.locator('.wp-block-table')).toBeVisible();
   });
@@ -1252,9 +1204,7 @@ test.describe('File-based Pages (Blade)', () => {
   });
 
   test('blade additional parser paths render', async () => {
-    await expect(
-      page.getByText('Blade section group paragraph'),
-    ).toBeVisible();
+    await expect(page.getByText('Blade section group paragraph')).toBeVisible();
     await expect(
       page.locator('.wp-block-image img[alt="Blade figure image"]'),
     ).toBeVisible();

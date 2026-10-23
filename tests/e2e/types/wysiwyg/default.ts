@@ -17,7 +17,7 @@ testType('wysiwyg', 'Default text', () => [
       await count(
         page,
         '.blockstudio-fields__field--wysiwyg .components-select-control__input option',
-        7
+        7,
       );
     },
   },
@@ -38,7 +38,7 @@ testType('wysiwyg', 'Default text', () => [
         await count(
           page,
           `.blockstudio-fields__field--wysiwyg [aria-label="${tag}"]`,
-          1
+          1,
         );
       },
     },
@@ -49,14 +49,14 @@ testType('wysiwyg', 'Default text', () => [
         await count(
           page,
           `.blockstudio-fields [aria-label="${tag}"][aria-pressed="true"]`,
-          1
+          1,
         );
         if (!tag.includes('Align')) {
           await page.click(`.blockstudio-fields [aria-label="${tag}"]`);
           await count(
             page,
             `.blockstudio-fields [aria-label="${tag}"][aria-pressed="true"]`,
-            0
+            0,
           );
         }
       },

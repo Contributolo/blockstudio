@@ -9,10 +9,7 @@ import {
 } from '@wordpress/element';
 import { pencil } from '@wordpress/icons';
 import { Fields } from '@/blocks/components/fields';
-import {
-  BlockstudioBlock,
-  BlockstudioBlockAttributes,
-} from '@/types/types';
+import { BlockstudioBlock, BlockstudioBlockAttributes } from '@/types/types';
 import { __ } from '@/utils/__';
 
 export const ExpandedEditor = ({
@@ -91,9 +88,7 @@ export const ExpandedEditor = ({
     let container: HTMLElement | null = null;
     let target: HTMLSpanElement | null = null;
     const frame = window.requestAnimationFrame(() => {
-      const inspector = document.querySelector(
-        '.block-editor-block-inspector',
-      );
+      const inspector = document.querySelector('.block-editor-block-inspector');
       const titles = inspector?.querySelectorAll(
         '.block-editor-block-card__title',
       );

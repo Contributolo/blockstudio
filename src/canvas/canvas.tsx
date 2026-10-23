@@ -1,8 +1,12 @@
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
-
 import { BlockEditorProvider } from '@wordpress/block-editor';
 import { getBlockType } from '@wordpress/blocks';
-import { Button, DropdownMenu, MenuGroup, MenuItem } from '@wordpress/components';
+import {
+  Button,
+  DropdownMenu,
+  MenuGroup,
+  MenuItem,
+} from '@wordpress/components';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { check, closeSmall, moreHorizontal } from '@wordpress/icons';
 import { Artboard } from './artboard';
@@ -94,15 +98,15 @@ export const Canvas = ({
     });
     return initial;
   });
-  const [blockRevisions, setBlockRevisions] = useState<
-    Record<string, number>
-  >(() => {
-    const initial: Record<string, number> = {};
-    initialBlocks.forEach((b) => {
-      initial[b.name] = 0;
-    });
-    return initial;
-  });
+  const [blockRevisions, setBlockRevisions] = useState<Record<string, number>>(
+    () => {
+      const initial: Record<string, number> = {};
+      initialBlocks.forEach((b) => {
+        initial[b.name] = 0;
+      });
+      return initial;
+    },
+  );
 
   const [focusedSlug, setFocusedSlug] = useState<string | null>(null);
   const focusedRef = useRef<string | null>(null);
@@ -113,19 +117,17 @@ export const Canvas = ({
   const currentBlocksRef = useRef(currentBlocks);
   currentBlocksRef.current = currentBlocks;
 
-  const liveMode = useSelect(
-    (select) => select(store).isLiveMode(),
-    [],
-  );
-  const view = useSelect(
-    (select) => select(store).getView(),
-    [],
-  ) as CanvasView;
+  const liveMode = useSelect((select) => select(store).isLiveMode(), []);
+  const view = useSelect((select) => select(store).getView(), []) as CanvasView;
   const { setLiveMode, setView, setFingerprint } = useDispatch(STORE_NAME);
 
   const isBlocksView = view === 'blocks';
-  const artboardWidth = isBlocksView ? BLOCK_ARTBOARD_WIDTH : PAGE_ARTBOARD_WIDTH;
-  const activeItems: (Page | BlockItem)[] = isBlocksView ? currentBlocks : currentPages;
+  const artboardWidth = isBlocksView
+    ? BLOCK_ARTBOARD_WIDTH
+    : PAGE_ARTBOARD_WIDTH;
+  const activeItems: (Page | BlockItem)[] = isBlocksView
+    ? currentBlocks
+    : currentPages;
   const totalItems = activeItems.length;
 
   const [mountedCount, setMountedCount] = useState(
@@ -232,9 +234,7 @@ export const Canvas = ({
         const doc = iframe.contentDocument;
         if (!doc) return;
         mediaElements.push(
-          ...Array.from(
-            doc.querySelectorAll<HTMLElement>('img, video'),
-          ),
+          ...Array.from(doc.querySelectorAll<HTMLElement>('img, video')),
         );
       });
 
@@ -261,7 +261,9 @@ export const Canvas = ({
             if (el instanceof HTMLVideoElement) {
               if (el.readyState >= 1) return Promise.resolve();
               return new Promise<void>((r) => {
-                el.addEventListener('loadedmetadata', () => r(), { once: true });
+                el.addEventListener('loadedmetadata', () => r(), {
+                  once: true,
+                });
                 el.addEventListener('error', () => r(), { once: true });
               });
             }
@@ -545,7 +547,11 @@ export const Canvas = ({
               try {
                 registerBlock(blockData);
               } catch (err) {
-                console.error('[canvas:queue] registerBlock FAILED:', blockData.name, err);
+                console.error(
+                  '[canvas:queue] registerBlock FAILED:',
+                  blockData.name,
+                  err,
+                );
               }
             }
           });
@@ -562,9 +568,7 @@ export const Canvas = ({
           let nextPages: typeof prevPg;
 
           if (data.changedPages.length > 0) {
-            const updatedMap = new Map(
-              data.pages.map((p) => [p.slug, p]),
-            );
+            const updatedMap = new Map(data.pages.map((p) => [p.slug, p]));
             const merged = prevPg.map((existing) => {
               const updated = updatedMap.get(existing.slug);
               if (updated) {
@@ -585,9 +589,7 @@ export const Canvas = ({
           } else {
             // Keep current artboard order stable in live mode updates and
             // append only newly discovered pages at the end.
-            const updatedMap = new Map(
-              data.pages.map((p) => [p.slug, p]),
-            );
+            const updatedMap = new Map(data.pages.map((p) => [p.slug, p]));
             const merged = prevPg.map((existing) => {
               const updated = updatedMap.get(existing.slug);
 
@@ -710,9 +712,7 @@ export const Canvas = ({
           const changedBlockItems = new Set<string>();
 
           const merged = prevBl.map((existing) => {
-            const updated = data.blocks.find(
-              (b) => b.name === existing.name,
-            );
+            const updated = data.blocks.find((b) => b.name === existing.name);
             if (!updated) return existing;
 
             if (existing.content !== updated.content) {
@@ -798,10 +798,7 @@ export const Canvas = ({
       );
       setBlockRevisions((previous) =>
         Object.fromEntries(
-          blocks.map((block) => [
-            block.name,
-            (previous[block.name] || 0) + 1,
-          ]),
+          blocks.map((block) => [block.name, (previous[block.name] || 0) + 1]),
         ),
       );
 
@@ -925,7 +922,9 @@ export const Canvas = ({
       let enqueuedFallback = false;
       const changedBlockList = parsed.changedBlocks || [];
 
-      const applyRefreshed = (refreshed: Partial<SSEChangedData> | null): void => {
+      const applyRefreshed = (
+        refreshed: Partial<SSEChangedData> | null,
+      ): void => {
         if (!active) return;
 
         if (!refreshed) {
@@ -1075,11 +1074,20 @@ export const Canvas = ({
         >
           {visibleItems.map((item) => {
             const key = 'slug' in item ? item.slug : item.name;
-            const rev = 'slug' in item
-              ? revisions[item.slug] || 0
-              : blockRevisions[item.name] || 0;
+            const rev =
+              'slug' in item
+                ? revisions[item.slug] || 0
+                : blockRevisions[item.name] || 0;
             return (
-              <div key={key} style={{ position: 'relative', minHeight: isBlocksView ? BLOCK_ARTBOARD_MIN_HEIGHT : undefined }}>
+              <div
+                key={key}
+                style={{
+                  position: 'relative',
+                  minHeight: isBlocksView
+                    ? BLOCK_ARTBOARD_MIN_HEIGHT
+                    : undefined,
+                }}
+              >
                 <div
                   data-canvas-label=""
                   onClick={() => setFocusedSlug(key)}
@@ -1132,41 +1140,46 @@ export const Canvas = ({
           })}
         </div>
 
-        {focusedSlug && (() => {
-          const focusedItem = activeItems.find((item) =>
-            'slug' in item ? item.slug === focusedSlug : item.name === focusedSlug,
-          );
-          if (!focusedItem) return null;
-          const focusedKey = 'slug' in focusedItem ? focusedItem.slug : focusedItem.name;
-          const focusedRev = 'slug' in focusedItem
-            ? revisions[focusedItem.slug] || 0
-            : blockRevisions[focusedItem.name] || 0;
-          return (
-            <div
-              data-canvas-focus=""
-              style={{
-                position: 'absolute',
-                inset: 0,
-                zIndex: 10,
-                overflowX: 'hidden',
-                overflowY: 'auto',
-                background: '#2c2c2c',
-              }}
-            >
-              <MemoizedArtboard
-                page={{
-                  title: focusedItem.title,
-                  slug: focusedKey,
-                  name: focusedItem.name,
-                  content: focusedItem.content,
+        {focusedSlug &&
+          (() => {
+            const focusedItem = activeItems.find((item) =>
+              'slug' in item
+                ? item.slug === focusedSlug
+                : item.name === focusedSlug,
+            );
+            if (!focusedItem) return null;
+            const focusedKey =
+              'slug' in focusedItem ? focusedItem.slug : focusedItem.name;
+            const focusedRev =
+              'slug' in focusedItem
+                ? revisions[focusedItem.slug] || 0
+                : blockRevisions[focusedItem.name] || 0;
+            return (
+              <div
+                data-canvas-focus=""
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  zIndex: 10,
+                  overflowX: 'hidden',
+                  overflowY: 'auto',
+                  background: '#2c2c2c',
                 }}
-                revision={focusedRev}
-                width={focusWidth}
-                onSwapComplete={handleSwapComplete}
-              />
-            </div>
-          );
-        })()}
+              >
+                <MemoizedArtboard
+                  page={{
+                    title: focusedItem.title,
+                    slug: focusedKey,
+                    name: focusedItem.name,
+                    content: focusedItem.content,
+                  }}
+                  revision={focusedRev}
+                  width={focusWidth}
+                  onSwapComplete={handleSwapComplete}
+                />
+              </div>
+            );
+          })()}
 
         <div
           style={{
@@ -1226,8 +1239,12 @@ export const Canvas = ({
                       </MenuItem>
                     </MenuGroup>
                     <MenuGroup>
-                      <MenuItem onClick={fitToView}>{__('Fit to view')}</MenuItem>
-                      <MenuItem onClick={zoomTo100}>{__('Zoom to 100%')}</MenuItem>
+                      <MenuItem onClick={fitToView}>
+                        {__('Fit to view')}
+                      </MenuItem>
+                      <MenuItem onClick={zoomTo100}>
+                        {__('Zoom to 100%')}
+                      </MenuItem>
                     </MenuGroup>
                     <MenuGroup>
                       <MenuItem

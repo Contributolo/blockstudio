@@ -15,7 +15,7 @@ type RegistryTableProps<Item extends { id: string }> = {
   view: View;
 };
 
-export const RegistryTable = <Item extends { id: string },>({
+export const RegistryTable = <Item extends { id: string }>({
   config,
   items,
   onChangeView,

@@ -1,22 +1,22 @@
-import type { Scorer } from "../types.ts";
-import { extractByLanguage } from "../utils/extract.ts";
+import type { Scorer } from '../types.ts';
+import { extractByLanguage } from '../utils/extract.ts';
 
 function stripJsonComments(text: string): string {
   return text
-    .split("\n")
-    .filter((line) => !line.trimStart().startsWith("//"))
-    .join("\n");
+    .split('\n')
+    .filter((line) => !line.trimStart().startsWith('//'))
+    .join('\n');
 }
 
 export function jsonParse(): Scorer {
   return (output: string) => {
-    const blocks = extractByLanguage(output, "json").filter((b) => {
+    const blocks = extractByLanguage(output, 'json').filter((b) => {
       const cleaned = stripJsonComments(b.content).trimStart();
-      return cleaned.startsWith("{") || cleaned.startsWith("[");
+      return cleaned.startsWith('{') || cleaned.startsWith('[');
     });
 
     if (blocks.length === 0) {
-      return { name: "JsonParse", score: 0, details: "No JSON blocks found" };
+      return { name: 'JsonParse', score: 0, details: 'No JSON blocks found' };
     }
 
     let passed = 0;
@@ -37,9 +37,9 @@ export function jsonParse(): Scorer {
     const score = passed / blocks.length;
     const details =
       errors.length > 0
-        ? `${passed}/${blocks.length} parsed. ${errors.join("; ")}`
+        ? `${passed}/${blocks.length} parsed. ${errors.join('; ')}`
         : `${passed}/${blocks.length} parsed`;
 
-    return { name: "JsonParse", score, details };
+    return { name: 'JsonParse', score, details };
   };
 }

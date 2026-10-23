@@ -14,11 +14,13 @@ testType(
       {
         description: 'wrong function not returning array',
         testFunction: async (page: Page, canvas: Frame) => {
-          await canvas.click('[data-type="blockstudio/type-populate-function"]');
+          await canvas.click(
+            '[data-type="blockstudio/type-populate-function"]',
+          );
           await count(
             page,
             '.blockstudio-fields .components-panel__body >> nth=3 .components-checkbox-control',
-            0
+            0,
           );
         },
       },
@@ -26,22 +28,22 @@ testType(
         description: 'change values',
         testFunction: async (page: Page, _canvas: Frame) => {
           await page.click(
-            `.blockstudio-fields .components-panel__body:nth-of-type(1) .components-checkbox-control:nth-of-type(1) .components-checkbox-control__input`
+            `.blockstudio-fields .components-panel__body:nth-of-type(1) .components-checkbox-control:nth-of-type(1) .components-checkbox-control__input`,
           );
           await page.click(
-            `.blockstudio-fields .components-panel__body:nth-of-type(1) .components-checkbox-control:nth-of-type(2) .components-checkbox-control__input`
+            `.blockstudio-fields .components-panel__body:nth-of-type(1) .components-checkbox-control:nth-of-type(2) .components-checkbox-control__input`,
           );
           await page.click(
-            `.blockstudio-fields .components-panel__body:nth-of-type(2) .components-checkbox-control:nth-of-type(1) .components-checkbox-control__input`
+            `.blockstudio-fields .components-panel__body:nth-of-type(2) .components-checkbox-control:nth-of-type(1) .components-checkbox-control__input`,
           );
           await page.click(
-            `.blockstudio-fields .components-panel__body:nth-of-type(2) .components-checkbox-control:nth-of-type(2) .components-checkbox-control__input`
+            `.blockstudio-fields .components-panel__body:nth-of-type(2) .components-checkbox-control:nth-of-type(2) .components-checkbox-control__input`,
           );
           await page.click(
-            `.blockstudio-fields .components-panel__body:nth-of-type(3) .components-checkbox-control:nth-of-type(1) .components-checkbox-control__input`
+            `.blockstudio-fields .components-panel__body:nth-of-type(3) .components-checkbox-control:nth-of-type(1) .components-checkbox-control__input`,
           );
           await page.click(
-            `.blockstudio-fields .components-panel__body:nth-of-type(3) .components-checkbox-control:nth-of-type(2) .components-checkbox-control__input`
+            `.blockstudio-fields .components-panel__body:nth-of-type(3) .components-checkbox-control:nth-of-type(2) .components-checkbox-control__input`,
           );
           await saveAndReload(page);
         },
@@ -49,13 +51,15 @@ testType(
       {
         description: 'check values',
         testFunction: async (_page: Page, canvas: Frame) => {
-          await canvas.click('[data-type="blockstudio/type-populate-function"]');
+          await canvas.click(
+            '[data-type="blockstudio/type-populate-function"]',
+          );
           await text(
             canvas,
-            '"postTypes":[{"value":"post","label":"post"},{"value":"page","label":"page"}],"postTypesArguments":["post","page"],"valueLabel":["option-1","option-2"],"wrongFunction":false'
+            '"postTypes":[{"value":"post","label":"post"},{"value":"page","label":"page"}],"postTypesArguments":["post","page"],"valueLabel":["option-1","option-2"],"wrongFunction":false',
           );
         },
       },
     ];
-  }
+  },
 );

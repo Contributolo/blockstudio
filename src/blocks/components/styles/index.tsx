@@ -70,7 +70,8 @@ export const Styles = () => {
           zIndex: 99999,
         },
         '.blockstudio-expanded-editor__drawer': {
-          animation: 'blockstudio-expanded-editor-drawer-in 100ms cubic-bezier(0, 0, 0.2, 1)',
+          animation:
+            'blockstudio-expanded-editor-drawer-in 100ms cubic-bezier(0, 0, 0.2, 1)',
           background: '#fff',
           borderLeft: style.border,
           bottom: 0,
@@ -117,10 +118,9 @@ export const Styles = () => {
         '.blockstudio-expanded-editor__content': {
           width: '100%',
         },
-        '.interface-interface-skeleton__sidebar .blockstudio-fields':
-          {
-            borderBottom: 0,
-          },
+        '.interface-interface-skeleton__sidebar .blockstudio-fields': {
+          borderBottom: 0,
+        },
         '.interface-interface-skeleton__sidebar .blockstudio-fields > .components-panel__body, .interface-interface-skeleton__sidebar .blockstudio-fields > .blockstudio-fields__field--tabs':
           {
             borderBottom: style.border,
@@ -133,25 +133,22 @@ export const Styles = () => {
           {
             borderBottom: 0,
           },
-        '.blockstudio-expanded-editor__drawer .blockstudio-fields':
-          {
-            marginTop: '0 !important',
-            borderBottom: 0,
-          },
+        '.blockstudio-expanded-editor__drawer .blockstudio-fields': {
+          marginTop: '0 !important',
+          borderBottom: 0,
+        },
         '.blockstudio-expanded-editor__drawer .components-panel + .components-panel':
           {
             marginTop: '0 !important',
           },
-        '.blockstudio-expanded-editor__drawer .components-panel':
-          {
-            border: 0,
-          },
-        '.blockstudio-expanded-editor__drawer .components-panel__body':
-          {
-            borderBottom: '0 !important',
-            borderTop: '0 !important',
-            marginTop: '0 !important',
-          },
+        '.blockstudio-expanded-editor__drawer .components-panel': {
+          border: 0,
+        },
+        '.blockstudio-expanded-editor__drawer .components-panel__body': {
+          borderBottom: '0 !important',
+          borderTop: '0 !important',
+          marginTop: '0 !important',
+        },
         '.blockstudio-expanded-editor__drawer .blockstudio-fields > .components-panel__body, .blockstudio-expanded-editor__drawer .blockstudio-fields > .blockstudio-fields__field--group, .blockstudio-expanded-editor__drawer .blockstudio-fields__field--tabs .components-tab-panel__tab-content > .components-panel__body, .blockstudio-expanded-editor__drawer .blockstudio-fields__field--tabs .components-tab-panel__tab-content > .blockstudio-fields__field--group':
           {
             borderBottom: `${style.border} !important`,
@@ -165,9 +162,10 @@ export const Styles = () => {
             borderBottom: '0 !important',
             padding: '0 !important',
           },
-        '.blockstudio-expanded-editor__drawer .blockstudio-fields__field--tabs .components-tab-panel__tabs': {
-          borderBottom: style.border,
-        },
+        '.blockstudio-expanded-editor__drawer .blockstudio-fields__field--tabs .components-tab-panel__tabs':
+          {
+            borderBottom: style.border,
+          },
         '@media (max-width: 782px)': {
           '.blockstudio-expanded-editor__drawer': {
             maxWidth: 'none',

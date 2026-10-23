@@ -32,7 +32,7 @@ testType('unit', '"unit":"1rem"', () => {
       testFunction: async (page: Page, canvas: Frame) => {
         await canvas.click('[data-type="blockstudio/type-unit"]');
         await expect(
-          page.locator('.blockstudio-fields__field--unit input')
+          page.locator('.blockstudio-fields__field--unit input'),
         ).toHaveValue('10');
         await count(page, '.blockstudio-fields__field--unit option', 3);
         await text(canvas, '"unit":"10px"');

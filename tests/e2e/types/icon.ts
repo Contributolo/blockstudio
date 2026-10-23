@@ -23,13 +23,13 @@ testType(
           await canvas.click('[data-type="blockstudio/type-icon"]');
           await page
             .locator(
-              '.blockstudio-fields__field--icon .components-combobox-control__input'
+              '.blockstudio-fields__field--icon .components-combobox-control__input',
             )
             .last()
             .click();
           await page
             .locator(
-              '.blockstudio-fields__field--icon .components-form-token-field__suggestion'
+              '.blockstudio-fields__field--icon .components-form-token-field__suggestion',
             )
             .nth(0)
             .click();
@@ -54,14 +54,17 @@ testType(
             .click();
           await page
             .locator(
-              '.blockstudio-fields .components-form-token-field__suggestion'
+              '.blockstudio-fields .components-form-token-field__suggestion',
             )
             .nth(0)
             .click();
           await page.locator('.blockstudio-repeater__remove').nth(1).click();
-          await page.getByRole('dialog').getByRole('button', { name: 'Delete', exact: true }).click();
+          await page
+            .getByRole('dialog')
+            .getByRole('button', { name: 'Delete', exact: true })
+            .click();
           await expect(
-            page.locator('.components-form-token-field__input').nth(2)
+            page.locator('.components-form-token-field__input').nth(2),
           ).not.toHaveValue('0');
         },
       },
@@ -70,35 +73,53 @@ testType(
         testFunction: async (page: Page, canvas: Frame) => {
           await canvas.click('[data-type="blockstudio/type-icon"]');
 
-          await page.locator('[data-id="icon"] select').first().selectOption('remix-icons');
+          await page
+            .locator('[data-id="icon"] select')
+            .first()
+            .selectOption('remix-icons');
           await page.waitForTimeout(500);
-          await page.locator('[data-id="icon"] select').nth(1).selectOption('user-faces');
+          await page
+            .locator('[data-id="icon"] select')
+            .nth(1)
+            .selectOption('user-faces');
           await page.waitForTimeout(2000);
 
-          const combobox = page.locator('[data-id="icon"] .components-combobox-control input').first();
+          const combobox = page
+            .locator('[data-id="icon"] .components-combobox-control input')
+            .first();
           await expect(combobox).toBeVisible({ timeout: 10000 });
         },
       },
       {
         description: 'remix health-medical subset loads icons',
         testFunction: async (page: Page, _canvas: Frame) => {
-          await page.locator('[data-id="icon"] select').nth(1).selectOption('health-medical');
+          await page
+            .locator('[data-id="icon"] select')
+            .nth(1)
+            .selectOption('health-medical');
           await page.waitForTimeout(2000);
 
-          const combobox = page.locator('[data-id="icon"] .components-combobox-control input').first();
+          const combobox = page
+            .locator('[data-id="icon"] .components-combobox-control input')
+            .first();
           await expect(combobox).toBeVisible({ timeout: 10000 });
         },
       },
       {
         description: 'remix game-sports subset loads icons',
         testFunction: async (page: Page, _canvas: Frame) => {
-          await page.locator('[data-id="icon"] select').nth(1).selectOption('game-sports');
+          await page
+            .locator('[data-id="icon"] select')
+            .nth(1)
+            .selectOption('game-sports');
           await page.waitForTimeout(2000);
 
-          const combobox = page.locator('[data-id="icon"] .components-combobox-control input').first();
+          const combobox = page
+            .locator('[data-id="icon"] .components-combobox-control input')
+            .first();
           await expect(combobox).toBeVisible({ timeout: 10000 });
         },
       },
     ];
-  }
+  },
 );

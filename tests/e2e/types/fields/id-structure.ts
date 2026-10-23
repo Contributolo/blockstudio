@@ -17,8 +17,12 @@ testType(
       {
         description: 'change prefixed field value',
         testFunction: async (page: Page, canvas: Frame) => {
-          await canvas.click('[data-type="blockstudio/type-fields-id-structure"]');
-          const input = page.locator('.blockstudio-fields__field--text input').first();
+          await canvas.click(
+            '[data-type="blockstudio/type-fields-id-structure"]',
+          );
+          const input = page
+            .locator('.blockstudio-fields__field--text input')
+            .first();
           await input.fill('Prefixed Heading');
           await saveAndReload(page);
         },
@@ -26,10 +30,12 @@ testType(
       {
         description: 'verify prefixed field persists',
         testFunction: async (_page: Page, canvas: Frame) => {
-          await canvas.click('[data-type="blockstudio/type-fields-id-structure"]');
+          await canvas.click(
+            '[data-type="blockstudio/type-fields-id-structure"]',
+          );
           await text(canvas, '"hero_heading":"Prefixed Heading"');
         },
       },
     ];
-  }
+  },
 );

@@ -231,7 +231,12 @@ const showLabel = (
   container.style.transform = `translateX(calc(-50% + ${position.edgeOffsetX}px))`;
 
   if (arrow) {
-    updateArrow(arrow, position.arrowPosition, position.arrowLeftOffset, panelWidth);
+    updateArrow(
+      arrow,
+      position.arrowPosition,
+      position.arrowLeftOffset,
+      panelWidth,
+    );
   }
 };
 
@@ -331,7 +336,12 @@ const showElementLabel = (
   elementContainer.style.transform = `translateX(calc(-50% + ${position.edgeOffsetX}px))`;
 
   if (elementArrow) {
-    updateArrow(elementArrow, position.arrowPosition, position.arrowLeftOffset, panelWidth);
+    updateArrow(
+      elementArrow,
+      position.arrowPosition,
+      position.arrowLeftOffset,
+      panelWidth,
+    );
   }
 };
 

@@ -1,4 +1,4 @@
-import type { BlockEntry, Registry } from "../config/schema.js";
+import type { BlockEntry, Registry } from '../config/schema.js';
 
 export type ResolvedBlock = BlockEntry & {
   registryName: string;

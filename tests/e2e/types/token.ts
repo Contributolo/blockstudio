@@ -13,14 +13,14 @@ testType('token', '"token":[{"value":"three","label":"Three"}]', () => {
       testFunction: async (page: Page, canvas: Frame) => {
         await canvas.click('[data-type="blockstudio/type-token"]');
         await page.click(
-          '.blockstudio-fields__field--token .components-form-token-field__input-container'
+          '.blockstudio-fields__field--token .components-form-token-field__input-container',
         );
         await page.press('body', 'Backspace');
         await page.press('body', 'Backspace');
         for (const tokenValue of ['one', 'two']) {
           await page.fill(
             '.blockstudio-fields__field--token input',
-            tokenValue
+            tokenValue,
           );
           await page.press('body', 'Enter');
         }
@@ -34,11 +34,11 @@ testType('token', '"token":[{"value":"three","label":"Three"}]', () => {
         await count(
           page,
           '.blockstudio-fields__field--token .components-form-token-field__token',
-          2
+          2,
         );
         await text(
-            canvas,
-          '"token":[{"value":"one","label":"One"},{"value":"two","label":"Two"}]'
+          canvas,
+          '"token":[{"value":"one","label":"One"},{"value":"two","label":"Two"}]',
         );
       },
     },

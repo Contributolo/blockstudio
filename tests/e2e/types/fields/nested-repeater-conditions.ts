@@ -5,10 +5,7 @@ testType(
   ['fields nested repeater conditions', 'fields-nested-repeater-conditions'],
   false,
   () => {
-    const expectVisibleField = async (
-      scope: Page | Locator,
-      id: string,
-    ) => {
+    const expectVisibleField = async (scope: Page | Locator, id: string) => {
       await expect(scope.locator(`[data-id="${id}"]`)).toBeVisible();
     };
 
@@ -16,30 +13,21 @@ testType(
       await expect(scope.locator(`[data-id="${id}"]`)).toHaveCount(0);
     };
 
-    const expectImageFields = async (
-      scope: Page | Locator,
-      prefix = '',
-    ) => {
+    const expectImageFields = async (scope: Page | Locator, prefix = '') => {
       await expectVisibleField(scope, `${prefix}image_default`);
       await expectVisibleField(scope, `${prefix}image_sources`);
       await expectHiddenField(scope, `${prefix}video_mp4`);
       await expectHiddenField(scope, `${prefix}video_sources`);
     };
 
-    const expectVideoFields = async (
-      scope: Page | Locator,
-      prefix = '',
-    ) => {
+    const expectVideoFields = async (scope: Page | Locator, prefix = '') => {
       await expectHiddenField(scope, `${prefix}image_default`);
       await expectHiddenField(scope, `${prefix}image_sources`);
       await expectVisibleField(scope, `${prefix}video_mp4`);
       await expectVisibleField(scope, `${prefix}video_sources`);
     };
 
-    const expectNoMediaFields = async (
-      scope: Page | Locator,
-      prefix = '',
-    ) => {
+    const expectNoMediaFields = async (scope: Page | Locator, prefix = '') => {
       await expectHiddenField(scope, `${prefix}image_default`);
       await expectHiddenField(scope, `${prefix}image_sources`);
       await expectHiddenField(scope, `${prefix}video_mp4`);

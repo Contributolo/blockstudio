@@ -25,7 +25,9 @@ test.describe('Select with plain string value (issue #27)', () => {
       waitUntil: 'domcontentloaded',
     });
 
-    const modalClose = page.locator('.components-modal__header button[aria-label="Close"]');
+    const modalClose = page.locator(
+      '.components-modal__header button[aria-label="Close"]',
+    );
     if (await modalClose.isVisible({ timeout: 2000 }).catch(() => false)) {
       await modalClose.click();
     }

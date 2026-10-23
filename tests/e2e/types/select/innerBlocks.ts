@@ -11,7 +11,7 @@ testType('select-innerblocks', '"layout":false', () => {
           '.blockstudio-fields .components-select-control__input',
           {
             value: '1',
-          }
+          },
         );
         await count(canvas, 'text=This is the left Heading Level 1.', 1);
         await count(canvas, 'text=This is the right Heading Level 1.', 1);
@@ -19,7 +19,7 @@ testType('select-innerblocks', '"layout":false', () => {
         await count(canvas, 'text=This is the right Paragraph Level 1.', 1);
         await text(
           page,
-          '"text":"This is the left Text.","textClassSelect":"class-1"'
+          '"text":"This is the left Text.","textClassSelect":"class-1"',
         );
         await canvas.click('text=This is the left Heading Level 1.');
         await count(page, '[aria-label="blue"][aria-selected="true"]', 1);
@@ -35,7 +35,7 @@ testType('select-innerblocks', '"layout":false', () => {
           '.blockstudio-fields .components-select-control__input',
           {
             value: '2',
-          }
+          },
         );
         await count(canvas, 'text=This is the left Heading Level 2.', 1);
         await count(canvas, 'text=This is the right Heading Level 2.', 1);
@@ -43,7 +43,7 @@ testType('select-innerblocks', '"layout":false', () => {
         await count(canvas, 'text=This is the right Paragraph Level 1.', 1);
         await text(
           page,
-          '"text":"This is the left Text.","textClassSelect":"class-1"'
+          '"text":"This is the left Text.","textClassSelect":"class-1"',
         );
         await canvas.click('text=This is the left Heading Level 2.');
         await count(page, '[aria-label="blue"][aria-selected="true"]', 1);

@@ -42,7 +42,7 @@ test.describe('DB Table Storage', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce }
+      { route: ROUTE, nonce },
     );
     expect(r.s).toBe(200);
     expect(r.b.title).toBe('Test Row');
@@ -64,7 +64,7 @@ test.describe('DB Table Storage', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce, id }
+      { route: ROUTE, nonce, id },
     );
     expect(r.s).toBe(200);
     expect(r.b.title).toBe('Test Row');
@@ -79,7 +79,7 @@ test.describe('DB Table Storage', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce }
+      { route: ROUTE, nonce },
     );
     expect(r.s).toBe(200);
     expect(Array.isArray(r.b)).toBe(true);
@@ -95,7 +95,7 @@ test.describe('DB Table Storage', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce }
+      { route: ROUTE, nonce },
     );
     expect(r.s).toBe(200);
     expect(r.b.every((row: any) => row.title === 'Test Row')).toBe(true);
@@ -111,7 +111,7 @@ test.describe('DB Table Storage', () => {
           body: JSON.stringify({ title: 'Second Row' }),
         });
       },
-      { route: ROUTE, nonce }
+      { route: ROUTE, nonce },
     );
 
     const r = await page.evaluate(
@@ -122,7 +122,7 @@ test.describe('DB Table Storage', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce }
+      { route: ROUTE, nonce },
     );
     expect(r.s).toBe(200);
     expect(r.b.length).toBe(1);
@@ -138,7 +138,7 @@ test.describe('DB Table Storage', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce, id }
+      { route: ROUTE, nonce, id },
     );
     expect(r.s).toBe(200);
     expect(r.b.title).toBe('Updated');
@@ -154,7 +154,7 @@ test.describe('DB Table Storage', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce, id }
+      { route: ROUTE, nonce, id },
     );
     expect(r.s).toBe(200);
     expect(r.b.deleted).toBe(true);
@@ -169,7 +169,7 @@ test.describe('DB Table Storage', () => {
         });
         return res.status;
       },
-      { route: ROUTE, nonce, id }
+      { route: ROUTE, nonce, id },
     );
     expect(r).toBe(404);
   });

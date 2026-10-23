@@ -7,6 +7,7 @@ import {
   mkdtempSync,
   readFileSync,
   rmSync,
+  symlinkSync,
   writeFileSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -22,6 +23,14 @@ test('generated LLM docs preserve wildcard names, glob paths and code operators'
     mkdirSync(resolve(path, 'scripts'));
     mkdirSync(resolve(path, 'includes/llm'), { recursive: true });
     writeFileSync(resolve(path, 'package.json'), '{"type":"module"}');
+    symlinkSync(
+      resolve(root, 'node_modules'),
+      resolve(path, 'node_modules'),
+      'dir',
+    );
+    cpSync(resolve(root, 'scripts/lib'), resolve(path, 'scripts/lib'), {
+      recursive: true,
+    });
     for (const directory of ['docs', 'schemas']) {
       cpSync(resolve(root, directory), resolve(path, directory), {
         recursive: true,
@@ -43,7 +52,7 @@ test('generated LLM docs preserve wildcard names, glob paths and code operators'
     );
     const result = spawnSync(
       process.execPath,
-      ['--import', 'tsx', resolve(path, 'scripts/build-llm.ts')],
+      [resolve(path, 'scripts/build-llm.ts')],
       { cwd: root, encoding: 'utf8' },
     );
     assert.equal(result.status, 0, result.stderr);

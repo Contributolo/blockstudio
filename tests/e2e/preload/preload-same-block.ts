@@ -54,9 +54,11 @@ test.describe('Same Block FIFO Ordering', () => {
         if (!bs?.blockstudioBlocks) return false;
         const blocks = bs.blockstudioBlocks;
         const entries = Array.isArray(blocks) ? blocks : Object.values(blocks);
-        return (entries as any[]).filter(
-          (e: any) => e.blockName === 'blockstudio/type-preload-simple',
-        ).length === 3;
+        return (
+          (entries as any[]).filter(
+            (e: any) => e.blockName === 'blockstudio/type-preload-simple',
+          ).length === 3
+        );
       },
       { timeout: 30000 },
     );
@@ -70,7 +72,9 @@ test.describe('Same Block FIFO Ordering', () => {
     });
 
     expect(data).toHaveLength(3);
-    expect(data.every((r: string) => typeof r === 'string' && r.length > 0)).toBe(true);
+    expect(
+      data.every((r: string) => typeof r === 'string' && r.length > 0),
+    ).toBe(true);
   });
 
   test('no render API calls', async () => {
@@ -94,15 +98,22 @@ test.describe('Same Block FIFO Ordering', () => {
     const canvas = await getEditorCanvas(page);
 
     for (const inst of INSTANCES) {
-      await canvas.waitForSelector(`.preload-simple[data-title="${inst.title}"]`, {
-        timeout: 15000,
-      });
+      await canvas.waitForSelector(
+        `.preload-simple[data-title="${inst.title}"]`,
+        {
+          timeout: 15000,
+        },
+      );
     }
 
-    const titles = await canvas.locator('.preload-simple .preload-title').allTextContents();
+    const titles = await canvas
+      .locator('.preload-simple .preload-title')
+      .allTextContents();
     expect(titles).toEqual(['First', 'Second', 'Third']);
 
-    const counts = await canvas.locator('.preload-simple .preload-count').allTextContents();
+    const counts = await canvas
+      .locator('.preload-simple .preload-count')
+      .allTextContents();
     expect(counts).toEqual(['1', '2', '3']);
   });
 });

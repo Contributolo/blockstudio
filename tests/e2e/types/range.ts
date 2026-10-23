@@ -16,7 +16,7 @@ testType('range', '"range":10,"rangeZero":0,"textOnZero":false', () => {
       testFunction: async (page: Page, canvas: Frame) => {
         await canvas.click('[data-type="blockstudio/type-range"]');
         await expect(
-          page.locator('.blockstudio-fields__field--range input').nth(0)
+          page.locator('.blockstudio-fields__field--range input').nth(0),
         ).toHaveValue('100');
       },
     },

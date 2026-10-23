@@ -4,11 +4,14 @@ import { testType } from '../../utils/playwright-utils';
 testType('code-undo', '"code":".initial {}"', () => {
   return [
     {
-      description: 'undo works within code field without triggering Gutenberg undo',
+      description:
+        'undo works within code field without triggering Gutenberg undo',
       testFunction: async (page: Page, canvas: Frame) => {
         await canvas.click('[data-type="blockstudio/type-code-undo"]');
 
-        const codeMirror = page.locator('.blockstudio-fields__field--code .cm-content');
+        const codeMirror = page.locator(
+          '.blockstudio-fields__field--code .cm-content',
+        );
         await codeMirror.click();
         await page.keyboard.type('first');
         await page.waitForTimeout(100);
@@ -19,7 +22,9 @@ testType('code-undo', '"code":".initial {}"', () => {
         await page.keyboard.press(isMac ? 'Meta+z' : 'Control+z');
 
         // Block should still exist (Gutenberg undo would remove it)
-        const block = canvas.locator('[data-type="blockstudio/type-code-undo"]');
+        const block = canvas.locator(
+          '[data-type="blockstudio/type-code-undo"]',
+        );
         await expect(block).toBeVisible();
       },
     },
@@ -28,7 +33,9 @@ testType('code-undo', '"code":".initial {}"', () => {
       testFunction: async (page: Page, canvas: Frame) => {
         await canvas.click('[data-type="blockstudio/type-code-undo"]');
 
-        const codeMirror = page.locator('.blockstudio-fields__field--code .cm-content');
+        const codeMirror = page.locator(
+          '.blockstudio-fields__field--code .cm-content',
+        );
         await codeMirror.click();
         await page.keyboard.type('test');
         await page.waitForTimeout(100);
@@ -37,7 +44,9 @@ testType('code-undo', '"code":".initial {}"', () => {
         await page.keyboard.press(isMac ? 'Meta+z' : 'Control+z');
         await page.keyboard.press(isMac ? 'Meta+Shift+z' : 'Control+y');
 
-        const block = canvas.locator('[data-type="blockstudio/type-code-undo"]');
+        const block = canvas.locator(
+          '[data-type="blockstudio/type-code-undo"]',
+        );
         await expect(block).toBeVisible();
       },
     },

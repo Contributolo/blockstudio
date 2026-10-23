@@ -11,15 +11,22 @@ import {
 import { join, relative } from 'path';
 
 const cleanWpOutput = (result: string) => {
-  return result.split('\n').filter(
-    (line) => !line.startsWith('ℹ ') && !line.startsWith('✔ ') && !line.startsWith('Ran '),
-  ).join('\n').trim();
+  return result
+    .split('\n')
+    .filter(
+      (line) =>
+        !line.startsWith('ℹ ') &&
+        !line.startsWith('✔ ') &&
+        !line.startsWith('Ran '),
+    )
+    .join('\n')
+    .trim();
 };
 
 const wp = (cmd: string) => {
   const result = execSync(
     `cd tests/wp-env && npx wp-env run cli -- wp ${cmd}`,
-    { encoding: 'utf-8', timeout: 30000 }
+    { encoding: 'utf-8', timeout: 30000 },
   ).trim();
 
   return cleanWpOutput(result);
@@ -49,10 +56,10 @@ function readFilesRecursive(dir: string): Record<string, string> {
 
 function cleanContentSyncState() {
   wp(
-    "eval 'foreach (get_posts(array(\"post_type\"=>\"bs_content_sync\",\"post_status\"=>\"any\",\"numberposts\"=>-1)) as $post) { wp_delete_post($post->ID, true); }'"
+    'eval \'foreach (get_posts(array("post_type"=>"bs_content_sync","post_status"=>"any","numberposts"=>-1)) as $post) { wp_delete_post($post->ID, true); }\'',
   );
   wp(
-    "eval 'for ($i = 0; $i < 5; $i++) { $terms = get_terms(array(\"taxonomy\"=>\"bs_content_topic\",\"hide_empty\"=>false,\"orderby\"=>\"parent\",\"order\"=>\"DESC\")); if (is_wp_error($terms) || empty($terms)) { break; } foreach ($terms as $term) { wp_delete_term($term->term_id, \"bs_content_topic\"); } }'"
+    'eval \'for ($i = 0; $i < 5; $i++) { $terms = get_terms(array("taxonomy"=>"bs_content_topic","hide_empty"=>false,"orderby"=>"parent","order"=>"DESC")); if (is_wp_error($terms) || empty($terms)) { break; } foreach ($terms as $term) { wp_delete_term($term->term_id, "bs_content_topic"); } }\'',
   );
 
   if (existsSync(contentPath)) {
@@ -100,11 +107,21 @@ test.describe('CLI - blocks', () => {
   });
 
   test('validates nested stored fields with JSON, exit codes and no post writes', () => {
-    const ids = JSON.parse(wp(`eval '$ids = array(); foreach (array("one", "unknown-option") as $value) { $block = array("blockName" => "blockstudio/type-select", "attrs" => array("blockstudio" => array("attributes" => array("defaultValueLabel" => $value))), "innerBlocks" => array(), "innerHTML" => "", "innerContent" => array()); $content = "<!-- wp:group -->" . serialize_block($block) . "<!-- /wp:group -->"; $ids[] = wp_insert_post(wp_slash(array("post_type" => "post", "post_status" => "draft", "post_title" => "Validation CLI", "post_content" => $content))); } echo wp_json_encode($ids);'`));
+    const ids = JSON.parse(
+      wp(
+        `eval '$ids = array(); foreach (array("one", "unknown-option") as $value) { $block = array("blockName" => "blockstudio/type-select", "attrs" => array("blockstudio" => array("attributes" => array("defaultValueLabel" => $value))), "innerBlocks" => array(), "innerHTML" => "", "innerContent" => array()); $content = "<!-- wp:group -->" . serialize_block($block) . "<!-- /wp:group -->"; $ids[] = wp_insert_post(wp_slash(array("post_type" => "post", "post_status" => "draft", "post_title" => "Validation CLI", "post_content" => $content))); } echo wp_json_encode($ids);'`,
+      ),
+    );
     try {
-      const before = ids.map((id: number) => JSON.parse(wp(`post get ${id} --format=json`)));
-      expect(JSON.parse(wp(`bs blocks validate ${ids[0]} --format=json`))).toEqual([]);
-      expect(wp(`bs blocks validate ${ids[0]}`)).toContain('No stored field problems found');
+      const before = ids.map((id: number) =>
+        JSON.parse(wp(`post get ${id} --format=json`)),
+      );
+      expect(
+        JSON.parse(wp(`bs blocks validate ${ids[0]} --format=json`)),
+      ).toEqual([]);
+      expect(wp(`bs blocks validate ${ids[0]}`)).toContain(
+        'No stored field problems found',
+      );
       let failure: { status: number; stdout: string } | undefined;
       try {
         wp(`bs blocks validate ${ids.join(' ')} --format=json`);
@@ -115,15 +132,22 @@ test.describe('CLI - blocks', () => {
       const findings = JSON.parse(cleanWpOutput(failure!.stdout));
       expect(findings).toHaveLength(1);
       expect(findings[0]).toMatchObject({
-        post_id: ids[1], block_path: '0/0', block_name: 'blockstudio/type-select',
-        code: 'unknown_option', path: 'defaultValueLabel', source: 'block', value: 'unknown-option',
+        post_id: ids[1],
+        block_path: '0/0',
+        block_name: 'blockstudio/type-select',
+        code: 'unknown_option',
+        path: 'defaultValueLabel',
+        source: 'block',
+        value: 'unknown-option',
       });
       expect(findings[0].expected).toEqual(['one', 'two', 'three']);
       expect(() => wp(`bs blocks validate ${ids[1]}`)).toThrow();
       expect(() => wp('bs blocks validate')).toThrow();
       expect(() => wp('bs blocks validate 0 --format=json')).toThrow();
       expect(() => wp(`bs blocks validate ${ids[0]} --format=csv`)).toThrow();
-      expect(ids.map((id: number) => JSON.parse(wp(`post get ${id} --format=json`)))).toEqual(before);
+      expect(
+        ids.map((id: number) => JSON.parse(wp(`post get ${id} --format=json`))),
+      ).toEqual(before);
     } finally {
       wp(`post delete ${ids.join(' ')} --force`);
     }
@@ -131,17 +155,28 @@ test.describe('CLI - blocks', () => {
 });
 
 test.describe('CLI - server defaults', () => {
-  test('renders min repeater rows without an editor save or content mutation', async ({ page }) => {
+  test('renders min repeater rows without an editor save or content mutation', async ({
+    page,
+  }) => {
     const content = '<!-- wp:blockstudio/type-repeater-min-rows /-->';
-    const id = wp(`eval 'echo wp_insert_post(array("post_title" => "Server repeater defaults", "post_status" => "publish", "post_content" => "${content}"));'`);
+    const id = wp(
+      `eval 'echo wp_insert_post(array("post_title" => "Server repeater defaults", "post_status" => "publish", "post_content" => "${content}"));'`,
+    );
     try {
       const response = await page.goto(`http://localhost:8888/?p=${id}`);
       expect(response?.status()).toBe(200);
-      const text = await page.locator('#blockstudio-type-repeater-min-rows code').first().textContent();
+      const text = await page
+        .locator('#blockstudio-type-repeater-min-rows code')
+        .first()
+        .textContent();
       const values = JSON.parse(text!.replace(/^Attributes:\s*/, ''));
-      expect(values.entries).toEqual(Array.from({ length: 3 }, () => ({
-        name: 'Default Name', value: 42, enabled: true,
-      })));
+      expect(values.entries).toEqual(
+        Array.from({ length: 3 }, () => ({
+          name: 'Default Name',
+          value: 42,
+          enabled: true,
+        })),
+      );
       expect(wp(`post get ${id} --field=post_content`)).toBe(content);
     } finally {
       wp(`post delete ${id} --force`);
@@ -160,8 +195,8 @@ test.describe('CLI - pages', () => {
 
     const stored = JSON.parse(
       wp(
-        'option get blockstudio_pages_successful_source_identity --format=json'
-      )
+        'option get blockstudio_pages_successful_source_identity --format=json',
+      ),
     );
     expect(stored.hash).toBe(report.sourceIdentity.hash);
   });
@@ -231,7 +266,7 @@ test.describe('CLI - db', () => {
 
   test('creates a record', () => {
     const out = wp(
-      'bs db create blockstudio/type-db-table default --title="CLI Test"'
+      'bs db create blockstudio/type-db-table default --title="CLI Test"',
     );
     expect(out).toContain('Record created');
     const match = out.match(/ID: (\d+)/);
@@ -240,28 +275,28 @@ test.describe('CLI - db', () => {
   });
 
   test('gets a record', () => {
-    const out = wp(
-      `bs db get blockstudio/type-db-table default ${createdId}`
-    );
+    const out = wp(`bs db get blockstudio/type-db-table default ${createdId}`);
     expect(out).toContain('title: CLI Test');
   });
 
   test('lists records', () => {
-    const out = wp('bs db list blockstudio/type-db-table default --format=json');
+    const out = wp(
+      'bs db list blockstudio/type-db-table default --format=json',
+    );
     const rows = JSON.parse(out);
     expect(rows.some((r: any) => r.title === 'CLI Test')).toBe(true);
   });
 
   test('updates a record', () => {
     const out = wp(
-      `bs db update blockstudio/type-db-table default ${createdId} --title="Updated CLI"`
+      `bs db update blockstudio/type-db-table default ${createdId} --title="Updated CLI"`,
     );
     expect(out).toContain('updated');
   });
 
   test('deletes a record', () => {
     const out = wp(
-      `bs db delete blockstudio/type-db-table default ${createdId}`
+      `bs db delete blockstudio/type-db-table default ${createdId}`,
     );
     expect(out).toContain('deleted');
   });
@@ -278,9 +313,7 @@ test.describe('CLI - rpc', () => {
   });
 
   test('calls a function', () => {
-    const out = wp(
-      'bs rpc call blockstudio/type-functions greet --name=CLI'
-    );
+    const out = wp('bs rpc call blockstudio/type-functions greet --name=CLI');
     const result = JSON.parse(out);
     expect(result.message).toBe('Hello, CLI!');
   });
@@ -343,23 +376,23 @@ test.describe.serial('CLI - content sync', () => {
 
   test('pulls files, pushes into an empty database, and remains stable', () => {
     const parentId = wp(
-      'post create --post_type=bs_content_sync --post_status=publish --post_title="Content Sync Parent" --post_name=content-sync-parent --post_content="<p>Parent Body</p>" --porcelain'
+      'post create --post_type=bs_content_sync --post_status=publish --post_title="Content Sync Parent" --post_name=content-sync-parent --post_content="<p>Parent Body</p>" --porcelain',
     );
     const childId = wp(
-      `post create --post_type=bs_content_sync --post_status=publish --post_title="Content Sync Child" --post_name=content-sync-child --post_parent=${parentId} --post_content="<p>Child Body</p>" --porcelain`
+      `post create --post_type=bs_content_sync --post_status=publish --post_title="Content Sync Child" --post_name=content-sync-child --post_parent=${parentId} --post_content="<p>Child Body</p>" --porcelain`,
     );
     const parentTermId = wp(
-      'term create bs_content_topic "Content Sync Topic" --slug=content-sync-topic --porcelain'
+      'term create bs_content_topic "Content Sync Topic" --slug=content-sync-topic --porcelain',
     );
     const childTermId = wp(
-      `term create bs_content_topic "Content Sync Child Topic" --slug=content-sync-child-topic --parent=${parentTermId} --porcelain`
+      `term create bs_content_topic "Content Sync Child Topic" --slug=content-sync-child-topic --parent=${parentTermId} --porcelain`,
     );
 
     wp(`post meta update ${parentId} _my_subtitle "Parent Subtitle"`);
     wp(`post meta update ${childId} _my_subtitle "Child Subtitle"`);
     wp(`post meta update ${childId} _related_posts '[${parentId}]'`);
     wp(
-      `eval 'wp_set_object_terms(${childId}, array(${childTermId}), "bs_content_topic", false);'`
+      `eval 'wp_set_object_terms(${childId}, array(${childTermId}), "bs_content_topic", false);'`,
     );
 
     const pullRows = JSON.parse(wp('bs content pull --format=json'));
@@ -369,24 +402,24 @@ test.describe.serial('CLI - content sync', () => {
     expect(Object.keys(pulledFiles)).toEqual(
       expect.arrayContaining([
         expect.stringMatching(
-          /^posts\/bs_content_sync\/content-sync-parent\.[a-f0-9-]+\.json$/
+          /^posts\/bs_content_sync\/content-sync-parent\.[a-f0-9-]+\.json$/,
         ),
         expect.stringMatching(
-          /^posts\/bs_content_sync\/content-sync-child\.[a-f0-9-]+\.json$/
+          /^posts\/bs_content_sync\/content-sync-child\.[a-f0-9-]+\.json$/,
         ),
         expect.stringMatching(
-          /^posts\/bs_content_sync\/content-sync-parent\.[a-f0-9-]+\.html$/
+          /^posts\/bs_content_sync\/content-sync-parent\.[a-f0-9-]+\.html$/,
         ),
         expect.stringMatching(
-          /^posts\/bs_content_sync\/content-sync-child\.[a-f0-9-]+\.html$/
+          /^posts\/bs_content_sync\/content-sync-child\.[a-f0-9-]+\.html$/,
         ),
         expect.stringMatching(
-          /^terms\/bs_content_topic\/content-sync-topic\.[a-f0-9-]+\.json$/
+          /^terms\/bs_content_topic\/content-sync-topic\.[a-f0-9-]+\.json$/,
         ),
         expect.stringMatching(
-          /^terms\/bs_content_topic\/content-sync-child-topic\.[a-f0-9-]+\.json$/
+          /^terms\/bs_content_topic\/content-sync-child-topic\.[a-f0-9-]+\.json$/,
         ),
-      ])
+      ]),
     );
 
     wp(`post delete ${childId} ${parentId} --force`);
@@ -395,37 +428,37 @@ test.describe.serial('CLI - content sync', () => {
     const pushRows = JSON.parse(wp('bs content push --format=json'));
     expect(
       pushRows.filter(
-        (row: any) => row.action === 'created' && row.entity === 'post'
-      )
+        (row: any) => row.action === 'created' && row.entity === 'post',
+      ),
     ).toHaveLength(2);
     expect(
       pushRows.filter(
-        (row: any) => row.action === 'created' && row.entity === 'term'
-      )
+        (row: any) => row.action === 'created' && row.entity === 'term',
+      ),
     ).toHaveLength(2);
 
     const terms = JSON.parse(
       wp(
-        'term list bs_content_topic --hide-empty=0 --fields=term_id,slug,parent --format=json'
-      )
+        'term list bs_content_topic --hide-empty=0 --fields=term_id,slug,parent --format=json',
+      ),
     );
     const parentTerm = terms.find(
-      (term: any) => term.slug === 'content-sync-topic'
+      (term: any) => term.slug === 'content-sync-topic',
     );
     const childTerm = terms.find(
-      (term: any) => term.slug === 'content-sync-child-topic'
+      (term: any) => term.slug === 'content-sync-child-topic',
     );
 
     const posts = JSON.parse(
       wp(
-        'post list --post_type=bs_content_sync --post_status=any --fields=ID,post_name,post_parent --format=json'
-      )
+        'post list --post_type=bs_content_sync --post_status=any --fields=ID,post_name,post_parent --format=json',
+      ),
     );
     const parent = posts.find(
-      (post: any) => post.post_name === 'content-sync-parent'
+      (post: any) => post.post_name === 'content-sync-parent',
     );
     const child = posts.find(
-      (post: any) => post.post_name === 'content-sync-child'
+      (post: any) => post.post_name === 'content-sync-child',
     );
 
     expect(parent).toBeDefined();
@@ -441,20 +474,20 @@ test.describe.serial('CLI - content sync', () => {
     expect(
       JSON.parse(
         wp(
-          `eval 'echo wp_json_encode(array_map("intval", wp_get_object_terms(${child.ID}, "bs_content_topic", array("fields"=>"ids"))));'`
-        )
-      )
+          `eval 'echo wp_json_encode(array_map("intval", wp_get_object_terms(${child.ID}, "bs_content_topic", array("fields"=>"ids"))));'`,
+        ),
+      ),
     ).toEqual([Number(childTerm.term_id)]);
 
     const statusRows = JSON.parse(wp('bs content status --format=json'));
     expect(statusRows.every((row: any) => row.action === 'unchanged')).toBe(
-      true
+      true,
     );
     expect(statusRows).toHaveLength(4);
 
     const secondPushRows = JSON.parse(wp('bs content push --format=json'));
     expect(secondPushRows.every((row: any) => row.action === 'unchanged')).toBe(
-      true
+      true,
     );
     expect(secondPushRows).toHaveLength(4);
 
