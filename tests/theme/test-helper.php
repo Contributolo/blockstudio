@@ -57,6 +57,28 @@ add_action(
 	function () {
 		register_rest_route(
 			'blockstudio-test/v1',
+			'/cache/asset-records',
+			array(
+				'methods'             => 'POST',
+				'permission_callback' => '__return_true',
+				'callback'            => static function ( $request ) {
+					if ( 'clear' === $request->get_param( 'action' ) ) {
+						\Blockstudio\Runtime_Cache::purge( 'runtime' );
+						return array( 'cleared' => true );
+					}
+
+					$path    = \Blockstudio\Build::get_build_dir();
+					$payload = \Blockstudio\Build_Cache::load_runtime( $path, \Blockstudio\Build::get_instance_name( $path ) );
+					return array(
+						'cached' => is_array( $payload ),
+						'assets' => $payload['store']['blockstudio/init']['assets'] ?? array(),
+					);
+				},
+			)
+		);
+
+		register_rest_route(
+			'blockstudio-test/v1',
 			'/pages/path-fixture',
 			array(
 				'methods'             => 'POST',

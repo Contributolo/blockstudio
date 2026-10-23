@@ -14140,6 +14140,18 @@ constructs discovery sources. A valid cache hit therefore skips recursive
 source discovery, block construction, field parsing, and repeated cache-key
 tree walks.
 
+The runtime payload also stores resolved block asset paths, sizes, timestamps,
+and module stylesheet lists. Warm requests reuse that metadata instead of
+repeating asset-output lookups and module-directory scans for each rendered
+block. Asset URL and disable filters still run for the current request, and
+`assets.inlineLimit` keeps its page-wide budget and cascade ordering. No asset
+output metadata is collected when `assets.enqueue` or persistent caching is
+disabled. A stale last-good build falls back to resolving its assets from disk.
+
+Unchanged resolved settings also reuse their fingerprint within the request.
+Reloading or changing settings invalidates it; mutable object or reference
+values are rehashed rather than reusing a potentially stale fingerprint.
+
 In `production` and `staging`, a validated watch snapshot is trusted for 20
 seconds before Blockstudio stats its files and directories again. `local` and
 `development` environments default to zero so source edits are visible
@@ -14152,11 +14164,11 @@ add_filter('blockstudio/cache/watch_debounce', function () {
 ```
 
 The debounce can delay automatic source-change detection by at most the
-configured number of seconds. Required compiled assets are still checked on
-every cache hit, so deleting an `_dist` directory invalidates the runtime
-payload immediately instead of serving raw CSS or dropping SCSS until the
-window expires. Set the debounce to `0` when a production-like environment is
-also used for active file authoring.
+configured number of seconds. Required compiled assets, cached nonempty raw
+assets, and module stylesheets are still checked on every cache hit. Deleting
+one invalidates the runtime payload immediately instead of serving stale asset
+metadata until the window expires. Set the debounce to `0` when a
+production-like environment is also used for active file authoring.
 
 Cache payloads are guarded PHP files. Small payloads use plain arrays when the
 writing process has active OPcache shared memory and the destination is not

@@ -1,5 +1,51 @@
 import { expect, test } from '@playwright/test';
 
+for (const limit of [0, 40000]) {
+  test(`cold and warm asset output matches with inline limit ${limit}`, async ({
+    page,
+  }) => {
+    const headers = { 'X-Blockstudio-Test-Inline-Limit': String(limit) };
+    await page.setExtraHTTPHeaders(headers);
+    const endpoint = '/wp-json/blockstudio-test/v1/cache/asset-records';
+    const reset = await page.request.post(endpoint, {
+      data: { action: 'clear' },
+      headers,
+    });
+    expect(reset.ok()).toBeTruthy();
+    expect(await reset.json()).toEqual({ cleared: true });
+
+    const output: string[] = [];
+    const backgrounds: string[] = [];
+    for (let request = 0; request < 2; request++) {
+      expect((await page.goto('/native-single/'))?.status()).toBe(200);
+      const stylesheet = page.locator(
+        `${limit ? 'style' : 'link'}#blockstudio-blockstudio-init-global-style-css`,
+      );
+      await expect(stylesheet).toHaveCount(1);
+      output.push(await stylesheet.evaluate((element) => element.outerHTML));
+      backgrounds.push(
+        await page
+          .locator('body')
+          .evaluate((body) => getComputedStyle(body).backgroundColor),
+      );
+    }
+    expect(output[1]).toBe(output[0]);
+    expect(backgrounds[1]).toBe(backgrounds[0]);
+
+    const inspection = await page.request.post(endpoint, { headers });
+    expect(inspection.ok()).toBeTruthy();
+    const records = await inspection.json();
+    expect(records.cached).toBe(true);
+    const stylesheet = Object.values(records.assets).find((asset: any) =>
+      asset.path.endsWith('/global-style.css'),
+    ) as any;
+    expect(stylesheet).toBeDefined();
+    expect(stylesheet.output.source).toBe(stylesheet.path);
+    expect(stylesheet.output.path).toEqual(expect.any(String));
+    expect(stylesheet.output.size).toBeGreaterThan(0);
+  });
+}
+
 test('small external stylesheets can inline without changing applied styles and stay linked by default', async ({
   page,
 }) => {

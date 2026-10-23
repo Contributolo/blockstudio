@@ -3,7 +3,7 @@ Contributors: dnnsjsk
 Requires at least: 6.7
 Tested up to: 7.0.0
 Requires PHP: 8.2
-Stable tag: 7.7.7
+Stable tag: 7.7.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,11 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 * [Getting Started](https://blockstudio.dev/docs/getting-started)
 
 == Changelog ==
+
+= 7.7.8 =
+* Performance: warm frontend builds reuse resolved asset metadata and module stylesheet lists while preserving request-time URL and disable filters (#173)
+* Performance: small cache payloads use OPcache-friendly PHP arrays when supported, with bounded compressed fallbacks and a `blockstudio/cache/compress` filter (#174)
+* Performance: unchanged resolved settings reuse their request-local fingerprint while reloads and mutable values remain correctly invalidated (#175)
 
 = 7.7.7 =
 * New: `bs_is_buffering()` reports whether Blockstudio is buffering the frontend response, so themes can choose the correct stylesheet loading path (#157)
