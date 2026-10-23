@@ -1,8 +1,47 @@
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import test from 'node:test';
 import config from '../../webpack.config.ts';
 import { ships } from '../build-release.ts';
 import { compileRuntime, runtimeRoots } from '../build-runtime.ts';
+
+test('CI npm projects have tracked lockfiles matching their manifests', () => {
+  const root = resolve(import.meta.dirname, '../..');
+  const tracked = new Set(
+    execFileSync('git', ['ls-files', '-z'], {
+      cwd: root,
+      encoding: 'utf8',
+    }).split('\0'),
+  );
+
+  for (const prefix of ['', 'packages/registry/']) {
+    const lockfile = `${prefix}package-lock.json`;
+    assert.ok(
+      tracked.has(lockfile),
+      `${lockfile} must be committed for npm ci`,
+    );
+
+    const manifest = JSON.parse(
+      readFileSync(resolve(root, `${prefix}package.json`), 'utf8'),
+    );
+    const lock = JSON.parse(readFileSync(resolve(root, lockfile), 'utf8'));
+    assert.ok(lock.lockfileVersion >= 2, `${lockfile} needs package metadata`);
+
+    for (const key of [
+      'dependencies',
+      'devDependencies',
+      'optionalDependencies',
+    ]) {
+      assert.deepEqual(
+        lock.packages[''][key],
+        manifest[key],
+        `${lockfile} ${key} must match package.json`,
+      );
+    }
+  }
+});
 
 test('runtime compilation erases types and preserves WordPress module imports', () => {
   const output = compileRuntime(

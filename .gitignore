@@ -81,7 +81,6 @@ block-catalog.json
 
 # Package builds
 packages/registry/dist/
-packages/registry/package-lock.json
 packages/phpstan/vendor/
 packages/phpstan/composer.lock
 
