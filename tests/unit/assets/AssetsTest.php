@@ -1215,6 +1215,269 @@ class AssetsTest extends TestCase {
 		Single_Flight::release( $lock );
 	}
 
+	public function test_parse_output_links_every_external_stylesheet_by_default(): void {
+		$page = $this->inline_limit_page(
+			array(
+				'one.css'   => str_repeat( 'a', 100 ),
+				'two.css'   => str_repeat( 'b', 3000 ),
+				'three.css' => str_repeat( 'c', 200 ),
+			)
+		);
+
+		try {
+			$output = $this->parse_inline_limit_page( $page );
+			$links  = '';
+
+			foreach ( $page['assets'] as $key => $asset ) {
+				$links .= Assets::render_tag( $key, $asset, $page['data'] );
+			}
+
+			$this->assertSame( 3, substr_count( $output, '<link' ) );
+			$this->assertStringNotContainsString( '<style id=', $output );
+			$this->assertStringContainsString( $links . '</head>', $output );
+		} finally {
+			$this->remove_inline_limit_page( $page );
+		}
+	}
+
+	public function test_parse_output_inlines_the_smallest_stylesheets_within_the_limit_in_source_order(): void {
+		$page = $this->inline_limit_page(
+			array(
+				'one.css'   => str_repeat( 'a', 100 ),
+				'two.css'   => str_repeat( 'b', 3000 ),
+				'three.css' => str_repeat( 'c', 200 ),
+			)
+		);
+
+		$this->add_filter( 'blockstudio/settings/assets/inline_limit', static fn(): int => 500 );
+
+		try {
+			$output = $this->parse_inline_limit_page( $page );
+			$one    = $page['ids']['one.css'];
+			$two    = $page['ids']['two.css'];
+			$three  = $page['ids']['three.css'];
+
+			$this->assert_stylesheet_inlined( $one, $output );
+			$this->assertStringContainsString( str_repeat( 'a', 100 ) . '</style>', $output );
+			$this->assert_stylesheet_linked( $two, $output );
+			$this->assert_stylesheet_inlined( $three, $output );
+			$this->assert_stylesheet_not_linked( $one, $output );
+			$this->assertStringNotContainsString( str_repeat( 'b', 3000 ), $output );
+
+			$positions = array(
+				strpos( $output, "id='$one'" ),
+				strpos( $output, "id='$two'" ),
+				strpos( $output, "id='$three'" ),
+			);
+
+			$this->assertTrue( $positions[0] < $positions[1] && $positions[1] < $positions[2] );
+			$this->assertStringNotContainsString( "\0", $output );
+		} finally {
+			$this->remove_inline_limit_page( $page );
+		}
+	}
+
+	public function test_parse_output_inlines_up_to_the_limit_inclusive(): void {
+		$page = $this->inline_limit_page(
+			array(
+				'one.css' => str_repeat( 'a', 100 ),
+				'two.css' => str_repeat( 'b', 200 ),
+			)
+		);
+
+		try {
+			$this->add_filter( 'blockstudio/settings/assets/inline_limit', static fn(): int => 300 );
+			$both = $this->parse_inline_limit_page( $page );
+
+			$this->assertSame( 2, substr_count( $both, '<style id=' ) );
+			$this->assertStringNotContainsString( '<link', $both );
+
+			remove_all_filters( 'blockstudio/settings/assets/inline_limit' );
+			$this->add_filter( 'blockstudio/settings/assets/inline_limit', static fn(): int => 299 );
+			Assets::reset_request_state();
+			$one = $this->parse_inline_limit_page( $page );
+
+			$this->assertSame( 1, substr_count( $one, '<style id=' ) );
+			$this->assertSame( 1, substr_count( $one, '<link' ) );
+
+			remove_all_filters( 'blockstudio/settings/assets/inline_limit' );
+			$this->add_filter( 'blockstudio/settings/assets/inline_limit', static fn(): int => 99 );
+			Assets::reset_request_state();
+			$none = $this->parse_inline_limit_page( $page );
+
+			$this->assertSame( 0, substr_count( $none, '<style id=' ) );
+			$this->assertSame( 2, substr_count( $none, '<link' ) );
+		} finally {
+			remove_all_filters( 'blockstudio/settings/assets/inline_limit' );
+			$this->remove_inline_limit_page( $page );
+		}
+	}
+
+	public function test_parse_output_counts_a_shared_stylesheet_once_against_the_limit(): void {
+		$page = $this->inline_limit_page(
+			array(
+				'one.css' => str_repeat( 'a', 100 ),
+				'two.css' => str_repeat( 'b', 150 ),
+			)
+		);
+
+		$second_name = 'blockstudio-test/inline-limit-second';
+		$registry    = Block_Registry::instance();
+		$registry->register_block( $second_name, new \WP_Block_Type( $second_name ) );
+		$registry->set_block_data(
+			$second_name,
+			array(
+				'name'   => $second_name,
+				'path'   => $page['data']['path'],
+				'file'   => $page['data']['file'],
+				'assets' => array( 'one.css' => $page['assets']['one.css'] ),
+			)
+		);
+
+		$this->add_filter( 'blockstudio/settings/assets/inline_limit', static fn(): int => 250 );
+
+		try {
+			$html   = '<html><head></head><body>' . Block::comment( $second_name ) . Block::comment( $page['data']['name'] ) . '</body></html>';
+			$output = ( new Assets() )->parse_output( $html );
+
+			$this->assertSame( 1, substr_count( $output, str_repeat( 'a', 100 ) ) );
+			$this->assertSame( 1, substr_count( $output, str_repeat( 'b', 150 ) ) );
+			$this->assertStringNotContainsString( '<link', $output );
+		} finally {
+			$registry->remove_block( $second_name );
+			$this->remove_inline_limit_page( $page );
+		}
+	}
+
+	public function test_parse_output_keeps_inline_assets_and_their_position_when_stylesheets_are_inlined(): void {
+		$page = $this->inline_limit_page(
+			array(
+				'one.css'        => str_repeat( 'a', 100 ),
+				'two.inline.css' => str_repeat( 'b', 150 ),
+				'three.css'      => str_repeat( 'c', 5000 ),
+			),
+			array( 'two.inline.css' => 'inline' )
+		);
+
+		$this->add_filter( 'blockstudio/settings/assets/inline_limit', static fn(): int => 1000 );
+
+		try {
+			$output = $this->parse_inline_limit_page( $page );
+			$ids    = $page['ids'];
+
+			$this->assert_stylesheet_inlined( $ids['two.inline.css'], $output );
+			$this->assert_stylesheet_linked( $ids['three.css'], $output );
+			$this->assertTrue( strpos( $output, "id='{$ids['one.css']}'" ) < strpos( $output, "id='{$ids['two.inline.css']}'" ) );
+			$this->assertTrue( strpos( $output, "id='{$ids['two.inline.css']}'" ) < strpos( $output, "id='{$ids['three.css']}'" ) );
+		} finally {
+			$this->remove_inline_limit_page( $page );
+		}
+	}
+
+	public function test_parse_output_keeps_stylesheets_linked_when_inlining_would_change_them(): void {
+		$page = $this->inline_limit_page(
+			array(
+				'relative.css' => '.a{background:url(img/a.png)}',
+				'quoted.css'   => ".b{background:url( 'b.png' )}",
+				'import.css'   => '@import "other.css";.c{color:red}',
+				'close.css'    => '.d::after{content:"</style>"}',
+				'imageset.css' => '.e{background:image-set("e.png" 1x)}',
+				'escaped.css'  => '.e{background:u\\72l(relative.png)}',
+				'comments.css' => '@import/**/"relative.css";',
+				'charset.css'  => '@charset "iso-8859-1";.e{color:red}',
+				'html.css'     => '.e::before{content:"<!--<style>"}',
+				'absolute.css' => '.f{background:url(/wp-content/f.png)}.g{background:url("https://example.test/g.png")}.h{background:url(data:image/png;base64,AAAA)}.i{fill:url(#mask)}',
+			)
+		);
+
+		$this->add_filter( 'blockstudio/settings/assets/inline_limit', static fn(): int => 40000 );
+
+		try {
+			$output = $this->parse_inline_limit_page( $page );
+
+			foreach ( array( 'relative.css', 'quoted.css', 'import.css', 'close.css', 'imageset.css', 'escaped.css', 'comments.css', 'charset.css', 'html.css' ) as $file ) {
+				$this->assert_stylesheet_linked( $page['ids'][ $file ], $output );
+			}
+
+			$this->assert_stylesheet_inlined( $page['ids']['absolute.css'], $output );
+		} finally {
+			$this->remove_inline_limit_page( $page );
+		}
+	}
+
+	public function test_inline_limit_keeps_missing_files_linked_without_warnings(): void {
+		$method = new ReflectionMethod( Assets::class, 'resolve_inline_slots' );
+		$slot   = array( 'path' => '/missing-blockstudio-asset.css', 'id' => 'missing', 'tag' => '<link id="missing">' );
+		$this->assertSame( array( 'slot' => $slot['tag'] ), $method->invoke( null, array( 'slot' => $slot ), 40000 ) );
+	}
+
+	private function assert_stylesheet_inlined( string $id, string $output ): void {
+		$this->assertMatchesRegularExpression( "/<style id='" . preg_quote( $id, '/' ) . "'\\s/", $output );
+	}
+
+	private function assert_stylesheet_linked( string $id, string $output ): void {
+		$this->assertMatchesRegularExpression( "/<link rel='stylesheet'\\s+id='" . preg_quote( $id, '/' ) . "'/", $output );
+	}
+
+	private function assert_stylesheet_not_linked( string $id, string $output ): void {
+		$this->assertDoesNotMatchRegularExpression( "/<link rel='stylesheet'\\s+id='" . preg_quote( $id, '/' ) . "'/", $output );
+	}
+
+	private function inline_limit_page( array $files, array $types = array() ): array {
+		$name     = 'blockstudio-test/inline-limit';
+		$registry = Block_Registry::instance();
+		$data     = array(
+			'name'   => $name,
+			'assets' => array(),
+		);
+		$ids      = array();
+
+		foreach ( $files as $filename => $contents ) {
+			$path = $this->create_temporary_asset( $filename, $contents );
+
+			if ( ! isset( $data['path'] ) ) {
+				$data['path'] = $path;
+				$data['file'] = array( 'dirname' => dirname( $path ) );
+			}
+
+			$data['assets'][ $filename ] = array(
+				'path'   => $path,
+				'type'   => $types[ $filename ] ?? 'external',
+				'editor' => false,
+			);
+		}
+
+		foreach ( array_keys( $files ) as $filename ) {
+			$ids[ $filename ] = Assets::get_id( $filename, $data );
+		}
+
+		$this->add_filter(
+			'blockstudio/assets/disable',
+			static fn( array $ids ): array => array_merge( $ids, array( 'blockstudio-blockstudio-init-global-style-css' ) )
+		);
+
+		$registry->register_block( $name, new \WP_Block_Type( $name ) );
+		$registry->set_block_data( $name, $data );
+		Assets::reset_request_state();
+
+		return array(
+			'data'   => $data,
+			'assets' => $data['assets'],
+			'ids'    => $ids,
+		);
+	}
+
+	private function parse_inline_limit_page( array $page ): string {
+		Assets::reset_request_state();
+
+		return ( new Assets() )->parse_output( '<html><head></head><body>' . Block::comment( $page['data']['name'] ) . '</body></html>' );
+	}
+
+	private function remove_inline_limit_page( array $page ): void {
+		Block_Registry::instance()->remove_block( $page['data']['name'] );
+		Assets::reset_request_state();
+	}
+
 	private function temporary_compiled_path(): string {
 		$source = $this->create_temporary_asset( 'style.css', '.source { color: red; }' );
 

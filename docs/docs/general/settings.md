@@ -274,12 +274,19 @@ if ($runtime->enabled('measurement/queryMonitor')) {
 | `minify.js`       | boolean | `false` | Minify JS output                                            |
 | `process.scss`    | boolean | `false` | Process SCSS files                                          |
 | `output`          | string  | `source` | Where compiled assets are written: `source` or `cache`     |
+| `inlineLimit`     | integer | `0`     | Bytes of external block CSS printed inline per page         |
 
 `output` defaults to `source`, which writes a `_dist` directory beside each
 block. Set it to `cache` to write compiled assets under the Blockstudio cache
 directory instead, so the block source tree stays clean and deployable from an
 immutable checkout. Sources Blockstudio cannot write to already redirect to the
 cache regardless of this setting.
+
+`inlineLimit` is off at `0`, so every external stylesheet keeps its `<link>`
+tag. Set it to a number of bytes to print the smallest external block
+stylesheets of a page inline instead, as long as their total stays within that
+number. `40000` is the limit WordPress core uses for the same rule. See
+[Inline Small Stylesheets](/docs/blocks/assets/registering#inline-small-stylesheets).
 
 With `reset.enabled` active, Blockstudio also copies sanitized frontend
 `body_class` values into the editor canvas. Use

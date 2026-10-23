@@ -576,6 +576,8 @@ class Assets {
 		$ids            = array();
 		$blocks_on_page = array();
 		$asset_ids      = &self::$parsed_asset_ids;
+		$inline_limit   = max( 0, Settings::get_int( 'assets/inlineLimit' ) );
+		$inline_slots   = array();
 
 		$style_pattern  = '/<style[^>]+data-blockstudio-asset[^>]*>(.*?)<\/style>/is';
 		$script_pattern = '/<script[^>]+data-blockstudio-asset[^>]*>(.*?)<\/script>/is';
@@ -639,7 +641,19 @@ class Assets {
 
 				if ( 'inline' !== $v['type'] ) {
 					if ( self::is_css( $k ) ) {
-						$head .= self::render_tag( $k, $v, $block );
+						$tag = self::render_tag( $k, $v, $block );
+
+						if ( $inline_limit > 0 && null !== $tag ) {
+							$slot                  = "\0blockstudio-css-slot-" . count( $inline_slots ) . "\0";
+							$inline_slots[ $slot ] = array(
+								'path' => $v['path'],
+								'id'   => self::get_id( $k, $block ),
+								'tag'  => $tag,
+							);
+							$head                 .= $slot;
+						} else {
+							$head .= $tag;
+						}
 					} else {
 						$footer .= self::render_tag( $k, $v, $block );
 					}
@@ -649,6 +663,10 @@ class Assets {
 					$footer .= self::render_inline( $k, $v, $block, true );
 				}
 			}
+		}
+
+		if ( array() !== $inline_slots ) {
+			$head = strtr( $head, self::resolve_inline_slots( $inline_slots, $inline_limit ) );
 		}
 
 		// Inject importmap for blocks using the Interactivity API.
@@ -692,6 +710,102 @@ class Assets {
 		Perf::stop( 'assets', 'Assets' );
 
 		return apply_filters( 'blockstudio/render', $output, $blocks_on_page );
+	}
+
+	/**
+	 * Decide which external frontend stylesheets are printed inline.
+	 *
+	 * Follows wp_maybe_inline_styles(): the files are taken smallest first and
+	 * printed inline while their running total stays within the limit, the
+	 * rest keep their link tag. Only the choice follows size. Every result is
+	 * keyed by the slot that holds the link's place in the head, so the
+	 * cascade order stays as it was.
+	 *
+	 * @param array $slots Stylesheets by slot, each with its source path, element ID and link tag.
+	 * @param int   $limit Maximum total size of inlined stylesheets in bytes.
+	 *
+	 * @return array<string, string> The tag to print for each slot.
+	 */
+	private static function resolve_inline_slots( array $slots, int $limit ): array {
+		$sizes = array();
+		$files = array();
+
+		foreach ( $slots as $slot => $candidate ) {
+			$files[ $slot ] = self::get_path( $candidate['path'] );
+			// A cache file may disappear after render_tag() checked it.
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Concurrent cache eviction falls back to the original link.
+			$size = @filesize( $files[ $slot ] );
+			if ( false !== $size && $size > 0 ) {
+				$sizes[ $slot ] = $size;
+			}
+		}
+
+		asort( $sizes );
+
+		$total  = 0;
+		$result = array();
+
+		foreach ( $sizes as $slot => $size ) {
+			if ( $total + $size > $limit ) {
+				break;
+			}
+
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents,WordPress.PHP.NoSilencedErrors.Discouraged -- Concurrent cache eviction falls back to the original link.
+			$css = @file_get_contents( $files[ $slot ] );
+
+			if ( false === $css || $total + strlen( $css ) > $limit || ! self::can_inline_css( $css ) ) {
+				continue;
+			}
+
+			$path      = $slots[ $slot ]['path'];
+			$processed = 1 === count( self::get_matches( $path ) ) ? 'data-processed' : '';
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- A concurrent cache eviction must not interrupt the response.
+			$key = (int) @filemtime( $files[ $slot ] );
+
+			$result[ $slot ] = "<style id='{$slots[ $slot ]['id']}' $processed data-key='$key'>" . $css . '</style>';
+			$total          += strlen( $css );
+		}
+
+		foreach ( $slots as $slot => $candidate ) {
+			if ( ! isset( $result[ $slot ] ) ) {
+				$result[ $slot ] = $candidate['tag'];
+			}
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Check whether a stylesheet still works once it is printed inline.
+	 *
+	 * A relative URL resolves against the stylesheet when it is linked and
+	 * against the page when it is inline, so a file holding one has to stay
+	 * linked. The same goes for a closing style tag, which would end the
+	 * element early.
+	 *
+	 * @param string $css The stylesheet contents.
+	 *
+	 * @return bool Whether the contents can be inlined unchanged.
+	 */
+	private static function can_inline_css( string $css ): bool {
+		// Escaped CSS identifiers can hide URL functions from the conservative scan below.
+		if ( str_contains( $css, '\\' ) || str_contains( $css, '<!--' ) || false !== stripos( $css, '</style' ) || false !== stripos( $css, 'image-set(' ) || false !== stripos( $css, '@charset' ) ) {
+			return false;
+		}
+
+		$css = preg_replace( '#/\*.*?\*/#s', '', $css ) ?? $css;
+
+		preg_match_all( '/url\(\s*(["\']?)(.*?)\1\s*\)|@import\s*(["\'])(.*?)\3/is', $css, $references, PREG_SET_ORDER );
+
+		foreach ( $references as $reference ) {
+			$url = trim( $reference[4] ?? $reference[2] );
+
+			if ( 1 !== preg_match( '/^(?:[a-z][a-z0-9+.-]*:|\/|#)/i', $url ) ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**

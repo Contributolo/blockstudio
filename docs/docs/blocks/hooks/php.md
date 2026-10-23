@@ -464,6 +464,16 @@ add_filter('blockstudio/settings/assets/output', function() {
 });
 ```
 
+### assets/inline_limit
+
+This filter allows you to control how many bytes of external block CSS are inlined per page.
+
+```php title="functions.php"
+add_filter('blockstudio/settings/assets/inline_limit', function() {
+  return 40000;
+});
+```
+
 ### cache/enabled
 
 This filter allows you to enable/disable all Blockstudio file-backed runtime and editor asset caches.

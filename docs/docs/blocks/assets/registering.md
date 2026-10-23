@@ -41,6 +41,53 @@ Inline styles and scripts have the big advantage that they are directly rendered
 - `.(s)css` files are inlined to the end of the head
 - Each file is only being inlined once
 
+## Inline Small Stylesheets
+
+A `*.(s)css` file is linked by default, which costs one request per file. The
+`assets.inlineLimit` setting prints small stylesheets inline instead, following
+the rule WordPress core applies to its own styles: the external block
+stylesheets of a page are taken from smallest to largest and printed as
+`<style>` while their running total stays within the limit. Every other file
+keeps its `<link>` tag.
+
+```json title="blockstudio.json"
+{
+  "assets": {
+    "inlineLimit": 40000
+  }
+}
+```
+
+The limit is in bytes and `0`, the default, turns the behavior off. It
+measures the compiled file that the `<link>` would load, minified when
+`assets.minify.css` is on. Only the choice between `<link>` and `<style>`
+depends on size. Each tag stays where the `<link>` would have been, so the load
+order and the cascade are unchanged. The element keeps its `id`.
+
+The setting does not apply to `*.inline.(s)css` and `*.scoped.(s)css` files,
+which are always inline, to editor and admin assets, or to stylesheets
+extracted from imported JavaScript modules. Global stylesheets count like block
+stylesheets. A file stays linked
+whenever inlining would change it:
+
+- It holds a relative URL in `url()` or `@import`, which resolves against the
+  stylesheet when linked and against the page when inline. Absolute paths,
+  full URLs, `data:` URIs and `#` fragments are fine.
+- It uses `image-set()` or contains a closing `</style` sequence.
+- It contains CSS escapes, an HTML comment opener, or an `@charset` declaration.
+  These files stay linked conservatively rather than risking changed URL or
+  document parsing.
+
+Use the setting filter to change the limit from PHP:
+
+```php title="functions.php"
+add_filter('blockstudio/settings/assets/inline_limit', fn() => 40000);
+```
+
+Inlined CSS becomes part of the page HTML. A page cache has to be purged after
+a stylesheet changes, and the browser cannot cache those bytes between pages,
+which is why the limit is a total per page.
+
 ## Scoped
 
 Scoped styles are also inlined, but are prefixed with an ID that is unique to each block. Use the `bs_get_scoped_class` function to add the class to your template.
