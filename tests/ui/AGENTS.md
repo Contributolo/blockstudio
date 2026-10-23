@@ -321,7 +321,7 @@ Global tokens in `blocks/global-style.css`. All variables use `--bs-ui-*` prefix
 
 ## Comment Policy
 
-Same as parent repo:
+Same as the root `AGENTS.md`:
 
 - No JSDoc internally, comments only for why not what
 - No banner comments (no `// ==========` separators)

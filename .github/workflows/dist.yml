@@ -61,7 +61,7 @@ jobs:
       - name: Verify no dev files leaked
         run: |
           cd build/blockstudio
-          for f in node_modules tests docs evals .github _reference CLAUDE.md scoper.inc.php prds scripts; do
+          for f in node_modules tests docs evals .github _reference AGENTS.md scoper.inc.php prds scripts; do
             if [ -e "$f" ]; then
               echo "LEAKED: $f"
               exit 1

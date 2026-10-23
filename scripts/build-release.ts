@@ -31,7 +31,7 @@ const excludedFiles = new Set([
   '.gitattributes',
   'scoper.inc.php',
   'build.sh',
-  'CLAUDE.md',
+  'AGENTS.md',
   'blockstudio.zip',
 ]);
 

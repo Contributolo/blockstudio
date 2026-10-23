@@ -138,7 +138,7 @@ section markers in Markdown files.
 - Main CI uses the existing self-hosted Blockstudio runners: four main-suite shards, empty-theme coverage, and UI regressions. Distribution and release packaging retain their existing runners.
 - Commit-message tags such as `[all]`, `[e2e]`, and `[unit]` do not gate jobs. `[all]` remains a release-validation convention only.
 
-## Key Rules for Claude
+## Key Rules for Agents
 
 1. **NEVER COMMIT WITHOUT TESTING** - Always run and verify tests pass before committing, unless explicitly instructed otherwise.
 2. **DEBUG UNTIL SOLVED** - When a test fails, debug with temporary logging, screenshots, and other debugging tools until the problem is resolved.

@@ -52,6 +52,8 @@ test('WordPress entry filenames, dependency extraction, and async vendor chunks 
 
 test('release packaging excludes tooling and fixtures but includes runtime assets and PHP schemas', () => {
   for (const file of [
+    'AGENTS.md',
+    'tests/ui/AGENTS.md',
     '.nvmrc',
     '.oxlintrc.json',
     'oxfmt.config.ts',
