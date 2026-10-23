@@ -183,10 +183,7 @@ class Select_Field_Handler extends Abstract_Field_Handler {
 		if ( isset( $field['populate'] ) ) {
 			$populate_type    = $field['populate']['type'] ?? false;
 			$should_defer     = $is_fetch_populate && ! ( $field['fromEditor'] ?? false );
-			$has_dynamic_args = str_contains(
-				wp_json_encode( $field['populate'] ?? array() ),
-				'{attributes.'
-			);
+			$has_dynamic_args = Populate::has_dynamic_arguments( $field['populate'] );
 
 			if (
 				! $should_defer &&
@@ -303,12 +300,16 @@ class Select_Field_Handler extends Abstract_Field_Handler {
 				}
 			} elseif ( in_array( $type, array( 'checkbox', 'radio', 'select', 'token' ), true ) ) {
 				$default_select = array();
-				$default_values = is_array( $field[ $item ] )
+				$is_unresolved  = 'select' === $type && (
+					( $field['populate']['fetch'] ?? false ) ||
+					Populate::has_dynamic_arguments( $field['populate'] ?? array() )
+				);
+				$default_values = is_array( $field[ $item ] ) && ! ( $is_unresolved && array_key_exists( 'value', $field[ $item ] ) )
 					? $field[ $item ]
 					: array( $field[ $item ] );
 
 				foreach ( $default_values as $value ) {
-					if ( 'select' === $type && ( $field['populate']['fetch'] ?? false ) ) {
+					if ( $is_unresolved ) {
 						$default_value = is_array( $value ) && array_key_exists( 'value', $value )
 							? $value['value']
 							: $value;
@@ -316,7 +317,10 @@ class Select_Field_Handler extends Abstract_Field_Handler {
 							? $value['label']
 							: ( is_scalar( $default_value ) ? (string) $default_value : '' );
 
-						$default_select[] = array(
+						$known_option     = ! ( $field['populate']['fetch'] ?? false )
+							? Option_Value_Resolver::get_option_value( array( 'options' => $attribute['options'] ?? array() ), 'both', array( 'value' => $default_value ) )
+							: false;
+						$default_select[] = is_array( $known_option ) ? $known_option : array(
 							'value' => $default_value,
 							'label' => $default_label,
 						);

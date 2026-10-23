@@ -68,6 +68,19 @@ class Populate {
 	private static array $query_cache = array();
 
 	/**
+	 * Whether a populate configuration refers to other attributes.
+	 *
+	 * Such options depend on the editor state, so the server cannot build them.
+	 *
+	 * @param mixed $data Population configuration data.
+	 *
+	 * @return bool Whether any argument contains an `{attributes.*}` reference.
+	 */
+	public static function has_dynamic_arguments( mixed $data ): bool {
+		return ! empty( $data ) && str_contains( (string) wp_json_encode( $data ), '{attributes.' );
+	}
+
+	/**
 	 * Initialize population for attributes.
 	 *
 	 * @param array $data      Population configuration data.

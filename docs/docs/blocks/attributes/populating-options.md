@@ -400,3 +400,10 @@ label, its value is used as the label. A matching static option declared in
 Empty selections remain `false` (or the field's configured `fallback`). This
 does not change validation of ordinary static options: a saved value that is no
 longer in a static option list still returns `false`.
+
+Dynamic selects also preserve `default` and `fallback` selections while their
+options are deferred. Use a scalar value, a `{value, label}` option, or an array
+of either for a multiple select. A scalar uses its value as the label unless it
+matches a declared static option. An option object preserves its supplied label;
+a matching static option takes precedence. No populate callback runs on the
+server to look up these defaults.

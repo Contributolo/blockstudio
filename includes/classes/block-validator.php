@@ -312,7 +312,7 @@ final class Block_Validator {
 			return;
 		}
 		$populate = $field['populate'] ?? array();
-		if ( 'fetch' === ( $populate['type'] ?? '' ) || ! empty( $populate['fetch'] ) || str_contains( (string) wp_json_encode( $populate ), '{attributes.' ) ) {
+		if ( 'fetch' === ( $populate['type'] ?? '' ) || ! empty( $populate['fetch'] ) || Populate::has_dynamic_arguments( $populate ) ) {
 			return;
 		}
 		$options  = array() !== $populate

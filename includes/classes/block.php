@@ -191,7 +191,7 @@ class Block {
 	) {
 		$fetch           = $populate['fetch'] ?? false;
 		$options_map     = array();
-		$dynamic_options = array() !== $populate && str_contains( (string) wp_json_encode( $populate ), '{attributes.' )
+		$dynamic_options = Populate::has_dynamic_arguments( $populate )
 			? Field_Type_Config::multiple_option_values( $v )
 			: array();
 		$options         = $fetch ? array( $v ) : ( $data['options'] ?? array() );
@@ -209,9 +209,8 @@ class Block {
 				isset( $populate['type'] ) &&
 				'query' === $populate['type'] &&
 				isset( $populate['query'] ) &&
-				( ( in_array( $populate['query'], $query_options, true ) &&
-					in_array( $value, $data['optionsPopulate'] ?? array(), true ) ) ||
-					$fetch || isset( $dynamic_options[ $index ] ) )
+				in_array( $populate['query'], $query_options, true ) &&
+				( in_array( $value, $data['optionsPopulate'] ?? array(), true ) || $fetch || isset( $dynamic_options[ $index ] ) )
 			) {
 				$is_object =
 					( isset( $populate['returnFormat']['value'] ) &&
