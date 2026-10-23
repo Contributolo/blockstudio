@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:40+0000\n"
+"Language-Team: Xhosa\n"
+"Language: xho\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "Uphawu \"%1$s\" kwithegi yebhloko ye-%2$s alufakwa kuba ibhloko ayichazanga ntsimi inale ID. Chaza loo ntsimi, okanye ulubhale njengophawu lwe-data-, aria- okanye html- ukuze lubekwe kwinto engundoqo."
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "Eli qhosha lokugcina alichazwanga yibhloko okanye zizandiso zayo."
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "Eli xabiso alikho phakathi kokhetho lwentsimi."
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "Ubume beli xabiso abuxhaswanga kule ntsimi."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "Le repeater inemiqolo embalwa kunobuncinane obumiselweyo."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "Le repeater inemiqolo emininzi kunobuninzi obumiselweyo."
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "Le key yokugcina ineenkcazelo zentsimi ezingqubanayo."
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "Ixabiso lentsimi engaphakathi lithatha indawo yeli xabiso likumgangatho ophezulu."
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "Izibophelelo zezandiso zifunda eli xabiso kwi-blockstudio.attributes kuphela."
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "Amaxabiso entsimi yeBlockstudio kufuneka agcinwe kwinto."
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "I-Blockstudio ilungiselela i-cache yeebhloko zayo. Nceda uzame kwakhona kungekudala."
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "I-canvas ivaliwe."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "Ithokheni ye-CSRF ayisebenzi okanye ayikho."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "Kufuneka ungene ukuze ungqinisise."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "Awunazo iimvume ezaneleyo."
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "Ukuqinisekisa akuphumelelanga."
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "Ingxelo ayifunyenwanga."
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "Isicelo seziqithi asisebenzi."
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "Kucelwe iziqithi ezininzi kakhulu."
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "Ibhloko yesiqithi ayisebenzi."
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "Utyikityo lwesiqithi alusebenzi."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "Uxolo, awuvumelekanga ukufunda iibhloko zale posi."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "Uxolo, awuvumelekanga ukufunda iibhloko njengalo msebenzisi."
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "Ibhloko ayisebenzi."
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "Le ndlela ayivumelekanga."
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "Ibhloko ayifunyenwanga."
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "Umsebenzi awufunyenwanga."
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "Umsebenzi awunakubizwa."
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "I-Blockstudio ayizisebenzisanga iisetingi ezingasebenziyo:"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: Umbhalo wekhonkco"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: I-URL"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "Yinyani"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "Bubuxoki"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "Akukwazekanga kulayishwa iingxelo zedathabheyisi."
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "Le dathabheyisi ayinazirekhodi okwangoku."
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "Akukho dathabheyisi zeBlockstudio zibhalisiweyo."
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "Ayifumanekanga idathabheyisi ekhethiweyo."
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "Isishwankathelo"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "Irejistri"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "Iidathabheyisi"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "Amaxwebhu"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "Akukho datha yesishwankathelo seBlockstudio ifumanekayo."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "Igama"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "Isihloko"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "Inkcazelo"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "Udidi"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "Uhlobo"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "Ubume"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "Ifakiwe"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "Iyafumaneka"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "Iintshukumo"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "Ngenisa kwakhona"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "Ngenisa"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "Akukho rejistri ziqwalaselweyo. Yongeza iirejistri kwifayile ye-blocks.json yomxholo wakho."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "Khangela iibhloko"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "Akukho bhloko zibhalisiweyo."
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "Bonisa"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "Iimpawu"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "Iibhloko"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "Akukho zandiso zibhalisiweyo."
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "Iithagethi"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "Okuphambili"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "Izandiso"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "Khangela izandiso"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "Akukho ntsimi zibhalisiweyo."
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "Iintsimi"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "Khangela iintsimi"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "Akukho maphepha abhalisiweyo."
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "I-slug"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "Uhlobo lweposi"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "Ungqamaniso"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "I-ID yeposi"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "Itemplate"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "Itemplate ye"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "Amaphepha"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "Khangela amaphepha"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "Akukho schema zibhalisiweyo."
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "Ibhloko"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "I-schema"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "Indawo yokugcina"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "Inqunyanyiselwe kumsebenzisi"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "Amandla"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "Iischema"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "Khangela iischema"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "Le ntsimi ivaliwe"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "Vula umhleli owandisiweyo"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "Kwenziwe"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "Uphawu"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "Okungakumbi"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "Faka ikhonkco"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "Faka imidiya"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "Cima"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "Ixabiso"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "Yongeza uphawu"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "Isiseko"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "Vula kwifestile ezivelelayo"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "Vula ithala leencwadi leendaba"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "Ubungakanani bemidiya"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "Khetha ikhonkco"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "Vula kwithebhu entsha"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "Khetha ikhonkco"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "Isiqalelo se-repeater"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "Yandisa umqolo %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "Songela umqolo %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "Phinda umqolo %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "Susa umqolo %d"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "Ufuna ukuwucima lo mqolo?"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "Yongeza umqolo"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "Buyisela kwixabiso elimiselweyo"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "Lungelelanisa ekhohlo"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "Lungelelanisa embindini"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "Lungelelanisa ekunene"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "Lungelelanisa macala omabini"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "Ibar yezixhobo ye-WYSIWYG"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "Ngqindilili"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "Akekelisiwe"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "Krwela umgca ngaphantsi"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "Krwela umgca phakathi"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "Ikhowudi"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "Ikhonkco"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "Uluhlu olungenamanani"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "Uluhlu olunamanani"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "Tshintshela kwimbonakalo"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "Tshintshela kwikhowudi"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "Umfanekiso"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "Ifayile"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "Cofa ukuze ulayishe"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "Vala indlela yokugxila"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "Iinketho ze-canvas"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "Lungisa ukuze ibonakale yonke"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "Yandisa uye kwi-100%"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "Imowudi ephilayo"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "Ikopiwe: %s"

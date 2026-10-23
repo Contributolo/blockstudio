@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:27+0000\n"
+"Language-Team: Greek\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "Το χαρακτηριστικό \"%1$s\" σε ετικέτα μπλοκ %2$s παραλείπεται, επειδή το μπλοκ δεν ορίζει πεδίο με αυτό το αναγνωριστικό. Ορίστε το πεδίο ή γράψτε το ως χαρακτηριστικό data-, aria- ή html- για να προστεθεί στο ριζικό στοιχείο."
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "Αυτό το κλειδί αποθήκευσης δεν έχει δηλωθεί από το μπλοκ ή τις επεκτάσεις του."
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "Αυτή η τιμή δεν περιλαμβάνεται στις επιλογές του πεδίου."
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "Αυτή η τιμή έχει μη υποστηριζόμενη μορφή για το πεδίο."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "Αυτό το επαναλήπτη έχει λιγότερες γραμμές από το ελάχιστο."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "Αυτό το επαναλήπτη έχει περισσότερες γραμμές από το μέγιστο."
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "Αυτό το κλειδί αποθήκευσης έχει αντικρουόμενους ορισμούς πεδίων."
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "Η τιμή του ένθετου πεδίου αντικαθιστά αυτήν την τιμή ανώτατου επιπέδου."
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "Οι συνδέσεις επεκτάσεων διαβάζουν αυτήν την τιμή μόνο από το blockstudio.attributes."
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "Οι τιμές πεδίων του Blockstudio πρέπει να αποθηκεύονται σε ένα αντικείμενο."
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "Το Blockstudio προετοιμάζει την προσωρινή μνήμη των μπλοκ. Δοκιμάστε ξανά σε λίγο."
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "Ο καμβάς είναι απενεργοποιημένος."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "Μη έγκυρο ή απόν διακριτικό CSRF."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "Απαιτείται έλεγχος ταυτότητας."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "Ανεπαρκή δικαιώματα."
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "Η επικύρωση απέτυχε."
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "Δεν βρέθηκε εγγραφή."
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "Μη έγκυρο αίτημα νησίδων."
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "Ζητήθηκαν πάρα πολλές νησίδες."
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "Μη έγκυρο μπλοκ νησίδας."
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "Μη έγκυρη υπογραφή νησίδας."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "Λυπούμαστε, δεν επιτρέπεται να διαβάσετε τα μπλοκ αυτής της δημοσίευσης."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "Λυπούμαστε, δεν επιτρέπεται σε αυτόν τον χρήστη να διαβάσει μπλοκ."
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "Μη έγκυρο μπλοκ."
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "Η μέθοδος δεν επιτρέπεται."
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "Δεν βρέθηκε το μπλοκ."
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "Δεν βρέθηκε η συνάρτηση."
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "Δεν είναι δυνατή η κλήση της συνάρτησης."
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Το Blockstudio αγνόησε μη έγκυρες τιμές διαμόρφωσης:"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: Κείμενο συνδέσμου"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: URL"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "Αληθές"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "Ψευδές"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "Δεν ήταν δυνατή η φόρτωση των εγγραφών της βάσης δεδομένων."
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "Αυτή η βάση δεδομένων δεν έχει ακόμη εγγραφές."
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "Δεν έχει καταχωριστεί καμία βάση δεδομένων Blockstudio."
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "Δεν ήταν δυνατή η εύρεση της επιλεγμένης βάσης δεδομένων."
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "Επισκόπηση"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "Μητρώο"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "Βάσεις δεδομένων"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "Τεκμηρίωση"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "Δεν υπάρχουν διαθέσιμα δεδομένα επισκόπησης του Blockstudio."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "Όνομα"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "Τίτλος"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "Περιγραφή"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "Κατηγορία"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "Τύπος"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "Κατάσταση"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "Εγκατεστημένο"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "Διαθέσιμο"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "Ενέργειες"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "Επανεισαγωγή"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "Εισαγωγή"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "Δεν έχουν διαμορφωθεί μητρώα. Προσθέστε μητρώα στο αρχείο blocks.json του θέματος."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "Αναζήτηση μπλοκ"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "Δεν έχει καταχωριστεί κανένα μπλοκ."
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "Απόδοση"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "Χαρακτηριστικά"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "Μπλοκ"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "Δεν έχουν καταχωριστεί επεκτάσεις."
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "Στόχοι"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "Προτεραιότητα"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "Επεκτάσεις"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "Αναζήτηση επεκτάσεων"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "Δεν έχουν καταχωριστεί πεδία."
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "Πεδία"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "Αναζήτηση πεδίων"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "Δεν έχουν καταχωριστεί σελίδες."
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "Σύντομο όνομα"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "Τύπος δημοσίευσης"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "Συγχρονισμός"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "ID δημοσίευσης"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "Πρότυπο"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "Πρότυπο για"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "Σελίδες"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "Αναζήτηση σελίδων"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "Δεν έχουν καταχωριστεί σχήματα."
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "Μπλοκ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "Σχήμα"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "Αποθήκευση"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "Με περιορισμό χρήστη"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "Δυνατότητες"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "Σχήματα"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "Αναζήτηση σχημάτων"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "Αυτό το πεδίο είναι απενεργοποιημένο"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "Άνοιγμα διευρυμένου επεξεργαστή"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "Τέλος"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "Χαρακτηριστικό"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "Περισσότερα"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "Εισαγωγή συνδέσμου"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "Εισαγωγή πολυμέσων"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "Διαγραφή"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "Τιμή"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "Προσθήκη χαρακτηριστικού"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "Βάση"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "Άνοιγμα σε αναδυόμενο παράθυρο"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "Άνοιγμα βιβλιοθήκης πολυμέσων"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "Μέγεθος πολυμέσου"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "Επιλογή συνδέσμου"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "Άνοιγμα σε νέα καρτέλα"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "Επιλογή συνδέσμου"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "Στοιχείο επαναλήπτη"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "Ανάπτυξη γραμμής %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "Σύμπτυξη γραμμής %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "Δημιουργία αντιγράφου της γραμμής %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "Αφαίρεση γραμμής %d"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "Θέλετε να διαγράψετε αυτήν τη γραμμή;"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "Προσθήκη γραμμής"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "Επαναφορά στην προεπιλογή"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "Στοίχιση αριστερά"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "Στοίχιση στο κέντρο"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "Στοίχιση δεξιά"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "Πλήρης στοίχιση"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "Γραμμή εργαλείων WYSIWYG"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "Έντονα"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "Πλάγια"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "Υπογράμμιση"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "Διακριτή διαγραφή"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "Κώδικας"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "Σύνδεσμος"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "Λίστα με κουκκίδες"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "Αριθμημένη λίστα"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "Μετάβαση στην οπτική λειτουργία"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "Μετάβαση στη λειτουργία κώδικα"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "Εικόνα"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "Αρχείο"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "Κάντε κλικ για φόρτωση"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "Κλείσιμο λειτουργίας εστίασης"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "Επιλογές καμβά"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "Προσαρμογή στην προβολή"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "Μεγέθυνση στο 100%"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "Ζωντανή λειτουργία"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "Αντιγράφηκε: %s"

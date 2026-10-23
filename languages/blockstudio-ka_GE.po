@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:31+0000\n"
+"Language-Team: Georgian\n"
+"Language: ka_GE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "%2$s ბლოკის ტეგზე ატრიბუტი „%1$s“ ამოღებულია, რადგან ბლოკში ამ ID-ის მქონე ველი არ არის გამოცხადებული. გამოაცხადეთ ეს ველი ან მიუთითეთ იგი როგორც data-, aria- ან html- ატრიბუტი, რათა ძირეულ ელემენტს დაემატოს."
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "ეს შენახვის გასაღები ბლოკში ან მის გაფართოებებში გამოცხადებული არ არის."
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "ეს მნიშვნელობა ველის ვარიანტებს შორის არ არის."
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "ამ ველისთვის მნიშვნელობის ფორმა მხარდაჭერილი არ არის."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "ამ გამეორებელში მინიმუმზე ნაკლები რიგია."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "ამ გამეორებელში მაქსიმუმზე მეტი რიგია."
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "ამ შენახვის გასაღებისთვის ველების განსაზღვრებები ერთმანეთს ეწინააღმდეგება."
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "ჩადგმული ველის მნიშვნელობა ამ ზედა დონის მნიშვნელობას ანაცვლებს."
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "გაფართოების მიბმები ამ მნიშვნელობას მხოლოდ blockstudio.attributes-იდან კითხულობს."
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "Blockstudio-ის ველების მნიშვნელობები ობიექტში უნდა ინახებოდეს."
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "Blockstudio ბლოკების ქეშს ამზადებს. გთხოვთ, ცოტა ხანში სცადოთ ხელახლა."
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "ტილო გამორთულია."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "CSRF ტოკენი არასწორია ან აკლია."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "საჭიროა ავთენტიფიკაცია."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "უფლებები არასაკმარისია."
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "ვალიდაცია ვერ შესრულდა."
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "ჩანაწერი ვერ მოიძებნა."
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "კუნძულების მოთხოვნა არასწორია."
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "მოთხოვნილია კუნძულების მეტისმეტად დიდი რაოდენობა."
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "კუნძულის ბლოკი არასწორია."
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "კუნძულის ხელმოწერა არასწორია."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "უკაცრავად, ამ პოსტის ბლოკების წაკითხვის უფლება არ გაქვთ."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "უკაცრავად, ამ მომხმარებლის სახელით ბლოკების წაკითხვის უფლება არ გაქვთ."
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "ბლოკი არასწორია."
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "მეთოდი დაშვებული არ არის."
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "ბლოკი ვერ მოიძებნა."
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "ფუნქცია ვერ მოიძებნა."
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "ფუნქციის გამოძახება შეუძლებელია."
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Blockstudio-მ კონფიგურაციის არასწორი მნიშვნელობები უგულებელყო:"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: ბმულის ტექსტი"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: URL"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "ჭეშმარიტი"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "მცდარი"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "მონაცემთა ბაზის ჩანაწერების ჩატვირთვა ვერ მოხერხდა."
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "ამ მონაცემთა ბაზაში ჯერ ჩანაწერები არ არის."
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "Blockstudio-ის მონაცემთა ბაზები რეგისტრირებული არ არის."
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "არჩეული მონაცემთა ბაზა ვერ მოიძებნა."
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "მიმოხილვა"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "რეესტრი"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "მონაცემთა ბაზები"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "დოკუმენტაცია"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "Blockstudio-ის მიმოხილვის მონაცემები ხელმისაწვდომი არ არის."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "სახელი"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "სათაური"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "აღწერა"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "კატეგორია"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "ტიპი"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "სტატუსი"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "დაინსტალირებულია"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "ხელმისაწვდომია"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "მოქმედებები"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "ხელახლა იმპორტი"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "იმპორტი"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "რეესტრები კონფიგურირებული არ არის. დაამატეთ რეესტრები თქვენი თემის blocks.json ფაილში."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "ბლოკების ძიება"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "ბლოკები რეგისტრირებული არ არის."
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "რენდერი"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "ატრიბუტები"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "ბლოკები"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "გაფართოებები რეგისტრირებული არ არის."
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "სამიზნეები"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "პრიორიტეტი"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "გაფართოებები"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "გაფართოებების ძიება"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "ველები რეგისტრირებული არ არის."
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "ველები"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "ველების ძიება"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "გვერდები რეგისტრირებული არ არის."
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "სლაგი"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "პოსტის ტიპი"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "სინქრონიზაცია"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "პოსტის ID"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "შაბლონი"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "შაბლონის დანიშნულება"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "გვერდები"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "გვერდების ძიება"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "სქემები რეგისტრირებული არ არის."
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "ბლოკი"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "სქემა"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "შენახვა"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "მომხმარებელზე მიბმული"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "შესაძლებლობები"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "სქემები"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "სქემების ძიება"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "ეს ველი გამორთულია"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "გაფართოებული რედაქტორის გახსნა"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "მზადაა"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "ატრიბუტი"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "მეტი"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "ბმულის ჩასმა"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "მედიის ჩასმა"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "წაშლა"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "მნიშვნელობა"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "ატრიბუტის დამატება"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "ძირითადი"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "ამომხტარ ფანჯარაში გახსნა"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "მედიათეკის გახსნა"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "მედიის ზომა"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "ბმულის არჩევა"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "ახალ ჩანართში გახსნა"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "ბმულის არჩევა"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "გამეორებლის ელემენტი"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "რიგის %d გაშლა"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "რიგის %d ჩაკეცვა"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "რიგის %d დუბლირება"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "რიგის %d ამოღება"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "გსურთ ამ რიგის წაშლა?"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "რიგის დამატება"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "ნაგულისხმევ მნიშვნელობაზე დაბრუნება"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "მარცხნივ გასწორება"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "ცენტრში გასწორება"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "მარჯვნივ გასწორება"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "სიგანეზე გასწორება"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "WYSIWYG-ის ხელსაწყოთა ზოლი"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "მსხვილი"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "დახრილი"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "ხაზგასმული"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "გადახაზული"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "კოდი"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "ბმული"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "დაულაგებელი სია"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "დანომრილი სია"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "ვიზუალურ რეჟიმზე გადასვლა"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "კოდის რეჟიმზე გადასვლა"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "სურათი"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "ფაილი"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "ჩასატვირთად დააწკაპუნეთ"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "ფოკუსის რეჟიმის დახურვა"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "ტილოს პარამეტრები"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "ხედში ჩატევა"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "100%-ზე გადიდება"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "ცოცხალი რეჟიმი"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "კოპირებულია: %s"

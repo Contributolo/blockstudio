@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:34+0000\n"
+"Language-Team: Malagasy\n"
+"Language: mg_MG\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "Tsy tafiditra ny toetra \"%1$s\" amin'ny marika sakana %2$s satria tsy misy saha manana io ID io voafaritra ao amin'ilay sakana. Farito ilay saha, na soraty ho toetra data-, aria- na html- mba hampidirana azy ao amin'ny singa fototra."
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "Tsy voafaritra ao amin'ilay sakana na ny fanitarana azy ity lakilen'ny fitahirizana ity."
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "Tsy anisan'ny safidin'ity saha ity io sanda io."
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "Tsy mifanaraka amin'ny endrika tohanan'ity saha ity io sanda io."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "Latsaka noho ny fetra farany ambany ny isan'ny andalana ao amin'ity famerimberenana ity."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "Mihoatra noho ny fetra farany ambony ny isan'ny andalana ao amin'ity famerimberenana ity."
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "Misy famaritana saha mifanipaka amin'ity lakilen'ny fitahirizana ity."
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "Manolo ity sanda ambony ity ny sandan'ny saha anatiny."
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "Ny fatoran'ny fanitarana dia mamaky ity sanda ity avy amin'ny blockstudio.attributes ihany."
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "Tsy maintsy tehirizina ao anaty object ny sandan'ny saha Blockstudio."
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "Manomana ny cache-n'ny sakany ny Blockstudio. Andramo indray afaka kelikely."
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "Tsy mandeha ny Canvas."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "Tsy manan-kery na tsy hita ny token CSRF."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "Ilaina ny fanamarinana maha-ianao anao."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "Tsy ampy ny fahazoan-dalana."
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "Tsy nahomby ny fanamarinana."
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "Tsy hita ilay rakitra."
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "Tsy manan-kery ny fangatahana islands."
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "Be loatra ny islands nangatahina."
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "Tsy manan-kery ilay sakana island."
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "Tsy manan-kery ny sonian'ny island."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "Miala tsiny, tsy mahazo mamaky ny sakana amin'ity lahatsoratra ity ianao."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "Miala tsiny, tsy mahazo mamaky sakana amin'ny maha-ianao an'ity mpampiasa ity ianao."
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "Sakana tsy manan-kery."
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "Tsy azo ampiasaina ity fomba ity."
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "Tsy hita ilay sakana."
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "Tsy hita ilay asa."
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "Tsy azo antsoina ilay asa."
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Notsinontsinoavin'ny Blockstudio ireto sandan'ny fikirana tsy manan-kery ireto:"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: Lahatsoratra rohy"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: URL"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "Marina"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "Diso"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "Tsy afaka nampiditra ny rakitra ao amin'ny database."
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "Mbola tsy misy rakitra ao amin'ity database ity."
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "Tsy misy database Blockstudio voasoratra."
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "Tsy hita ilay database voafantina."
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "Topimaso"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "Rejistra"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "Database"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "Tahirin-kevitra"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "Tsy misy angona topimaso Blockstudio azo ampiasaina."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "Anarana"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "Lohateny"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "Famaritana"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "Sokajy"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "Karazana"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "Sata"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "Napetraka"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "Misy"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "Hetsika"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "Ampidiro indray"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "Ampidiro"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "Tsy misy rejistra voarindra. Ampio rejistra ao amin'ny rakitra blocks.json an'ny lohahevitrao."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "Karohy sakana"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "Tsy misy sakana voasoratra."
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "Asehoy"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "Toetra"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "Sakana"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "Tsy misy fanitarana voasoratra."
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "Lasibatra"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "Laharam-pahamehana"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "Fanitarana"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "Karohy fanitarana"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "Tsy misy saha voasoratra."
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "Saha"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "Karohy saha"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "Tsy misy pejy voasoratra."
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "Slug"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "Karazana lahatsoratra"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "Ampifanaraho"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "ID lahatsoratra"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "Endrika"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "Endrika ho an'ny"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "Pejy"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "Karohy pejy"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "Tsy misy rafitra voasoratra."
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "Sakana"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "Rafitra"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "Fitahirizana"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "Voafetra ho an'ny mpampiasa"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "Fahafahana"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "Rafitra"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "Karohy rafitra"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "Tsy mandeha ity saha ity"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "Sokafy ny mpanonta lehibe"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "Vita"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "Toetra"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "Bebe kokoa"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "Ampidiro rohy"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "Ampidiro media"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "Fafao"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "Sanda"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "Ampio toetra"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "Fototra"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "Sokafy amin'ny varavarankely mitsingevana"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "Sokafy ny Tranomboky Media"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "Haben'ny media"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "Misafidiana rohy"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "Sokafy amin'ny kiheba vaovao"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "Misafidiana rohy"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "Singa famerimberenana"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "Avelaro ny andalana %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "Aforeno ny andalana %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "Adikao ny andalana %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "Esory ny andalana %d"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "Tianao hofafana ve ity andalana ity?"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "Ampio andalana"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "Avereno amin'ny sanda mahazatra"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "Alahatra ankavia"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "Alahatra afovoany"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "Alahatra ankavanana"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "Alahatra mifanaraka amin'ny sisiny"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "Fitaovana WYSIWYG"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "Matevina"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "Soratra mitongilana"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "Tsipiho"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "Asio tsipika mamakivaky"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "Kaody"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "Rohy"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "Lisitra tsy misy laharana"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "Lisitra misy laharana"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "Hiverena amin'ny fijery"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "Hiverena amin'ny kaody"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "Sary"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "Rakitra"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "Tsindrio raha hampidirina"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "Hidio ny fomba fifantohana"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "Safidin'ny Canvas"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "Ampifanaraho amin'ny fijery"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "Zòma mankany amin'ny 100%"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "Fomba mivantana"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "Voadika: %s"

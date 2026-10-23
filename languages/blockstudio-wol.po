@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:40+0000\n"
+"Language-Team: Wolof\n"
+"Language: wol\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "Jumtuka «%1$s» ci tagu block %2$s dafay ne mes, ndax block bi amul benn waajal bu am tur googu. Waajalal waajal bi, walla bind ko ni jumtuka data-, aria- walla html- ngir dugal ko ci elementu reen bi."
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "Caabi denc bii waxuñu ko ci block bi walla ci yokkuteem."
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "Walu bii nekkul ci tànneefi waajal bi."
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "Walu bii amul melokaan bu ñu nangu ci waajal bi."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "Repeater bii am na ay rëdd yu néew lool ci limu suuf."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "Repeater bii am na ay rëdd yu ëpp limu kaw."
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "Caabi denc bii am na ay waajal yu dëppooñu."
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "Walu waajal bi ci biir dafay weesu walu bii ci kaw."
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "Yokkute yi jëfandikoo nañu walu bii rekk ci blockstudio.attributes."
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "War nañu denc wali waajal yu Blockstudio ci ab object."
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "Blockstudio mi ngi waajal cache-y block yi. Jéemaatal ci lu néew."
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "Canvas bi dañu ko tëj."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "Token CSRF bi baaxul walla wu amul."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "War nga ajiñoo."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "Sañ-sañ yi doyul."
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "Wóorale gi lajj na."
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "Gisatuñu kayit bi."
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "Laaj bu islands bi baaxul."
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "Ñu laaj nañu islands yu bare lool."
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "Blocku island bi baaxul."
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "Signature island bi baaxul."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "Baal ma, sañuloo jàng ay block ci taxawu bii."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "Baal ma, sañuloo jàng block yi ni jëfandikookat bii."
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "Block bi baaxul."
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "Tolluwaay bi sañul."
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "Gisatuñu block bi."
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "Gisatuñu fungsiõ bi."
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "Mënuloo woowee fungsiõ bi."
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Blockstudio bàyyi na ay njureefi konfigurasi yu baaxul:"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: Mbindu bu boppu link"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: URL"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "Déedéet"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "Déedéet"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "Mënuloo yebbi ay kayitu database."
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "Database bii amagul benn kayit."
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "Amul database Blockstudio bu ñu bind."
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "Mënuloo gis database bi nga tànn."
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "Tëralin"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "Registre"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "Databases"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "Dokimaa"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "Amul ay jumtukaayi tëralinu Blockstudio."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "Tur"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "Bopp"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "Nettali"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "Wàll"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "Xeet"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "Nekkin"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "Sampu nañu ko"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "Jàppandi"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "Jumtukaay yi"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "Yebbiwaat"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "Yebbi"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "Amul registre bu ñu tëral. Yokkal ay registre ci fichier blocks.json ci theme bi."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "Seet ay block"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "Amul block bu ñu bind."
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "Wone"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "Jumtukaay yi"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "Block yi"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "Amul yokkute bu ñu bind."
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "Jëmale yi"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "Priorité"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "Yokkute yi"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "Seet ay yokkute"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "Amul waajal bu ñu bind."
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "Waajal yi"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "Seet ay waajal"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "Amul xët bu ñu bind."
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "Slug"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "Xeetu post"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "Sàmmandoo"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "ID post"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "Misaal"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "Misaal bu"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "Xët yi"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "Seet ay xët"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "Amul schema bu ñu bind."
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "Block"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "Schema"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "Dencukaay"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "Jëfandikookat kese"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "Sañ-sañ yi"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "Schema yi"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "Seet ay schema"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "Waajal bii dañu ko tëj"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "Ubbi editor bu yaatu"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "Jeexal"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "Jumtukaay"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "Yeneen"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "Dugal link"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "Dugal meññiit"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "Far"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "Walu"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "Yokk jumtukaay"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "Base"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "Ubbi ci popup"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "Ubbi néegu meññiit"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "Dayo meññiit"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "Tànn link"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "Ubbi ci koñ bu bees"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "Tànn link"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "Elementu repeater"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "Yaatal rëdd %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "Wàññi rëdd %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "Duppital rëdd %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "Màbb rëdd %d"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "Ndax bëgg nga far rëdd bii?"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "Yokk rëdd"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "Delloo ci wàllu njeexital"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "Jàppale ci càmmoñ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "Jàppale ci digg"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "Jàppale ci ndeyjoor"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "Jàppale ci ñaari wet"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "Barabu jumtukaayi WYSIWYG"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "Dëgëral"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "Xëcc"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "Rëddal"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "Dëgëral ak rëdd"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "Kood"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "Link"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "Lim bu amul limu baat"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "Lim bu am limu baat"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "Jubbanti ci Wone"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "Jubbanti ci Kood"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "Nataal"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "Dencukaay"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "Cuqal ngir yebbi"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "Tëj mode fookus"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "Tànneefi canvas"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "Lalal ci seetukaay bi"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "Yaatu ci 100%"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "Mode bu dund"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "Yebbi nañu: %s"

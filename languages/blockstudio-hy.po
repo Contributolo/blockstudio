@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:31+0000\n"
+"Language-Team: Armenian\n"
+"Language: hy\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "%2$s բլոկի թեգի «%1$s» ատրիբուտը հեռացվում է, քանի որ բլոկը այդ նույնացուցիչով դաշտ չի հայտարարում։ Հայտարարեք դաշտը կամ այն գրեք որպես data-, aria- կամ html- ատրիբուտ՝ այն արմատային տարրին ավելացնելու համար։"
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "Պահեստավորման այս բանալին հայտարարած չէ բլոկի կամ դրա ընդլայնումների կողմից։"
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "Այս արժեքը դաշտի տարբերակների թվում չէ։"
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "Այս արժեքի կառուցվածքը դաշտի համար չի աջակցվում։"
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "Այս կրկնվող դաշտն ունի նվազագույնից քիչ տողեր։"
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "Այս կրկնվող դաշտն ունի առավելագույնից շատ տողեր։"
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "Պահեստավորման այս բանալու դաշտերի սահմանումները հակասում են։"
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "Ներդրված դաշտի արժեքը վերագրում է այս վերին մակարդակի արժեքը։"
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "Ընդլայնումների կապակցումները այս արժեքը կարդում են միայն blockstudio.attributes-ից։"
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "Blockstudio-ի դաշտերի արժեքները պետք է պահվեն օբյեկտում։"
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "Blockstudio-ն պատրաստում է իր բլոկների քեշը։ Խնդրում ենք կրկին փորձել քիչ անց։"
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "Canvas-ն անջատված է։"
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "CSRF նշանն անվավեր է կամ բացակայում է։"
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "Պահանջվում է նույնականացում։"
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "Թույլտվությունները բավարար չեն։"
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "Վավերացումը ձախողվեց։"
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "Գրառումը չի գտնվել։"
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "Կղզիների հարցումն անվավեր է։"
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "Պահանջվել են չափազանց շատ կղզիներ։"
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "Կղզու բլոկն անվավեր է։"
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "Կղզու ստորագրությունն անվավեր է։"
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "Ներողություն, ձեզ թույլատրված չէ կարդալ այս գրառման բլոկները։"
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "Ներողություն, այս օգտատիրոջ իրավունքներով ձեզ թույլատրված չէ կարդալ բլոկները։"
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "Բլոկն անվավեր է։"
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "Մեթոդը թույլատրված չէ։"
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "Բլոկը չի գտնվել։"
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "Ֆունկցիան չի գտնվել։"
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "Ֆունկցիան կանչելի չէ։"
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Blockstudio-ն անտեսել է կազմաձևման անվավեր արժեքները՝"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s՝ հղման տեքստ"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s՝ URL"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "Ճիշտ"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "Սխալ"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "Չհաջողվեց բեռնել տվյալների բազայի գրառումները։"
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "Այս տվյալների բազայում դեռ գրառումներ չկան։"
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "Blockstudio-ի տվյալների բազաներ գրանցված չեն։"
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "Ընտրված տվյալների բազան չի գտնվել։"
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "Ընդհանուր ակնարկ"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "Գրանցամատյան"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "Տվյալների բազաներ"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "Փաստաթղթեր"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "Blockstudio-ի ընդհանուր ակնարկի տվյալները հասանելի չեն։"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "Անուն"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "Վերնագիր"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "Նկարագրություն"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "Կատեգորիա"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "Տեսակ"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "Կարգավիճակ"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "Տեղադրված է"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "Հասանելի է"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "Գործողություններ"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "Կրկին ներմուծել"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "Ներմուծել"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "Գրանցամատյաններ կազմաձևված չեն։ Ավելացրեք գրանցամատյաններ ձեր թեմայի blocks.json ֆայլին։"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "Որոնել բլոկներ"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "Բլոկներ գրանցված չեն։"
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "Արտապատկերում"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "Ատրիբուտներ"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "Բլոկներ"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "Ընդլայնումներ գրանցված չեն։"
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "Թիրախներ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "Առաջնահերթություն"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "Ընդլայնումներ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "Որոնել ընդլայնումներ"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "Դաշտեր գրանցված չեն։"
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "Դաշտեր"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "Որոնել դաշտեր"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "Էջեր գրանցված չեն։"
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "Slug"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "Գրառման տեսակ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "Համաժամեցնել"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "Գրառման ID"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "Կաղապար"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "Կաղապարը՝"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "Էջեր"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "Որոնել էջեր"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "Սխեմաներ գրանցված չեն։"
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "Բլոկ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "Սխեմա"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "Պահեստավորում"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "Օգտատիրոջ շրջանակում"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "Հնարավորություններ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "Սխեմաներ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "Որոնել սխեմաներ"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "Այս դաշտն անջատված է"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "Բացել ընդլայնված խմբագրիչը"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "Պատրաստ է"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "Ատրիբուտ"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "Ավելին"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "Ներդնել հղում"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "Ներդնել մեդիա"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "Ջնջել"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "Արժեք"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "Ավելացնել ատրիբուտ"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "Հիմնական"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "Բացել ելնող պատուհանում"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "Բացել մեդիագրադարանը"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "Մեդիայի չափը"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "Ընտրել հղումը"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "Բացել նոր ներդիրում"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "Ընտրել հղումը"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "Կրկնվող տարր"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "Ընդարձակել %d-րդ տողը"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "Ծալել %d-րդ տողը"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "Կրկնօրինակել %d-րդ տողը"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "Հեռացնել %d-րդ տողը"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "Ցանկանո՞ւմ եք ջնջել այս տողը։"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "Ավելացնել տող"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "Վերականգնել լռելյայն արժեքը"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "Հավասարեցնել ձախ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "Հավասարեցնել կենտրոնում"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "Հավասարեցնել աջ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "Հավասարեցնել ըստ լայնության"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "WYSIWYG գործիքագոտի"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "Թավ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "Շեղ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "Ընդգծված"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "Ջնջվածի գծով"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "Կոդ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "Հղում"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "Չհամարակալված ցանկ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "Համարակալված ցանկ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "Անցնել տեսողական ռեժիմի"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "Անցնել կոդի ռեժիմի"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "Պատկեր"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "Ֆայլ"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "Սեղմեք՝ բեռնելու համար"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "Փակել ֆոկուսի ռեժիմը"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "Canvas-ի ընտրանքներ"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "Տեղավորել տեսադաշտում"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "Մեծացնել մինչև 100%"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "Կենդանի ռեժիմ"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "Պատճենված է՝ %s"

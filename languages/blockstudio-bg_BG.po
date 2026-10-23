@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:26+0000\n"
+"Language-Team: Bulgarian\n"
+"Language: bg_BG\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "Атрибутът „%1$s“ на етикета на блока %2$s се премахва, защото блокът не декларира поле с този идентификатор. Декларирайте полето или го запишете като атрибут data-, aria- или html-, за да го добавите към кореновия елемент."
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "Този ключ за съхранение не е деклариран от блока или неговите разширения."
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "Тази стойност не е сред опциите на полето."
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "Тази стойност е с неподдържан формат за полето."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "Този повтарящ се списък съдържа по-малко редове от минималния брой."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "Този повтарящ се списък съдържа повече редове от максималния брой."
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "За този ключ за съхранение има конфликтни дефиниции на полета."
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "Стойността на вложеното поле заменя тази стойност от най-горното ниво."
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "Свързванията на разширенията четат тази стойност само от blockstudio.attributes."
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "Стойностите на полетата на Blockstudio трябва да се съхраняват в обект."
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "Blockstudio подготвя кеша на блоковете си. Опитайте отново след малко."
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "Canvas е деактивиран."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "Невалиден или липсващ CSRF токен."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "Изисква се удостоверяване."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "Недостатъчни права."
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "Неуспешна проверка."
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "Записът не е намерен."
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "Невалидна заявка за острови."
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "Заявени са твърде много острови."
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "Невалиден блок на остров."
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "Невалиден подпис на остров."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "Съжаляваме, нямате право да четете блоковете на тази публикация."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "Съжаляваме, нямате право да четете блокове като този потребител."
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "Невалиден блок."
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "Методът не е разрешен."
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "Блокът не е намерен."
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "Функцията не е намерена."
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "Функцията не може да бъде извикана."
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Blockstudio пренебрегна невалидни стойности за конфигурация:"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: Текст на връзката"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: URL адрес"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "Вярно"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "Невярно"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "Неуспешно зареждане на записите в базата данни."
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "Тази база данни все още няма записи."
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "Няма регистрирани бази данни в Blockstudio."
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "Избраната база данни не е намерена."
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "Общ преглед"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "Регистър"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "Бази данни"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "Документация"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "Няма налични данни за общия преглед на Blockstudio."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "Име"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "Заглавие"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "Описание"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "Категория"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "Тип"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "Състояние"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "Инсталирано"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "Налично"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "Действия"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "Импортиране отново"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "Импортиране"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "Няма конфигурирани регистри. Добавете регистри във файла blocks.json на темата си."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "Търсене на блокове"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "Няма регистрирани блокове."
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "Изобразяване"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "Атрибути"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "Блокове"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "Няма регистрирани разширения."
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "Цели"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "Приоритет"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "Разширения"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "Търсене на разширения"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "Няма регистрирани полета."
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "Полета"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "Търсене на полета"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "Няма регистрирани страници."
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "Кратко име"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "Тип публикация"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "Синхронизиране"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "ID на публикацията"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "Шаблон"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "Шаблон за"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "Страници"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "Търсене на страници"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "Няма регистрирани схеми."
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "Блок"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "Схема"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "Съхранение"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "Ограничено до потребителя"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "Възможности"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "Схеми"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "Търсене на схеми"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "Това поле е деактивирано"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "Отваряне на разширения редактор"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "Готово"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "Атрибут"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "Още"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "Вмъкване на връзка"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "Вмъкване на медия"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "Изтриване"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "Стойност"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "Добавяне на атрибут"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "Базов"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "Отваряне в изскачащ прозорец"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "Отваряне на медийната библиотека"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "Размер на медията"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "Избиране на връзка"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "Отваряне в нов раздел"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "Избиране на връзка"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "Елемент на повтарящия се списък"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "Разгъване на ред %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "Свиване на ред %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "Дублиране на ред %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "Премахване на ред %d"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "Искате ли да изтриете този ред?"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "Добавяне на ред"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "Възстановяване на стойността по подразбиране"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "Подравняване отляво"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "Центриране"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "Подравняване отдясно"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "Двустранно подравняване"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "Лента с инструменти на WYSIWYG"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "Получер"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "Курсив"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "Подчертаване"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "Зачертаване"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "Код"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "Връзка"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "Неподреден списък"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "Подреден списък"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "Превключване към визуален режим"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "Превключване към режим на код"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "Изображение"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "Файл"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "Щракнете за зареждане"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "Излизане от режима на фокус"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "Опции на Canvas"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "Побиране в изгледа"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "Мащабиране до 100%"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "Режим на живо"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "Копирано: %s"

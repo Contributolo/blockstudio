@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:26+0000\n"
+"Language-Team: Breton\n"
+"Language: bre\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "Ar goll eo an elfenn \"%1$s\" war ur valizenn bloc’h %2$s, rak n’eus bet termenet maezienn ebet gant an elfenn-se. Termenit ar maezienn, pe skrivit anezhañ evel un elfenn data-, aria- pe html- evit he lakaat war an elfenn wrizienn."
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "N’eo ket termenet an alc’hwez stokañ-mañ gant ar bloc’h pe gant e astennadoù."
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "N’emañ ket ar werzh-mañ e-touez dibarzhioù ar maezienn."
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "N’eo ket stumm ar werzh-mañ skoret evit ar maezienn."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "N’eus ket a-walc’h a renkoù er repeater-mañ evit bezañ dindan ar bihanañ niver aotreet."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "Re a renkoù zo er repeater-mañ, hervez ar brasañ niver aotreet."
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "Ur c’henniñ zo etre termenoù ar maeziennoù evit an alc’hwez stokañ-mañ."
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "Erlec’hiañ a ra talvoud ar maezienn enklozet an talvoud-mañ eus al live uhel."
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "Liammoù an astennadoù a lenn an talvoud-mañ eus blockstudio.attributes hepken."
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "Ret eo stokañ talvoudoù maeziennoù Blockstudio en un ergorenn."
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "O prientiñ emañ Blockstudio heñvellec’h ar bloc’hoù. Klaskit en-dro a-benn nebeud."
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "Diweredekaet eo ar c’henwerz."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "Jedouer CSRF direizh pe ankempenn."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "Ret eo bezañ dilesaet."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "N’hoc’h eus ket aotre a-walc’h."
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "C’hwitadenn war ar gwiriañ."
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "N’eo ket bet kavet ar marilh."
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "Goulenn inizi direizh."
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "Re a inizi zo bet goulennet."
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "Blokenn enezenn direizh."
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "Sinadur enezenn direizh."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "Digarezit, n’oc’h ket aotreet da lenn ar bloc’hoù eus ar post-mañ."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "Digarezit, n’oc’h ket aotreet da lenn bloc’hoù evel an implijer-mañ."
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "Bloc’h direizh."
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "N’eo ket aotreet an hentenn-mañ."
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "N’eo ket bet kavet ar bloc’h."
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "N’eo ket bet kavet an arc’hwel."
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "N’haller ket galv an arc’hwel."
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Lezet en deus Blockstudio gwerzhioù kefluniadur direizh a-gostez:"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: Testenn al liamm"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: URL"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "Gwir"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "Gaou"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "N’haller ket kargañ marilhoù ar stlennvon."
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "N’eus marilh ebet er stlennvon-mañ evit poent."
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "N’eus stlennvon Blockstudio ebet enrollet."
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "N’haller ket kavout ar stlennvon diuzet."
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "Alberz"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "Roll"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "Stlennvonioù"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "Teuliadoù"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "N’eus roadennoù alberz Blockstudio ebet hegerz."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "Anv"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "Titl"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "Deskrivadur"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "Rummad"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "Seurt"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "Stad"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "Staliet"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "Hegerz"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "Oberoù"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "Enporzhiañ en-dro"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "Enporzhiañ"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "N’eus roll ebet kefluniet. Ouzhpennit rolloù da restr blocks.json ho tem."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "Klask bloc’hoù"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "N’eus bloc’h ebet enrollet."
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "Deouezañ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "Perzhioù"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "Bloc’hoù"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "N’eus astennad ebet enrollet."
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "Targedoù"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "Renk"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "Astennadoù"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "Klask astennadoù"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "N’eus maezienn ebet enrollet."
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "Maeziennoù"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "Klask maeziennoù"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "N’eus pajenn ebet enrollet."
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "Slug"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "Seurt post"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "Sinkronaat"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "ID ar post"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "Patrom"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "Patrom evit"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "Pajennoù"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "Klask pajennoù"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "N’eus skeulenn ebet enrollet."
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "Bloc’h"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "Skeulenn"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "Stokañ"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "Dindan dalc’h an implijer"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "Galloudoù"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "Skeulennoù"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "Klask skeulennoù"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "Diweredekaet eo ar maezienn-mañ"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "Digeriñ an embanner ledanaet"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "Graet"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "Elfenn"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "Muioc’h"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "Enlakaat ul liamm"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "Enlakaat ur media"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "Dilemel"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "Talvoud"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "Ouzhpennañ un elfenn"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "Diazez"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "Digeriñ en ur prenestrig"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "Digeriñ levraoueg ar media"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "Ment ar media"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "Diuzañ al liamm"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "Digeriñ en un ivinell nevez"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "Diuzañ al liamm"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "Elfenn repeater"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "Ledañ ar renk %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "Bihanaat ar renk %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "Eilañ ar renk %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "Lemel ar renk %d"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "C'hoant ho peus da zilemel ar renk-mañ ?"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "Ouzhpennañ ur renk"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "Adderaouekaat d’ar gwerzh dre ziouer"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "Steudañ a-gleiz"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "Steudañ e-kreiz"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "Steudañ a-zehou"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "Steudañ a-ziviz"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "Barrenn ostilhoù WYSIWYG"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "Tev"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "Italek"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "Islinennañ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "Barrenn-dreuz"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "Kod"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "Liamm"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "Roll hep urzh"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "Roll urzhiet"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "Mont d’ar modo gwelet"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "Mont d’ar modo kod"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "Skeudenn"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "Restr"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "Klikit evit kargañ"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "Serriñ ar modo focus"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "Dibarzhioù ar c’henwerz"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "Lakaat da glotañ gant ar gwel"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "Zoum da 100%"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "Modo bev"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "Eilet: %s"

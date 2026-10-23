@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:29+0000\n"
+"Language-Team: Faroese\n"
+"Language: fo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "Eiginleikurin \"%1$s\" á blokktagginum %2$s verður sleptur, tí blokkin ikki hevur lýst nakran teig við hesum samleika. Lýs teigin, ella skriva hann sum ein data-, aria- ella html-eiginleika, so hann verður settur á rótelementið."
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "Hesin goymslulykilin er ikki lýstur av blokkinum ella útbyggingum hansara."
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "Hesin virðið er ikki millum møguleikarnar hjá teiginum."
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "Hesin virðisskapur er ikki stuðlaður fyri teigin."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "Hesin endurtakari hevur færri raðir enn minstamarkið."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "Hesin endurtakari hevur fleiri raðir enn hámarkið."
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "Hesin goymslulykilin hevur mótstríðandi teigalýsingar."
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "Virðið í innara teiginum setur hetta virðið úr gildi."
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "Bindingar í útbyggingum lesa hetta virðið bert frá blockstudio.attributes."
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "Virði í Blockstudio-teigum skulu goymast í einum objekti."
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "Blockstudio fyrireikar blokkskyndiminnið. Royn aftur um eina løtu."
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "Canvas er óvirkjað."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "Ógilt ella vantandi CSRF-token."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "Innritan krevst."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "Ikki nógvar heimildir."
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "Góðkenning miseydnaðist."
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "Færslan varð ikki funnin."
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "Ógild umbøn um oyggjar."
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "Ov nógvar oyggjar eru umbønar."
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "Ógild oyggjablokk."
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "Ógild oyggjasignatur."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "Tíverri hevur tú ikki loyvi at lesa blokkarnar í hesi uppslagsfærslu."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "Tíverri hevur tú ikki loyvi at lesa blokkar sum hesin brúkarin."
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "Ógildur blokkur."
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "Hendan hátturin er ikki loyvdur."
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "Blokkurin varð ikki funnin."
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "Funktiónin varð ikki funnin."
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "Ikki ber til at kalla á funktiónina."
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Blockstudio leyp ógild virði í uppsetingini um:"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: Leinkjutekstur"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: Slóð"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "Satt"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "Ósatt"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "Ikki bar til at heinta dátugrunnsfærslur."
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "Hesin dátugrunnurin hevur ongar færslur enn."
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "Eingir Blockstudio-dátugrunnar eru skrásettir."
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "Ikki bar til at finna valda dátugrunnin."
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "Yvirlit"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "Skrá"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "Dátugrunnar"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "Skjøl"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "Eingi Blockstudio-yvirlitstøl eru tøk."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "Navn"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "Heiti"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "Frágreiðing"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "Bólkur"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "Slag"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "Støða"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "Innlagt"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "Tøkt"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "Gerðir"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "Flyt inn aftur"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "Flyt inn"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "Eingir skráar eru settir upp. Legg skráar afturat í blocks.json-fíluna í temasniðnum."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "Leita í blokkum"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "Eingir blokkar eru skrásettir."
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "Rendara"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "Eiginleikar"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "Blokkar"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "Eingir útbyggingar eru skrásettar."
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "Mál"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "Raðfesting"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "Útbyggingar"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "Leita í útbyggingum"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "Eingir teigar eru skrásettir."
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "Teigar"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "Leita í teigum"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "Eingar síður eru skrásettar."
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "Stytt heiti"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "Uppslagsgerð"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "Samstilla"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "Uppslags-ID"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "Snið"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "Snið fyri"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "Síður"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "Leita á síðum"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "Eingir skemur eru skrásettir."
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "Blokkur"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "Skema"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "Goymsla"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "Brúkaravíst"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "Heimildir"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "Skemur"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "Leita í skemum"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "Hesin teigur er óvirkjaður"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "Opna stóra ritilin"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "Liðugt"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "Eginleiki"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "Meira"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "Set inn leinki"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "Set inn miðil"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "Strika"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "Virði"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "Legg eginleika afturat"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "Grundarlag"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "Opna í sprettglugga"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "Opna miðlasavnið"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "Miðlastødd"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "Vel leinki"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "Opna í nýggjum flipi"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "Vel leinki"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "Endurtakaraliður"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "Lat rað %d upp"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "Lat rað %d aftur"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "Tvífalda rað %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "Tak rað %d burtur"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "Vilt tú strika hesa raðina?"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "Legg rað afturat"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "Endurstilla til sjálvsett"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "Javna vinstrumegin"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "Javna í miðjuna"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "Javna høgrumegin"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "Javna út til báðar síður"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "WYSIWYG-amboðslinja"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "Feit"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "Skák"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "Undirstrikað"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "Yvirstrikað"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "Kota"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "Leinki"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "Óraðaður listi"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "Raðaður listi"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "Skift til sjónligan"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "Skift til kotu"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "Mynd"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "Fíla"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "Trýst fyri at lesa inn"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "Lat fókusstøðu aftur"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "Canvas-valmøguleikar"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "Tillaga til sýnið"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "Zooma til 100%"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "Beinleiðis hamur"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "Avritað: %s"

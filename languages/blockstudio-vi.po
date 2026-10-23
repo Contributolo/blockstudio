@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:40+0000\n"
+"Language-Team: Vietnamese\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "Thuộc tính \"%1$s\" trên thẻ khối %2$s bị loại bỏ vì khối không khai báo trường nào có id đó. Hãy khai báo trường hoặc viết thuộc tính dưới dạng data-, aria- hoặc html- để thêm vào phần tử gốc."
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "Khóa lưu trữ này không được khối hoặc phần mở rộng của khối khai báo."
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "Giá trị này không nằm trong các tùy chọn của trường."
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "Giá trị này có cấu trúc không được trường hỗ trợ."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "Bộ lặp này có ít hàng hơn mức tối thiểu."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "Bộ lặp này có nhiều hàng hơn mức tối đa."
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "Khóa lưu trữ này có các định nghĩa trường xung đột."
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "Giá trị trường lồng nhau ghi đè giá trị cấp cao nhất này."
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "Các liên kết phần mở rộng chỉ đọc giá trị này từ blockstudio.attributes."
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "Giá trị trường Blockstudio phải được lưu trữ dưới dạng đối tượng."
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "Blockstudio đang chuẩn bị bộ nhớ đệm khối. Vui lòng thử lại sau ít phút."
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "Canvas đã bị tắt."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "Mã thông báo CSRF không hợp lệ hoặc bị thiếu."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "Yêu cầu xác thực."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "Không đủ quyền."
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "Xác thực không thành công."
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "Không tìm thấy bản ghi."
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "Yêu cầu island không hợp lệ."
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "Yêu cầu quá nhiều island."
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "Khối island không hợp lệ."
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "Chữ ký island không hợp lệ."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "Rất tiếc, bạn không được phép đọc các khối của bài viết này."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "Rất tiếc, bạn không được phép đọc khối với tư cách người dùng này."
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "Khối không hợp lệ."
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "Phương thức không được phép."
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "Không tìm thấy khối."
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "Không tìm thấy hàm."
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "Hàm không thể được gọi."
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Blockstudio đã bỏ qua các giá trị cấu hình không hợp lệ:"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: Văn bản liên kết"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: URL"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "Đúng"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "Sai"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "Không thể tải bản ghi cơ sở dữ liệu."
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "Cơ sở dữ liệu này chưa có bản ghi nào."
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "Chưa đăng ký cơ sở dữ liệu Blockstudio nào."
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "Không tìm thấy cơ sở dữ liệu đã chọn."
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "Tổng quan"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "Sổ đăng ký"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "Cơ sở dữ liệu"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "Tài liệu"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "Không có dữ liệu tổng quan của Blockstudio."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "Tên"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "Tiêu đề"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "Mô tả"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "Danh mục"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "Loại"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "Trạng thái"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "Đã cài đặt"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "Có sẵn"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "Thao tác"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "Nhập lại"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "Nhập"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "Chưa cấu hình sổ đăng ký nào. Hãy thêm sổ đăng ký vào tệp blocks.json của giao diện."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "Tìm kiếm khối"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "Chưa đăng ký khối nào."
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "Kết xuất"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "Thuộc tính"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "Khối"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "Chưa đăng ký phần mở rộng nào."
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "Đích"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "Mức ưu tiên"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "Phần mở rộng"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "Tìm kiếm phần mở rộng"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "Chưa đăng ký trường nào."
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "Trường"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "Tìm kiếm trường"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "Chưa đăng ký trang nào."
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "Đường dẫn tĩnh"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "Loại bài viết"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "Đồng bộ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "ID bài viết"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "Mẫu"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "Mẫu dành cho"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "Trang"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "Tìm kiếm trang"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "Chưa đăng ký giản đồ nào."
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "Khối"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "Giản đồ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "Lưu trữ"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "Phạm vi người dùng"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "Quyền"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "Giản đồ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "Tìm kiếm giản đồ"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "Trường này bị tắt"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "Mở trình chỉnh sửa mở rộng"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "Xong"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "Thuộc tính"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "Thêm"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "Chèn liên kết"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "Chèn phương tiện"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "Xóa"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "Giá trị"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "Thêm thuộc tính"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "Cơ bản"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "Mở trong cửa sổ bật lên"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "Mở thư viện phương tiện"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "Kích thước phương tiện"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "Chọn liên kết"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "Mở trong tab mới"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "Chọn liên kết"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "Phần tử bộ lặp"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "Mở rộng hàng %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "Thu gọn hàng %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "Nhân bản hàng %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "Xóa hàng %d"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "Bạn có muốn xóa hàng này không?"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "Thêm hàng"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "Đặt lại về mặc định"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "Căn trái"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "Căn giữa"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "Căn phải"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "Căn đều"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "Thanh công cụ WYSIWYG"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "In đậm"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "In nghiêng"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "Gạch chân"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "Gạch ngang"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "Mã"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "Liên kết"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "Danh sách không thứ tự"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "Danh sách có thứ tự"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "Chuyển sang trực quan"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "Chuyển sang mã"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "Hình ảnh"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "Tệp"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "Nhấp để tải"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "Thoát chế độ tập trung"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "Tùy chọn canvas"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "Vừa khung nhìn"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "Thu phóng đến 100%"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "Chế độ trực tiếp"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "Đã sao chép: %s"

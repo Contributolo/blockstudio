@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:26+0000\n"
+"Language-Team: Cebuano\n"
+"Language: ceb\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "Gikuha ang attribute nga \"%1$s\" sa block tag nga %2$s kay walay field nga adunay maong ID nga gideklara ang block. Ideklara ang field, o isulat kini isip data-, aria- o html- nga attribute aron ibutang kini sa root element."
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "Wala gideklara sa block o sa mga extension niini kining storage key."
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "Wala kini nga value sa mga kapilian sa field."
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "Dili suportado alang sa field kining porma sa value."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "Mas ubos sa minimum ang gidaghanon sa mga row niining repeater."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "Labaw sa maximum ang gidaghanon sa mga row niining repeater."
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "Nagkasumpaki ang mga kahulugan sa field alang niining storage key."
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "Gipulihan sa value sa nested field kining value sa taas nga lebel."
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "Gibasa sa mga extension binding kining value gikan lamang sa blockstudio.attributes."
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "Kinahanglang tipigan ang mga value sa field sa Blockstudio isip object."
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "Giandam sa Blockstudio ang cache sa block niini. Sulayi pag-usab sa dili madugay."
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "Gi-disable ang canvas."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "Dili balido o wala ang CSRF token."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "Kinahanglan ang pag-authenticate."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "Dili igo ang mga permiso."
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "Napakyas ang pagbalido."
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "Wala makit-i ang rekord."
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "Dili balido ang hangyo sa mga isla."
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "Daghan ra kaayo ang gipangayong isla."
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "Dili balido ang island block."
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "Dili balido ang pirma sa isla."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "Pasayloa, wala kay permiso sa pagbasa sa mga block niining post."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "Pasayloa, wala kay permiso sa pagbasa sa mga block isip kining user."
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "Dili balido ang block."
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "Dili tugotan ang pamaagi."
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "Wala makit-i ang block."
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "Wala makit-i ang function."
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "Dili matawag ang function."
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Gibalewala sa Blockstudio ang dili balidong mga value sa configuration:"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: Teksto sa link"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: URL"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "Tinuod"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "Bakak"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "Dili ma-load ang mga rekord sa database."
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "Wala pay rekord kining database."
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "Walay rehistradong database sa Blockstudio."
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "Wala makit-i ang gipiling database."
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "Kinatibuk-ang pagtan-aw"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "Registry"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "Mga database"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "Mga dokumento"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "Walay magamit nga datos sa kinatibuk-ang pagtan-aw sa Blockstudio."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "Ngalan"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "Titulo"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "Deskripsiyon"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "Kategorya"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "Tipo"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "Kahimtang"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "Na-install"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "Anaa"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "Mga aksiyon"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "I-import pag-usab"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "I-import"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "Walay na-configure nga registry. Idugang ang mga registry sa blocks.json file sa imong tema."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "Pangitaa ang mga block"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "Walay rehistradong block."
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "I-render"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "Mga attribute"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "Mga block"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "Walay rehistradong extension."
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "Mga target"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "Prayoridad"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "Mga extension"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "Pangitaa ang mga extension"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "Walay rehistradong field."
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "Mga field"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "Pangitaa ang mga field"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "Walay rehistradong panid."
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "Slug"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "Tipo sa post"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "I-synchronize"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "ID sa post"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "Template"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "Template alang sa"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "Mga panid"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "Pangitaa ang mga panid"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "Walay rehistradong schema."
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "Block"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "Schema"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "Tipiganan"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "Gilimitahan sa user"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "Mga kapabilidad"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "Mga schema"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "Pangitaa ang mga schema"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "Gi-disable kining field"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "Ablihi ang gipalapad nga editor"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "Nahuman"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "Attribute"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "Dugang pa"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "Isulod ang link"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "Isulod ang media"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "Papasa"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "Value"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "Idugang ang attribute"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "Base"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "Ablihi sa popup"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "Ablihi ang librarya sa media"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "Gidak-on sa media"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "Pilia ang link"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "Ablihi sa bag-ong tab"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "Pilia ang link"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "Elemento sa repeater"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "Palapda ang row %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "Piloa ang row %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "Kopyaha ang row %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "Kuhaa ang row %d"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "Gusto ba nimong papason kining row?"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "Idugang ang row"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "I-reset sa default"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "I-align sa wala"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "I-align sa tunga"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "I-align sa tuo"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "I-justify"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "Toolbar sa WYSIWYG"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "Bold"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "Italic"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "Salungguhitan"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "Tabasan"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "Code"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "Link"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "Walay han-ay nga lista"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "Han-ay nga lista"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "Balhin sa visual"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "Balhin sa code"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "Hulagway"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "File"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "I-klik aron i-load"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "Isira ang focus mode"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "Mga kapilian sa canvas"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "Ipahaom sa talan-awon"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "I-zoom sa 100%"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "Live nga mode"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "Nakopya: %s"

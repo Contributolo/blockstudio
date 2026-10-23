@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:37+0000\n"
+"Language-Team: Sinhala\n"
+"Language: si_LK\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "%2$s බ්ලොක් ටැගයේ \"%1$s\" ගුණාංගය ඉවත් කරනු ලැබේ, මන්ද බ්ලොක් එකේ එම ID සහිත ක්ෂේත්‍රයක් ප්‍රකාශ කර නොමැති බැවිනි. ක්ෂේත්‍රය ප්‍රකාශ කරන්න, නැතහොත් එය data-, aria- හෝ html- ගුණාංගයක් ලෙස ලියන්න, එවිට එය මූල අංගයට එක් වේ."
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "මෙම ගබඩා යතුර බ්ලොක් එක හෝ එහි දිගු මඟින් ප්‍රකාශ කර නැත."
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "මෙම අගය ක්ෂේත්‍ර විකල්ප අතර නැත."
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "මෙම අගයේ හැඩය ක්ෂේත්‍රය සඳහා සහාය නොදක්වයි."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "මෙම නැවත නැවත යෙදෙන ක්ෂේත්‍රයේ පේළි අවමයට වඩා අඩුය."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "මෙම නැවත නැවත යෙදෙන ක්ෂේත්‍රයේ පේළි උපරිමයට වඩා වැඩිය."
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "මෙම ගබඩා යතුර සඳහා ගැටෙන ක්ෂේත්‍ර නිර්වචන ඇත."
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "කැදලි ක්ෂේත්‍ර අගය මෙම ඉහළ මට්ටමේ අගය අභිබවා යයි."
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "දිගු බැඳීම් මෙම අගය කියවන්නේ blockstudio.attributes වෙතින් පමණි."
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "Blockstudio ක්ෂේත්‍ර අගයන් වස්තුවක් තුළ ගබඩා කළ යුතුය."
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "Blockstudio එහි බ්ලොක් හැඹිලිය සකස් කරමින් සිටී. කරුණාකර මඳ වේලාවකින් නැවත උත්සාහ කරන්න."
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "Canvas අක්‍රිය කර ඇත."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "CSRF ටෝකනය වලංගු නැත හෝ නොමැත."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "සත්‍යාපනය අවශ්‍යයි."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "ප්‍රමාණවත් අවසර නොමැත."
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "වලංගුකරණය අසාර්ථක විය."
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "වාර්තාව හමු නොවීය."
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "islands ඉල්ලීම වලංගු නැත."
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "ඉල්ලා ඇති islands ගණන වැඩිය."
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "island බ්ලොක් එක වලංගු නැත."
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "island අත්සන වලංගු නැත."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "කණගාටුයි, මෙම ලිපියේ බ්ලොක් කියවීමට ඔබට අවසර නැත."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "කණගාටුයි, මෙම පරිශීලකයා ලෙස බ්ලොක් කියවීමට ඔබට අවසර නැත."
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "බ්ලොක් එක වලංගු නැත."
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "මෙම ක්‍රමයට අවසර නැත."
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "බ්ලොක් එක හමු නොවීය."
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "ශ්‍රිතය හමු නොවීය."
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "ශ්‍රිතය කැඳවිය නොහැක."
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Blockstudio වලංගු නොවන වින්‍යාස අගයන් නොසලකා හැරියේය:"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: සබැඳි පෙළ"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: URL"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "සත්‍ය"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "අසත්‍ය"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "දත්ත සමුදා වාර්තා පූරණය කළ නොහැකි විය."
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "මෙම දත්ත සමුදායේ තවම වාර්තා නොමැත."
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "Blockstudio දත්ත සමුදා කිසිවක් ලියාපදිංචි කර නැත."
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "තෝරාගත් දත්ත සමුදාය හමු නොවීය."
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "දළ විශ්ලේෂණය"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "ලේඛනය"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "දත්ත සමුදා"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "ලේඛන"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "Blockstudio දළ විශ්ලේෂණ දත්ත ලබා ගත නොහැක."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "නම"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "ශීර්ෂය"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "විස්තරය"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "ප්‍රවර්ගය"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "වර්ගය"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "තත්ත්වය"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "ස්ථාපිත"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "ලබා ගත හැක"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "ක්‍රියා"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "නැවත ආයාත කරන්න"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "ආයාත කරන්න"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "ලේඛන කිසිවක් වින්‍යාස කර නැත. ඔබේ තේමාවේ blocks.json ගොනුවට ලේඛන එක් කරන්න."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "බ්ලොක් සොයන්න"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "බ්ලොක් කිසිවක් ලියාපදිංචි කර නැත."
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "විදැහුම් කරන්න"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "ගුණාංග"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "බ්ලොක්"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "දිගු කිසිවක් ලියාපදිංචි කර නැත."
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "ඉලක්ක"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "ප්‍රමුඛතාව"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "දිගු"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "දිගු සොයන්න"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "ක්ෂේත්‍ර කිසිවක් ලියාපදිංචි කර නැත."
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "ක්ෂේත්‍ර"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "ක්ෂේත්‍ර සොයන්න"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "පිටු කිසිවක් ලියාපදිංචි කර නැත."
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "ස්ලගය"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "ලිපි වර්ගය"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "සමමුහුර්ත කරන්න"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "ලිපි ID"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "සැකිල්ල"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "සැකිල්ල සඳහා"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "පිටු"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "පිටු සොයන්න"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "ස්කීමා කිසිවක් ලියාපදිංචි කර නැත."
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "බ්ලොක්"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "ස්කීමා"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "ගබඩාව"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "පරිශීලකයාට සීමා කර ඇත"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "හැකියාවන්"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "ස්කීමා"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "ස්කීමා සොයන්න"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "මෙම ක්ෂේත්‍රය අක්‍රිය කර ඇත"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "විස්තාරිත සංස්කාරකය විවෘත කරන්න"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "අවසන්"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "ගුණාංගය"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "තවත්"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "සබැඳිය ඇතුළු කරන්න"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "මාධ්‍ය ඇතුළු කරන්න"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "මකන්න"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "අගය"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "ගුණාංගය එක් කරන්න"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "මූලික"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "උත්පතන කවුළුවක විවෘත කරන්න"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "මාධ්‍ය පුස්තකාලය විවෘත කරන්න"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "මාධ්‍ය ප්‍රමාණය"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "සබැඳිය තෝරන්න"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "නව ටැබයක විවෘත කරන්න"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "සබැඳිය තෝරන්න"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "නැවත නැවත යෙදෙන අංගය"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "පේළිය %d විහිදුවන්න"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "පේළිය %d හකුළන්න"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "පේළිය %d අනුපිටපත් කරන්න"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "පේළිය %d ඉවත් කරන්න"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "ඔබට මෙම පේළිය මැකීමට අවශ්‍යද?"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "පේළිය එක් කරන්න"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "පෙරනිමියට යළි පිහිටුවන්න"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "වමට පෙළගස්වන්න"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "මැදට පෙළගස්වන්න"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "දකුණට පෙළගස්වන්න"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "සාධාරණ ලෙස පෙළගස්වන්න"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "WYSIWYG මෙවලම් තීරුව"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "තද"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "ඇල"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "යටින් ඉරක්"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "මැදින් ඉරක්"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "කේතය"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "සබැඳිය"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "අනුපිළිවෙළක් නොමැති ලැයිස්තුව"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "අනුපිළිවෙළක් සහිත ලැයිස්තුව"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "දෘශ්‍ය මාදිලියට මාරු වන්න"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "කේත මාදිලියට මාරු වන්න"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "රූපය"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "ගොනුව"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "පූරණය කිරීමට ක්ලික් කරන්න"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "අවධානය යොමු කිරීමේ මාදිලිය වසන්න"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "Canvas විකල්ප"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "දර්ශනයට ගැළපෙන්න"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "100% දක්වා විශාලනය කරන්න"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "සජීවී මාදිලිය"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "පිටපත් කළා: %s"

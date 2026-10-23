@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:38+0000\n"
+"Language-Team: Tajik\n"
+"Language: tg\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "Атрибути «%1$s» дар теги блоки %2$s ҳазф карда мешавад, зеро блок майдонеро бо чунин ID эълон накардааст. Майдонро эълон кунед ё онро ҳамчун атрибути data-, aria- ё html- нависед, то ба унсури реша илова шавад."
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "Ин калиди нигоҳдорӣ аз ҷониби блок ё васеъкуниҳои он эълон нашудааст."
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "Ин қимат дар байни имконоти майдон нест."
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "Сохтори ин қимат барои майдон дастгирӣ намешавад."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "Ин такроркунанда аз ҳадди ақали сатрҳо камтар дорад."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "Ин такроркунанда аз ҳадди аксари сатрҳо зиёд дорад."
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "Таърифҳои майдон барои ин калиди нигоҳдорӣ бо ҳам мухолифанд."
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "Қимати майдони дохилӣ қимати сатҳи болоро иваз мекунад."
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "Пайвастҳои васеъкунӣ ин қиматро танҳо аз blockstudio.attributes мехонанд."
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "Қиматҳои майдонҳои Blockstudio бояд ҳамчун объект нигоҳ дошта шаванд."
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "Blockstudio кэши блокҳоро омода мекунад. Лутфан каме баъдтар аз нав кӯшиш кунед."
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "Canvas ғайрифаъол аст."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "Токени CSRF нодуруст аст ё вуҷуд надорад."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "Аутентификатсия лозим аст."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "Иҷозатҳои кофӣ нестанд."
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "Санҷиши дурустӣ ноком шуд."
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "Сабт ёфт нашуд."
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "Дархости islands нодуруст аст."
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "Шумораи islands-и дархостшуда аз ҳад зиёд аст."
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "Блоки island нодуруст аст."
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "Имзои island нодуруст аст."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "Бубахшед, ба шумо иҷозати хондани блокҳои ин навишта дода нашудааст."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "Бубахшед, ба ин корбар иҷозати хондани блокҳо дода нашудааст."
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "Блок нодуруст аст."
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "Ин усул иҷозат дода нашудааст."
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "Блок ёфт нашуд."
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "Функсия ёфт нашуд."
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "Функсияро даъват кардан мумкин нест."
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Blockstudio қиматҳои конфигуратсияи нодурустро нодида гирифт:"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: Матни пайванд"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: URL"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "Ҳақ"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "Дурӯғ"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "Сабтҳои пойгоҳи додаҳоро бор кардан муяссар нашуд."
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "Дар ин пойгоҳи додаҳо ҳанӯз сабте нест."
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "Ягон пойгоҳи додаи Blockstudio сабт нашудааст."
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "Пойгоҳи додаи интихобшуда ёфт нашуд."
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "Шарҳи умумӣ"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "Феҳрист"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "Пойгоҳҳои додаҳо"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "Ҳуҷҷатҳо"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "Маълумоти шарҳи умумии Blockstudio дастрас нест."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "Ном"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "Сарлавҳа"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "Тавсиф"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "Категория"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "Намуд"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "Вазъият"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "Насбшуда"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "Дастрас"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "Амалҳо"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "Аз нав ворид кардан"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "Ворид кардан"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "Ягон феҳрист танзим нашудааст. Ба файли blocks.json-и мавзӯи худ феҳристҳо илова кунед."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "Ҷустуҷӯи блокҳо"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "Ягон блок сабт нашудааст."
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "Намоиш"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "Атрибутҳо"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "Блокҳо"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "Ягон васеъкунӣ сабт нашудааст."
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "Ҳадафҳо"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "Афзалият"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "Васеъкуниҳо"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "Ҷустуҷӯи васеъкуниҳо"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "Ягон майдон сабт нашудааст."
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "Майдонҳо"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "Ҷустуҷӯи майдонҳо"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "Ягон саҳифа сабт нашудааст."
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "Лақаб"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "Навъи навишта"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "Ҳамоҳангсозӣ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "ID-и навишта"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "Қолаб"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "Қолаб барои"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "Саҳифаҳо"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "Ҷустуҷӯи саҳифаҳо"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "Ягон схема сабт нашудааст."
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "Блок"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "Схема"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "Нигоҳдорӣ"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "Маҳдуд ба корбар"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "Имкониятҳо"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "Схемаҳо"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "Ҷустуҷӯи схемаҳо"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "Ин майдон ғайрифаъол аст"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "Муҳаррири васеъшударо кушоед"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "Тайёр"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "Атрибут"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "Бештар"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "Ворид кардани пайванд"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "Ворид кардани медиа"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "Ҳазф кардан"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "Қимат"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "Илова кардани атрибут"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "Асосӣ"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "Дар равзанаи поп-ап кушоед"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "Китобхонаи медиаро кушоед"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "Андозаи медиа"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "Интихоби пайванд"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "Дар ҷадвали нав кушоед"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "Интихоби пайванд"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "Унсури такроркунанда"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "Сатри %d-ро васеъ кунед"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "Сатри %d-ро ҷамъ кунед"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "Сатри %d-ро нусха бардоред"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "Сатри %d-ро хориҷ кунед"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "Мехоҳед ин сатрро ҳазф кунед?"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "Илова кардани сатр"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "Барқарор кардан ба қимати пешфарз"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "Аз чап ҳамоҳанг кунед"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "Аз марказ ҳамоҳанг кунед"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "Аз рост ҳамоҳанг кунед"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "Аз ду тараф ҳамоҳанг кунед"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "Навори абзорҳои WYSIWYG"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "Ғафс"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "Курсив"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "Зерхат"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "Хатзада"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "Рамз"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "Пайванд"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "Рӯйхати берақам"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "Рӯйхати рақамдор"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "Гузариш ба намуди визуалӣ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "Гузариш ба рамз"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "Тасвир"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "Файл"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "Барои боркунӣ клик кунед"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "Баромадан аз ҳолати фокус"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "Имконоти Canvas"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "Мутобиқ кардан ба намоиш"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "Масштаб ба 100%"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "Ҳолати зинда"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "Нусха бардошта шуд: %s"

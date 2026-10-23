@@ -1,0 +1,1 @@
+{"translation-revision-date":"2026-10-23 15:33+0000","generator":"Blockstudio i18n","domain":"messages","locale_data":{"messages":{"":{"domain":"messages","lang":"lt_LT","plural-forms":"nplurals=3; plural=(n % 10 == 1 && (n % 100 < 11 || n % 100 > 19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? 1 : 2);"},"Copied: %s":["Nukopijuota: %s"]}}}

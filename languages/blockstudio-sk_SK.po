@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:37+0000\n"
+"Language-Team: Slovak\n"
+"Language: sk_SK\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n >= 2 && n <= 4) ? 1 : 2);\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "Atribút „%1$s“ v značke bloku %2$s sa vynechá, pretože blok nemá deklarované pole s týmto ID. Deklarujte pole alebo atribút zapíšte ako data-, aria- alebo html-, aby sa pridal ku koreňovému elementu."
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "Tento kľúč úložiska nie je deklarovaný blokom ani jeho rozšíreniami."
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "Táto hodnota nie je medzi možnosťami poľa."
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "Táto hodnota má nepodporovaný tvar pre dané pole."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "Tento opakovač má menej riadkov, než je minimum."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "Tento opakovač má viac riadkov, než je maximum."
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "Pre tento kľúč úložiska sú definované konfliktné polia."
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "Hodnota vnoreného poľa prepisuje túto hodnotu najvyššej úrovne."
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "Väzby rozšírení čítajú túto hodnotu iba z blockstudio.attributes."
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "Hodnoty polí Blockstudio sa musia ukladať ako objekt."
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "Blockstudio pripravuje vyrovnávaciu pamäť blokov. Skúste to znova o chvíľu."
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "Plátno je vypnuté."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "Neplatný alebo chýbajúci token CSRF."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "Vyžaduje sa overenie totožnosti."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "Nedostatočné oprávnenia."
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "Overenie zlyhalo."
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "Záznam sa nenašiel."
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "Neplatná požiadavka na ostrovy."
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "Požaduje sa príliš veľa ostrovov."
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "Neplatný blok ostrova."
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "Neplatný podpis ostrova."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "Prepáčte, nemáte oprávnenie čítať bloky tohto príspevku."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "Prepáčte, ako tento používateľ nemáte oprávnenie čítať bloky."
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "Neplatný blok."
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "Metóda nie je povolená."
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "Blok sa nenašiel."
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "Funkcia sa nenašla."
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "Funkciu nemožno zavolať."
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Blockstudio ignorovalo neplatné konfiguračné hodnoty:"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: Text odkazu"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: URL"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "Pravda"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "Nepravda"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "Nepodarilo sa načítať záznamy databázy."
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "Táto databáza zatiaľ nemá žiadne záznamy."
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "Nie sú zaregistrované žiadne databázy Blockstudio."
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "Vybranú databázu sa nepodarilo nájsť."
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "Prehľad"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "Register"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "Databázy"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "Dokumentácia"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "Údaje prehľadu Blockstudio nie sú k dispozícii."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "Názov"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "Nadpis"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "Popis"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "Kategória"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "Typ"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "Stav"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "Nainštalované"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "Dostupné"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "Akcie"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "Znova importovať"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "Importovať"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "Nie sú nakonfigurované žiadne registre. Pridajte registre do súboru blocks.json svojej témy."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "Hľadať bloky"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "Nie sú zaregistrované žiadne bloky."
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "Vykresliť"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "Atribúty"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "Bloky"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "Nie sú zaregistrované žiadne rozšírenia."
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "Ciele"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "Priorita"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "Rozšírenia"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "Hľadať rozšírenia"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "Nie sú zaregistrované žiadne polia."
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "Polia"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "Hľadať polia"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "Nie sú zaregistrované žiadne stránky."
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "Slug"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "Typ príspevku"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "Synchronizovať"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "ID príspevku"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "Šablóna"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "Šablóna pre"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "Stránky"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "Hľadať stránky"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "Nie sú zaregistrované žiadne schémy."
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "Blok"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "Schéma"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "Úložisko"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "Rozsah používateľa"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "Schopnosti"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "Schémy"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "Hľadať schémy"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "Toto pole je vypnuté"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "Otvoriť rozšírený editor"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "Hotovo"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "Atribút"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "Viac"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "Vložiť odkaz"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "Vložiť médium"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "Odstrániť"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "Hodnota"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "Pridať atribút"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "Základ"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "Otvoriť vo vyskakovacom okne"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "Otvoriť knižnicu médií"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "Veľkosť média"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "Vybrať odkaz"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "Otvoriť na novej karte"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "Vybrať odkaz"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "Prvok opakovača"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "Rozbaliť riadok %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "Zbaliť riadok %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "Duplikovať riadok %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "Odstrániť riadok %d"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "Chcete odstrániť tento riadok?"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "Pridať riadok"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "Obnoviť predvolenú hodnotu"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "Zarovnať doľava"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "Zarovnať na stred"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "Zarovnať doprava"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "Zarovnať do bloku"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "Panel nástrojov WYSIWYG"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "Tučné"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "Kurzíva"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "Podčiarknuté"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "Prečiarknuté"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "Kód"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "Odkaz"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "Nečíslovaný zoznam"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "Číslovaný zoznam"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "Prepnúť na vizuálny režim"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "Prepnúť na režim kódu"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "Obrázok"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "Súbor"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "Kliknutím načítate"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "Zavrieť režim zaostrenia"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "Možnosti plátna"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "Prispôsobiť zobrazeniu"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "Priblížiť na 100 %"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "Živý režim"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "Skopírované: %s"

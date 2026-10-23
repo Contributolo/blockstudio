@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:32+0000\n"
+"Language-Team: Khmer\n"
+"Language: km\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "បានបោះបង់គុណលក្ខណៈ \"%1$s\" នៅលើស្លាកប្លុក %2$s ព្រោះប្លុកមិនបានប្រកាសវាលដែលមានលេខសម្គាល់នោះ។ សូមប្រកាសវាលនេះ ឬសរសេរវាជាគុណលក្ខណៈ data-, aria- ឬ html- ដើម្បីដាក់វាលើធាតុ root។"
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "សោផ្ទុកទិន្នន័យនេះមិនត្រូវបានប្រកាសដោយប្លុក ឬផ្នែកបន្ថែមរបស់វាទេ។"
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "តម្លៃនេះមិនមាននៅក្នុងជម្រើសវាលទេ។"
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "ទម្រង់តម្លៃនេះមិនត្រូវបានគាំទ្រសម្រាប់វាលនេះទេ។"
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "កម្មវិធីបញ្ចូលជួរដេកនេះមានចំនួនជួរដេកតិចជាងអប្បបរមា។"
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "កម្មវិធីបញ្ចូលជួរដេកនេះមានចំនួនជួរដេកលើសអតិបរមា។"
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "សោផ្ទុកទិន្នន័យនេះមាននិយមន័យវាលដែលផ្ទុយគ្នា។"
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "តម្លៃវាលដែលជាន់គ្នានៅខាងក្នុង បដិសេធតម្លៃកម្រិតកំពូលនេះ។"
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "ការភ្ជាប់ផ្នែកបន្ថែមអានតម្លៃនេះតែពី blockstudio.attributes ប៉ុណ្ណោះ។"
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "តម្លៃវាលរបស់ Blockstudio ត្រូវតែរក្សាទុកក្នុងវត្ថុមួយ។"
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "Blockstudio កំពុងរៀបចំឃ្លាំងសម្ងាត់ប្លុក។ សូមព្យាយាមម្តងទៀតបន្តិចក្រោយ។"
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "Canvas ត្រូវបានបិទ។"
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "សញ្ញាសម្គាល់ CSRF មិនត្រឹមត្រូវ ឬបាត់។"
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "តម្រូវឱ្យមានការផ្ទៀងផ្ទាត់អត្តសញ្ញាណ។"
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "សិទ្ធិមិនគ្រប់គ្រាន់។"
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "ការផ្ទៀងផ្ទាត់សុពលភាពបានបរាជ័យ។"
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "រកមិនឃើញកំណត់ត្រា។"
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "សំណើ islands មិនត្រឹមត្រូវ។"
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "បានស្នើ islands ច្រើនពេក។"
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "ប្លុក island មិនត្រឹមត្រូវ។"
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "ហត្ថលេខា island មិនត្រឹមត្រូវ។"
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "សូមអភ័យទោស អ្នកមិនមានសិទ្ធិអានប្លុកនៃប្រកាសនេះទេ។"
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "សូមអភ័យទោស អ្នកប្រើនេះមិនមានសិទ្ធិអានប្លុកទេ។"
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "ប្លុកមិនត្រឹមត្រូវ។"
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "មិនអនុញ្ញាតឱ្យប្រើវិធីនេះទេ។"
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "រកមិនឃើញប្លុក។"
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "រកមិនឃើញមុខងារ។"
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "មិនអាចហៅមុខងារនេះបានទេ។"
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Blockstudio បានមិនអើពើតម្លៃកំណត់រចនាសម្ព័ន្ធមិនត្រឹមត្រូវ៖"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s៖ អត្ថបទតំណ"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s៖ URL"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "ពិត"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "មិនពិត"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "មិនអាចផ្ទុកកំណត់ត្រាមូលដ្ឋានទិន្នន័យបានទេ។"
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "មូលដ្ឋានទិន្នន័យនេះមិនទាន់មានកំណត់ត្រាទេ។"
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "មិនមានមូលដ្ឋានទិន្នន័យ Blockstudio ត្រូវបានចុះបញ្ជីទេ។"
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "រកមិនឃើញមូលដ្ឋានទិន្នន័យដែលបានជ្រើសរើសទេ។"
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "ទិដ្ឋភាពទូទៅ"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "បញ្ជីឈ្មោះ"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "មូលដ្ឋានទិន្នន័យ"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "ឯកសារណែនាំ"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "មិនមានទិន្នន័យទិដ្ឋភាពទូទៅរបស់ Blockstudio ទេ។"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "ឈ្មោះ"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "ចំណងជើង"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "សេចក្ដីពិពណ៌នា"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "ប្រភេទ"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "ប្រភេទ"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "ស្ថានភាព"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "បានដំឡើង"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "មាន"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "សកម្មភាព"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "នាំចូលឡើងវិញ"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "នាំចូល"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "មិនទាន់បានកំណត់រចនាសម្ព័ន្ធបញ្ជីឈ្មោះទេ។ សូមបន្ថែមបញ្ជីឈ្មោះទៅឯកសារ blocks.json របស់ស្បែករបស់អ្នក។"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "ស្វែងរកប្លុក"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "មិនមានប្លុកត្រូវបានចុះបញ្ជីទេ។"
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "បង្ហាញ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "គុណលក្ខណៈ"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "ប្លុក"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "មិនមានផ្នែកបន្ថែមត្រូវបានចុះបញ្ជីទេ។"
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "គោលដៅ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "អាទិភាព"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "ផ្នែកបន្ថែម"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "ស្វែងរកផ្នែកបន្ថែម"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "មិនមានវាលត្រូវបានចុះបញ្ជីទេ។"
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "វាល"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "ស្វែងរកវាល"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "មិនមានទំព័រត្រូវបានចុះបញ្ជីទេ។"
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "Slug"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "ប្រភេទប្រកាស"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "ធ្វើសមកាលកម្ម"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "លេខសម្គាល់ប្រកាស"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "គំរូ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "គំរូសម្រាប់"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "ទំព័រ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "ស្វែងរកទំព័រ"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "មិនមានគ្រោងការណ៍ត្រូវបានចុះបញ្ជីទេ។"
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "ប្លុក"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "គ្រោងការណ៍"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "ការផ្ទុក"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "កំណត់វិសាលភាពតាមអ្នកប្រើ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "សមត្ថភាព"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "គ្រោងការណ៍"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "ស្វែងរកគ្រោងការណ៍"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "វាលនេះត្រូវបានបិទ"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "បើកកម្មវិធីកែសម្រួលពង្រីក"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "រួចរាល់"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "គុណលក្ខណៈ"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "បន្ថែម"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "បញ្ចូលតំណ"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "បញ្ចូលមេឌៀ"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "លុប"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "តម្លៃ"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "បន្ថែមគុណលក្ខណៈ"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "មូលដ្ឋាន"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "បើកក្នុងផ្ទាំងលេចឡើង"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "បើកបណ្ណាល័យមេឌៀ"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "ទំហំមេឌៀ"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "ជ្រើសរើសតំណ"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "បើកក្នុងផ្ទាំងថ្មី"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "ជ្រើសរើសតំណ"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "ធាតុកម្មវិធីបញ្ចូលជួរដេក"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "ពង្រីកជួរដេក %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "បង្រួមជួរដេក %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "ចម្លងជួរដេក %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "ដកជួរដេក %d ចេញ"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "តើអ្នកចង់លុបជួរដេកនេះឬ?"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "បន្ថែមជួរដេក"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "កំណត់ឡើងវិញទៅតម្លៃលំនាំដើម"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "តម្រឹមឆ្វេង"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "តម្រឹមកណ្ដាល"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "តម្រឹមស្ដាំ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "តម្រឹមសងខាង"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "របារឧបករណ៍ WYSIWYG"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "ដិត"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "ទ្រេត"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "គូសបន្ទាត់ពីក្រោម"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "គូសបន្ទាត់ឆូត"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "កូដ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "តំណ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "បញ្ជីគ្មានលេខរៀង"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "បញ្ជីមានលេខរៀង"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "ប្ដូរទៅទិដ្ឋភាព"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "ប្ដូរទៅកូដ"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "រូបភាព"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "ឯកសារ"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "ចុចដើម្បីផ្ទុក"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "បិទរបៀបផ្ដោត"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "ជម្រើស Canvas"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "សម្របទៅនឹងទិដ្ឋភាព"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "ពង្រីកទៅ 100%"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "របៀបផ្ទាល់"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "បានចម្លង៖ %s"

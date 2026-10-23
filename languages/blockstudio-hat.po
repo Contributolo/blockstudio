@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:30+0000\n"
+"Language-Team: Haitian Creole\n"
+"Language: hat\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "Atribi \"%1$s\" la sou yon etikèt blòk %2$s la retire paske blòk la pa deklare okenn chan ki gen id sa a. Deklare chan an, oswa ekri li kòm yon atribi data-, aria- oswa html- pou mete l sou eleman rasin lan."
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "Blòk la oswa ekstansyon li yo pa deklare kle depo sa a."
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "Valè sa a pa nan opsyon chan an."
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "Valè sa a gen yon fòm chan an pa sipòte."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "Repete sa a gen mwens liy pase minimòm nan."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "Repete sa a gen plis liy pase maksimòm nan."
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "Definisyon chan ki an konfli yo itilize kle depo sa a."
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "Valè chan anndan an ranplase valè anlè sa a."
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "Lyen ekstansyon yo li valè sa a sèlman nan blockstudio.attributes."
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "Valè chan Blockstudio yo dwe estoke nan yon objè."
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "Blockstudio ap prepare kach blòk li. Tanpri eseye ankò talè."
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "Canvas la dezaktive."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "Jeton CSRF a pa valab oswa li manke."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "Otantifikasyon obligatwa."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "Pèmisyon yo pa sifi."
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "Validasyon an echwe."
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "Nou pa jwenn anrejistreman an."
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "Demann zile a pa valab."
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "Yo mande twòp zile."
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "Blòk zile a pa valab."
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "Siyati zile a pa valab."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "Dezole, ou pa gen pèmisyon pou li blòk nan piblikasyon sa a."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "Dezole, ou pa gen pèmisyon pou li blòk kòm itilizatè sa a."
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "Blòk la pa valab."
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "Metòd la pa otorize."
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "Nou pa jwenn blòk la."
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "Nou pa jwenn fonksyon an."
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "Fonksyon an pa kapab rele."
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Blockstudio inyore valè konfigirasyon ki pa valab yo:"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: Tèks lyen an"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: URL"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "Vrè"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "Fo"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "Pa t kapab chaje anrejistreman bazdone yo."
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "Bazdone sa a poko gen anrejistreman."
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "Pa gen bazdone Blockstudio ki anrejistre."
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "Pa t kapab jwenn bazdone yo chwazi a."
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "Apèsi"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "Rejis"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "Bazdone"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "Dokimantasyon"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "Pa gen done apèsi Blockstudio ki disponib."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "Non"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "Tit"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "Deskripsyon"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "Kategori"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "Kalite"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "Estati"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "Enstale"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "Disponib"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "Aksyon"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "Enpòte ankò"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "Enpòte"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "Pa gen rejis ki konfigire. Ajoute rejis nan fichye blocks.json tèm ou a."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "Chèche blòk"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "Pa gen blòk ki anrejistre."
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "Rann"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "Atribi"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "Blòk"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "Pa gen ekstansyon ki anrejistre."
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "Objektif"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "Priyorite"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "Ekstansyon"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "Chèche ekstansyon"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "Pa gen chan ki anrejistre."
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "Chan"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "Chèche chan"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "Pa gen paj ki anrejistre."
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "Slug"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "Kalite piblikasyon"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "Senkronize"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "ID piblikasyon"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "Modèl"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "Modèl pou"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "Paj"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "Chèche paj"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "Pa gen chema ki anrejistre."
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "Blòk"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "Chema"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "Depo"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "Limit pou itilizatè"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "Kapasite"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "Chema"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "Chèche chema"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "Chan sa a dezaktive"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "Louvri editè elaji a"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "Fini"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "Atribi"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "Plis"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "Mete lyen"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "Mete medya"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "Efase"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "Valè"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "Ajoute atribi"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "Baz"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "Louvri nan fenèt popup"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "Louvri bibliyotèk medya a"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "Gwosè medya"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "Chwazi lyen"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "Louvri nan yon nouvo onglet"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "Chwazi lyen"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "Eleman repete"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "Elaji liy %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "Ranpli liy %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "Kopye liy %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "Retire liy %d"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "Èske ou vle efase liy sa a?"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "Ajoute liy"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "Reyinisyalize sou valè defo a"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "Aliye agoch"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "Aliye nan mitan"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "Aliye adwat"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "Alinye sou toude bò yo"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "Ba zouti WYSIWYG"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "Gras"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "Italik"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "Souliye"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "Bare"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "Kòd"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "Lyen"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "Lis san lòd"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "Lis nimewote"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "Chanje pou vizyèl"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "Chanje pou kòd"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "Imaj"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "Fichye"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "Klike pou chaje"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "Fèmen mòd konsantrasyon"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "Opsyon canvas"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "Ajiste nan vi a"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "Zoom 100%"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "Mòd dirèk"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "Kopye: %s"

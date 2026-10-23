@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:32+0000\n"
+"Language-Team: Karakalpak\n"
+"Language: kaa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "%2$s blok tegindegi \"%1$s\" atributı alıp taslanadı, sebebi blokta bul ID-ge iye maydan járiyalanbaǵan. Maydandı járiyalań yamasa onı túbir elementke qosıw ushın data-, aria- yamasa html- atributı sıpatında jazıń."
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "Bul saqlaw giltı blok yamasa onıń keńeytpeleri tárepinen járiyalanbaǵan."
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "Bul mánis maydan parametrleri arasında joq."
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "Bul mánis maydan ushın qollap-quwatlanbaytuǵın formada."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "Bul qaytalawshıda eń az mánisinen az qatar bar."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "Bul qaytalawshıda eń kóp mánisinen kóp qatar bar."
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "Bul saqlaw giltı ushın maydan anıqlamaları bir-birine sáykes kelmeydi."
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "Ishki maydan mánisi joqarı dárejedegi bul mánisti basıp ketedi."
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "Keńeytpe baylanıslıqları bul mánisti tek blockstudio.attributes ishinen oqıydı."
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "Blockstudio maydan mánisleri obyekt túrinde saqlanıwı kerek."
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "Blockstudio blok keshin tayarlamaqta. Azdan soń qayta urınıp kóriń."
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "Canvas óshirilgen."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "CSRF tokeni nadurıs yamasa joq."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "Autentifikaciya talap etiledi."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "Ruxsatlar jetkiliksiz."
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "Tekseriw sátsiz tamamlandı."
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "Jazba tabılmadı."
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "Islands sorawı nadurıs."
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "Islands sorawı júdá kóp."
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "Island blogı nadurıs."
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "Island imzası nadurıs."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "Keshiriń, bul jazbanıń blokların oqıwǵa ruxsatıńız joq."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "Keshiriń, bul paydalanıwshı retinde bloklardı oqıwǵa ruxsatıńız joq."
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "Blok nadurıs."
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "Bul usılǵa ruxsat joq."
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "Blok tabılmadı."
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "Funkciya tabılmadı."
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "Funkciyanı shaqırıw múmkin emes."
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Blockstudio nadurıs konfiguraciya mánislerin esapqa almadı:"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: Silteme mátini"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: URL"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "Ras"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "Ótirik"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "Derekler bazası jazbaların júklew múmkin bolmadı."
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "Bul derekler bazasında ele jazbalar joq."
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "Blockstudio derekler bazaları dizimnen ótkerilmegen."
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "Tańlanǵan derekler bazası tabılmadı."
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "Ulıwma kórinis"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "Dizim"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "Derekler bazaları"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "Hújjetler"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "Blockstudio ulıwma kórinis maǵlıwmatları joq."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "Atı"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "Atama"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "Sıpatlama"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "Kategoriya"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "Túr"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "Status"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "Ornatılǵan"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "Bar"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "Háreketler"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "Qayta importlaw"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "Importlaw"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "Dizimler sazlanbaǵan. Temińizdiń blocks.json faylına dizimlerdi qosıń."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "Bloklardı izlew"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "Dizimnen ótkerilgen bloklar joq."
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "Renderlew"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "Atributlar"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "Bloklar"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "Dizimnen ótkerilgen keńeytpeler joq."
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "Nıshanalar"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "Áhmiyet dárejesi"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "Keńeytpeler"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "Keńeytpelerdi izlew"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "Dizimnen ótkerilgen maydanlar joq."
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "Maydanlar"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "Maydanlardı izlew"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "Dizimnen ótkerilgen betler joq."
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "Slug"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "Jazba túri"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "Sinxronlaw"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "Jazba ID-si"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "Shablon"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "Shablon arnalǵan:"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "Betler"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "Betlerdi izlew"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "Dizimnen ótkerilgen sxemalar joq."
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "Blok"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "Sxema"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "Saqlaw"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "Paydalanıwshıǵa baylanıslı"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "Múmkinshilikler"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "Sxemalar"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "Sxemalardı izlew"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "Bul maydan óshirilgen"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "Keńeytilgen redaktordı ashıw"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "Tayyar"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "Atribut"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "Taǵı"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "Silteme kirgiziw"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "Media kirgiziw"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "Óshiriw"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "Mánis"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "Atribut qosıw"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "Negiz"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "Qalqıma aynada ashıw"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "Media kitaphanasın ashıw"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "Media ólshemi"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "Silteme tańlaw"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "Jańa bette ashıw"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "Siltemeni tańlaw"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "Qaytalawshı elementi"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "%d-qatarды jaydırıw"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "%d-qatardı jıynaw"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "%d-qatardı kóshiriw"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "%d-qatardı alıp taslaw"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "Bul qatarды óshiresiz be?"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "Qatar qosıw"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "Ádettegi mániske qaytarıw"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "Shepke teńlew"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "Ortaǵa teńlew"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "Ońǵa teńlew"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "Eni boyınsha teńlew"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "WYSIWYG qural paneli"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "Qalıń"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "Kursiv"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "Astı sızılǵan"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "Ústinen sızılǵan"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "Kod"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "Silteme"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "Retlenbegen dizim"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "Retlengen dizim"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "Kórinis rejimine ótiw"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "Kod rejimine ótiw"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "Súwret"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "Fayl"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "Júklew ushın basıń"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "Fokus rejimin jabıw"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "Canvas parametrleri"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "Kórinis aymaǵına sıydırıw"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "100%-ǵa jaqınlastırıw"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "Tikkeley rejim"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "Kóshirildi: %s"

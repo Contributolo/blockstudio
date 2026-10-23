@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:29+0000\n"
+"Language-Team: Estonian\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "%2$s plokisildi atribuuti „%1$s” ei lisata, sest plokk ei deklareeri selle ID-ga välja. Deklareeri väli või kirjuta atribuut kujul data-, aria- või html-, et lisada see juurelemendile."
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "See salvestusvõti pole ploki ega selle laienduste poolt deklareeritud."
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "See väärtus ei kuulu välja valikute hulka."
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "Selle väärtuse kuju ei sobi väljale."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "Selles kordajas on vähem ridu kui miinimum lubab."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "Selles kordajas on rohkem ridu kui maksimum lubab."
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "Selle salvestusvõtme välja määratlused on vastuolus."
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "Pesastatud välja väärtus kirjutab selle ülataseme väärtuse üle."
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "Laienduste sidumised loevad seda väärtust ainult atribuudist blockstudio.attributes."
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "Blockstudio välja väärtused tuleb salvestada objektina."
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "Blockstudio valmistab ette plokkide vahemälu. Proovi peagi uuesti."
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "Lõuend on keelatud."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "CSRF-luba on vigane või puudub."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "Autentimine on nõutav."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "Õigusi pole piisavalt."
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "Valideerimine ebaõnnestus."
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "Kirjet ei leitud."
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "Saarte päring on vigane."
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "Päriti liiga palju saari."
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "Saare plokk on vigane."
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "Saare allkiri on vigane."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "Vabandust, sul pole õigust selle postituse plokke lugeda."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "Vabandust, sul pole selle kasutajana õigust plokke lugeda."
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "Plokk on vigane."
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "Meetod pole lubatud."
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "Plokki ei leitud."
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "Funktsiooni ei leitud."
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "Funktsiooni ei saa kutsuda."
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Blockstudio eiras vigaseid seadistusväärtusi:"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: Lingi tekst"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: URL"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "Tõene"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "Väär"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "Andmebaasi kirjete laadimine ebaõnnestus."
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "Selles andmebaasis pole veel kirjeid."
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "Ühtegi Blockstudio andmebaasi pole registreeritud."
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "Valitud andmebaasi ei leitud."
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "Ülevaade"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "Register"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "Andmebaasid"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "Dokumentatsioon"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "Blockstudio ülevaateandmed pole saadaval."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "Nimi"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "Pealkiri"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "Kirjeldus"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "Kategooria"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "Tüüp"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "Olek"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "Paigaldatud"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "Saadaval"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "Toimingud"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "Impordi uuesti"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "Impordi"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "Registreid pole seadistatud. Lisa registrid oma teema faili blocks.json."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "Otsi plokke"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "Ühtegi plokki pole registreeritud."
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "Renderda"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "Atribuudid"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "Plokid"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "Ühtegi laiendust pole registreeritud."
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "Sihtmärgid"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "Prioriteet"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "Laiendused"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "Otsi laiendusi"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "Ühtegi välja pole registreeritud."
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "Väljad"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "Otsi välju"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "Ühtegi lehte pole registreeritud."
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "Püsiviide"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "Postituse tüüp"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "Sünkrooni"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "Postituse ID"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "Mall"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "Malli siht"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "Lehed"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "Otsi lehti"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "Ühtegi skeemi pole registreeritud."
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "Plokk"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "Skeem"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "Salvestus"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "Kasutajapõhine"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "Võimalused"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "Skeemid"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "Otsi skeeme"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "See väli on keelatud"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "Ava laiendatud redaktor"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "Valmis"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "Atribuut"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "Veel"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "Lisa link"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "Lisa meedia"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "Kustuta"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "Väärtus"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "Lisa atribuut"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "Alus"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "Ava hüpikaknas"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "Ava meediateek"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "Meedia suurus"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "Vali link"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "Ava uuel vahelehel"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "Vali link"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "Kordaja element"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "Laienda rida %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "Ahenda rida %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "Tee reast %d koopia"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "Eemalda rida %d"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "Kas soovid selle rea kustutada?"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "Lisa rida"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "Taasta vaikeväärtus"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "Joonda vasakule"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "Joonda keskele"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "Joonda paremale"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "Joonda rööpselt"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "WYSIWYG-tööriistariba"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "Paks kiri"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "Kaldkiri"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "Allakriipsutus"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "Läbikriipsutus"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "Kood"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "Link"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "Täpploend"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "Nummerdatud loend"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "Lülitu visuaalrežiimile"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "Lülitu koodirežiimile"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "Pilt"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "Fail"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "Klõpsa laadimiseks"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "Sulge fookusrežiim"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "Lõuendi valikud"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "Mahuta vaatesse"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "Suumi 100%-ni"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "Reaalajarežiim"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "Kopeeritud: %s"

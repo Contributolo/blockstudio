@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:26+0000\n"
+"Language-Team: Bhojpuri\n"
+"Language: bho\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "%2$s ब्लॉक टैग पर \"%1$s\" एट्रिब्यूट हटा दिहल जाला, काहे कि ब्लॉक में एह आईडी वाला कवनो फील्ड नइखे। फील्ड घोषित करीं, भा एकरा के data-, aria- चाहे html- एट्रिब्यूट के रूप में लिखीं, ताकि ई रूट एलिमेंट पर लागे।"
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "ई स्टोरेज कुंजी ब्लॉक भा ओकर एक्सटेंशन में घोषित नइखे।"
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "ई मान फील्ड के विकल्पन में नइखे।"
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "ई मान के बनावट फील्ड खातिर समर्थित नइखे।"
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "एह रिपीटर में न्यूनतम से कम पंक्ति बा।"
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "एह रिपीटर में अधिकतम से बेसी पंक्ति बा।"
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "एह स्टोरेज कुंजी खातिर फील्ड के परस्पर विरोधी परिभाषा बा।"
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "नेस्टेड फील्ड के मान एह सबसे ऊपर वाला मान के बदल देला।"
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "एक्सटेंशन बाइंडिंग एह मान के खाली blockstudio.attributes से पढ़ेला।"
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "Blockstudio फील्ड के मान ऑब्जेक्ट में रखल जरूरी बा।"
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "Blockstudio अपना ब्लॉक कैश तैयार करत बा। कुछ देर बाद फेरु कोशिश करीं।"
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "कैनवस बंद बा।"
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "CSRF टोकन अमान्य बा भा मौजूद नइखे।"
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "प्रमाणीकरण जरूरी बा।"
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "पर्याप्त अनुमति नइखे।"
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "मान्यता जाँच असफल भइल।"
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "रिकॉर्ड ना मिलल।"
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "आइलैंड के अनुरोध अमान्य बा।"
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "बहुत अधिक आइलैंड के अनुरोध कइल गइल।"
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "आइलैंड ब्लॉक अमान्य बा।"
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "आइलैंड हस्ताक्षर अमान्य बा।"
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "माफ करीं, रउआ के एह पोस्ट के ब्लॉक पढ़े के अनुमति नइखे।"
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "माफ करीं, एह उपयोगकर्ता के रूप में रउआ के ब्लॉक पढ़े के अनुमति नइखे।"
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "ब्लॉक अमान्य बा।"
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "ई तरीका मान्य नइखे।"
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "ब्लॉक ना मिलल।"
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "फंक्शन ना मिलल।"
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "फंक्शन चलावे लायक नइखे।"
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Blockstudio अमान्य कॉन्फ़िगरेशन मान के अनदेखा कइलस:"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: लिंक के पाठ"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: URL"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "सही"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "गलत"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "डेटाबेस रिकॉर्ड लोड ना हो सकल।"
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "एह डेटाबेस में अभी कवनो रिकॉर्ड नइखे।"
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "कवनो Blockstudio डेटाबेस रजिस्टर नइखे।"
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "चुनल डेटाबेस ना मिल सकल।"
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "अवलोकन"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "रजिस्ट्री"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "डेटाबेस"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "दस्तावेज"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "Blockstudio के अवलोकन खातिर कवनो डेटा उपलब्ध नइखे।"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "नाम"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "शीर्षक"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "विवरण"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "श्रेणी"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "प्रकार"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "स्थिति"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "इंस्टॉल कइल"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "उपलब्ध"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "कार्रवाई"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "फेरु आयात करीं"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "आयात करीं"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "कवनो रजिस्ट्री कॉन्फ़िगर नइखे। अपना थीम के blocks.json फाइल में रजिस्ट्री जोड़ीं।"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "ब्लॉक खोजीं"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "कवनो ब्लॉक रजिस्टर नइखे।"
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "रेंडर"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "एट्रिब्यूट"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "ब्लॉक"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "कवनो एक्सटेंशन रजिस्टर नइखे।"
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "लक्ष्य"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "प्राथमिकता"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "एक्सटेंशन"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "एक्सटेंशन खोजीं"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "कवनो फील्ड रजिस्टर नइखे।"
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "फील्ड"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "फील्ड खोजीं"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "कवनो पन्ना रजिस्टर नइखे।"
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "स्लग"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "पोस्ट प्रकार"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "सिंक"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "पोस्ट आईडी"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "टेम्पलेट"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "एह खातिर टेम्पलेट"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "पन्ना"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "पन्ना खोजीं"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "कवनो स्कीमा रजिस्टर नइखे।"
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "ब्लॉक"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "स्कीमा"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "स्टोरेज"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "उपयोगकर्ता-सीमित"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "क्षमताएँ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "स्कीमा"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "स्कीमा खोजीं"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "ई फील्ड बंद बा"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "विस्तारित संपादक खोलीं"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "पूरा भइल"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "एट्रिब्यूट"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "आउर"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "लिंक डालें"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "मीडिया डालें"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "हटाईं"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "मान"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "एट्रिब्यूट जोड़ीं"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "आधार"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "पॉपअप में खोलीं"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "मीडिया लाइब्रेरी खोलीं"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "मीडिया के आकार"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "लिंक चुनीं"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "नया टैब में खोलीं"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "लिंक चुनीं"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "रिपीटर एलिमेंट"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "पंक्ति %d के फैलाईं"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "पंक्ति %d समेटीं"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "पंक्ति %d के नकल बनाईं"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "पंक्ति %d हटाईं"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "का रउआ एह पंक्ति के हटावल चाहत बानी?"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "पंक्ति जोड़ीं"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "डिफॉल्ट पर रीसेट करीं"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "बायाँ संरेखित करीं"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "बीच में संरेखित करीं"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "दहिना संरेखित करीं"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "जस्टिफाई करीं"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "WYSIWYG टूलबार"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "मोटा"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "तिरछा"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "रेखांकित"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "काटल रेखा"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "कोड"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "लिंक"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "बिना क्रम वाली सूची"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "क्रम वाली सूची"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "विजुअल पर जाईं"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "कोड पर जाईं"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "छवि"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "फाइल"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "लोड करे खातिर क्लिक करीं"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "फोकस मोड बंद करीं"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "कैनवस के विकल्प"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "दृश्य में फिट करीं"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "100% पर ज़ूम करीं"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "लाइव मोड"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "कॉपी भइल: %s"

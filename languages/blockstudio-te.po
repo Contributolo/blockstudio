@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:38+0000\n"
+"Language-Team: Telugu\n"
+"Language: te\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "%2$s బ్లాక్ ట్యాగ్‌లోని \"%1$s\" లక్షణం తొలగించబడింది, ఎందుకంటే ఆ బ్లాక్‌లో ఆ ఐడీతో ఫీల్డ్ లేదు. ఆ ఫీల్డ్‌ను ప్రకటించండి లేదా దాన్ని మూల ఎలిమెంట్‌కు జోడించడానికి data-, aria- లేదా html- లక్షణంగా రాయండి."
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "ఈ నిల్వ కీని బ్లాక్ లేదా దాని పొడిగింపులు ప్రకటించలేదు."
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "ఈ విలువ ఫీల్డ్ ఎంపికల్లో లేదు."
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "ఈ విలువ ఫీల్డ్‌కు మద్దతు లేని ఆకృతిలో ఉంది."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "ఈ రిపీటర్‌లో కనీసం ఉండాల్సిన దానికంటే తక్కువ వరుసలు ఉన్నాయి."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "ఈ రిపీటర్‌లో గరిష్ఠ పరిమితికి మించి వరుసలు ఉన్నాయి."
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "ఈ నిల్వ కీకి విరుద్ధమైన ఫీల్డ్ నిర్వచనాలు ఉన్నాయి."
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "లోపలి ఫీల్డ్ విలువ ఈ పైస్థాయి విలువను అధిగమిస్తుంది."
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "పొడిగింపు బైండింగ్‌లు ఈ విలువను blockstudio.attributes నుంచే చదువుతాయి."
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "Blockstudio ఫీల్డ్ విలువలను ఆబ్జెక్ట్‌లో నిల్వ చేయాలి."
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "Blockstudio దాని బ్లాక్ కాష్‌ను సిద్ధం చేస్తోంది. దయచేసి కొద్దిసేపటి తర్వాత మళ్లీ ప్రయత్నించండి."
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "క్యాన్వాస్ నిలిపివేయబడింది."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "CSRF టోకెన్ చెల్లదు లేదా లేదు."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "ధృవీకరణ అవసరం."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "తగిన అనుమతులు లేవు."
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "ధృవీకరణ విఫలమైంది."
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "రికార్డు కనుగొనబడలేదు."
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "ద్వీపాల అభ్యర్థన చెల్లదు."
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "అభ్యర్థించిన ద్వీపాల సంఖ్య చాలా ఎక్కువ."
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "ద్వీప బ్లాక్ చెల్లదు."
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "ద్వీప సంతకం చెల్లదు."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "క్షమించండి, ఈ పోస్ట్‌లోని బ్లాక్‌లను చదవడానికి మీకు అనుమతి లేదు."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "క్షమించండి, ఈ వినియోగదారుగా బ్లాక్‌లను చదవడానికి మీకు అనుమతి లేదు."
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "బ్లాక్ చెల్లదు."
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "ఈ పద్ధతికి అనుమతి లేదు."
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "బ్లాక్ కనుగొనబడలేదు."
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "ఫంక్షన్ కనుగొనబడలేదు."
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "ఫంక్షన్‌ను కాల్ చేయడం సాధ్యం కాదు."
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Blockstudio చెల్లని కాన్ఫిగరేషన్ విలువలను విస్మరించింది:"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: లింక్ వచనం"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: URL"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "అవును"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "కాదు"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "డేటాబేస్ రికార్డులను లోడ్ చేయడం సాధ్యం కాలేదు."
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "ఈ డేటాబేస్‌లో ఇంకా రికార్డులు లేవు."
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "Blockstudio డేటాబేస్‌లు ఏవీ నమోదు కాలేదు."
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "ఎంచుకున్న డేటాబేస్ కనుగొనబడలేదు."
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "అవలోకనం"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "రిజిస్ట్రీ"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "డేటాబేస్‌లు"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "డాక్యుమెంటేషన్"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "Blockstudio అవలోకన డేటా అందుబాటులో లేదు."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "పేరు"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "శీర్షిక"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "వివరణ"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "వర్గం"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "రకం"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "స్థితి"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "ఇన్‌స్టాల్ చేయబడింది"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "అందుబాటులో ఉంది"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "చర్యలు"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "మళ్లీ దిగుమతి చేయండి"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "దిగుమతి చేయండి"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "రిజిస్ట్రీలు ఏవీ కాన్ఫిగర్ చేయబడలేదు. మీ థీమ్‌లోని blocks.json ఫైల్‌కు రిజిస్ట్రీలను జోడించండి."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "బ్లాక్‌లను వెతకండి"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "బ్లాక్‌లు ఏవీ నమోదు కాలేదు."
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "రెండర్"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "లక్షణాలు"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "బ్లాక్‌లు"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "పొడిగింపులు ఏవీ నమోదు కాలేదు."
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "లక్ష్యాలు"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "ప్రాధాన్యత"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "పొడిగింపులు"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "పొడిగింపులను వెతకండి"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "ఫీల్డ్‌లు ఏవీ నమోదు కాలేదు."
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "ఫీల్డ్‌లు"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "ఫీల్డ్‌లను వెతకండి"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "పేజీలు ఏవీ నమోదు కాలేదు."
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "స్లగ్"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "పోస్ట్ రకం"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "సమకాలీకరించండి"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "పోస్ట్ ID"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "టెంప్లేట్"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "దీని కోసం టెంప్లేట్"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "పేజీలు"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "పేజీలను వెతకండి"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "స్కీమాలు ఏవీ నమోదు కాలేదు."
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "బ్లాక్"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "స్కీమా"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "నిల్వ"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "వినియోగదారు పరిధి"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "సామర్థ్యాలు"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "స్కీమాలు"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "స్కీమాలను వెతకండి"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "ఈ ఫీల్డ్ నిలిపివేయబడింది"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "విస్తరించిన ఎడిటర్‌ను తెరవండి"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "పూర్తయింది"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "లక్షణం"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "మరిన్ని"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "లింక్ చొప్పించండి"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "మీడియా చొప్పించండి"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "తొలగించండి"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "విలువ"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "లక్షణాన్ని జోడించండి"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "బేస్"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "పాప్‌అప్‌లో తెరవండి"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "మీడియా లైబ్రరీని తెరవండి"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "మీడియా పరిమాణం"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "లింక్‌ను ఎంచుకోండి"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "కొత్త ట్యాబ్‌లో తెరవండి"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "లింక్‌ను ఎంచుకోండి"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "రిపీటర్ ఎలిమెంట్"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "వరుస %dను విస్తరించండి"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "వరుస %dను కుదించండి"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "వరుస %dను నకలు చేయండి"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "వరుస %dను తొలగించండి"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "ఈ వరుసను తొలగించాలనుకుంటున్నారా?"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "వరుసను జోడించండి"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "డిఫాల్ట్‌కు రీసెట్ చేయండి"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "ఎడమకు సమలేఖనం చేయండి"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "మధ్యకు సమలేఖనం చేయండి"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "కుడికి సమలేఖనం చేయండి"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "సమానంగా సమలేఖనం చేయండి"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "WYSIWYG టూల్‌బార్"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "బోల్డ్"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "ఇటాలిక్"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "అండర్‌లైన్"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "స్ట్రైక్‌త్రూ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "కోడ్"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "లింక్"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "క్రమం లేని జాబితా"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "క్రమబద్ధమైన జాబితా"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "విజువల్‌కు మారండి"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "కోడ్‌కు మారండి"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "చిత్రం"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "ఫైల్"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "లోడ్ చేయడానికి క్లిక్ చేయండి"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "ఫోకస్ మోడ్‌ను మూసివేయండి"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "క్యాన్వాస్ ఎంపికలు"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "వీక్షణకు సరిపడేలా చేయండి"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "100%కు జూమ్ చేయండి"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "లైవ్ మోడ్"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "నకలు చేయబడింది: %s"

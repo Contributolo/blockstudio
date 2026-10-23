@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:37+0000\n"
+"Language-Team: Saraiki\n"
+"Language: skr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "%2$s بلاک ٹیگ اُتے \"%1$s\" وصف چھڈ ݙتا ویندا ہے، کیوں جو بلاک وچ ایں آئی ڈی دا کوئی فیلڈ اعلان نئیں۔ فیلڈ دا اعلان کرو، یا ایں کوں data-، aria- یا html- وصف دے طور تے لکھو تاں جو ایہہ بنیادی عنصر اُتے آوے۔"
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "ایہہ سٹوریج کلید بلاک یا ایں دیاں توسیعاں وچ اعلان شدہ کائنی۔"
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "ایہہ قدر فیلڈ دے اختیاراں وچ شامل کائنی۔"
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "ایہہ قدر فیلڈ دے لئی معاون شکل وچ کائنی۔"
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "ایں ریپیٹر وچ گھٹ توں گھٹ حد توں گھٹ قطاراں ہن۔"
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "ایں ریپیٹر وچ ودھ توں ودھ حد توں ودھ قطاراں ہن۔"
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "ایں سٹوریج کلید لئی فیلڈ دیاں تعریفاں آپس وچ ٹکراؤندیاں ہن۔"
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "اندرلے فیلڈ دی قدر ایں اوپری سطح دی قدر دی تھاں لیندی ہے۔"
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "توسیع دیاں بائنڈنگز ایہہ قدر صرف blockstudio.attributes توں پڑھدیاں ہن۔"
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "Blockstudio فیلڈ دیاں قدراں شے وچ محفوظ تھیوݨ لازمی ہن۔"
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "Blockstudio اپݨا بلاک کیش تیار کریندا پیا ہے۔ تھوڑی دیر بعد ول کوشش کرو۔"
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "کینوس بند ہے۔"
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "CSRF ٹوکن غلط ہے یا موجود کائنی۔"
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "تصدیق لازمی ہے۔"
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "اجازتیں کافی کائنی۔"
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "توثیق ناکام تھی ڳئی۔"
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "ریکارڈ نئیں لبھا۔"
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "آئی لینڈ دی درخواست غلط ہے۔"
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "ٻہوں زیادہ آئی لینڈ منگے ڳئے ہن۔"
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "آئی لینڈ بلاک غلط ہے۔"
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "آئی لینڈ دستخط غلط ہن۔"
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "معاف کرو، تہاکوں ایں پوسٹ دے بلاک پڑھݨ دی اجازت کائنی۔"
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "معاف کرو، تہاکوں ایں صارف دے طور تے بلاک پڑھݨ دی اجازت کائنی۔"
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "بلاک غلط ہے۔"
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "ایہہ طریقہ اجازت یافتہ کائنی۔"
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "بلاک نئیں لبھا۔"
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "فنکشن نئیں لبھا۔"
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "فنکشن قابلِ کال کائنی۔"
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Blockstudio غلط تشکیل دیاں قدراں نظرانداز کر ݙتیاں:"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: لنک دا متن"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: URL"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "درست"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "غلط"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "ڈیٹا بیس ریکارڈ لوڈ نئیں تھی سکئے۔"
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "ہݨ تائیں ایں ڈیٹا بیس وچ کوئی ریکارڈ کائنی۔"
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "کوئی Blockstudio ڈیٹا بیس رجسٹر نئیں ہیا۔"
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "چݨیا ہویا ڈیٹا بیس نئیں لبھا۔"
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "جائزہ"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "رجسٹری"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "ڈیٹا بیس"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "دستاویزات"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "Blockstudio جائزے دا کوئی ڈیٹا دستیاب کائنی۔"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "ناں"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "عنوان"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "تفصیل"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "زمرہ"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "قسم"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "حالت"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "انسٹال تھیا ہویا"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "دستیاب"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "کارروائیاں"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "ول درآمد کرو"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "درآمد کرو"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "کوئی رجسٹری ترتیب ݙتی ہوئی کائنی۔ اپݨی تھیم دی blocks.json فائل وچ رجسٹریاں شامل کرو۔"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "بلاکس ڳولو"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "کوئی بلاک رجسٹر کائنی۔"
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "رینڈر"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "اوصاف"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "بلاکس"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "کوئی توسیع رجسٹر کائنی۔"
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "اہداف"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "ترجیح"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "توسعات"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "توسعات ڳولو"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "کوئی فیلڈ رجسٹر کائنی۔"
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "فیلڈز"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "فیلڈز ڳولو"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "کوئی صفحہ رجسٹر کائنی۔"
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "سلگ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "پوسٹ دی قسم"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "ہم وقت کرو"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "پوسٹ آئی ڈی"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "سانچہ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "سانچہ برائے"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "صفحے"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "صفحے ڳولو"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "کوئی اسکیما رجسٹر کائنی۔"
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "بلاک"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "اسکیما"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "سٹوریج"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "صارف تک محدود"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "صلاحیتاں"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "اسکیما"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "اسکیما ڳولو"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "ایہہ فیلڈ بند ہے"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "وݙا ایڈیٹر کھولو"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "مکمل"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "وصف"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "ٻیا"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "لنک شامل کرو"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "میڈیا شامل کرو"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "مٹاؤ"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "قدر"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "وصف شامل کرو"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "بنیاد"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "پاپ اَپ وچ کھولو"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "میڈیا لائبریری کھولو"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "میڈیا دا سائز"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "لنک چݨو"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "نویں ٹیب وچ کھولو"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "لنک چݨو"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "ریپیٹر دا عنصر"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "قطار %d پھیلاؤ"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "قطار %d سکیڑو"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "قطار %d دی نقل بناؤ"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "قطار %d ہٹاؤ"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "کیا تساں ایہہ قطار مٹاوݨ چاہندے ہو؟"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "قطار شامل کرو"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "طے شدہ قدر تے واپس آؤ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "کھٻے پاسے ترتیب ݙیو"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "وچکار ترتیب ݙیو"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "سڄے پاسے ترتیب ݙیو"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "دونھیں پاسیاں برابر ترتیب ݙیو"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "WYSIWYG ٹول بار"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "موٹا"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "ترچھا"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "لکیردار"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "کٹ لکیردار"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "کوڈ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "لنک"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "بے ترتیب فہرست"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "ترتیب وار فہرست"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "بصری موڈ تے بدلو"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "کوڈ موڈ تے بدلو"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "تصویر"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "فائل"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "لوڈ کرݨ کیتے کلک کرو"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "فوکس موڈ بند کرو"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "کینوس دے اختیار"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "ݙکھاوݨ لئی فٹ کرو"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "100٪ تے زوم کرو"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "لائیو موڈ"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "کاپی تھیا: %s"

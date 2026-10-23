@@ -131,6 +131,7 @@ section markers in Markdown files.
 - Edit UI behavior in `src/ui/` and frontend helpers in `src/runtime/`; run `npm run build:runtime` and commit the generated JS at its original `includes/` path.
 - Do not convert JavaScript test fixtures or vendor code. `audit:tooling` enforces the explicit exceptions and checked TS project coverage.
 - `npm run build` retains the WordPress webpack pipeline, externals and `.asset.php` manifests.
+- Translation generation is explicit: `npm run i18n:translate` uses Codex CLI to fill missing forms only. Preserve existing translations. `i18n:check` and `i18n:coverage` are offline CI gates; never call AI from tests or normal builds.
 
 ## CI
 

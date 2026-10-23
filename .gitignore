@@ -33,6 +33,8 @@ _references/
 artifacts/
 .last-run.json
 *.tsbuildinfo
+languages/.i18n-lock/
+languages/.blockstudio-*/
 
 # Source maps from dev builds (npm run dev); never part of the shipped assets
 includes/admin/assets/**/*.map

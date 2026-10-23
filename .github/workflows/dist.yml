@@ -69,6 +69,24 @@ jobs:
           done
           echo "No dev files leaked"
 
+      - name: Verify bundled translations
+        run: |
+          php -r '
+            $directory = "build/blockstudio/languages/";
+            $snapshot = json_decode(file_get_contents($directory . "locales.json"), true, 512, JSON_THROW_ON_ERROR);
+            foreach ($snapshot["locales"] as $locale) {
+              if ($locale["locale"] === "en_US") { continue; }
+              $base = $directory . "blockstudio-" . $locale["locale"];
+              foreach ([".po", ".mo", ".l10n.php", "-blockstudio-blocks.json", "-blockstudio-admin-page.json", "-blockstudio-canvas.json", "-blockstudio-devtools.json"] as $suffix) {
+                if (!is_file($base . $suffix)) {
+                  fwrite(STDERR, "Missing translation: " . $base . $suffix . PHP_EOL);
+                  exit(1);
+                }
+              }
+            }
+            echo "All locale catalogs and compiled translations are packaged" . PHP_EOL;
+          '
+
       - name: Verify PHP syntax
         run: |
           cd build/blockstudio

@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:36+0000\n"
+"Language-Team: Sakha\n"
+"Language: sah\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "%2$s блок тэгэр %1$s атрибутун блокка бу атрибут ID-таах поле суох буолан, ылар. Поле туруор, эбэтэр атрибуту корневой элементкэ туруорар диэн data-, aria- эбэтэр html- атрибут быһыытынан суруй."
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "Бу хранилище клюһа блокка уонна кини расширениеларыгар суруллубатах."
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "Бу суолтата поле талбаларыгар суох."
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "Бу суолтата поле форматыгар сөп түбэспэт."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "Бу повторитель минимальнай чиҥиэтигэр тиийбэтэх."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "Бу повторитель максимальнай чиҥиэтиттэн аһар."
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "Бу хранилище клюһугар атын-атын поле быһаарыылара сыһыаннаах."
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "Иһинээҕи поле суолтата бу үөһээҕи суолтаны уларыта."
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "Расширение связкалары бу суолтаны blockstudio.attributes иһигэр эрэ ааҕаллар."
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "Blockstudio поле суолталарын объект быһыытынан харайыахтаах."
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "Blockstudio блок кэшигэр бэлэмнэнэр. Билигин кэнники холон."
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "Canvas араарыллыбыт."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "CSRF токен буруйдаах эбэтэр суох."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "Аутентификация наада."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "Уруксат ситэри суох."
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "Туруоруу буруйдаах."
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "Суруналы табыллыбата."
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "Островтарга ыйытык буруйдаах."
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "Өрөҕөйдүүр островтар ахсааннара элбэх."
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "Остров блок буруйдаах."
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "Остров сигнатурата буруйдаах."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "Баҕарабын, бу пост блоктарын ааҕар кыах суох."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "Баҕарабын, бу кыттааччы быһыытынан блоктары ааҕар кыах суох."
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "Блок буруйдаах."
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "Метод көрүллүбэт."
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "Блок табыллыбата."
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "Функция табыллыбата."
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "Функцияны ыҥырыллыахха сөп түбэспэт."
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Blockstudio буруйдаах конфигурация суолталарын кэриэттээтэ:"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: Сибидиэнньэ текстэ"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: URL"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "Сөп"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "Сөп түбэспэт"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "База биллэрүүлэрин хачайдаан ылар сатаммата."
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "Бу базаҕа билигин биллэрүүлэр суохтар."
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "Blockstudio базалара регистрацияламматылар."
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "Талыллыбыт база табыллыбата."
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "Көрүү"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "Реестр"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "Базалар"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "Документация"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "Blockstudio көрүү информацията суох."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "Аата"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "Баһа"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "Туһунан"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "Категория"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "Тиэки"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "Туруга"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "Олохтоммут"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "Бэлэм"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "Дьайыылар"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "Хат импорттаа"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "Импорттаа"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "Реестр туруоруллубатах. Теманыҥ blocks.json билэтигэр реестрдары эп."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "Блоктары көрдөө"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "Блоктар регистрацияламматылар."
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "Саҥар"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "Атрибуттар"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "Блоктар"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "Кэҥэтии регистрацияламмата."
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "Тиһиктэр"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "Приоритет"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "Кэҥэтии"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "Кэҥэтии көрдөө"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "Полелар регистрацияламматылар."
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "Полелар"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "Полелары көрдөө"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "Сирэйдэр регистрацияламматылар."
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "Кыра ат"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "Публикация тиэки"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "Синхрон"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "Пост ID"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "Шаблон"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "Шаблон туһунан"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "Сирэйдэр"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "Сирэйдэр көрдөө"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "Схемалар регистрацияламматылар."
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "Блок"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "Схема"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "Харайыы"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "Кыттааччыга сөп"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "Кыахтар"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "Схемалар"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "Схемалары көрдөө"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "Бу поле араарыллыбыт"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "Кэҥэтиллибит редактору арый"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "Бүттэ"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "Атрибут"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "Остуол"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "Сибидиэнньэ киллэр"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "Медианы киллэр"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "Сот"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "Суолта"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "Атрибут эп"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "Нөҥүө"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "Попапка арый"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "Медиа библиотеканы арый"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "Медиа кээмэйэ"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "Сибидиэнньэ тал"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "Саҥа тиһиккэ арый"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "Сибидиэнньэ тал"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "Хаталанар элемент"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "%d тэрилэҕи кэҥэт"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "%d тэрилэҕи кистээ"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "%d тэрилэҕи дубликаттаа"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "%d тэрилэҕи сот"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "Бу тэрилэҕи сотуоххун баҕараҕын дуо?"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "Тэрилэ эп"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "Аныгыскыга төннөр"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "Хаҥас өттүнэн тэҥнээ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "Ортотунан тэҥнээ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "Уҥа өттүнэн тэҥнээ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "Икки өттүнэн тэҥнээ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "WYSIWYG панель"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "Бэлиэтээ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "Курсив"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "Астын сыз"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "Кырдьаҕас сыз"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "Код"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "Сибидиэнньэ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "Тиһиктээх исписок"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "Номерациялаах исписок"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "Көрдөрөргэ уларыт"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "Кодка уларыт"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "Ойуу"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "Билэ"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "Хачайдаа"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "Фокус режимын сап"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "Canvas туруоруулар"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "Көрүүгэ сөптөө"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "100% кээмэйгэ дьүөрэлээ"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "Тириир режим"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "Көчүрүллүннэ: %s"

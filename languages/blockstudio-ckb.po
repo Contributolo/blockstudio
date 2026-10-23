@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:27+0000\n"
+"Language-Team: Kurdish (Sorani)\n"
+"Language: ckb\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "بەهای تایبەتمەندی «%1$s» لەسەر تاگی بلۆکی %2$s لادەبرێت، چونکە بلۆکەکە هیچ خانەیەکی بەو ناسنامەیەوە دیاری نەکردووە. خانەکە دیاری بکە، یان وەک تایبەتمەندی data-، aria- یان html- بینووسە بۆ ئەوەی لەسەر توخمە ڕەگدا دابنرێت."
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "ئەم کلیلەی هەڵگرتن لەلایەن بلۆکەکە یان زیادکراوەکانیەوە دیاری نەکراوە."
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "ئەم بەهایە لە نێو هەڵبژاردەکانی خانەکەدا نییە."
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "شێوەی ئەم بەهایە بۆ ئەم خانەیە پشتگیری ناکرێت."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "ئەم دووبارەکەرەوەیە ڕیزەکانی لە کەمترین ژمارەی دیاریکراو کەمترە."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "ئەم دووبارەکەرەوەیە ڕیزەکانی لە زۆرترین ژمارەی دیاریکراو زیاترە."
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "پێناسەکانی خانە بۆ ئەم کلیلەی هەڵگرتن ناکۆکن."
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "بەهای خانەی تۆمارکراو بەهای سەرەوەیی دەگۆڕێت."
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "بەستەرەکانی زیادکراوەکان ئەم بەهایە تەنها لە blockstudio.attributes دەخوێننەوە."
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "بەهاکانی خانەی Blockstudio دەبێت لە ناو ئۆبجێکتێکدا هەڵبگیرێن."
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "Blockstudio خەریکی ئامادەکردنی کەشی بلۆکەکانیەتی. تکایە کەمێک دواتر دووبارە هەوڵ بدە."
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "Canvas ناچالاکە."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "تۆکنی CSRF نادروستە یان نییە."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "پێویستە چوونەژوورەوە بکەیت."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "دەسەڵاتی پێویستت نییە."
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "پشتڕاستکردنەوە سەرکەوتوو نەبوو."
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "تۆمار نەدۆزرایەوە."
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "داواکاریی جزیرەکان نادروستە."
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "ژمارەی زۆری جزیرە داواکراوە."
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "بلۆکی جزیرە نادروستە."
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "واژۆی جزیرە نادروستە."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "ببورە، ڕێگەت پێنەدراوە بلۆکەکانی ئەم بابەتە بخوێنیتەوە."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "ببورە، ڕێگەت پێنەدراوە وەک ئەم بەکارهێنەرە بلۆکەکان بخوێنیتەوە."
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "بلۆک نادروستە."
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "ئەم ڕێگایە ڕێگەپێدراو نییە."
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "بلۆک نەدۆزرایەوە."
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "فەنکشن نەدۆزرایەوە."
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "فەنکشن بانگکردنی ناکرێت."
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Blockstudio بەها نادروستەکانی ڕێکخستنەکانی پشتگوێ خست:"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: دەقی بەستەر"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: بەستەر"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "ڕاست"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "هەڵە"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "نەتوانرا تۆمارەکانی بنکەدراوە بار بکرێن."
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "ئەم بنکەدراوەیە هێشتا هیچ تۆمارێکی تێدا نییە."
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "هیچ بنکەدراوەیەکی Blockstudio تۆمار نەکراوە."
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "نەتوانرا بنکەدراوەی هەڵبژێردراو بدۆزرێتەوە."
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "پوختە"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "تۆمارگە"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "بنکەدراوەکان"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "بەڵگەنامەکان"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "هیچ زانیارییەکی پوختەی Blockstudio بەردەست نییە."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "ناو"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "ناونیشان"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "وەسف"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "پۆل"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "جۆر"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "دۆخ"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "دامەزراو"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "بەردەست"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "کردارەکان"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "دووبارە هاوردەکردن"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "هاوردەکردن"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "هیچ تۆمارگەیەک ڕێک نەخراوە. تۆمارگەکان لە فایلە blocks.json ـی ڕووکاری خۆت زیاد بکە."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "گەڕان بەدوای بلۆکەکاندا"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "هیچ بلۆکێک تۆمار نەکراوە."
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "ڕەندەرکردن"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "تایبەتمەندییەکان"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "بلۆکەکان"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "هیچ زیادکراوەیەک تۆمار نەکراوە."
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "ئامانجەکان"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "ئەولەویەت"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "زیادکراوەکان"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "گەڕان بەدوای زیادکراوەکاندا"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "هیچ خانەیەک تۆمار نەکراوە."
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "خانەکان"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "گەڕان بەدوای خانەکاندا"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "هیچ پەڕەیەک تۆمار نەکراوە."
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "ناوی کورت"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "جۆری بابەت"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "هاوکاتکردن"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "ناسنامەی بابەت"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "قاڵب"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "قاڵب بۆ"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "پەڕەکان"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "گەڕان بەدوای پەڕەکاندا"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "هیچ سکیمایەک تۆمار نەکراوە."
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "بلۆک"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "سکیما"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "هەڵگرتن"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "تایبەت بە بەکارهێنەر"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "تواناکان"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "سکیماکان"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "گەڕان بەدوای سکیماکاندا"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "ئەم خانەیە ناچالاکە"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "کردنەوەی دەستکاریی فراوانکراو"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "تەواو"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "تایبەتمەندی"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "زیاتر"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "خستنەناوەوەی بەستەر"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "خستنەناوەوەی میدیا"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "سڕینەوە"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "بەها"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "زیادکردنی تایبەتمەندی"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "بنەڕەت"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "کردنەوە لە پەنجەرەیەکی بچووکدا"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "کردنەوەی کتێبخانەی میدیا"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "قەبارەی میدیا"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "هەڵبژاردنی بەستەر"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "کردنەوە لە پەڕەیەکی نوێدا"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "هەڵبژاردنی بەستەر"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "توخمی دووبارەکەرەوە"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "فراوانکردنی ڕیزی %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "داخستنی ڕیزی %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "لەبەرگرتنەوەی ڕیزی %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "لابردنی ڕیزی %d"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "دەتەوێت ئەم ڕیزە بسڕیتەوە؟"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "زیادکردنی ڕیز"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "گەڕاندنەوە بۆ بنەڕەت"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "ڕێکخستن لە چەپ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "ڕێکخستن لە ناوەڕاست"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "ڕێکخستن لە ڕاست"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "ڕێکخستن بە هەردوو لاوە"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "تووڵباری WYSIWYG"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "قەڵەو"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "لار"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "ژێرهێڵ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "هێڵبەزێن"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "کۆد"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "بەستەر"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "لیستی بێ ژمارە"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "لیستی ژمارەدار"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "گۆڕین بۆ شێوازی بینراو"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "گۆڕین بۆ شێوازی کۆد"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "وێنە"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "پەڕگە"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "کرتە بکە بۆ بارکردن"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "داخستنی دۆخی سەرنج"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "هەڵبژاردەکانی Canvas"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "گونجاندن لەگەڵ پێشبینین"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "گەورەکردن بۆ ١٠٠٪"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "دۆخی زیندوو"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "لەبەرگیرا: %s"

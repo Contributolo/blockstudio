@@ -87,6 +87,39 @@ class BundledTranslationsTest extends TestCase {
 		}
 	}
 
+	public function test_every_supported_locale_has_a_bundled_catalog(): void {
+		$snapshot = json_decode( file_get_contents( Translations::path() . '/locales.json' ), true );
+		$this->assertNotEmpty( $snapshot['locales'] );
+		foreach ( $snapshot['locales'] as $locale ) {
+			if ( 'en_US' === $locale['locale'] ) {
+				continue;
+			}
+			$base = Translations::path() . '/blockstudio-' . $locale['locale'];
+			$this->assertFileExists( $base . '.po' );
+			$this->assertFileExists( $base . '.l10n.php' );
+			$data = require $base . '.l10n.php';
+			$this->assertSame( $locale['locale'], $data['language'] );
+			$this->assertStringContainsString( 'nplurals=' . $locale['nplurals'] . ';', $data['plural-forms'] );
+		}
+	}
+
+	public function test_generated_latin_cjk_and_rtl_locales_load_php_and_editor_strings(): void {
+		$blocks = ( new ReflectionClass( Blocks::class ) )->newInstanceWithoutConstructor();
+		$blocks->enqueue_editor_assets();
+		foreach ( array( 'fr_FR', 'ja', 'ar' ) as $locale ) {
+			$this->locale = $locale;
+			Translations::load();
+			$data = require Translations::path() . '/blockstudio-' . $locale . '.l10n.php';
+			$this->assertNotSame( 'Invalid block.', $data['messages']['Invalid block.'] );
+			$this->assertSame( $data['messages']['Invalid block.'], __( 'Invalid block.', 'blockstudio' ) );
+			$scripts = wp_scripts();
+			$scripts->set_translations( 'blockstudio-blocks', Translations::DOMAIN, Translations::script_path( 'blockstudio-blocks' ) );
+			$json = $scripts->print_translations( 'blockstudio-blocks', false );
+			$this->assertIsString( $json );
+			$this->assertStringContainsString( wp_json_encode( $data['messages']['Add row'], JSON_UNESCAPED_UNICODE ), $json );
+		}
+	}
+
 	public function test_site_php_override_wins_and_missing_strings_fall_back_to_the_bundle(): void {
 		require_once ABSPATH . WPINC . '/pomo/mo.php';
 		$file = tempnam( sys_get_temp_dir(), 'blockstudio-override-' ) . '.mo';

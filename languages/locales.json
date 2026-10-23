@@ -1,0 +1,1682 @@
+{
+  "version": 1,
+  "sources": {
+    "registry": "https://raw.githubusercontent.com/GlotPress/GlotPress/develop/locales/locales.php",
+    "packages": "https://api.wordpress.org/translations/core/1.0/"
+  },
+  "registrySha256": "81f10b5c0346f2327df0fde5d3d134105ef92c166f856f573e1beb9047e8ef1b",
+  "locales": [
+    {
+      "locale": "af",
+      "englishName": "Afrikaans",
+      "nativeName": "Afrikaans",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "am",
+      "englishName": "Amharic",
+      "nativeName": "አማርኛ",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "ar",
+      "englishName": "Arabic",
+      "nativeName": "العربية",
+      "direction": "rtl",
+      "nplurals": 6,
+      "pluralExpression": "(n == 0) ? 0 : ((n == 1) ? 1 : ((n == 2) ? 2 : ((n % 100 >= 3 && n % 100 <= 10) ? 3 : ((n % 100 >= 11 && n % 100 <= 99) ? 4 : 5))))"
+    },
+    {
+      "locale": "arg",
+      "englishName": "Aragonese",
+      "nativeName": "Aragonés",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "arq",
+      "englishName": "Algerian Arabic",
+      "nativeName": "الدارجة الجزايرية",
+      "direction": "rtl",
+      "nplurals": 6,
+      "pluralExpression": "(n == 0) ? 0 : ((n == 1) ? 1 : ((n == 2) ? 2 : ((n % 100 >= 3 && n % 100 <= 10) ? 3 : ((n % 100 >= 11 && n % 100 <= 99) ? 4 : 5))))"
+    },
+    {
+      "locale": "art_xemoji",
+      "englishName": "Emoji",
+      "nativeName": "ððð (Emoji)",
+      "direction": "ltr",
+      "nplurals": 1,
+      "pluralExpression": "0"
+    },
+    {
+      "locale": "art_xpirate",
+      "englishName": "English (Pirate)",
+      "nativeName": "English (Pirate)",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "ary",
+      "englishName": "Moroccan Arabic",
+      "nativeName": "العربية المغربية",
+      "direction": "rtl",
+      "nplurals": 6,
+      "pluralExpression": "(n == 0) ? 0 : ((n == 1) ? 1 : ((n == 2) ? 2 : ((n % 100 >= 3 && n % 100 <= 10) ? 3 : ((n % 100 >= 11 && n % 100 <= 99) ? 4 : 5))))"
+    },
+    {
+      "locale": "as",
+      "englishName": "Assamese",
+      "nativeName": "অসমীয়া",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "ast",
+      "englishName": "Asturian",
+      "nativeName": "Asturianu",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "az",
+      "englishName": "Azerbaijani",
+      "nativeName": "Azərbaycan dili",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "az_TR",
+      "englishName": "Azerbaijani (Turkey)",
+      "nativeName": "Azərbaycan Türkcəsi",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "azb",
+      "englishName": "South Azerbaijani",
+      "nativeName": "تۆرکجه‌ (آذربایجان تۆرکجه‌سی)",
+      "direction": "rtl",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "ba",
+      "englishName": "Bashkir",
+      "nativeName": "башҡорт теле",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "bal",
+      "englishName": "Catalan (Balear)",
+      "nativeName": "Català (Balear)",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "bcc",
+      "englishName": "Balochi (Southern)",
+      "nativeName": "بلوچی مکرانی",
+      "direction": "rtl",
+      "nplurals": 1,
+      "pluralExpression": "0"
+    },
+    {
+      "locale": "bel",
+      "englishName": "Belarusian",
+      "nativeName": "Беларуская мова",
+      "direction": "ltr",
+      "nplurals": 3,
+      "pluralExpression": "(n % 10 == 1 && n % 100 != 11) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2)"
+    },
+    {
+      "locale": "bg_BG",
+      "englishName": "Bulgarian",
+      "nativeName": "Български",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "bgn",
+      "englishName": "Balochi (western)",
+      "nativeName": "مغربی بلوچی",
+      "direction": "rtl",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "bho",
+      "englishName": "Bhojpuri",
+      "nativeName": "भोजपुरी",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "bn_BD",
+      "englishName": "Bengali (Bangladesh)",
+      "nativeName": "বাংলা",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "bn_IN",
+      "englishName": "Bengali (India)",
+      "nativeName": "বাংলা (ভারত)",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n > 1"
+    },
+    {
+      "locale": "bo",
+      "englishName": "Tibetan",
+      "nativeName": "བོད་ཡིག",
+      "direction": "ltr",
+      "nplurals": 1,
+      "pluralExpression": "0"
+    },
+    {
+      "locale": "bre",
+      "englishName": "Breton",
+      "nativeName": "Brezhoneg",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n > 1"
+    },
+    {
+      "locale": "brx",
+      "englishName": "Bodo",
+      "nativeName": "बोडो‎",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "bs_BA",
+      "englishName": "Bosnian",
+      "nativeName": "Bosanski",
+      "direction": "ltr",
+      "nplurals": 3,
+      "pluralExpression": "(n % 10 == 1 && n % 100 != 11) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2)"
+    },
+    {
+      "locale": "ca",
+      "englishName": "Catalan",
+      "nativeName": "Català",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "ca_valencia",
+      "englishName": "Catalan (Valencian)",
+      "nativeName": "Català (Valencià)",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "ceb",
+      "englishName": "Cebuano",
+      "nativeName": "Cebuano",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "ckb",
+      "englishName": "Kurdish (Sorani)",
+      "nativeName": "كوردی‎",
+      "direction": "rtl",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "co",
+      "englishName": "Corsican",
+      "nativeName": "Corsu",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "cor",
+      "englishName": "Cornish",
+      "nativeName": "Kernewek",
+      "direction": "ltr",
+      "nplurals": 6,
+      "pluralExpression": "(n == 0) ? 0 : ((n == 1) ? 1 : (((n % 100 == 2 || n % 100 == 22 || n % 100 == 42 || n % 100 == 62 || n % 100 == 82) || n % 1000 == 0 && (n % 100000 >= 1000 && n % 100000 <= 20000 || n % 100000 == 40000 || n % 100000 == 60000 || n % 100000 == 80000) || n != 0 && n % 1000000 == 100000) ? 2 : ((n % 100 == 3 || n % 100 == 23 || n % 100 == 43 || n % 100 == 63 || n % 100 == 83) ? 3 : ((n != 1 && (n % 100 == 1 || n % 100 == 21 || n % 100 == 41 || n % 100 == 61 || n % 100 == 81)) ? 4 : 5))))"
+    },
+    {
+      "locale": "cs_CZ",
+      "englishName": "Czech",
+      "nativeName": "Čeština",
+      "direction": "ltr",
+      "nplurals": 3,
+      "pluralExpression": "(n == 1) ? 0 : ((n >= 2 && n <= 4) ? 1 : 2)"
+    },
+    {
+      "locale": "cy",
+      "englishName": "Welsh",
+      "nativeName": "Cymraeg",
+      "direction": "ltr",
+      "nplurals": 4,
+      "pluralExpression": "(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3"
+    },
+    {
+      "locale": "da_DK",
+      "englishName": "Danish",
+      "nativeName": "Dansk",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "de_AT",
+      "englishName": "German (Austria)",
+      "nativeName": "Deutsch (Österreich)",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "de_CH",
+      "englishName": "German (Switzerland)",
+      "nativeName": "Deutsch (Schweiz)",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "de_CH_informal",
+      "englishName": "German (Switzerland, Informal)",
+      "nativeName": "Deutsch (Schweiz, Du)",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "de_DE",
+      "englishName": "German",
+      "nativeName": "Deutsch",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "de_DE_formal",
+      "englishName": "German (Formal)",
+      "nativeName": "Deutsch (Sie)",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "dsb",
+      "englishName": "Lower Sorbian",
+      "nativeName": "Dolnoserbšćina",
+      "direction": "ltr",
+      "nplurals": 4,
+      "pluralExpression": "(n % 100 == 1) ? 0 : ((n % 100 == 2) ? 1 : ((n % 100 == 3 || n % 100 == 4) ? 2 : 3))"
+    },
+    {
+      "locale": "dv",
+      "englishName": "Dhivehi",
+      "nativeName": "ދިވެހި",
+      "direction": "rtl",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "dzo",
+      "englishName": "Dzongkha",
+      "nativeName": "རྫོང་ཁ",
+      "direction": "ltr",
+      "nplurals": 1,
+      "pluralExpression": "0"
+    },
+    {
+      "locale": "el",
+      "englishName": "Greek",
+      "nativeName": "Ελληνικά",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "en_AU",
+      "englishName": "English (Australia)",
+      "nativeName": "English (Australia)",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "en_CA",
+      "englishName": "English (Canada)",
+      "nativeName": "English (Canada)",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "en_GB",
+      "englishName": "English (UK)",
+      "nativeName": "English (UK)",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "en_NZ",
+      "englishName": "English (New Zealand)",
+      "nativeName": "English (New Zealand)",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "en_US",
+      "englishName": "English",
+      "nativeName": "English",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "en_ZA",
+      "englishName": "English (South Africa)",
+      "nativeName": "English (South Africa)",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "eo",
+      "englishName": "Esperanto",
+      "nativeName": "Esperanto",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "es_AN",
+      "englishName": "Spanish (Andalusia)",
+      "nativeName": "Español de Andalucía",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "es_AR",
+      "englishName": "Spanish (Argentina)",
+      "nativeName": "Español de Argentina",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "es_CL",
+      "englishName": "Spanish (Chile)",
+      "nativeName": "Español de Chile",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "es_CO",
+      "englishName": "Spanish (Colombia)",
+      "nativeName": "Español de Colombia",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "es_CR",
+      "englishName": "Spanish (Costa Rica)",
+      "nativeName": "Español de Costa Rica",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "es_DO",
+      "englishName": "Spanish (Dominican Republic)",
+      "nativeName": "Español de República Dominicana",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "es_EC",
+      "englishName": "Spanish (Ecuador)",
+      "nativeName": "Español de Ecuador",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "es_ES",
+      "englishName": "Spanish (Spain)",
+      "nativeName": "Español",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "es_GT",
+      "englishName": "Spanish (Guatemala)",
+      "nativeName": "Español de Guatemala",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "es_HN",
+      "englishName": "Spanish (Honduras)",
+      "nativeName": "Español de Honduras",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "es_MX",
+      "englishName": "Spanish (Mexico)",
+      "nativeName": "Español de México",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "es_PE",
+      "englishName": "Spanish (Peru)",
+      "nativeName": "Español de Perú",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "es_PR",
+      "englishName": "Spanish (Puerto Rico)",
+      "nativeName": "Español de Puerto Rico",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "es_UY",
+      "englishName": "Spanish (Uruguay)",
+      "nativeName": "Español de Uruguay",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "es_VE",
+      "englishName": "Spanish (Venezuela)",
+      "nativeName": "Español de Venezuela",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "et",
+      "englishName": "Estonian",
+      "nativeName": "Eesti",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "eu",
+      "englishName": "Basque",
+      "nativeName": "Euskara",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "ewe",
+      "englishName": "Ewe",
+      "nativeName": "Eʋegbe",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "fa_AF",
+      "englishName": "Persian (Afghanistan)",
+      "nativeName": "(فارسی (افغانستان",
+      "direction": "rtl",
+      "nplurals": 2,
+      "pluralExpression": "n > 1"
+    },
+    {
+      "locale": "fa_IR",
+      "englishName": "Persian",
+      "nativeName": "فارسی",
+      "direction": "rtl",
+      "nplurals": 2,
+      "pluralExpression": "n > 1"
+    },
+    {
+      "locale": "fi",
+      "englishName": "Finnish",
+      "nativeName": "Suomi",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "fo",
+      "englishName": "Faroese",
+      "nativeName": "Føroyskt",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "fon",
+      "englishName": "Fon",
+      "nativeName": "fɔ̀ngbè",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "fr_BE",
+      "englishName": "French (Belgium)",
+      "nativeName": "Français de Belgique",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n > 1"
+    },
+    {
+      "locale": "fr_CA",
+      "englishName": "French (Canada)",
+      "nativeName": "Français du Canada",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n > 1"
+    },
+    {
+      "locale": "fr_FR",
+      "englishName": "French (France)",
+      "nativeName": "Français",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n > 1"
+    },
+    {
+      "locale": "frp",
+      "englishName": "Arpitan",
+      "nativeName": "Arpitan",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n > 1"
+    },
+    {
+      "locale": "fuc",
+      "englishName": "Fulah",
+      "nativeName": "Pulaar",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "fur",
+      "englishName": "Friulian",
+      "nativeName": "Friulian",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "fy",
+      "englishName": "Frisian",
+      "nativeName": "Frysk",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "ga",
+      "englishName": "Irish",
+      "nativeName": "Gaelige",
+      "direction": "ltr",
+      "nplurals": 5,
+      "pluralExpression": "(n == 1) ? 0 : ((n == 2) ? 1 : ((n >= 3 && n <= 6) ? 2 : ((n >= 7 && n <= 10) ? 3 : 4)))"
+    },
+    {
+      "locale": "gax",
+      "englishName": "Borana-Arsi-Guji Oromo",
+      "nativeName": "Afaan Oromoo",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n > 1"
+    },
+    {
+      "locale": "gd",
+      "englishName": "Scottish Gaelic",
+      "nativeName": "Gàidhlig",
+      "direction": "ltr",
+      "nplurals": 4,
+      "pluralExpression": "(n == 1 || n == 11) ? 0 : ((n == 2 || n == 12) ? 1 : ((n >= 3 && n <= 10 || n >= 13 && n <= 19) ? 2 : 3))"
+    },
+    {
+      "locale": "gl_ES",
+      "englishName": "Galician",
+      "nativeName": "Galego",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "gu",
+      "englishName": "Gujarati",
+      "nativeName": "ગુજરાતી",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "hat",
+      "englishName": "Haitian Creole",
+      "nativeName": "Kreyol ayisyen",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "hau",
+      "englishName": "Hausa",
+      "nativeName": "Harshen Hausa",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "haw_US",
+      "englishName": "Hawaiian",
+      "nativeName": "Ōlelo Hawaiʻi",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "haz",
+      "englishName": "Hazaragi",
+      "nativeName": "هزاره گی",
+      "direction": "rtl",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "he_IL",
+      "englishName": "Hebrew",
+      "nativeName": "עִבְרִית",
+      "direction": "rtl",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "hi_IN",
+      "englishName": "Hindi",
+      "nativeName": "हिन्दी",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "hr",
+      "englishName": "Croatian",
+      "nativeName": "Hrvatski",
+      "direction": "ltr",
+      "nplurals": 3,
+      "pluralExpression": "(n % 10 == 1 && n % 100 != 11) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2)"
+    },
+    {
+      "locale": "hsb",
+      "englishName": "Upper Sorbian",
+      "nativeName": "Hornjoserbšćina",
+      "direction": "ltr",
+      "nplurals": 4,
+      "pluralExpression": "(n % 100 == 1) ? 0 : ((n % 100 == 2) ? 1 : ((n % 100 == 3 || n % 100 == 4) ? 2 : 3))"
+    },
+    {
+      "locale": "hu_HU",
+      "englishName": "Hungarian",
+      "nativeName": "Magyar",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "hy",
+      "englishName": "Armenian",
+      "nativeName": "Հայերեն",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "ibo",
+      "englishName": "Igbo",
+      "nativeName": "Asụsụ Igbo",
+      "direction": "ltr",
+      "nplurals": 1,
+      "pluralExpression": "0"
+    },
+    {
+      "locale": "id_ID",
+      "englishName": "Indonesian",
+      "nativeName": "Bahasa Indonesia",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n > 1"
+    },
+    {
+      "locale": "ido",
+      "englishName": "Ido",
+      "nativeName": "Ido",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "is_IS",
+      "englishName": "Icelandic",
+      "nativeName": "Íslenska",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n % 10 != 1 || n % 100 == 11"
+    },
+    {
+      "locale": "it_IT",
+      "englishName": "Italian",
+      "nativeName": "Italiano",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "ja",
+      "englishName": "Japanese",
+      "nativeName": "日本語",
+      "direction": "ltr",
+      "nplurals": 1,
+      "pluralExpression": "0"
+    },
+    {
+      "locale": "jv_ID",
+      "englishName": "Javanese",
+      "nativeName": "Basa Jawa",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "ka_GE",
+      "englishName": "Georgian",
+      "nativeName": "ქართული",
+      "direction": "ltr",
+      "nplurals": 1,
+      "pluralExpression": "0"
+    },
+    {
+      "locale": "kaa",
+      "englishName": "Karakalpak",
+      "nativeName": "Qaraqalpaq tili",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "kab",
+      "englishName": "Kabyle",
+      "nativeName": "Taqbaylit",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n > 1"
+    },
+    {
+      "locale": "kal",
+      "englishName": "Greenlandic",
+      "nativeName": "Kalaallisut",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "kin",
+      "englishName": "Kinyarwanda",
+      "nativeName": "Ikinyarwanda",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "kir",
+      "englishName": "Kyrgyz",
+      "nativeName": "Кыргызча",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "kk",
+      "englishName": "Kazakh",
+      "nativeName": "Қазақ тілі",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "km",
+      "englishName": "Khmer",
+      "nativeName": "ភាសាខ្មែរ",
+      "direction": "ltr",
+      "nplurals": 1,
+      "pluralExpression": "0"
+    },
+    {
+      "locale": "kmr",
+      "englishName": "Kurdish (Kurmanji)",
+      "nativeName": "Kurdî",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "kn",
+      "englishName": "Kannada",
+      "nativeName": "ಕನ್ನಡ",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "ko_KR",
+      "englishName": "Korean",
+      "nativeName": "한국어",
+      "direction": "ltr",
+      "nplurals": 1,
+      "pluralExpression": "0"
+    },
+    {
+      "locale": "lb_LU",
+      "englishName": "Luxembourgish",
+      "nativeName": "Lëtzebuergesch",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "li",
+      "englishName": "Limburgish",
+      "nativeName": "Limburgs",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "lij",
+      "englishName": "Ligurian",
+      "nativeName": "Lìgure",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "lin",
+      "englishName": "Lingala",
+      "nativeName": "Ngala",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n > 1"
+    },
+    {
+      "locale": "lmo",
+      "englishName": "Lombard",
+      "nativeName": "Lombardo",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "lo",
+      "englishName": "Lao",
+      "nativeName": "ພາສາລາວ",
+      "direction": "ltr",
+      "nplurals": 1,
+      "pluralExpression": "0"
+    },
+    {
+      "locale": "lt_LT",
+      "englishName": "Lithuanian",
+      "nativeName": "Lietuvių kalba",
+      "direction": "ltr",
+      "nplurals": 3,
+      "pluralExpression": "(n % 10 == 1 && (n % 100 < 11 || n % 100 > 19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? 1 : 2)"
+    },
+    {
+      "locale": "lug",
+      "englishName": "Luganda",
+      "nativeName": "Oluganda",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "lv",
+      "englishName": "Latvian",
+      "nativeName": "Latviešu valoda",
+      "direction": "ltr",
+      "nplurals": 3,
+      "pluralExpression": "(n % 10 == 0 || n % 100 >= 11 && n % 100 <= 19) ? 0 : ((n % 10 == 1 && n % 100 != 11) ? 1 : 2)"
+    },
+    {
+      "locale": "mai",
+      "englishName": "Maithili",
+      "nativeName": "मैथिली",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "me_ME",
+      "englishName": "Montenegrin",
+      "nativeName": "Crnogorski jezik",
+      "direction": "ltr",
+      "nplurals": 3,
+      "pluralExpression": "(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)"
+    },
+    {
+      "locale": "mfe",
+      "englishName": "Mauritian Creole",
+      "nativeName": "Kreol Morisien",
+      "direction": "ltr",
+      "nplurals": 1,
+      "pluralExpression": "0"
+    },
+    {
+      "locale": "mg_MG",
+      "englishName": "Malagasy",
+      "nativeName": "Malagasy",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "mk_MK",
+      "englishName": "Macedonian",
+      "nativeName": "Македонски јазик",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n % 10 != 1 || n % 100 == 11"
+    },
+    {
+      "locale": "ml_IN",
+      "englishName": "Malayalam",
+      "nativeName": "മലയാളം",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "mlt",
+      "englishName": "Maltese",
+      "nativeName": "Malti",
+      "direction": "ltr",
+      "nplurals": 4,
+      "pluralExpression": "(n == 1) ? 0 : ((n == 0 || n % 100 >= 2 && n % 100 <= 10) ? 1 : ((n % 100 >= 11 && n % 100 <= 19) ? 2 : 3))"
+    },
+    {
+      "locale": "mn",
+      "englishName": "Mongolian",
+      "nativeName": "Монгол",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "mr",
+      "englishName": "Marathi",
+      "nativeName": "मराठी",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "mri",
+      "englishName": "Maori",
+      "nativeName": "Te Reo Māori",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n > 1"
+    },
+    {
+      "locale": "ms_MY",
+      "englishName": "Malay",
+      "nativeName": "Bahasa Melayu",
+      "direction": "ltr",
+      "nplurals": 1,
+      "pluralExpression": "0"
+    },
+    {
+      "locale": "my_MM",
+      "englishName": "Myanmar (Burmese)",
+      "nativeName": "ဗမာစာ",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "nb_NO",
+      "englishName": "Norwegian (Bokmål)",
+      "nativeName": "Norsk bokmål",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "ne_NP",
+      "englishName": "Nepali",
+      "nativeName": "नेपाली",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "nl_BE",
+      "englishName": "Dutch (Belgium)",
+      "nativeName": "Nederlands (België)",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "nl_NL",
+      "englishName": "Dutch",
+      "nativeName": "Nederlands",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "nl_NL_formal",
+      "englishName": "Dutch (Formal)",
+      "nativeName": "Nederlands (Formeel)",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "nn_NO",
+      "englishName": "Norwegian (Nynorsk)",
+      "nativeName": "Norsk nynorsk",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "nqo",
+      "englishName": "N’ko",
+      "nativeName": "ߒߞߏ",
+      "direction": "rtl",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "oci",
+      "englishName": "Occitan",
+      "nativeName": "Occitan",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n > 1"
+    },
+    {
+      "locale": "ory",
+      "englishName": "Oriya",
+      "nativeName": "ଓଡ଼ିଆ",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "os",
+      "englishName": "Ossetic",
+      "nativeName": "Ирон",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "pa_IN",
+      "englishName": "Panjabi (India)",
+      "nativeName": "ਪੰਜਾਬੀ",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n > 1"
+    },
+    {
+      "locale": "pa_PK",
+      "englishName": "Punjabi (Pakistan)",
+      "nativeName": "پنجابی",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n > 1"
+    },
+    {
+      "locale": "pap_AW",
+      "englishName": "Papiamento (Aruba)",
+      "nativeName": "Papiamento",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "pap_CW",
+      "englishName": "Papiamento (Curaçao and Bonaire)",
+      "nativeName": "Papiamentu",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "pcd",
+      "englishName": "Picard",
+      "nativeName": "Ch’ti",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n > 1"
+    },
+    {
+      "locale": "pcm",
+      "englishName": "Nigerian Pidgin",
+      "nativeName": "Nigerian Pidgin",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "pl_PL",
+      "englishName": "Polish",
+      "nativeName": "Polski",
+      "direction": "ltr",
+      "nplurals": 3,
+      "pluralExpression": "(n == 1) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2)"
+    },
+    {
+      "locale": "ps",
+      "englishName": "Pashto",
+      "nativeName": "پښتو",
+      "direction": "rtl",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "pt_AO",
+      "englishName": "Portuguese (Angola)",
+      "nativeName": "Português de Angola",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "pt_BR",
+      "englishName": "Portuguese (Brazil)",
+      "nativeName": "Português do Brasil",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n > 1"
+    },
+    {
+      "locale": "pt_PT",
+      "englishName": "Portuguese (Portugal)",
+      "nativeName": "Português",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "pt_PT_ao90",
+      "englishName": "Portuguese (Portugal, AO90)",
+      "nativeName": "Português (AO90)",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "rhg",
+      "englishName": "Rohingya",
+      "nativeName": "Ruáinga",
+      "direction": "ltr",
+      "nplurals": 1,
+      "pluralExpression": "0"
+    },
+    {
+      "locale": "ro_RO",
+      "englishName": "Romanian",
+      "nativeName": "Română",
+      "direction": "ltr",
+      "nplurals": 3,
+      "pluralExpression": "(n == 1) ? 0 : ((n == 0 || n % 100 >= 2 && n % 100 <= 19) ? 1 : 2)"
+    },
+    {
+      "locale": "roh",
+      "englishName": "Romansh",
+      "nativeName": "Rumantsch",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "ru_RU",
+      "englishName": "Russian",
+      "nativeName": "Русский",
+      "direction": "ltr",
+      "nplurals": 3,
+      "pluralExpression": "(n % 10 == 1 && n % 100 != 11) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2)"
+    },
+    {
+      "locale": "sa_IN",
+      "englishName": "Sanskrit",
+      "nativeName": "भारतम्",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "sah",
+      "englishName": "Sakha",
+      "nativeName": "Сахалыы",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "scn",
+      "englishName": "Sicilian",
+      "nativeName": "Sicilianu",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "si_LK",
+      "englishName": "Sinhala",
+      "nativeName": "සිංහල",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "sk_SK",
+      "englishName": "Slovak",
+      "nativeName": "Slovenčina",
+      "direction": "ltr",
+      "nplurals": 3,
+      "pluralExpression": "(n == 1) ? 0 : ((n >= 2 && n <= 4) ? 1 : 2)"
+    },
+    {
+      "locale": "skr",
+      "englishName": "Saraiki",
+      "nativeName": "سرائیکی",
+      "direction": "rtl",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "sl_SI",
+      "englishName": "Slovenian",
+      "nativeName": "Slovenščina",
+      "direction": "ltr",
+      "nplurals": 4,
+      "pluralExpression": "(n % 100 == 1) ? 0 : ((n % 100 == 2) ? 1 : ((n % 100 == 3 || n % 100 == 4) ? 2 : 3))"
+    },
+    {
+      "locale": "sna",
+      "englishName": "Shona",
+      "nativeName": "ChiShona",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "snd",
+      "englishName": "Sindhi",
+      "nativeName": "سنڌي",
+      "direction": "rtl",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "so_SO",
+      "englishName": "Somali",
+      "nativeName": "Afsoomaali",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "sq",
+      "englishName": "Albanian",
+      "nativeName": "Shqip",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "sq_XK",
+      "englishName": "Shqip (Kosovo)",
+      "nativeName": "Për Kosovën Shqip",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "sr_RS",
+      "englishName": "Serbian",
+      "nativeName": "Српски језик",
+      "direction": "ltr",
+      "nplurals": 3,
+      "pluralExpression": "(n % 10 == 1 && n % 100 != 11) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2)"
+    },
+    {
+      "locale": "srd",
+      "englishName": "Sardinian",
+      "nativeName": "Sardu",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "ssw",
+      "englishName": "Swati",
+      "nativeName": "SiSwati",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "su_ID",
+      "englishName": "Sundanese",
+      "nativeName": "Basa Sunda",
+      "direction": "ltr",
+      "nplurals": 1,
+      "pluralExpression": "0"
+    },
+    {
+      "locale": "sv_SE",
+      "englishName": "Swedish",
+      "nativeName": "Svenska",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "sw",
+      "englishName": "Swahili",
+      "nativeName": "Kiswahili",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "syr",
+      "englishName": "Syriac",
+      "nativeName": "Syriac",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "szl",
+      "englishName": "Silesian",
+      "nativeName": "Ślōnskŏ gŏdka",
+      "direction": "ltr",
+      "nplurals": 3,
+      "pluralExpression": "(n==1 ? 0 : n%10>=2 && n%10<=4 && n%100==20 ? 1 : 2)"
+    },
+    {
+      "locale": "ta_IN",
+      "englishName": "Tamil",
+      "nativeName": "தமிழ்",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "ta_LK",
+      "englishName": "Tamil (Sri Lanka)",
+      "nativeName": "தமிழ்",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "tah",
+      "englishName": "Tahitian",
+      "nativeName": "Reo Tahiti",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n > 1"
+    },
+    {
+      "locale": "te",
+      "englishName": "Telugu",
+      "nativeName": "తెలుగు",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "tg",
+      "englishName": "Tajik",
+      "nativeName": "Тоҷикӣ",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "th",
+      "englishName": "Thai",
+      "nativeName": "ไทย",
+      "direction": "ltr",
+      "nplurals": 1,
+      "pluralExpression": "0"
+    },
+    {
+      "locale": "tir",
+      "englishName": "Tigrinya",
+      "nativeName": "ትግርኛ",
+      "direction": "ltr",
+      "nplurals": 1,
+      "pluralExpression": "0"
+    },
+    {
+      "locale": "tl",
+      "englishName": "Tagalog",
+      "nativeName": "Tagalog",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "tr_TR",
+      "englishName": "Turkish",
+      "nativeName": "Türkçe",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n > 1"
+    },
+    {
+      "locale": "tt_RU",
+      "englishName": "Tatar",
+      "nativeName": "Татар теле",
+      "direction": "ltr",
+      "nplurals": 1,
+      "pluralExpression": "0"
+    },
+    {
+      "locale": "tuk",
+      "englishName": "Turkmen",
+      "nativeName": "Türkmençe",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n > 1"
+    },
+    {
+      "locale": "twd",
+      "englishName": "Tweants",
+      "nativeName": "Twents",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "tzm",
+      "englishName": "Tamazight (Central Atlas)",
+      "nativeName": "ⵜⴰⵎⴰⵣⵉⵖⵜ",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n > 1"
+    },
+    {
+      "locale": "ug_CN",
+      "englishName": "Uighur",
+      "nativeName": "ئۇيغۇرچە",
+      "direction": "rtl",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "uk",
+      "englishName": "Ukrainian",
+      "nativeName": "Українська",
+      "direction": "ltr",
+      "nplurals": 3,
+      "pluralExpression": "(n % 10 == 1 && n % 100 != 11) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2)"
+    },
+    {
+      "locale": "ur",
+      "englishName": "Urdu",
+      "nativeName": "اردو",
+      "direction": "rtl",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "uz_UZ",
+      "englishName": "Uzbek",
+      "nativeName": "O‘zbekcha",
+      "direction": "ltr",
+      "nplurals": 1,
+      "pluralExpression": "0"
+    },
+    {
+      "locale": "vec",
+      "englishName": "Venetian",
+      "nativeName": "Vèneto",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "vi",
+      "englishName": "Vietnamese",
+      "nativeName": "Tiếng Việt",
+      "direction": "ltr",
+      "nplurals": 1,
+      "pluralExpression": "0"
+    },
+    {
+      "locale": "wol",
+      "englishName": "Wolof",
+      "nativeName": "Wolof",
+      "direction": "ltr",
+      "nplurals": 1,
+      "pluralExpression": "0"
+    },
+    {
+      "locale": "xho",
+      "englishName": "Xhosa",
+      "nativeName": "isiXhosa",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "yor",
+      "englishName": "Yoruba",
+      "nativeName": "Yorùbá",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    },
+    {
+      "locale": "zgh",
+      "englishName": "Tamazight",
+      "nativeName": "ⵜⴰⵎⴰⵣⵉⵖⵜ",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n >= 2 && (n < 11 || n > 99)"
+    },
+    {
+      "locale": "zh_CN",
+      "englishName": "Chinese (China)",
+      "nativeName": "简体中文",
+      "direction": "ltr",
+      "nplurals": 1,
+      "pluralExpression": "0"
+    },
+    {
+      "locale": "zh_HK",
+      "englishName": "Chinese (Hong Kong)",
+      "nativeName": "香港中文",
+      "direction": "ltr",
+      "nplurals": 1,
+      "pluralExpression": "0"
+    },
+    {
+      "locale": "zh_SG",
+      "englishName": "Chinese (Singapore)",
+      "nativeName": "中文",
+      "direction": "ltr",
+      "nplurals": 1,
+      "pluralExpression": "0"
+    },
+    {
+      "locale": "zh_TW",
+      "englishName": "Chinese (Taiwan)",
+      "nativeName": "繁體中文",
+      "direction": "ltr",
+      "nplurals": 1,
+      "pluralExpression": "0"
+    },
+    {
+      "locale": "zul",
+      "englishName": "Zulu",
+      "nativeName": "isiZulu",
+      "direction": "ltr",
+      "nplurals": 2,
+      "pluralExpression": "n != 1"
+    }
+  ]
+}

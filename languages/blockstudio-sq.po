@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:37+0000\n"
+"Language-Team: Albanian\n"
+"Language: sq\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "Atributi \"%1$s\" në etiketën e bllokut %2$s hiqet sepse blloku nuk deklaron asnjë fushë me atë ID. Deklaroni fushën ose shkruajeni si atribut data-, aria- ose html- që të vendoset në elementin rrënjë."
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "Ky çelës ruajtjeje nuk është deklaruar nga blloku ose zgjerimet e tij."
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "Kjo vlerë nuk është ndër opsionet e fushës."
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "Kjo vlerë ka një strukturë të pambështetur për fushën."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "Ky përsëritës ka më pak rreshta se minimumi."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "Ky përsëritës ka më shumë rreshta se maksimumi."
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "Ky çelës ruajtjeje ka përkufizime fushash në konflikt."
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "Vlera e fushës së ndërfutur zëvendëson këtë vlerë të nivelit të sipërm."
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "Lidhjet e zgjerimeve e lexojnë këtë vlerë vetëm nga blockstudio.attributes."
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "Vlerat e fushave të Blockstudio duhet të ruhen në një objekt."
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "Blockstudio po përgatit memorien e blloqeve. Ju lutemi riprovoni pas pak."
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "Canvas është çaktivizuar."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "Token CSRF është i pavlefshëm ose mungon."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "Kërkohet autentikimi."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "Leje të pamjaftueshme."
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "Vlerësimi dështoi."
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "Regjistrimi nuk u gjet."
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "Kërkesë e pavlefshme për ishuj."
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "U kërkuan tepër ishuj."
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "Bllok i pavlefshëm ishulli."
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "Nënshkrim i pavlefshëm i ishullit."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "Na vjen keq, nuk ju lejohet të lexoni blloqet e këtij postimi."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "Na vjen keq, nuk ju lejohet të lexoni blloqet si ky përdorues."
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "Bllok i pavlefshëm."
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "Metoda nuk lejohet."
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "Blloku nuk u gjet."
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "Funksioni nuk u gjet."
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "Funksioni nuk mund të thirret."
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Blockstudio shpërfilli vlera të pavlefshme konfigurimi:"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: Teksti i lidhjes"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: URL-ja"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "E vërtetë"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "E gabuar"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "Nuk mund të ngarkoheshin regjistrimet e bazës së të dhënave."
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "Kjo bazë të dhënash nuk ka ende regjistrime."
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "Nuk janë regjistruar baza të dhënash të Blockstudio."
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "Baza e zgjedhur e të dhënave nuk u gjet."
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "Përmbledhje"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "Regjistri"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "Bazat e të dhënave"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "Dokumentacioni"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "Nuk ka të dhëna të disponueshme për përmbledhjen e Blockstudio."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "Emri"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "Titulli"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "Përshkrimi"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "Kategoria"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "Lloji"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "Statusi"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "Instaluar"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "I disponueshëm"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "Veprimet"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "Riimporto"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "Importo"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "Nuk është konfiguruar asnjë regjistër. Shtoni regjistra në skedarin blocks.json të temës suaj."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "Kërko blloqe"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "Nuk është regjistruar asnjë bllok."
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "Paraqitja"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "Atributet"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "Blloqet"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "Nuk është regjistruar asnjë zgjerim."
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "Objektivat"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "Përparësia"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "Zgjerimet"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "Kërko zgjerime"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "Nuk është regjistruar asnjë fushë."
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "Fushat"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "Kërko fusha"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "Nuk është regjistruar asnjë faqe."
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "Slug"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "Lloji i postimit"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "Sinkronizo"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "ID-ja e postimit"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "Shablloni"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "Shabllon për"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "Faqet"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "Kërko faqe"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "Nuk është regjistruar asnjë skemë."
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "Blloku"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "Skema"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "Ruajtja"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "E kufizuar për përdoruesin"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "Aftësitë"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "Skemat"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "Kërko skema"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "Kjo fushë është çaktivizuar"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "Hap redaktuesin e zgjeruar"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "U krye"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "Atributi"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "Më shumë"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "Fut lidhje"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "Fut media"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "Fshi"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "Vlera"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "Shto atribut"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "Baza"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "Hap në dritare kërcyese"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "Hap bibliotekën e mediave"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "Madhësia e medias"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "Zgjidh lidhjen"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "Hap në skedë të re"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "Zgjidh lidhjen"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "Element përsëritësi"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "Zgjero rreshtin %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "Palos rreshtin %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "Dubliko rreshtin %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "Hiq rreshtin %d"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "Dëshironi ta fshini këtë rresht?"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "Shto rresht"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "Rikthe vlerën e parazgjedhur"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "Rreshto majtas"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "Rreshto në qendër"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "Rreshto djathtas"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "Rreshto të dy anët"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "Shiriti i mjeteve WYSIWYG"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "Të trasha"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "Kursive"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "Nënvizim"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "Heqje me vijë"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "Kod"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "Lidhje"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "Listë pa renditje"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "Listë e renditur"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "Kalo në pamjen vizuale"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "Kalo në pamjen e kodit"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "Imazhi"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "Skedari"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "Klikoni për ta ngarkuar"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "Mbyll modalitetin e fokusit"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "Opsionet e kanavacës"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "Përshtate në pamje"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "Zmadho në 100%"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "Modaliteti i drejtpërdrejtë"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "U kopjua: %s"

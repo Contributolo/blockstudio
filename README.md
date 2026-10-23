@@ -179,6 +179,51 @@ limited to static checks, builds, and focused non-E2E tests. `npm run check` is
 the CI aggregate, not a local preflight. CI also builds the WordPress assets and
 checks ZIP/Composer installations before a tooling candidate can be merged.
 
+## Translation Maintenance
+
+English strings are extracted into `languages/blockstudio.pot`. Existing German
+and formal German translations are retained. Additional locales are generated
+with Codex CLI using `gpt-6-luna` and compiled into the same WordPress translation
+formats. The plugin itself never calls AI or downloads translations.
+
+```bash
+npm run i18n:locales                 # Refresh the checked-in WordPress locale snapshot
+npm run i18n:translate -- --dry-run   # Report missing translations, without calling Codex
+npm run i18n:translate               # Generate missing entries in all locales
+npm run i18n:translate -- --locale fr_FR
+npm run i18n                        # Recompile after manual PO edits
+npm run i18n:check                  # Validate extraction and compiled outputs, offline
+npm run i18n:coverage               # Verify every snapshot locale is complete, offline
+```
+
+Generation requires an authenticated Codex CLI supporting `exec`,
+`--ignore-user-config`, `--ephemeral`, and `--output-schema`. It uses saved CLI
+authentication; no API key is stored in the repository. Only the public source
+strings, translator context, and existing forms for the requested entries are
+sent. Codex runs in a temporary read-only workspace with shell execution, apps,
+web search, and project instructions disabled.
+
+The locale snapshot combines GlotPress entries with a WordPress locale code and
+variants from the WordPress core translation API. `en_US` uses the source strings.
+Plural counts and expressions come from upstream metadata, not the model.
+Refreshing locales is explicit; normal checks never fetch upstream data.
+
+`--concurrency` accepts 1-8 workers (default 4), `--batch-size` accepts 1-250
+entries (default 200), and `--model` can explicitly select another available
+Codex model. The default remains `gpt-6-luna` with high reasoning effort;
+failures never silently switch it.
+Each validated batch is saved atomically. Reruns fill missing forms only, preserve
+nonempty translations, and refuse to overwrite concurrent edits. Fuzzy entries
+and changed source plurals require human review. A failed run exits nonzero and
+keeps completed batches so the same command can resume.
+
+`languages/.i18n-lock/` prevents concurrent generation. Normal completion and
+interrupts remove it. After a hard kill, remove a stale lock only after confirming
+that no translation process is still running. New catalogs identify their AI
+origin in the PO headers; native-speaker corrections are encouraged and retained
+on subsequent runs. CI validates completeness, placeholders and generated files
+without calling Codex. Full suites and E2E remain CI-only.
+
 ## License
 
 [GPL-2.0](LICENSE)

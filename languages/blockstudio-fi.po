@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:29+0000\n"
+"Language-Team: Finnish\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "%2$s-lohkon tunnisteen \"%1$s\" määritettä ei oteta käyttöön, koska lohko ei määritä kyseistä tunnistetta vastaavaa kenttää. Määritä kenttä tai kirjoita määrite data-, aria- tai html-määritteenä, jotta se lisätään juurielementtiin."
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "Lohko tai sen laajennukset eivät määritä tätä tallennusavainta."
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "Tämä arvo ei kuulu kentän vaihtoehtoihin."
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "Tämän kentän arvolla on virheellinen muoto."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "Toistimessa on vähemmän rivejä kuin vähimmäismäärä."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "Toistimessa on enemmän rivejä kuin enimmäismäärä."
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "Tälle tallennusavaimelle on määritetty ristiriitaisia kenttiä."
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "Sisäkkäisen kentän arvo ohittaa tämän ylimmän tason arvon."
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "Laajennusten sidokset lukevat tämän arvon vain blockstudio.attributes-kohdasta."
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "Blockstudio-kenttien arvot on tallennettava objektina."
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "Blockstudio valmistelee lohkovälimuistiaan. Yritä hetken kuluttua uudelleen."
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "Canvas on poistettu käytöstä."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "CSRF-tunniste puuttuu tai on virheellinen."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "Tunnistautuminen vaaditaan."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "Käyttöoikeudet eivät riitä."
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "Kelpoisuuden tarkistus epäonnistui."
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "Tietuetta ei löytynyt."
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "Virheellinen islands-pyyntö."
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "Islands-pyyntöjä on liikaa."
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "Virheellinen island-lohko."
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "Virheellinen island-allekirjoitus."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "Pahoittelut, sinulla ei ole oikeutta lukea tämän artikkelin lohkoja."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "Pahoittelut, sinulla ei ole oikeutta lukea lohkoja tällä käyttäjällä."
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "Virheellinen lohko."
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "Menetelmä ei ole sallittu."
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "Lohkoa ei löytynyt."
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "Funktiota ei löytynyt."
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "Funktiota ei voi kutsua."
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Blockstudio ohitti virheelliset määritysarvot:"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: Linkin teksti"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: URL-osoite"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "Tosi"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "Epätosi"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "Tietokantatietueiden lataaminen epäonnistui."
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "Tietokannassa ei ole vielä tietueita."
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "Blockstudio-tietokantoja ei ole rekisteröity."
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "Valittua tietokantaa ei löytynyt."
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "Yleiskatsaus"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "Rekisteri"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "Tietokannat"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "Ohjeet"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "Blockstudion yleiskatsauksen tietoja ei ole saatavilla."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "Nimi"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "Otsikko"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "Kuvaus"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "Luokka"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "Tyyppi"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "Tila"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "Asennettu"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "Saatavilla"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "Toiminnot"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "Tuo uudelleen"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "Tuo"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "Rekistereitä ei ole määritetty. Lisää rekisterit teeman blocks.json-tiedostoon."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "Hae lohkoja"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "Lohkoja ei ole rekisteröity."
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "Renderöinti"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "Määritteet"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "Lohkot"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "Laajennuksia ei ole rekisteröity."
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "Kohteet"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "Prioriteetti"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "Laajennukset"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "Hae laajennuksia"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "Kenttiä ei ole rekisteröity."
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "Kentät"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "Hae kenttiä"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "Sivuja ei ole rekisteröity."
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "Polkutunnus"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "Artikkelityyppi"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "Synkronoi"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "Artikkelin tunnus"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "Sivupohja"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "Sivupohja kohteelle"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "Sivut"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "Hae sivuja"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "Skeemoja ei ole rekisteröity."
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "Lohko"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "Skeema"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "Tallennus"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "Käyttäjäkohtainen"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "Ominaisuudet"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "Skeemat"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "Hae skeemoja"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "Tämä kenttä on poistettu käytöstä"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "Avaa laajennettu editori"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "Valmis"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "Määrite"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "Lisää"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "Lisää linkki"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "Lisää media"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "Poista"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "Arvo"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "Lisää määrite"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "Perus"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "Avaa ponnahdusikkunassa"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "Avaa mediakirjasto"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "Median koko"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "Valitse linkki"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "Avaa uudessa välilehdessä"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "Valitse linkki"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "Toistimen elementti"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "Laajenna rivi %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "Pienennä rivi %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "Monista rivi %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "Poista rivi %d"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "Haluatko poistaa tämän rivin?"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "Lisää rivi"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "Palauta oletusarvo"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "Tasaa vasemmalle"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "Keskitä"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "Tasaa oikealle"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "Tasaa molemmat reunat"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "WYSIWYG-työkalupalkki"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "Lihavointi"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "Kursivointi"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "Alleviivaus"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "Yliviivaus"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "Koodi"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "Linkki"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "Järjestämätön luettelo"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "Järjestetty luettelo"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "Vaihda visuaaliseen tilaan"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "Vaihda kooditilaan"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "Kuva"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "Tiedosto"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "Lataa napsauttamalla"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "Poistu kohdistustilasta"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "Canvas-asetukset"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "Sovita näkymään"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "Zoomaa kokoon 100 %"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "Reaaliaikainen tila"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "Kopioitu: %s"

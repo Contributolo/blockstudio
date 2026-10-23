@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:27+0000\n"
+"Language-Team: Dzongkha\n"
+"Language: dzo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "%2$s བི་ལོཀ་ངོས་རྟགས་ཀྱི་ \"%1$s\" ཁྱད་ཆོས་དེ་བཀག་སྟེ་བཞག་ཡོད། བི་ལོཀ་དེའི་ནང་ངོས་རྟགས་དེ་ཡོད་པའི་ས་སྒོ་མེད། ས་སྒོ་དེ་ཁ་སྐོང་འབད། ཡང་ན་data-, aria- ཡང་ན་html- ཁྱད་ཆོས་སྦེ་འབྲི་སྟེ་རྩ་བའི་ཆ་ཤས་ནང་བཙུགས།"
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "བི་ལོཀ་ཡང་ན་དེའི་རྒྱ་སྐྱེད་ཚུ་གིས་གསལ་བཤད་མ་འབད་བའི་གསོག་འཇོག་ལྡེ་མིག་ཨིན།"
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "འ་ནི་གནས་གོང་དེ་ས་སྒོའི་གདམ་ཁ་ཚུའི་ནང་མེད།"
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "འ་ནི་གནས་གོང་གི་དབྱིབས་དེ་ས་སྒོ་འདི་གིས་མི་ཤོང་།"
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "འ་ནི་ཡང་བསྐྱར་སྐོང་ཐོ་ནང་ཉུང་མཐའི་གྲལ་ཐིག་ལས་ཉུངམ་འདུག"
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "འ་ནི་ཡང་བསྐྱར་སྐོང་ཐོ་ནང་མང་མཐའི་གྲལ་ཐིག་ལས་མངམ་འདུག"
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "འ་ནི་གསོག་འཇོག་ལྡེ་མིག་ལུ་ས་སྒོའི་ངོ་བོ་མི་མཐུན་པ་ཡོད།"
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "ནང་གི་ས་སྒོའི་གནས་གོང་གིས་གནས་གོང་འ་ནི་སྤྱི་མཚན་གྱི་གནས་གོང་ལས་བརྗེ་སོང་།"
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "རྒྱ་སྐྱེད་མཐུད་སྦྱོར་ཚུ་གིས་གནས་གོང་འ་ནི་blockstudio.attributes ནང་ལས་རྐྱངམ་ཅིག་ལྷགཔ་ཨིན།"
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "Blockstudio ས་སྒོའི་གནས་གོང་ཚུ་དངོས་པོ་ནང་གསོག་འཇོག་འབད་དགོ"
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "Blockstudio གིས་ད་ལྟོ་བི་ལོཀ་འཛིན་མཛོད་གྲ་སྒྲིག་འབད་དོ། དུས་ཡུན་ཐུང་ཀུ་ཅིག་གི་ཤུལ་ལས་སླར་འབད།"
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "Canvas བཀག་ཡོད།"
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "CSRF ཊོ་ཀེན་མི་ནུས་པའམ་མེད།"
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "ངོ་སྤྲོད་དགོཔ་ཨིན།"
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "གནང་བ་མི་ལང་།"
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "ནུས་ལྡན་བཟོ་མ་ཚུགས།"
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "ཐོ་བཀོད་འཚོལ་མ་ཐོབ།"
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "མི་ནུས་པའི་མཚོ་གླིང་ཞུ་བ།"
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "མཚོ་གླིང་མང་དྲགས་ཞུ་ཡོད།"
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "མི་ནུས་པའི་མཚོ་གླིང་བི་ལོཀ"
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "མི་ནུས་པའི་མཚོ་གླིང་མིང་རྟགས།"
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "དགོངས་དག ཁྱོད་ལུ་འ་ནི་གནས་བཟོའི་བི་ལོཀ་ཚུ་ལྷག་ནིའི་གནང་བ་མེད།"
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "དགོངས་དག ཁྱོད་ལུ་འ་ནི་ལག་ལེན་པ་སྦེ་བི་ལོཀ་ཚུ་ལྷག་ནིའི་གནང་བ་མེད།"
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "མི་ནུས་པའི་བི་ལོཀ"
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "ཐབས་ལམ་འདི་མ་ཆོག"
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "བི་ལོཀ་འཚོལ་མ་ཐོབ།"
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "ལས་འགན་འཚོལ་མ་ཐོབ།"
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "ལས་འགན་འདི་འབོད་མི་བཏུབ།"
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Blockstudio གིས་མི་ནུས་པའི་སྒྲིག་བཀོད་གནས་གོང་ཚུ་སྣང་མེད་བཞག་ཡོད།"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: མཐུད་ལམ་གྱི་ཚིག"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: URL"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "བདེན།"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "རྫུན།"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "གཞི་གྲངས་ཐོ་བཀོད་ཚུ་ཕབ་ལེན་འབད་མ་ཚུགས།"
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "གཞི་གྲངས་མཛོད་འདི་ནང་ད་ལྟོ་ཐོ་བཀོད་མེད།"
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "Blockstudio གཞི་གྲངས་མཛོད་གཅིག་ཡང་ཐོ་བཀོད་མ་འབད།"
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "གདམ་འཐུ་འབད་མི་གཞི་གྲངས་མཛོད་འཚོལ་མ་ཐོབ།"
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "སྤྱི་བསྡོམས།"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "ཐོ་བཀོད་སྒྲིག་སྟངས།"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "གཞི་གྲངས་མཛོད།"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "ཡིག་ཆ།"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "Blockstudio སྤྱི་བསྡོམས་གནས་སྡུད་འདི་མིན་འདུག"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "མིང་།"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "མགོ་མིང་།"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "འགྲེལ་བཤད།"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "དབྱེ་ཁག"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "དབྱེ་བ།"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "གནས་ཚད།"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "གཞི་བཙུགས་འབད་ཡོད།"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "ཐོབ་ཚུགས།"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "བྱ་བ།"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "སླར་ནང་འདྲེན།"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "ནང་འདྲེན།"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "ཐོ་བཀོད་སྒྲིག་སྟངས་མེད། ཁྱོད་ཀྱི་བརྗོད་དོན་གྱི་blocks.json ཡིག་སྣོད་ནང་ཐོ་བཀོད་ཁ་སྐོང་འབད།"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "བི་ལོཀ་འཚོལ།"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "བི་ལོཀ་ཐོ་བཀོད་མ་འབད།"
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "བཟོ་བཀོད།"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "ཁྱད་ཆོས་ཚུ།"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "བི་ལོཀ་ཚུ།"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "རྒྱ་སྐྱེད་གཅིག་ཡང་ཐོ་བཀོད་མ་འབད།"
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "དམིགས་ཡུལ་ཚུ།"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "གཙོ་རིམ།"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "རྒྱ་སྐྱེད་ཚུ།"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "རྒྱ་སྐྱེད་ཚུ་འཚོལ།"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "ས་སྒོ་ཚུ་ཐོ་བཀོད་མ་འབད།"
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "ས་སྒོ་ཚུ།"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "ས་སྒོ་ཚུ་འཚོལ།"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "ཤོག་ལེབ་ཚུ་ཐོ་བཀོད་མ་འབད།"
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "གསོག་མིང་།"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "རྩོམ་ཡིག་དབྱེ་བ།"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "མཉམ་འབྲེལ།"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "རྩོམ་ཡིག་ཨང་།"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "དཔེ་གཞི།"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "དཔེ་གཞིའི་དམིགས་ཡུལ།"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "ཤོག་ལེབ་ཚུ།"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "ཤོག་ལེབ་ཚུ་འཚོལ།"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "ལས་འཆར་ཚུ་ཐོ་བཀོད་མ་འབད།"
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "བི་ལོཀ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "ལས་འཆར།"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "གསོག་འཇོག"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "ལག་ལེན་པ་གི་ཁྱབ་ཁོངས།"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "ནུས་ཚད་ཚུ།"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "ལས་འཆར་ཚུ།"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "ལས་འཆར་ཚུ་འཚོལ།"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "ས་སྒོ་འདི་ལྕོགས་མིན་ཨིན།"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "རྒྱ་བསྐྱེད་བཞག་མི་ཞུན་དག་པ་ཁ་ཕྱེ།"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "གྲུབ་སོང་།"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "ཁྱད་ཆོས།"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "མངམ།"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "མཐུད་ལམ་བཙུགས།"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "སྨྱན་བྱད་བཙུགས།"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "བཏོན་གཏང་།"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "གནས་གོང་།"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "ཁྱད་ཆོས་ཁ་སྐོང་འབད།"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "གཞི་རྩ།"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "པོཔ་ཨཔ་ནང་ཁ་ཕྱེ།"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "སྨྱན་བྱད་དཔེ་མཛོད་ཁ་ཕྱེ།"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "སྨྱན་བྱད་ཀྱི་ཚད།"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "མཐུད་ལམ་གདམ་ཁ་རྐྱབས།"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "མཆོང་ལེབ་གསརཔ་ནང་ཁ་ཕྱེ།"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "མཐུད་ལམ་གདམ་ཁ་རྐྱབས།"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "ཡང་བསྐྱར་སྐོང་ཐོའི་ཆ་ཤས།"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "གྲལ་ཐིག་%d རྒྱ་སྐྱེད།"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "གྲལ་ཐིག་%d བསྡུ།"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "གྲལ་ཐིག་%d འདྲ་བཤུས།"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "གྲལ་ཐིག་%d རྩ་བསྐྲད།"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "ཁྱོད་ཀྱིས་གྲལ་ཐིག་འདི་བཏོན་གཏང་ནི་ཨིན་ན?"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "གྲལ་ཐིག་ཁ་སྐོང་འབད།"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "སྔོན་སྒྲིག་ལུ་སླར་བཟོ།"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "གཡོན་ལུ་སྙོམས།"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "དཀྱིལ་ལུ་སྙོམས།"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "གཡས་ལུ་སྙོམས།"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "གཉིས་ཕྱོགས་སྙོམས།"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "WYSIWYG ལག་ཆའི་སྡེ།"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "སྦོམ་ཡིག"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "གསེག་ཡིག"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "འོག་ཐིག་བཀལ།"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "བརྒྱུད་ཐིག་བཀལ།"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "ཨང་རྟགས།"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "མཐུད་ལམ།"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "ཨང་མེད་ཐོ་ཡིག"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "ཨང་ཐོ་ཡིག"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "མཐོང་སྣང་ལུ་བསྒྱུར།"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "ཨང་རྟགས་ལུ་བསྒྱུར།"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "པར།"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "ཡིག་སྣོད།"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "བཀང་ནིའི་དོན་ལུ་ཨེབ་གཏང་།"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "མཐའ་སྒྲིག་ལམ་སྣང་རྩ་བསྐྲད།"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "Canvas གདམ་ཁ་ཚུ།"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "མཐོང་སྣང་ལུ་ཚད་བསྟུན།"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "100% ལུ་རྒྱས་བསྐྱེད།"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "དུས་མཉམ་ཐབས་ལམ།"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "འདྲ་བཤུས: %s"

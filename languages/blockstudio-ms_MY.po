@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:34+0000\n"
+"Language-Team: Malay\n"
+"Language: ms_MY\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "Atribut \"%1$s\" pada tag blok %2$s digugurkan kerana blok itu tidak mengisytiharkan medan dengan ID tersebut. Isytiharkan medan itu atau tuliskannya sebagai atribut data-, aria- atau html- untuk meletakkannya pada elemen akar."
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "Kunci storan ini tidak diisytiharkan oleh blok atau sambungannya."
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "Nilai ini tiada dalam pilihan medan."
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "Bentuk nilai ini tidak disokong untuk medan tersebut."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "Pengulang ini mempunyai baris kurang daripada bilangan minimum."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "Pengulang ini mempunyai baris melebihi bilangan maksimum."
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "Takrif medan untuk kunci storan ini bercanggah."
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "Nilai medan tersarang mengatasi nilai peringkat atas ini."
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "Pengikatan sambungan membaca nilai ini hanya daripada blockstudio.attributes."
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "Nilai medan Blockstudio mesti disimpan dalam objek."
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "Blockstudio sedang menyediakan cache bloknya. Sila cuba lagi sebentar lagi."
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "Kanvas dilumpuhkan."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "Token CSRF tidak sah atau tiada."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "Pengesahan diperlukan."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "Kebenaran tidak mencukupi."
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "Pengesahan gagal."
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "Rekod tidak ditemui."
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "Permintaan pulau tidak sah."
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "Terlalu banyak pulau diminta."
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "Blok pulau tidak sah."
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "Tandatangan pulau tidak sah."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "Maaf, anda tidak dibenarkan membaca blok bagi siaran ini."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "Maaf, anda tidak dibenarkan membaca blok sebagai pengguna ini."
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "Blok tidak sah."
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "Kaedah tidak dibenarkan."
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "Blok tidak ditemui."
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "Fungsi tidak ditemui."
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "Fungsi tidak boleh dipanggil."
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Blockstudio mengabaikan nilai konfigurasi yang tidak sah:"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: Teks pautan"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: URL"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "Benar"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "Palsu"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "Tidak dapat memuatkan rekod pangkalan data."
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "Pangkalan data ini belum mempunyai rekod."
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "Tiada pangkalan data Blockstudio didaftarkan."
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "Pangkalan data yang dipilih tidak ditemui."
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "Gambaran keseluruhan"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "Pendaftaran"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "Pangkalan data"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "Dokumentasi"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "Tiada data gambaran keseluruhan Blockstudio tersedia."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "Nama"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "Tajuk"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "Perihalan"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "Kategori"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "Jenis"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "Status"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "Dipasang"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "Tersedia"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "Tindakan"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "Import semula"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "Import"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "Tiada pendaftaran dikonfigurasikan. Tambahkan pendaftaran pada fail blocks.json tema anda."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "Cari blok"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "Tiada blok didaftarkan."
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "Paparan"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "Atribut"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "Blok"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "Tiada sambungan didaftarkan."
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "Sasaran"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "Keutamaan"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "Sambungan"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "Cari sambungan"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "Tiada medan didaftarkan."
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "Medan"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "Cari medan"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "Tiada halaman didaftarkan."
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "Slug"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "Jenis siaran"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "Segerakkan"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "ID siaran"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "Templat"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "Templat untuk"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "Halaman"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "Cari halaman"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "Tiada skema didaftarkan."
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "Blok"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "Skema"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "Storan"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "Skop pengguna"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "Keupayaan"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "Skema"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "Cari skema"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "Medan ini dilumpuhkan"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "Buka editor lanjutan"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "Selesai"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "Atribut"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "Lagi"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "Sisipkan pautan"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "Sisipkan media"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "Padam"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "Nilai"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "Tambah atribut"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "Asas"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "Buka dalam tetingkap timbul"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "Buka pustaka media"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "Saiz media"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "Pilih pautan"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "Buka dalam tab baharu"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "Pilih pautan"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "Elemen pengulang"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "Kembangkan baris %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "Runtuhkan baris %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "Gandakan baris %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "Buang baris %d"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "Adakah anda mahu memadam baris ini?"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "Tambah baris"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "Tetapkan semula kepada lalai"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "Ratakan ke kiri"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "Ratakan ke tengah"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "Ratakan ke kanan"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "Ratakan sepenuhnya"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "Bar alat WYSIWYG"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "Tebal"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "Condong"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "Garis bawah"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "Garis potong"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "Kod"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "Pautan"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "Senarai tidak bernombor"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "Senarai bernombor"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "Beralih ke visual"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "Beralih ke kod"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "Imej"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "Fail"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "Klik untuk memuatkan"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "Tutup mod fokus"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "Pilihan kanvas"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "Muatkan mengikut paparan"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "Zum kepada 100%"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "Mod langsung"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "Disalin: %s"

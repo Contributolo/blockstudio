@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:38+0000\n"
+"Language-Team: Tamil\n"
+"Language: ta_IN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "%2$s பிளாக் குறிச்சொல்லில் உள்ள \"%1$s\" பண்புக்கூறு நீக்கப்பட்டது; அந்த ID கொண்ட புலம் பிளாக் அறிவிப்பில் இல்லை. அந்தப் புலத்தை அறிவிக்கவும் அல்லது மூல உறுப்பில் சேர்க்க அதை data-, aria- அல்லது html- பண்புக்கூறாக எழுதவும்."
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "இந்த சேமிப்பக விசை பிளாக் அல்லது அதன் நீட்டிப்புகளால் அறிவிக்கப்படவில்லை."
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "இந்த மதிப்பு புல விருப்பங்களில் இல்லை."
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "இந்த மதிப்பின் வடிவம் இந்தப் புலத்துக்கு ஆதரிக்கப்படவில்லை."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "இந்த மீளுருவாக்கியில் குறைந்தபட்சத்தைவிடக் குறைவான வரிசைகள் உள்ளன."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "இந்த மீளுருவாக்கியில் அதிகபட்சத்தைவிட அதிகமான வரிசைகள் உள்ளன."
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "இந்தச் சேமிப்பக விசைக்கு முரண்படும் புல வரையறைகள் உள்ளன."
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "உட்பொதிந்த புலத்தின் மதிப்பு இந்த மேல்நிலை மதிப்பை மேலெழுதுகிறது."
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "நீட்டிப்பு பிணைப்புகள் இந்த மதிப்பை blockstudio.attributes இலிருந்து மட்டுமே படிக்கும்."
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "Blockstudio புல மதிப்புகள் ஒரு பொருளில் சேமிக்கப்பட வேண்டும்."
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "Blockstudio அதன் பிளாக் தற்காலிகச் சேமிப்பைத் தயாரிக்கிறது. சிறிது நேரம் கழித்து மீண்டும் முயற்சிக்கவும்."
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "கேன்வாஸ் முடக்கப்பட்டுள்ளது."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "CSRF டோக்கன் தவறானது அல்லது இல்லை."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "அங்கீகாரம் தேவை."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "போதிய அனுமதிகள் இல்லை."
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "சரிபார்ப்பு தோல்வியடைந்தது."
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "பதிவு கிடைக்கவில்லை."
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "தவறான தீவுகள் கோரிக்கை."
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "மிக அதிகமான தீவுகள் கோரப்பட்டன."
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "தவறான தீவுப் பிளாக்."
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "தவறான தீவு கையொப்பம்."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "மன்னிக்கவும், இந்தப் பதிவின் பிளாக்குகளைப் படிக்க உங்களுக்கு அனுமதி இல்லை."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "மன்னிக்கவும், இந்தப் பயனராக பிளாக்குகளைப் படிக்க உங்களுக்கு அனுமதி இல்லை."
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "தவறான பிளாக்."
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "இந்த முறை அனுமதிக்கப்படவில்லை."
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "பிளாக் கிடைக்கவில்லை."
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "செயல்பாடு கிடைக்கவில்லை."
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "செயல்பாட்டை அழைக்க முடியாது."
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Blockstudio தவறான உள்ளமைவு மதிப்புகளைப் புறக்கணித்தது:"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: இணைப்பு உரை"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: URL"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "உண்மை"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "பொய்"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "தரவுத்தளப் பதிவுகளை ஏற்ற முடியவில்லை."
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "இந்தத் தரவுத்தளத்தில் இதுவரை பதிவுகள் இல்லை."
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "Blockstudio தரவுத்தளங்கள் எதுவும் பதிவு செய்யப்படவில்லை."
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "தேர்ந்தெடுக்கப்பட்ட தரவுத்தளத்தைக் கண்டறிய முடியவில்லை."
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "மேலோட்டம்"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "பதிவகம்"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "தரவுத்தளங்கள்"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "ஆவணங்கள்"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "Blockstudio மேலோட்டத் தரவு எதுவும் இல்லை."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "பெயர்"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "தலைப்பு"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "விளக்கம்"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "வகை"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "வகை"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "நிலை"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "நிறுவப்பட்டது"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "கிடைக்கிறது"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "செயல்கள்"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "மீண்டும் இறக்குமதி"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "இறக்குமதி"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "பதிவகங்கள் எதுவும் உள்ளமைக்கப்படவில்லை. உங்கள் தீமின் blocks.json கோப்பில் பதிவகங்களைச் சேர்க்கவும்."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "பிளாக்குகளைத் தேடு"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "பிளாக்குகள் எதுவும் பதிவு செய்யப்படவில்லை."
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "வழங்கல்"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "பண்புக்கூறுகள்"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "பிளாக்குகள்"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "நீட்டிப்புகள் எதுவும் பதிவு செய்யப்படவில்லை."
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "இலக்குகள்"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "முன்னுரிமை"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "நீட்டிப்புகள்"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "நீட்டிப்புகளைத் தேடு"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "புலங்கள் எதுவும் பதிவு செய்யப்படவில்லை."
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "புலங்கள்"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "புலங்களைத் தேடு"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "பக்கங்கள் எதுவும் பதிவு செய்யப்படவில்லை."
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "சுருக்கப்பெயர்"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "பதிவு வகை"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "ஒத்திசை"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "பதிவு ID"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "வார்ப்புரு"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "இதற்கான வார்ப்புரு"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "பக்கங்கள்"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "பக்கங்களைத் தேடு"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "வடிவமைப்புகள் எதுவும் பதிவு செய்யப்படவில்லை."
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "பிளாக்"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "வடிவமைப்பு"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "சேமிப்பகம்"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "பயனருக்குரியது"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "திறன்கள்"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "வடிவமைப்புகள்"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "வடிவமைப்புகளைத் தேடு"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "இந்தப் புலம் முடக்கப்பட்டுள்ளது"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "விரிவாக்கப்பட்ட திருத்தியைத் திற"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "முடிந்தது"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "பண்புக்கூறு"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "மேலும்"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "இணைப்பைச் செருகு"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "ஊடகத்தைச் செருகு"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "நீக்கு"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "மதிப்பு"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "பண்புக்கூற்றைச் சேர்"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "அடிப்படை"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "பாப்அப்பில் திற"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "ஊடக நூலகத்தைத் திற"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "ஊடக அளவு"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "இணைப்பைத் தேர்ந்தெடு"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "புதிய தாவலில் திற"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "இணைப்பைத் தேர்ந்தெடு"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "மீளுருவாக்கி உறுப்பு"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "வரிசை %d-ஐ விரி"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "வரிசை %d-ஐ சுருக்கு"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "வரிசை %d-ஐ நகலெடு"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "வரிசை %d-ஐ அகற்று"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "இந்த வரிசையை நீக்க விரும்புகிறீர்களா?"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "வரிசையைச் சேர்"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "இயல்புநிலைக்கு மீட்டமை"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "இடப்புறம் சீரமை"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "மையத்தில் சீரமை"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "வலப்புறம் சீரமை"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "இருபுறமும் சீரமை"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "WYSIWYG கருவிப்பட்டை"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "தடிமன்"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "சாய்வு"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "அடிக்கோடு"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "நடுவெட்டுக் கோடு"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "குறியீடு"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "இணைப்பு"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "வரிசையற்ற பட்டியல்"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "வரிசைப்படுத்திய பட்டியல்"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "காட்சி முறைக்கு மாறு"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "குறியீட்டு முறைக்கு மாறு"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "படம்"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "கோப்பு"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "ஏற்றுவதற்குச் சொடுக்கவும்"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "கவன முறைமையிலிருந்து வெளியேறு"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "கேன்வாஸ் விருப்பங்கள்"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "காட்சிக்கு ஏற்றவாறு பொருத்து"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "100% அளவுக்கு பெரிதாக்கு"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "நேரடி முறை"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "நகலெடுக்கப்பட்டது: %s"

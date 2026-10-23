@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:27+0000\n"
+"Language-Team: Welsh\n"
+"Language: cy\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "Mae’r briodwedd \"%1$s\" ar dag bloc %2$s yn cael ei hepgor am nad yw’r bloc yn datgan maes gyda’r ID hwnnw. Datganwch y maes, neu ysgrifennwch ef fel priodwedd data-, aria- neu html- i’w roi ar yr elfen wraidd."
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "Nid yw’r allwedd storio hon wedi’i datgan gan y bloc na’i estyniadau."
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "Nid yw’r gwerth hwn ymhlith opsiynau’r maes."
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "Mae gan y gwerth hwn siâp nad yw’n cael ei gynnal ar gyfer y maes."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "Mae gan yr ailadroddydd hwn lai o resi na’r isafswm."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "Mae gan yr ailadroddydd hwn fwy o resi na’r uchafswm."
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "Mae diffiniadau maes sy’n gwrthdaro ar gyfer yr allwedd storio hon."
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "Mae gwerth y maes nythol yn diystyru’r gwerth lefel uchaf hwn."
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "Dim ond o blockstudio.attributes y mae rhwymiadau estyniad yn darllen y gwerth hwn."
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "Rhaid storio gwerthoedd meysydd Blockstudio mewn gwrthrych."
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "Mae Blockstudio yn paratoi ei storfa blociau. Rhowch gynnig arall arni cyn bo hir."
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "Mae Canvas wedi’i analluogi."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "Tocyn CSRF annilys neu ar goll."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "Mae angen dilysu."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "Dim digon o ganiatâd."
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "Methodd y dilysu."
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "Heb ganfod y cofnod."
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "Cais ynysoedd annilys."
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "Gofynnwyd am ormod o ynysoedd."
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "Bloc ynys annilys."
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "Llofnod ynys annilys."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "Mae’n ddrwg gennym, ni chaniateir i chi ddarllen blociau’r cofnod hwn."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "Mae’n ddrwg gennym, ni chaniateir i chi ddarllen blociau fel y defnyddiwr hwn."
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "Bloc annilys."
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "Ni chaniateir y dull hwn."
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "Heb ganfod y bloc."
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "Heb ganfod y ffwythiant."
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "Ni ellir galw’r ffwythiant."
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Anwybyddodd Blockstudio werthoedd cyfluniad annilys:"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: Testun y ddolen"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: URL"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "Gwir"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "Anwir"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "Methu llwytho cofnodion y gronfa ddata."
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "Nid oes cofnodion yn y gronfa ddata hon eto."
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "Nid oes cronfeydd data Blockstudio wedi’u cofrestru."
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "Methu dod o hyd i’r gronfa ddata a ddewiswyd."
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "Trosolwg"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "Cofrestrfa"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "Cronfeydd data"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "Dogfennau"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "Nid oes data trosolwg Blockstudio ar gael."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "Enw"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "Teitl"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "Disgrifiad"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "Categori"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "Math"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "Statws"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "Wedi’i osod"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "Ar gael"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "Gweithredoedd"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "Ailfewnforio"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "Mewnforio"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "Nid oes cofrestrfeydd wedi’u ffurfweddu. Ychwanegwch gofrestrfeydd at ffeil blocks.json eich thema."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "Chwilio blociau"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "Nid oes blociau wedi’u cofrestru."
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "Rendro"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "Priodoleddau"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "Blociau"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "Nid oes estyniadau wedi’u cofrestru."
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "Targedau"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "Blaenoriaeth"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "Estyniadau"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "Chwilio estyniadau"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "Nid oes meysydd wedi’u cofrestru."
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "Meysydd"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "Chwilio meysydd"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "Nid oes tudalennau wedi’u cofrestru."
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "Bonyn"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "Math o gofnod"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "Cydamseru"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "ID y cofnod"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "Templed"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "Templed ar gyfer"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "Tudalennau"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "Chwilio tudalennau"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "Nid oes sgemâu wedi’u cofrestru."
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "Bloc"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "Sgema"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "Storfa"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "Yn ôl y defnyddiwr"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "Galluoedd"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "Sgemâu"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "Chwilio sgemâu"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "Mae’r maes hwn wedi’i analluogi"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "Agor y golygydd estynedig"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "Wedi gorffen"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "Priodoledd"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "Mwy"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "Mewnosod dolen"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "Mewnosod cyfrwng"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "Dileu"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "Gwerth"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "Ychwanegu priodwedd"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "Sylfaen"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "Agor mewn ffenestr naid"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "Agor y Llyfrgell Cyfryngau"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "Maint y cyfrwng"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "Dewis dolen"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "Agor mewn tab newydd"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "Dewis dolen"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "Elfen ailadroddydd"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "Ehangu rhes %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "Cwympo rhes %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "Dyblygu rhes %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "Tynnu rhes %d"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "Ydych chi am ddileu’r rhes hon?"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "Ychwanegu rhes"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "Ailosod i’r rhagosodiad"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "Alinio i’r chwith"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "Alinio i’r canol"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "Alinio i’r dde"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "Alinio i’r ddau ymyl"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "Bar offer WYSIWYG"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "Bras"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "Italig"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "Tanlinellu"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "Llinellu drwy"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "Cod"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "Dolen"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "Rhestr heb drefn"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "Rhestr drefnedig"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "Newid i’r golwg weledol"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "Newid i’r cod"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "Delwedd"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "Ffeil"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "Cliciwch i lwytho"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "Gadael y modd ffocws"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "Opsiynau Canvas"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "Ffitio i’r golwg"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "Chwyddo i 100%"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "Modd byw"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "Wedi’i gopïo: %s"

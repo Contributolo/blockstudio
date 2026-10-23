@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:35+0000\n"
+"Language-Team: Papiamento (Curaçao and Bonaire)\n"
+"Language: pap_CW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "Atributo \"%1$s\" riba un etiqueta di blok %2$s ta wordu kita pasobra e blok no deklará ningun campo ku e ID ei. Deklará e campo, òf skibi’é komo un atributo data-, aria- òf html- pa agreg’é na e elemento raíz."
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "E yabi di almacenamentu aki no ta deklará pa e blok ni pa su ekstensions."
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "E balor aki no ta entre e opshonnan di e campo."
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "E forma di e balor aki no ta sostené pa e campo."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "E repetidor aki tin ménos rij ku su mínimo."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "E repetidor aki tin mas rij ku su máximo."
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "E yabi di almacenamentu aki tin definishonnan di campo ku ta konflikta."
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "E balor di e campo anidá ta sobrescribí e balor di nivel superior aki."
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "Bindings di ekstension ta lesa e balor aki solamente for di blockstudio.attributes."
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "Mester warda balornan di campo di Blockstudio den un objekto."
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "Blockstudio ta preparando su caché di bloknan. Purba atrobe den un momentu."
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "Canvas ta desaktivá."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "Token CSRF inválido òf faltante."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "Autentikashon nesesario."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "Permisonan insufisiente."
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "Validashon a faya."
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "No a haña e registro."
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "Petishon di isla inválido."
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "A pidi di mas isla."
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "Blok di isla inválido."
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "Firma di isla inválido."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "Diskulpa, bo no tin permiso pa lesa bloknan di e post aki."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "Diskulpa, bo no tin permiso pa lesa bloknan komo e usuario aki."
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "Blok inválido."
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "Método no permití."
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "No a haña e blok."
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "No a haña e funshon."
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "No por yama e funshon."
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Blockstudio a ignorá balornan di konfigurasion inválido:"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: Teksto di e link"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: URL"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "Berdadero"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "Falso"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "No por a karga e registronan di base di dato."
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "E base di dato aki ainda no tin registro."
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "No tin base di datonan di Blockstudio registrá."
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "No por a haña e base di dato selektá."
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "Resumen"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "Registro"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "Basenan di dato"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "Dokumentashon"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "No tin dato di resumen di Blockstudio disponibel."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "Nòmber"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "Título"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "Deskripshon"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "Kategoria"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "Tipo"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "Status"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "Instalá"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "Disponibel"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "Akshonnan"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "Importá di nobo"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "Importá"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "No tin registro konfigura. Agregá registro na e archivo blocks.json di bo tema."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "Buska bloknan"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "No tin blok registrá."
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "Renderisá"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "Atributonan"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "Bloknan"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "No tin ekstension registrá."
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "Destinashonnan"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "Prioridat"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "Ekstensionnan"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "Buska ekstensionnan"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "No tin campo registrá."
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "Kamponan"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "Buska kamponan"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "No tin página registrá."
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "Slug"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "Tipo di post"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "Sincronisá"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "ID di post"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "Plantia"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "Plantia pa"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "Páginanan"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "Buska páginanan"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "No tin eskema registrá."
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "Blok"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "Eskema"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "Almacenamentu"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "Limitá na usuario"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "Kapabilidatnan"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "Eskemanan"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "Buska eskemanan"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "E campo aki ta desaktivá"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "Habri editor espandí"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "Kla"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "Atributo"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "Mas"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "Insertá link"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "Insertá medio"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "Eliminá"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "Balor"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "Agregá atributo"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "Básiko"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "Habri den ventana popup"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "Habri biblioteka di medio"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "Tamaño di medio"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "Skohe link"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "Habri den pestaña nobo"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "Skohe link"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "Elemento repetidor"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "Habrí rij %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "Sera rij %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "Dupliká rij %d"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "Kita rij %d"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "Bo ke eliminá e rij aki?"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "Agregá rij"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "Restablesé balor predeterminá"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "Aliniá na man robes"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "Aliniá na sentro"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "Aliniá na man drechi"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "Aliniá pa hustifiká"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "Barra di echèl WYSIWYG"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "Grùf"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "Kursiva"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "Subrayá"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "Tachá"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "Kódigo"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "Link"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "Lista sin órden"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "Lista ordená"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "Kambiá pa Visual"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "Kambiá pa Kódigo"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "Imágen"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "Archivo"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "Klik pa karga"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "Sera modo di enfoke"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "Opshonnan di canvas"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "Ajustá na bista"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "Zoom na 100%"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "Modo en bibu"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "Kopiá: %s"

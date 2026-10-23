@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:34+0000\n"
+"Language-Team: Myanmar (Burmese)\n"
+"Language: my_MM\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "%2$s ဘလောက်တဂ်ရှိ “%1$s” ရည်ညွှန်းချက်ကို ဖယ်ရှားလိုက်သည်။ ထို ID ဖြင့် ဖော်ပြထားသော အကွက်မရှိပါ။ အကွက်ကို ဖော်ပြပါ၊ သို့မဟုတ် ပင်မဒြပ်စင်တွင် ထည့်ရန် data-, aria- သို့မဟုတ် html- ရည်ညွှန်းချက်အဖြစ် ရေးပါ။"
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "ဤသိုလှောင်မှုကီးကို ဘလောက် သို့မဟုတ် ၎င်း၏ တိုးချဲ့မှုများတွင် မကြေညာထားပါ။"
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "ဤတန်ဖိုးသည် အကွက်ရွေးချယ်စရာများထဲတွင် မပါဝင်ပါ။"
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "ဤတန်ဖိုး၏ ပုံစံကို အကွက်က မပံ့ပိုးပါ။"
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "ဤပြန်လုပ်နိုင်သောအကွက်တွင် အနည်းဆုံးလိုအပ်သည့် အတန်းအရေအတွက် မပြည့်ပါ။"
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "ဤပြန်လုပ်နိုင်သောအကွက်တွင် အများဆုံးခွင့်ပြုသည့် အတန်းအရေအတွက် ကျော်လွန်နေပါသည်။"
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "ဤသိုလှောင်မှုကီးအတွက် အကွက်သတ်မှတ်ချက်များ ကွဲလွဲနေပါသည်။"
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "အတွင်းထည့်ထားသော အကွက်တန်ဖိုးက ဤထိပ်တန်းအဆင့်တန်ဖိုးကို အစားထိုးထားသည်။"
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "တိုးချဲ့မှုချိတ်ဆက်မှုများသည် ဤတန်ဖိုးကို blockstudio.attributes မှသာ ဖတ်သည်။"
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "Blockstudio အကွက်တန်ဖိုးများကို အရာဝတ္ထုတစ်ခုအဖြစ် သိမ်းဆည်းရပါမည်။"
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "Blockstudio သည် ၎င်း၏ ဘလောက်ကက်ရှ်ကို ပြင်ဆင်နေပါသည်။ ခဏစောင့်ပြီး ထပ်ကြိုးစားပါ။"
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "ကင်းဗတ်ကို ပိတ်ထားသည်။"
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "CSRF တိုကင် မမှန်ကန်ပါ သို့မဟုတ် မရှိပါ။"
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "အထောက်အထားစစ်ဆေးမှု လိုအပ်ပါသည်။"
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "ခွင့်ပြုချက် မလုံလောက်ပါ။"
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "အတည်ပြုစစ်ဆေးမှု မအောင်မြင်ပါ။"
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "မှတ်တမ်းကို မတွေ့ပါ။"
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "ကျွန်းစုတောင်းဆိုမှု မမှန်ကန်ပါ။"
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "ကျွန်းစုများကို အလွန်များစွာ တောင်းဆိုထားပါသည်။"
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "ကျွန်းစုဘလောက် မမှန်ကန်ပါ။"
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "ကျွန်းစုလက်မှတ် မမှန်ကန်ပါ။"
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "ဤပို့စ်၏ ဘလောက်များကို ဖတ်ရှုခွင့် မရှိပါ။"
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "ဤအသုံးပြုသူအနေဖြင့် ဘလောက်များကို ဖတ်ရှုခွင့် မရှိပါ။"
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "ဘလောက် မမှန်ကန်ပါ။"
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "ဤနည်းလမ်းကို ခွင့်မပြုပါ။"
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "ဘလောက်ကို မတွေ့ပါ။"
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "လုပ်ဆောင်ချက်ကို မတွေ့ပါ။"
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "လုပ်ဆောင်ချက်ကို ခေါ်ယူ၍မရပါ။"
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Blockstudio သည် မမှန်ကန်သော ဖွဲ့စည်းပုံတန်ဖိုးများကို လျစ်လျူရှုခဲ့သည်-"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: လင့်ခ်စာသား"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: URL"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "မှန်သည်"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "မှားသည်"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "ဒေတာဘေ့စ်မှတ်တမ်းများကို ဖွင့်၍မရပါ။"
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "ဤဒေတာဘေ့စ်တွင် မှတ်တမ်းများ မရှိသေးပါ။"
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "Blockstudio ဒေတာဘေ့စ်များ မှတ်ပုံတင်ထားခြင်း မရှိပါ။"
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "ရွေးချယ်ထားသော ဒေတာဘေ့စ်ကို ရှာမတွေ့ပါ။"
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "ခြုံငုံသုံးသပ်ချက်"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "မှတ်ပုံတင်စာရင်း"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "ဒေတာဘေ့စ်များ"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "စာရွက်စာတမ်းများ"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "Blockstudio ခြုံငုံသုံးသပ်ချက်ဒေတာကို မရရှိနိုင်ပါ။"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "အမည်"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "ခေါင်းစဉ်"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "ဖော်ပြချက်"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "အမျိုးအစား"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "အမျိုးအစား"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "အခြေအနေ"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "ထည့်သွင်းပြီး"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "ရရှိနိုင်သည်"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "လုပ်ဆောင်ချက်များ"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "ပြန်လည်တင်သွင်းရန်"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "တင်သွင်းရန်"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "မှတ်ပုံတင်စာရင်းများ မသတ်မှတ်ရသေးပါ။ သင့်အခင်းအကျင်း၏ blocks.json ဖိုင်တွင် မှတ်ပုံတင်စာရင်းများ ထည့်ပါ။"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "ဘလောက်များကို ရှာရန်"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "ဘလောက်များ မှတ်ပုံတင်ထားခြင်း မရှိပါ။"
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "ပုံဖော်ရန်"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "ရည်ညွှန်းချက်များ"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "ဘလောက်များ"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "တိုးချဲ့မှုများ မှတ်ပုံတင်ထားခြင်း မရှိပါ။"
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "ပစ်မှတ်များ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "ဦးစားပေး"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "တိုးချဲ့မှုများ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "တိုးချဲ့မှုများကို ရှာရန်"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "အကွက်များ မှတ်ပုံတင်ထားခြင်း မရှိပါ။"
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "အကွက်များ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "အကွက်များကို ရှာရန်"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "စာမျက်နှာများ မှတ်ပုံတင်ထားခြင်း မရှိပါ။"
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "အတိုကောက်အမည်"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "ပို့စ်အမျိုးအစား"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "ထပ်တူပြုရန်"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "ပို့စ် ID"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "နမူနာပုံစံ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "နမူနာပုံစံအတွက်"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "စာမျက်နှာများ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "စာမျက်နှာများကို ရှာရန်"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "စကီးမားများ မှတ်ပုံတင်ထားခြင်း မရှိပါ။"
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "ဘလောက်"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "စကီးမား"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "သိုလှောင်မှု"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "အသုံးပြုသူအလိုက် သီးသန့်"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "လုပ်ပိုင်ခွင့်များ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "စကီးမားများ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "စကီးမားများကို ရှာရန်"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "ဤအကွက်ကို ပိတ်ထားသည်"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "တိုးချဲ့တည်းဖြတ်ကိရိယာကို ဖွင့်ရန်"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "ပြီးပါပြီ"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "ရည်ညွှန်းချက်"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "ပိုမို"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "လင့်ခ်ထည့်ရန်"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "မီဒီယာထည့်ရန်"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "ဖျက်ရန်"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "တန်ဖိုး"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "ရည်ညွှန်းချက်ထည့်ရန်"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "အခြေခံ"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "ပေါ့ပ်အပ်တွင် ဖွင့်ရန်"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "မီဒီယာစာကြည့်တိုက်ကို ဖွင့်ရန်"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "မီဒီယာအရွယ်အစား"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "လင့်ခ်ရွေးရန်"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "တက်ဘ်အသစ်တွင် ဖွင့်ရန်"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "လင့်ခ်ရွေးရန်"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "ထပ်ခါတလဲလဲ ထည့်သွင်းနိုင်သော ဒြပ်စင်"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "အတန်း %d ကို ချဲ့ရန်"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "အတန်း %d ကို ခေါက်ရန်"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "အတန်း %d ကို ပွားရန်"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "အတန်း %d ကို ဖယ်ရှားရန်"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "ဤအတန်းကို ဖျက်လိုပါသလား။"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "အတန်းထည့်ရန်"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "မူလတန်ဖိုးသို့ ပြန်သတ်မှတ်ရန်"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "ဘယ်ဘက်ညှိရန်"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "အလယ်ညှိရန်"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "ညာဘက်ညှိရန်"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "အနားနှစ်ဖက်ညှိရန်"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "WYSIWYG ကိရိယာဘား"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "စာလုံးမည်း"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "စာလုံးစောင်း"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "မျဉ်းသား"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "ဖြတ်မျဉ်း"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "ကုဒ်"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "လင့်ခ်"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "အစဉ်မလိုက်သော စာရင်း"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "အစဉ်လိုက် စာရင်း"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "မြင်ကွင်းသို့ ပြောင်းရန်"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "ကုဒ်သို့ ပြောင်းရန်"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "ပုံ"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "ဖိုင်"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "ဖွင့်ရန် နှိပ်ပါ"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "အာရုံစိုက်မုဒ်ကို ပိတ်ရန်"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "ကင်းဗတ်ရွေးချယ်စရာများ"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "မြင်ကွင်းနှင့် ကိုက်ညီအောင် ချိန်ရန်"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "100% သို့ ချဲ့ရန်"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "တိုက်ရိုက်မုဒ်"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "ကူးယူပြီး: %s"

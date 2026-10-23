@@ -55,6 +55,7 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 == Changelog ==
 
 = 7.7.8 =
+* New: bundled AI-generated translations cover WordPress-supported locales and regional variants while preserving the existing German and formal German translations
 * Performance: warm frontend builds reuse resolved asset metadata and module stylesheet lists while preserving request-time URL and disable filters (#173)
 * Performance: small cache payloads use OPcache-friendly PHP arrays when supported, with bounded compressed fallbacks and a `blockstudio/cache/compress` filter (#174)
 * Performance: unchanged resolved settings reuse their request-local fingerprint while reloads and mutable values remain correctly invalidated (#175)

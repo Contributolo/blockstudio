@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Blockstudio\n"
+"Report-Msgid-Bugs-To: https://github.com/inline0/blockstudio/issues\n"
+"PO-Revision-Date: 2026-10-23 15:32+0000\n"
+"Language-Team: Kannada\n"
+"Language: kn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Domain: blockstudio\n"
+"X-Generator: Codex CLI (gpt-6-luna)\n"
+"X-Translation-Status: machine-generated\n"
+
+#: blockstudio.php
+msgid "Blockstudio"
+msgstr "Blockstudio"
+
+#. translators: 1: attribute name, 2: block name.
+#: includes/classes/block-tags.php
+#, php-format
+msgid "The \"%1$s\" attribute on a %2$s block tag is dropped because the block declares no field with that id. Declare the field, or write it as a data-, aria- or html- attribute to put it on the root element."
+msgstr "%2$s ಬ್ಲಾಕ್ ಟ್ಯಾಗ್‌ನಲ್ಲಿರುವ \"%1$s\" ಗುಣಲಕ್ಷಣವನ್ನು ಕೈಬಿಡಲಾಗಿದೆ, ಏಕೆಂದರೆ ಬ್ಲಾಕ್ ಆ ಐಡಿಯೊಂದಿಗೆ ಯಾವುದೇ ಕ್ಷೇತ್ರವನ್ನು ಘೋಷಿಸಿಲ್ಲ. ಕ್ಷೇತ್ರವನ್ನು ಘೋಷಿಸಿ, ಅಥವಾ ಅದನ್ನು data-, aria- ಅಥವಾ html- ಗುಣಲಕ್ಷಣವಾಗಿ ಬರೆದು ರೂಟ್ ಎಲಿಮೆಂಟ್‌ಗೆ ಸೇರಿಸಿ."
+
+#: includes/classes/block-validator.php
+msgid "This storage key is not declared by the block or its extensions."
+msgstr "ಈ ಸಂಗ್ರಹಣಾ ಕೀಲಿಯನ್ನು ಬ್ಲಾಕ್ ಅಥವಾ ಅದರ ವಿಸ್ತರಣೆಗಳು ಘೋಷಿಸಿಲ್ಲ."
+
+#: includes/classes/block-validator.php
+msgid "This value is not among the field options."
+msgstr "ಈ ಮೌಲ್ಯವು ಕ್ಷೇತ್ರದ ಆಯ್ಕೆಗಳಲ್ಲಿ ಇಲ್ಲ."
+
+#: includes/classes/block-validator.php
+msgid "This value has an unsupported shape for the field."
+msgstr "ಈ ಮೌಲ್ಯದ ಆಕಾರವು ಕ್ಷೇತ್ರಕ್ಕೆ ಬೆಂಬಲಿತವಾಗಿಲ್ಲ."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has fewer rows than its minimum."
+msgstr "ಈ ಪುನರಾವರ್ತಕದಲ್ಲಿ ಕನಿಷ್ಠಕ್ಕಿಂತ ಕಡಿಮೆ ಸಾಲುಗಳಿವೆ."
+
+#: includes/classes/block-validator.php
+msgid "This repeater has more rows than its maximum."
+msgstr "ಈ ಪುನರಾವರ್ತಕದಲ್ಲಿ ಗರಿಷ್ಠಕ್ಕಿಂತ ಹೆಚ್ಚು ಸಾಲುಗಳಿವೆ."
+
+#: includes/classes/block-validator.php
+msgid "This storage key has conflicting field definitions."
+msgstr "ಈ ಸಂಗ್ರಹಣಾ ಕೀಲಿಗೆ ಪರಸ್ಪರ ಸಂಘರ್ಷಿಸುವ ಕ್ಷೇತ್ರ ವ್ಯಾಖ್ಯಾನಗಳಿವೆ."
+
+#: includes/classes/block-validator.php
+msgid "The nested field value overrides this top-level value."
+msgstr "ನೆಸ್ಟೆಡ್ ಕ್ಷೇತ್ರದ ಮೌಲ್ಯವು ಈ ಮೇಲ್ಮಟ್ಟದ ಮೌಲ್ಯವನ್ನು ಮೀರಿಸುತ್ತದೆ."
+
+#: includes/classes/block-validator.php
+msgid "Extension bindings read this value only from blockstudio.attributes."
+msgstr "ವಿಸ್ತರಣೆ ಬೈಂಡಿಂಗ್‌ಗಳು ಈ ಮೌಲ್ಯವನ್ನು blockstudio.attributes ನಿಂದ ಮಾತ್ರ ಓದುತ್ತವೆ."
+
+#: includes/classes/block-validator.php
+msgid "Blockstudio field values must be stored in an object."
+msgstr "Blockstudio ಕ್ಷೇತ್ರದ ಮೌಲ್ಯಗಳನ್ನು ಆಬ್ಜೆಕ್ಟ್‌ನಲ್ಲಿ ಸಂಗ್ರಹಿಸಬೇಕು."
+
+#: includes/classes/build.php
+msgid "Blockstudio is preparing its block cache. Please retry shortly."
+msgstr "Blockstudio ತನ್ನ ಬ್ಲಾಕ್ ಕ್ಯಾಶ್ ಅನ್ನು ಸಿದ್ಧಪಡಿಸುತ್ತಿದೆ. ದಯವಿಟ್ಟು ಸ್ವಲ್ಪ ಸಮಯದ ನಂತರ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ."
+
+#: includes/classes/canvas.php
+msgid "Canvas is disabled."
+msgstr "ಕ್ಯಾನ್ವಾಸ್ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Invalid or missing CSRF token."
+msgstr "CSRF ಟೋಕನ್ ಅಮಾನ್ಯವಾಗಿದೆ ಅಥವಾ ಇಲ್ಲ."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Authentication required."
+msgstr "ದೃಢೀಕರಣ ಅಗತ್ಯವಿದೆ."
+
+#: includes/classes/database.php
+#: includes/classes/rpc.php
+msgid "Insufficient permissions."
+msgstr "ಸಾಕಷ್ಟು ಅನುಮತಿಗಳಿಲ್ಲ."
+
+#: includes/classes/database.php
+msgid "Validation failed."
+msgstr "ಮಾನ್ಯೀಕರಣ ವಿಫಲವಾಗಿದೆ."
+
+#: includes/classes/database.php
+msgid "Record not found."
+msgstr "ದಾಖಲೆ ಕಂಡುಬಂದಿಲ್ಲ."
+
+#: includes/classes/islands.php
+msgid "Invalid islands request."
+msgstr "ದ್ವೀಪಗಳ ವಿನಂತಿ ಅಮಾನ್ಯವಾಗಿದೆ."
+
+#: includes/classes/islands.php
+msgid "Too many islands requested."
+msgstr "ಹೆಚ್ಚು ದ್ವೀಪಗಳನ್ನು ವಿನಂತಿಸಲಾಗಿದೆ."
+
+#: includes/classes/islands.php
+msgid "Invalid island block."
+msgstr "ದ್ವೀಪದ ಬ್ಲಾಕ್ ಅಮಾನ್ಯವಾಗಿದೆ."
+
+#: includes/classes/islands.php
+msgid "Invalid island signature."
+msgstr "ದ್ವೀಪದ ಸಹಿ ಅಮಾನ್ಯವಾಗಿದೆ."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr "ಕ್ಷಮಿಸಿ, ಈ ಪೋಸ್ಟ್‌ನ ಬ್ಲಾಕ್‌ಗಳನ್ನು ಓದಲು ನಿಮಗೆ ಅನುಮತಿಯಿಲ್ಲ."
+
+#: includes/classes/rest.php
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr "ಕ್ಷಮಿಸಿ, ಈ ಬಳಕೆದಾರರಾಗಿ ಬ್ಲಾಕ್‌ಗಳನ್ನು ಓದಲು ನಿಮಗೆ ಅನುಮತಿಯಿಲ್ಲ."
+
+#: includes/classes/rest.php
+msgid "Invalid block."
+msgstr "ಬ್ಲಾಕ್ ಅಮಾನ್ಯವಾಗಿದೆ."
+
+#: includes/classes/rpc.php
+msgid "Method not allowed."
+msgstr "ವಿಧಾನಕ್ಕೆ ಅನುಮತಿಯಿಲ್ಲ."
+
+#: includes/classes/rpc.php
+msgid "Block not found."
+msgstr "ಬ್ಲಾಕ್ ಕಂಡುಬಂದಿಲ್ಲ."
+
+#: includes/classes/rpc.php
+msgid "Function not found."
+msgstr "ಕಾರ್ಯ ಕಂಡುಬಂದಿಲ್ಲ."
+
+#: includes/classes/rpc.php
+msgid "Function is not callable."
+msgstr "ಕಾರ್ಯವನ್ನು ಕರೆಯಲು ಸಾಧ್ಯವಿಲ್ಲ."
+
+#: includes/classes/runtime.php
+msgid "Blockstudio ignored invalid configuration values:"
+msgstr "Blockstudio ಅಮಾನ್ಯ ಸಂರಚನಾ ಮೌಲ್ಯಗಳನ್ನು ನಿರ್ಲಕ್ಷಿಸಿದೆ:"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: Link text"
+msgstr "%s: ಲಿಂಕ್ ಪಠ್ಯ"
+
+#. translators: %s: Label of a link field, preceded by the labels of its enclosing repeaters and groups.
+#: includes/classes/wpml-config.php
+#, php-format
+msgid "%s: URL"
+msgstr "%s: URL"
+
+#: src/admin/components/database-records-table.tsx
+msgid "True"
+msgstr "ಸತ್ಯ"
+
+#: src/admin/components/database-records-table.tsx
+msgid "False"
+msgstr "ಸುಳ್ಳು"
+
+#: src/admin/components/database-records-table.tsx
+msgid "Could not load database records."
+msgstr "ಡೇಟಾಬೇಸ್ ದಾಖಲೆಗಳನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ."
+
+#: src/admin/components/database-records-table.tsx
+msgid "This database has no records yet."
+msgstr "ಈ ಡೇಟಾಬೇಸ್‌ನಲ್ಲಿ ಇನ್ನೂ ಯಾವುದೇ ದಾಖಲೆಗಳಿಲ್ಲ."
+
+#: src/admin/components/databases.tsx
+msgid "No Blockstudio databases are registered."
+msgstr "ಯಾವುದೇ Blockstudio ಡೇಟಾಬೇಸ್‌ಗಳನ್ನು ನೋಂದಾಯಿಸಲಾಗಿಲ್ಲ."
+
+#: src/admin/components/databases.tsx
+msgid "The selected database could not be found."
+msgstr "ಆಯ್ಕೆ ಮಾಡಿದ ಡೇಟಾಬೇಸ್ ಕಂಡುಬಂದಿಲ್ಲ."
+
+#: src/admin/components/header.tsx
+msgid "Overview"
+msgstr "ಅವಲೋಕನ"
+
+#: src/admin/components/header.tsx
+#: src/admin/components/registry-browser.tsx
+msgid "Registry"
+msgstr "ನೋಂದಣಿ"
+
+#: src/admin/components/header.tsx
+msgid "Databases"
+msgstr "ಡೇಟಾಬೇಸ್‌ಗಳು"
+
+#: src/admin/components/header.tsx
+msgid "Docs"
+msgstr "ದಸ್ತಾವೇಜುಗಳು"
+
+#: src/admin/components/overview.tsx
+msgid "No Blockstudio overview data is available."
+msgstr "ಯಾವುದೇ Blockstudio ಅವಲೋಕನ ಡೇಟಾ ಲಭ್ಯವಿಲ್ಲ."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Name"
+msgstr "ಹೆಸರು"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Title"
+msgstr "ಶೀರ್ಷಿಕೆ"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Description"
+msgstr "ವಿವರಣೆ"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Category"
+msgstr "ವರ್ಗ"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Type"
+msgstr "ಪ್ರಕಾರ"
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Status"
+msgstr "ಸ್ಥಿತಿ"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Installed"
+msgstr "ಸ್ಥಾಪಿಸಲಾಗಿದೆ"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Available"
+msgstr "ಲಭ್ಯವಿದೆ"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Actions"
+msgstr "ಕ್ರಿಯೆಗಳು"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Reimport"
+msgstr "ಮರುಆಮದು"
+
+#: src/admin/components/registry-browser.tsx
+msgid "Import"
+msgstr "ಆಮದು"
+
+#: src/admin/components/registry-browser.tsx
+msgid "No registries are configured. Add registries to your theme's blocks.json file."
+msgstr "ಯಾವುದೇ ರಿಜಿಸ್ಟ್ರಿಗಳನ್ನು ಸಂರಚಿಸಲಾಗಿಲ್ಲ. ನಿಮ್ಮ ಥೀಮ್‌ನ blocks.json ಫೈಲ್‌ಗೆ ರಿಜಿಸ್ಟ್ರಿಗಳನ್ನು ಸೇರಿಸಿ."
+
+#: src/admin/components/registry-browser.tsx
+#: src/admin/data/registry-config.tsx
+msgid "Search blocks"
+msgstr "ಬ್ಲಾಕ್‌ಗಳನ್ನು ಹುಡುಕಿ"
+
+#: src/admin/data/registry-config.tsx
+msgid "No blocks are registered."
+msgstr "ಯಾವುದೇ ಬ್ಲಾಕ್‌ಗಳನ್ನು ನೋಂದಾಯಿಸಲಾಗಿಲ್ಲ."
+
+#: src/admin/data/registry-config.tsx
+msgid "API"
+msgstr "API"
+
+#: src/admin/data/registry-config.tsx
+msgid "Render"
+msgstr "ರೆಂಡರ್"
+
+#: src/admin/data/registry-config.tsx
+msgid "Attributes"
+msgstr "ಗುಣಲಕ್ಷಣಗಳು"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Blocks"
+msgstr "ಬ್ಲಾಕ್‌ಗಳು"
+
+#: src/admin/data/registry-config.tsx
+msgid "No extensions are registered."
+msgstr "ಯಾವುದೇ ವಿಸ್ತರಣೆಗಳನ್ನು ನೋಂದಾಯಿಸಲಾಗಿಲ್ಲ."
+
+#: src/admin/data/registry-config.tsx
+msgid "Targets"
+msgstr "ಗುರಿಗಳು"
+
+#: src/admin/data/registry-config.tsx
+msgid "Priority"
+msgstr "ಆದ್ಯತೆ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Extensions"
+msgstr "ವಿಸ್ತರಣೆಗಳು"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search extensions"
+msgstr "ವಿಸ್ತರಣೆಗಳನ್ನು ಹುಡುಕಿ"
+
+#: src/admin/data/registry-config.tsx
+msgid "No fields are registered."
+msgstr "ಯಾವುದೇ ಕ್ಷೇತ್ರಗಳನ್ನು ನೋಂದಾಯಿಸಲಾಗಿಲ್ಲ."
+
+#: src/admin/data/registry-config.tsx
+msgid "Fields"
+msgstr "ಕ್ಷೇತ್ರಗಳು"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search fields"
+msgstr "ಕ್ಷೇತ್ರಗಳನ್ನು ಹುಡುಕಿ"
+
+#: src/admin/data/registry-config.tsx
+msgid "No pages are registered."
+msgstr "ಯಾವುದೇ ಪುಟಗಳನ್ನು ನೋಂದಾಯಿಸಲಾಗಿಲ್ಲ."
+
+#: src/admin/data/registry-config.tsx
+msgid "Slug"
+msgstr "ಸ್ಲಗ್"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post Type"
+msgstr "ಪೋಸ್ಟ್ ಪ್ರಕಾರ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Sync"
+msgstr "ಸಿಂಕ್"
+
+#: src/admin/data/registry-config.tsx
+msgid "Post ID"
+msgstr "ಪೋಸ್ಟ್ ID"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template"
+msgstr "ಟೆಂಪ್ಲೇಟ್"
+
+#: src/admin/data/registry-config.tsx
+msgid "Template For"
+msgstr "ಟೆಂಪ್ಲೇಟ್ ಗುರಿ"
+
+#: src/admin/data/registry-config.tsx
+#: src/canvas/canvas.tsx
+msgid "Pages"
+msgstr "ಪುಟಗಳು"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search pages"
+msgstr "ಪುಟಗಳನ್ನು ಹುಡುಕಿ"
+
+#: src/admin/data/registry-config.tsx
+msgid "No schemas are registered."
+msgstr "ಯಾವುದೇ ಸ್ಕೀಮಾಗಳನ್ನು ನೋಂದಾಯಿಸಲಾಗಿಲ್ಲ."
+
+#: src/admin/data/registry-config.tsx
+msgid "Block"
+msgstr "ಬ್ಲಾಕ್"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schema"
+msgstr "ಸ್ಕೀಮಾ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Storage"
+msgstr "ಸಂಗ್ರಹಣೆ"
+
+#: src/admin/data/registry-config.tsx
+msgid "User Scoped"
+msgstr "ಬಳಕೆದಾರರ ವ್ಯಾಪ್ತಿಗೆ ಸೀಮಿತ"
+
+#: src/admin/data/registry-config.tsx
+msgid "Capabilities"
+msgstr "ಸಾಮರ್ಥ್ಯಗಳು"
+
+#: src/admin/data/registry-config.tsx
+msgid "Schemas"
+msgstr "ಸ್ಕೀಮಾಗಳು"
+
+#: src/admin/data/registry-config.tsx
+msgid "Search schemas"
+msgstr "ಸ್ಕೀಮಾಗಳನ್ನು ಹುಡುಕಿ"
+
+#: src/blocks/components/control/index.tsx
+msgid "This field is disabled"
+msgstr "ಈ ಕ್ಷೇತ್ರವನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Open Expanded Editor"
+msgstr "ವಿಸ್ತೃತ ಸಂಪಾದಕವನ್ನು ತೆರೆಯಿರಿ"
+
+#: src/blocks/components/expanded-editor/index.tsx
+msgid "Done"
+msgstr "ಮುಗಿದಿದೆ"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Attribute"
+msgstr "ಗುಣಲಕ್ಷಣ"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "More"
+msgstr "ಇನ್ನಷ್ಟು"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Link"
+msgstr "ಲಿಂಕ್ ಸೇರಿಸಿ"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Insert Media"
+msgstr "ಮಾಧ್ಯಮ ಸೇರಿಸಿ"
+
+#: src/blocks/components/fields/components/attributes.tsx
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Delete"
+msgstr "ಅಳಿಸಿ"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Value"
+msgstr "ಮೌಲ್ಯ"
+
+#: src/blocks/components/fields/components/attributes.tsx
+msgid "Add Attribute"
+msgstr "ಗುಣಲಕ್ಷಣ ಸೇರಿಸಿ"
+
+#: src/blocks/components/fields/components/classes/index.tsx
+msgid "Base"
+msgstr "ಮೂಲ"
+
+#: src/blocks/components/fields/components/code-popout.tsx
+msgid "Open in popup"
+msgstr "ಪಾಪ್‌ಅಪ್‌ನಲ್ಲಿ ತೆರೆಯಿರಿ"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Open Media Library"
+msgstr "ಮಾಧ್ಯಮ ಲೈಬ್ರರಿ ತೆರೆಯಿರಿ"
+
+#: src/blocks/components/fields/components/files.tsx
+msgid "Media size"
+msgstr "ಮಾಧ್ಯಮದ ಗಾತ್ರ"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select link"
+msgstr "ಲಿಂಕ್ ಆಯ್ಕೆಮಾಡಿ"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Open in new tab"
+msgstr "ಹೊಸ ಟ್ಯಾಬ್‌ನಲ್ಲಿ ತೆರೆಯಿರಿ"
+
+#: src/blocks/components/fields/components/link.tsx
+msgid "Select Link"
+msgstr "ಲಿಂಕ್ ಆಯ್ಕೆಮಾಡಿ"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Repeater element"
+msgstr "ಪುನರಾವರ್ತಕ ಎಲಿಮೆಂಟ್"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Expand row %d"
+msgstr "ಸಾಲು %d ವಿಸ್ತರಿಸಿ"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Collapse row %d"
+msgstr "ಸಾಲು %d ಕುಗ್ಗಿಸಿ"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Duplicate row %d"
+msgstr "ಸಾಲು %d ನಕಲಿಸಿ"
+
+#. translators: %d: number of the repeater row.
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Remove row %d"
+msgstr "ಸಾಲು %d ತೆಗೆದುಹಾಕಿ"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Do you want to delete this row?"
+msgstr "ಈ ಸಾಲನ್ನು ಅಳಿಸಲು ಬಯಸುವಿರಾ?"
+
+#: src/blocks/components/fields/components/repeater.tsx
+msgid "Add row"
+msgstr "ಸಾಲು ಸೇರಿಸಿ"
+
+#: src/blocks/components/fields/components/select.tsx
+msgid "Reset to default"
+msgstr "ಡೀಫಾಲ್ಟ್‌ಗೆ ಮರುಹೊಂದಿಸಿ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align left"
+msgstr "ಎಡಕ್ಕೆ ಜೋಡಿಸಿ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align center"
+msgstr "ಮಧ್ಯಕ್ಕೆ ಜೋಡಿಸಿ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align right"
+msgstr "ಬಲಕ್ಕೆ ಜೋಡಿಸಿ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Align justify"
+msgstr "ಎರಡೂ ಬದಿಗಳಿಗೆ ಸಮನಾಗಿ ಜೋಡಿಸಿ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "p"
+msgstr "p"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h1"
+msgstr "h1"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h2"
+msgstr "h2"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h3"
+msgstr "h3"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h4"
+msgstr "h4"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h5"
+msgstr "h5"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "h6"
+msgstr "h6"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "WYSIWYG Toolbar"
+msgstr "WYSIWYG ಟೂಲ್‌ಬಾರ್"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Bold"
+msgstr "ದಪ್ಪ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Italic"
+msgstr "ಓರೆ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Underline"
+msgstr "ಅಡಿಗೆರೆ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Strikethrough"
+msgstr "ಹೊಡೆದ ಗೆರೆ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Code"
+msgstr "ಕೋಡ್"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Link"
+msgstr "ಲಿಂಕ್"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Unordered list"
+msgstr "ಅನಿಯಮಿತ ಪಟ್ಟಿ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Ordered list"
+msgstr "ಕ್ರಮಬದ್ಧ ಪಟ್ಟಿ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Visual"
+msgstr "ದೃಶ್ಯ ಮೋಡ್‌ಗೆ ಬದಲಿಸಿ"
+
+#: src/blocks/components/fields/components/wysiwyg.tsx
+msgid "Switch to Code"
+msgstr "ಕೋಡ್ ಮೋಡ್‌ಗೆ ಬದಲಿಸಿ"
+
+#: src/blocks/components/list/cards.tsx
+msgid "Image"
+msgstr "ಚಿತ್ರ"
+
+#: src/blocks/components/list/cards.tsx
+msgid "File"
+msgstr "ಫೈಲ್"
+
+#: src/blocks/components/placeholder/index.tsx
+msgid "Click to load"
+msgstr "ಲೋಡ್ ಮಾಡಲು ಕ್ಲಿಕ್ ಮಾಡಿ"
+
+#: src/canvas/canvas.tsx
+msgid "Close focus mode"
+msgstr "ಫೋಕಸ್ ಮೋಡ್ ಮುಚ್ಚಿ"
+
+#: src/canvas/canvas.tsx
+msgid "Canvas options"
+msgstr "ಕ್ಯಾನ್ವಾಸ್ ಆಯ್ಕೆಗಳು"
+
+#: src/canvas/canvas.tsx
+msgid "Fit to view"
+msgstr "ವೀಕ್ಷಣೆಗೆ ಹೊಂದಿಸಿ"
+
+#: src/canvas/canvas.tsx
+msgid "Zoom to 100%"
+msgstr "100% ಜೂಮ್‌ಗೆ ಹೊಂದಿಸಿ"
+
+#: src/canvas/canvas.tsx
+msgid "Live mode"
+msgstr "ಲೈವ್ ಮೋಡ್"
+
+#. translators: %s: shortened path of the copied file.
+#: src/devtools/styles.ts
+msgid "Copied: %s"
+msgstr "ನಕಲಿಸಲಾಗಿದೆ: %s"
