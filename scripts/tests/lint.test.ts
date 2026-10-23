@@ -1,6 +1,6 @@
 import { Effect } from 'effect';
 import assert from 'node:assert/strict';
-import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import test from 'node:test';
@@ -8,6 +8,40 @@ import { command } from '../lib/command.ts';
 import { runtime } from '../lib/runtime.ts';
 
 const root = resolve(import.meta.dirname, '../..');
+
+test('Oxc checks tooling helpers instead of treating nested lib directories as vendors', async (t) => {
+  const directory = mkdtempSync(join(root, 'scripts', '.lint-'));
+  t.after(() => rmSync(directory, { recursive: true, force: true }));
+  const lib = join(directory, 'lib');
+  mkdirSync(lib);
+  const file = join(lib, 'helper.ts');
+  writeFileSync(file, 'const unused=1;\nexport {};\n');
+  const config = join(directory, 'tsconfig.json');
+  writeFileSync(
+    config,
+    JSON.stringify({
+      compilerOptions: { strict: true },
+      include: ['lib/*.ts'],
+    }),
+  );
+  const lint = await Effect.runPromise(
+    command(
+      resolve(root, 'node_modules/.bin/oxlint'),
+      ['--tsconfig', config, '--format=json', file],
+      { check: false, cwd: root },
+    ).pipe(Effect.provide(runtime)),
+  );
+  assert.equal(lint.exitCode, 1, lint.stdout + lint.stderr);
+  assert.match(lint.stdout, /no-unused-vars/);
+  const format = await Effect.runPromise(
+    command(resolve(root, 'node_modules/.bin/oxfmt'), ['--check', file], {
+      check: false,
+      cwd: root,
+    }).pipe(Effect.provide(runtime)),
+  );
+  assert.equal(format.exitCode, 1, format.stdout + format.stderr);
+  assert.match(format.stdout + format.stderr, /helper\.ts/);
+});
 
 test('Oxlint preserves React deprecation, JSX usage, unused-variable and typed dot-notation checks', async (t) => {
   const directory = mkdtempSync(join(tmpdir(), 'blockstudio-lint-'));

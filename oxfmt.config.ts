@@ -15,7 +15,7 @@ export default defineConfig({
     '**/coverage/',
     '**/test-results/',
     '**/playwright-report/',
-    'lib/',
+    '/lib/',
     'includes/',
     '_reference/',
     '_references/',

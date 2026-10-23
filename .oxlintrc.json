@@ -8,7 +8,7 @@
     "node_modules",
     "vendor",
     "includes",
-    "lib",
+    "/lib",
     "build",
     "_reference",
     "_references",
