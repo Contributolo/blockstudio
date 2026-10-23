@@ -92,6 +92,29 @@ payload immediately instead of serving raw CSS or dropping SCSS until the
 window expires. Set the debounce to `0` when a production-like environment is
 also used for active file authoring.
 
+Cache payloads are guarded PHP files. Small payloads use plain arrays when the
+writing process has active OPcache shared memory and the destination is not
+excluded. OPcache can then reuse the compiled array on later includes; modifying
+the returned data still uses PHP's normal copy-on-write behavior.
+
+Without shared-memory OPcache, payloads remain compressed serialized data. This
+also applies when OPcache is full, its API is unavailable or restricted, or its
+blacklist or `opcache.max_file_size` excludes the file. File-cache-only OPcache
+does not select the plain-array format. See the [PHP OPcache configuration](https://www.php.net/manual/en/opcache.configuration.php)
+for those host-level controls.
+
+The default plain-array format is capped at 1 MiB, measured against both the
+serialized data and generated PHP source. Larger payloads remain compressed to
+avoid large-array compilation costs when a CLI process without OPcache reads
+a cache warmed by web workers.
+Small plain files still need parsing on such a reader, and newly written files
+may need compilation during `opcache.file_update_protection`.
+
+The `blockstudio/cache/compress` filter overrides the format per scope, for
+example when WP-CLI warms cache files for OPcache-enabled web workers. Returning
+`false` also overrides the size guard: only do so when every reader can handle
+the generated PHP file. If zlib is unavailable, plain PHP remains the fallback.
+
 ## Concurrency and retention
 
 Cold cache keys use a single-flight lock. One request builds the payload while

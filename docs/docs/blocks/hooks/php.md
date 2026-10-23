@@ -1224,6 +1224,25 @@ add_filter('blockstudio/cache/max_files_per_scope', function($maximum, $scope) {
 }, 10, 2);
 ```
 
+### blockstudio/cache/compress
+
+Filters whether a cache payload uses compressed serialized data instead of a
+plain PHP array. By default, only payloads up to 1 MiB use the plain format,
+and only when active OPcache shared memory can cache the destination. Other
+processes, excluded files, and larger payloads use compression.
+
+```php title="functions.php"
+add_filter('blockstudio/cache/compress', function($compress, $scope) {
+  return $scope === 'runtime' ? false : $compress;
+}, 10, 2);
+```
+
+Returning `false` overrides the size guard as well. This can help when WP-CLI
+without `opcache.enable_cli` warms files for OPcache-enabled web workers, but
+every reader without OPcache will parse the generated array. Keep compression
+for large shared payloads unless that extra memory cost is acceptable. See
+[cache payload formats](/docs/production/caching) for the default safeguards.
+
 ### blockstudio/cache/protected_paths
 
 Cache paths retention pruning must never evict. Blockstudio seeds it with

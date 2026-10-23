@@ -856,11 +856,11 @@ class BuildCacheTest extends TestCase {
 	}
 
 	/**
-	 * Cache files use a compact payload format when zlib is available.
+	 * Cache files use a compact payload format when compression is requested.
 	 *
 	 * @return void
 	 */
-	public function test_cache_file_uses_compact_payload_format_when_available(): void {
+	public function test_cache_file_uses_compact_payload_format_when_compressing(): void {
 		if ( ! function_exists( 'gzcompress' ) ) {
 			$this->markTestSkipped( 'zlib is not available.' );
 		}
@@ -872,12 +872,18 @@ class BuildCacheTest extends TestCase {
 		);
 		$file    = Build_Cache::get_cache_dir( 'runtime' ) . '/' . sanitize_file_name( $key ) . '.php';
 
-		$this->track_cache_file( 'runtime', $key );
-		Build_Cache::write( 'runtime', $key, $payload );
+		add_filter( 'blockstudio/cache/compress', '__return_true' );
+
+		try {
+			$this->track_cache_file( 'runtime', $key );
+			Build_Cache::write( 'runtime', $key, $payload );
+		} finally {
+			remove_filter( 'blockstudio/cache/compress', '__return_true' );
+		}
 
 		$this->assertFileExists( $file );
 		$this->assertLessThan(
-			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export -- Comparing compact cache size against the legacy exported-array shape.
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export -- Comparing compact cache size against the exported-array shape.
 			strlen( var_export( $payload, true ) ),
 			filesize( $file )
 		);
@@ -885,6 +891,147 @@ class BuildCacheTest extends TestCase {
 			$payload['value'],
 			Build_Cache::load( 'runtime', $key )['value'] ?? null
 		);
+	}
+
+	/**
+	 * Cache files are plain arrays OPcache can keep in shared memory.
+	 *
+	 * @return void
+	 */
+	public function test_cache_file_uses_plain_array_format_without_compression(): void {
+		$key     = 'plain-payload-' . uniqid();
+		$payload = array(
+			'value'  => "cached-value-'quoted'\\\0-" . str_repeat( 'x', 100 ),
+			'nested' => array(
+				'int'   => 7,
+				'float' => 1.5,
+				'bool'  => false,
+				'null'  => null,
+				'list'  => array( 'a', 'b' ),
+			),
+			'watch'  => Build_Cache::create_watch_snapshot( array() ),
+		);
+		$file    = Build_Cache::get_cache_dir( 'runtime' ) . '/' . sanitize_file_name( $key ) . '.php';
+		$scopes  = array();
+		$filter  = static function ( bool $compress, string $scope ) use ( &$scopes ): bool {
+			$scopes[] = $scope;
+			return false;
+		};
+
+		add_filter( 'blockstudio/cache/compress', $filter, 10, 2 );
+
+		try {
+			$this->track_cache_file( 'runtime', $key );
+			Build_Cache::write( 'runtime', $key, $payload );
+		} finally {
+			remove_filter( 'blockstudio/cache/compress', $filter, 10 );
+		}
+
+		$this->assertSame( array( 'runtime' ), $scopes );
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reading a local cache file written by this test.
+		$contents = file_get_contents( $file );
+		$this->assertStringStartsWith( "<?php\nif ( ! defined( 'ABSPATH' ) ) { exit; }\nreturn array (", $contents );
+		$this->assertStringNotContainsString( 'unserialize', $contents );
+
+		$loaded = Build_Cache::load( 'runtime', $key );
+		$this->assertSame( $payload['value'], $loaded['value'] ?? null );
+		$this->assertSame( $payload['nested'], $loaded['nested'] ?? null );
+	}
+
+	/**
+	 * Compression defaults to processes that do not serve includes from OPcache.
+	 *
+	 * @return void
+	 */
+	public function test_cache_compression_defaults_to_processes_without_opcache(): void {
+		$method   = new ReflectionMethod( Build_Cache::class, 'opcache_caches_includes' );
+		$status = function_exists( 'opcache_get_status' ) ? @opcache_get_status( false ) : false;
+		$expected = filter_var( ini_get( 'opcache.enable' ), FILTER_VALIDATE_BOOLEAN )
+			&& filter_var( ini_get( 'cli' === PHP_SAPI ? 'opcache.enable_cli' : 'opcache.enable' ), FILTER_VALIDATE_BOOLEAN )
+			&& ! filter_var( ini_get( 'opcache.file_cache_only' ), FILTER_VALIDATE_BOOLEAN )
+			&& is_array( $status ) && ! empty( $status['opcache_enabled'] ) && empty( $status['cache_full'] ) && empty( $status['restart_pending'] ) && empty( $status['restart_in_progress'] );
+		$default  = null;
+		$filter   = static function ( bool $compress ) use ( &$default ): bool {
+			$default = $compress;
+			return $compress;
+		};
+
+		$this->assertSame( $expected, $method->invoke( null ) );
+
+		$key = 'default-payload-' . uniqid();
+		add_filter( 'blockstudio/cache/compress', $filter );
+
+		try {
+			$this->track_cache_file( 'runtime', $key );
+			Build_Cache::write( 'runtime', $key, array( 'watch' => Build_Cache::create_watch_snapshot( array() ) ) );
+		} finally {
+			remove_filter( 'blockstudio/cache/compress', $filter );
+		}
+
+		$this->assertIsBool( $default );
+		if ( ! $expected ) {
+			$this->assertTrue( $default );
+		}
+	}
+
+	public static function cache_payload_policy_provider(): array {
+		return array(
+			'CLI without OPcache' => array( array( 'opcache.enable_cli=0' ), 'default', 256, true ),
+			'OPcache disabled globally' => array( array( 'opcache.enable=0' ), 'default', 256, true ),
+			'OPcache shared memory' => array( array(), 'default', 256, false ),
+			'large shared CLI payload' => array( array(), 'default', 1048577, true ),
+			'large PHP representation' => array( array(), 'expanded', 100000, true ),
+			'file cache without shared memory' => array( array( 'opcache.file_cache_only=1' ), 'default', 256, true ),
+			'OPcache size exclusion' => array( array( 'opcache.max_file_size=64' ), 'default', 256, true ),
+			'restricted OPcache API' => array( array( 'opcache.restrict_api=/not-allowed/' ), 'default', 256, true ),
+			'force compression' => array( array(), 'compressed', 256, true ),
+			'force plain without CLI OPcache' => array( array( 'opcache.enable_cli=0' ), 'plain', 256, false ),
+		);
+	}
+
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'cache_payload_policy_provider' )]
+	public function test_cache_payload_policy_in_real_php_processes( array $ini, string $mode, int $size, bool $compressed ): void {
+		if ( ! function_exists( 'opcache_get_status' ) || ! function_exists( 'gzcompress' ) ) {
+			$this->markTestSkipped( 'OPcache and zlib are required for the policy matrix.' );
+		}
+		$result = $this->run_payload_process( $ini, $mode, $size );
+		$this->assertSame( $compressed, $result['compressed'] );
+		$this->assertTrue( $result['roundTrip'] );
+		$this->assertSame( 'runtime', $result['scope'] );
+		if ( array() === $ini && 'default' === $mode && 256 === $size ) {
+			$this->assertTrue( $result['cached'], 'The plain payload must actually enter OPcache shared memory.' );
+		}
+	}
+
+	public function test_cache_payload_defaults_to_compressed_for_blacklisted_files(): void {
+		if ( ! function_exists( 'opcache_get_status' ) ) {
+			$this->markTestSkipped( 'OPcache is required.' );
+		}
+		$blacklist = $this->create_temporary_directory() . '/blacklist.txt';
+		$this->write_file( $blacklist, BLOCKSTUDIO_DIR . '/.tmp-tests/*' );
+		$result = $this->run_payload_process( array( 'opcache.blacklist_filename=' . $blacklist ), 'default', 256 );
+		$this->assertTrue( $result['compressed'] );
+	}
+
+	private function run_payload_process( array $ini, string $mode, int $size ): array {
+		$directory = $this->create_temporary_directory();
+		if ( in_array( 'opcache.file_cache_only=1', $ini, true ) ) {
+			$ini[] = 'opcache.file_cache=' . $directory;
+		}
+		$command = array( PHP_BINARY );
+		foreach ( array_merge( array( 'opcache.enable=1', 'opcache.enable_cli=1', 'opcache.file_update_protection=0', 'opcache.file_cache_only=0', 'opcache.max_file_size=0', 'opcache.restrict_api=', 'opcache.blacklist_filename=' ), $ini ) as $value ) {
+			$command[] = '-d';
+			$command[] = $value;
+		}
+		$command = array_merge( $command, array( BLOCKSTUDIO_DIR . '/tests/fixtures/cache-payload.php', $mode, $directory . '/payload.php', (string) $size ) );
+		$process = proc_open( $command, array( 1 => array( 'pipe', 'w' ), 2 => array( 'pipe', 'w' ) ), $pipes );
+		$this->assertIsResource( $process );
+		$output = stream_get_contents( $pipes[1] );
+		$error = stream_get_contents( $pipes[2] );
+		fclose( $pipes[1] );
+		fclose( $pipes[2] );
+		$this->assertSame( 0, proc_close( $process ), $error );
+		return json_decode( $output, true, 512, JSON_THROW_ON_ERROR );
 	}
 
 	/**

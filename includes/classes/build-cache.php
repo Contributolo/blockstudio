@@ -25,7 +25,12 @@ final class Build_Cache {
 	 *
 	 * @var int
 	 */
-	private const VERSION = 6;
+	private const VERSION = 7;
+
+	/**
+	 * Bound uncached compilation costs when CLI and web workers share payloads.
+	 */
+	private const MAX_PLAIN_PAYLOAD_BYTES = 1048576;
 
 	/**
 	 * Option storing the database-backed populate cache version.
@@ -754,7 +759,7 @@ final class Build_Cache {
 		$file                    = self::get_cache_file( $scope, $key );
 		$is_new                  = ! is_file( $file );
 		$tmp                     = $file . '.tmp-' . wp_generate_uuid4();
-		$contents                = self::export_payload( $payload );
+		$contents                = self::export_payload( $payload, $scope, $file );
 
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- Writing local cache file.
 		if ( false === file_put_contents( $tmp, $contents, LOCK_EX ) ) {
@@ -850,18 +855,46 @@ final class Build_Cache {
 	/**
 	 * Export a cache payload as a guarded PHP file.
 	 *
-	 * Compressed serialization keeps large build payloads from becoming huge PHP
-	 * array literals, which are expensive for PHP to parse and can exhaust CLI
-	 * memory on large sites.
+	 * With OPcache, a plain array file is compiled once into shared memory and
+	 * every later include returns that immutable array without parsing or
+	 * copying it. Without OPcache, the array literal is parsed on every include,
+	 * which costs more time and memory than inflating a compressed serialized
+	 * payload, so those processes keep the compressed form.
 	 *
-	 * @param array $payload Payload to export.
+	 * @param array  $payload Payload to export.
+	 * @param string $scope   Cache scope.
+	 * @param string $file    Destination cache file.
 	 *
 	 * @return string PHP file contents.
 	 */
-	private static function export_payload( array $payload ): string {
-		if ( function_exists( 'gzcompress' ) ) {
-			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize -- Internal cache payload with no user-provided execution.
-			$compressed = gzcompress( serialize( $payload ), 1 );
+	private static function export_payload( array $payload, string $scope, string $file = '' ): string {
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize -- Internal array cache payload, also used to bound the plain-file format.
+		$serialized = serialize( $payload );
+		$plain      = null;
+		$compress   = true;
+
+		if ( strlen( $serialized ) <= self::MAX_PLAIN_PAYLOAD_BYTES && self::opcache_caches_includes() && self::opcache_allows_path( $file ) ) {
+			$plain    = self::export_plain_payload( $payload );
+			$max_file = (int) ini_get( 'opcache.max_file_size' );
+			$compress = strlen( $plain ) > self::MAX_PLAIN_PAYLOAD_BYTES || ( $max_file > 0 && strlen( $plain ) > $max_file );
+		}
+		/**
+		 * Filter whether a cache payload is written in compressed form.
+		 *
+		 * Compression is the default when this process does not keep included
+		 * files in OPcache shared memory, for example WP-CLI without
+		 * opcache.enable_cli. Hosts that warm the cache from such a process
+		 * for web workers that do use OPcache can return false.
+		 *
+		 * @since 7.7.8
+		 *
+		 * @param bool   $compress Whether to compress the payload.
+		 * @param string $scope    Cache scope.
+		 */
+		$compress = (bool) apply_filters( 'blockstudio/cache/compress', $compress, $scope );
+
+		if ( $compress && function_exists( 'gzcompress' ) ) {
+			$compressed = gzcompress( $serialized, 1 );
 
 			if ( false !== $compressed ) {
 				// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- Encoding compressed cache data, not executable code.
@@ -871,8 +904,71 @@ final class Build_Cache {
 			}
 		}
 
-		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export -- Fallback cache format when zlib is unavailable.
+		return $plain ?? self::export_plain_payload( $payload );
+	}
+
+	/**
+	 * Export the bounded plain-array format or an explicitly requested override.
+	 *
+	 * @param array $payload Cache payload.
+	 * @return string Guarded PHP source.
+	 */
+	private static function export_plain_payload( array $payload ): string {
+		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export -- OPcache compiles this internal array, never user-provided PHP.
 		return "<?php\nif ( ! defined( 'ABSPATH' ) ) { exit; }\nreturn " . var_export( $payload, true ) . ";\n";
+	}
+
+	/**
+	 * Check whether this process keeps included files in OPcache shared memory.
+	 *
+	 * @return bool Whether included cache files are served from OPcache.
+	 */
+	private static function opcache_caches_includes(): bool {
+		$enabled = 'cli' === PHP_SAPI ? 'opcache.enable_cli' : 'opcache.enable';
+
+		if (
+			! filter_var( ini_get( 'opcache.enable' ), FILTER_VALIDATE_BOOLEAN ) ||
+			! filter_var( ini_get( $enabled ), FILTER_VALIDATE_BOOLEAN ) ||
+			filter_var( ini_get( 'opcache.file_cache_only' ), FILTER_VALIDATE_BOOLEAN ) ||
+			! function_exists( 'opcache_get_status' )
+		) {
+			return false;
+		}
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Hosts can restrict the OPcache API independently of its enable flags.
+		$status = @opcache_get_status( false );
+		return is_array( $status ) && ! empty( $status['opcache_enabled'] ) && empty( $status['cache_full'] ) && empty( $status['restart_pending'] ) && empty( $status['restart_in_progress'] );
+	}
+
+	/**
+	 * Respect OPcache exclusions without parsing blacklist files ourselves.
+	 *
+	 * @param string $file Destination cache file.
+	 * @return bool Whether the cache file is eligible for shared-memory caching.
+	 */
+	private static function opcache_allows_path( string $file ): bool {
+		if ( '' === $file || ! function_exists( 'opcache_get_configuration' ) ) {
+			return false;
+		}
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- A restricted API cannot establish that this file is cacheable.
+		$config = @opcache_get_configuration();
+		if ( ! is_array( $config ) ) {
+			return false;
+		}
+		$paths = array( str_replace( '\\', '/', $file ) );
+		// OPcache canonicalizes blacklist entries, including symlinked cache directories.
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- A concurrent purge can remove the directory before publication.
+		$directory = @realpath( dirname( $file ) );
+		if ( false !== $directory ) {
+			$paths[] = str_replace( '\\', '/', $directory . '/' . basename( $file ) );
+		}
+		foreach ( $config['blacklist'] ?? array() as $pattern ) {
+			foreach ( $paths as $path ) {
+				if ( is_string( $pattern ) && ( str_starts_with( $path, $pattern ) || fnmatch( $pattern, $path ) ) ) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	/**
