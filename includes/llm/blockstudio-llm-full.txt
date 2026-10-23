@@ -11395,6 +11395,26 @@ that previously passed a `force` argument to that method must call
 
 To prevent a page from being overwritten after manual edits, set `"sync": false` in `page.json`.
 
+### Portable Source Locations
+
+Synced theme files are stored as theme-relative locations rather than absolute
+installation paths. Child-theme files and parent-theme files keep separate
+identities, even when they have the same relative filename. Page helpers still
+return resolved absolute `template_path`, `content_path`, `layout_path`, and
+`directory` values for the current request.
+
+This lets CLI synchronization and web requests use different filesystem roots,
+as on jailed hosting, without breaking Markdown responses, layouts, editor
+Tailwind scanning, or prerender source tracking. Existing absolute theme paths
+are rebased on read when the theme directory name is unchanged. No sync,
+database migration, or request-time metadata write is required to read them;
+the next explicit sync stores the portable locations.
+
+Files outside the active child and parent themes remain supported at their
+configured absolute paths, subject to PHP's `open_basedir` restrictions. They
+are not automatically relocatable: after moving an external source, update
+its configured path and run an explicit sync.
+
 ### Post Field Ownership
 
 `postStatus` sets the initial status. Subsequent syncs preserve existing draft,

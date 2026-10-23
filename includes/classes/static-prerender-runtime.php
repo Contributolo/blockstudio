@@ -1889,27 +1889,19 @@ final class Static_Prerender_Runtime {
 
 		$paths = array();
 		foreach ( array( '_blockstudio_page_template_path', '_blockstudio_page_content_path', '_blockstudio_page_layout' ) as $meta_key ) {
-			$paths[] = (string) get_post_meta( $post_id, $meta_key, true );
+			$paths[] = Page_Paths::from_meta( $post_id, $meta_key );
 		}
 
-		$roots = array_unique(
-			array(
-				wp_normalize_path( (string) get_stylesheet_directory() ),
-				wp_normalize_path( (string) get_template_directory() ),
-			)
-		);
-		$ids   = get_post_meta( $post_id, '_blockstudio_page_dependencies', true );
+		$ids = get_post_meta( $post_id, '_blockstudio_page_dependencies', true );
 		foreach ( is_array( $ids ) ? $ids : array() as $id ) {
-			if ( ! is_string( $id ) || ! str_starts_with( $id, 'theme:' ) ) {
+			if ( ! is_string( $id ) || ! ( str_starts_with( $id, 'theme:' ) || str_starts_with( $id, 'parent-theme:' ) ) ) {
 				continue;
 			}
-
-			foreach ( $roots as $root ) {
-				$candidate = trailingslashit( $root ) . ltrim( substr( $id, 6 ), '/' );
-				if ( is_file( $candidate ) ) {
-					$paths[] = $candidate;
-					break;
-				}
+			$resolved = Page_Paths::resolve( $id );
+			$paths[]  = $resolved;
+			// Older dependency identities did not distinguish child and parent themes.
+			if ( str_starts_with( $id, 'theme:' ) && ( '' === $resolved || ! is_file( $resolved ) ) ) {
+				$paths[] = Page_Paths::resolve( 'parent-theme:' . substr( $id, 6 ) );
 			}
 		}
 

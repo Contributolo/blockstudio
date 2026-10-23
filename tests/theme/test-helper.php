@@ -19,6 +19,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 add_filter(
+	'blockstudio/settings/assets/inline_limit',
+	static function ( $limit ) {
+		return isset( $_SERVER['HTTP_X_BLOCKSTUDIO_TEST_INLINE_LIMIT'] )
+			? max( 0, (int) sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_BLOCKSTUDIO_TEST_INLINE_LIMIT'] ) ) )
+			: $limit;
+	}
+);
+
+add_filter(
 	'load_script_translation_file',
 	static function ( $file, $handle, $domain ) {
 		// A request-only fixture leaves the locale and other browser tests unchanged.
@@ -46,6 +55,45 @@ if ( class_exists( 'Timber\Timber' ) ) {
 add_action(
 	'rest_api_init',
 	function () {
+		register_rest_route(
+			'blockstudio-test/v1',
+			'/pages/path-fixture',
+			array(
+				'methods'             => 'POST',
+				'permission_callback' => '__return_true',
+				'callback'            => static function ( $request ) {
+					$post_id = \Blockstudio\Pages::get_post_id( 'docs-install' );
+					if ( ! $post_id ) {
+						return new WP_Error( 'missing_fixture', 'Docs fixture is missing.', array( 'status' => 404 ) );
+					}
+					$keys = array( '_blockstudio_page_template_path', '_blockstudio_page_content_path', '_blockstudio_page_layout', '_blockstudio_page_directory' );
+					$root = wp_normalize_path( get_stylesheet_directory() );
+					$restore = $request->get_param( 'restore' );
+					foreach ( $keys as $key ) {
+						if ( is_array( $restore ) && is_string( $restore[ $key ] ?? null ) ) {
+							update_post_meta( $post_id, $key, $restore[ $key ] );
+						} elseif ( 'legacy' === $request->get_param( 'action' ) ) {
+							$path = \Blockstudio\Page_Paths::from_meta( $post_id, $key );
+							if ( str_starts_with( $path, $root . '/' ) ) {
+								update_post_meta( $post_id, $key, '/old-cli-root/wp-content/themes/' . basename( $root ) . substr( $path, strlen( $root ) ) );
+							}
+						}
+					}
+					$paths = array();
+					foreach ( $keys as $key ) {
+						$paths[ $key ] = get_post_meta( $post_id, $key, true );
+					}
+					$post = get_post( $post_id );
+					return array(
+						'paths' => $paths,
+						'content' => $post->post_content,
+						'modified' => $post->post_modified_gmt,
+						'fingerprint' => get_post_meta( $post_id, '_blockstudio_page_fingerprint', true ),
+					);
+				},
+			)
+		);
+
 		register_rest_route(
 			'blockstudio-test/v1',
 			'/discovery-overlay',

@@ -404,7 +404,7 @@ class Pages {
 
 			$indexes['id'][ $post->ID ] = $post;
 			$key                        = (string) get_post_meta( $post->ID, '_blockstudio_page_key', true );
-			$source                     = (string) get_post_meta( $post->ID, '_blockstudio_page_source', true );
+			$source                     = Page_Paths::from_meta( $post->ID, '_blockstudio_page_source' );
 
 			if ( '' !== $key ) {
 				$indexes['key'][ $key ][] = $post;
@@ -1785,7 +1785,7 @@ class Pages {
 
 		$claims_404 = $is_md_ext && self::path_is_in_collection( $relative );
 
-		$file = $post ? (string) get_post_meta( $post->ID, '_blockstudio_page_content_path', true ) : '';
+		$file = $post ? Page_Paths::from_meta( $post->ID, '_blockstudio_page_content_path' ) : '';
 		if ( ! $post || ! self::can_serve_markdown_post( $post ) ) {
 			if ( $claims_404 ) {
 				self::serve_markdown_not_found();
@@ -1867,7 +1867,7 @@ class Pages {
 			return false;
 		}
 
-		$file = (string) get_post_meta( $post_id, '_blockstudio_page_content_path', true );
+		$file = Page_Paths::from_meta( $post_id, '_blockstudio_page_content_path' );
 
 		return '' !== $file && is_file( $file );
 	}
@@ -1991,6 +1991,7 @@ class Pages {
 				: '';
 		}
 
+		$layout_path = Page_Paths::resolve( $layout_path );
 		if ( '' === $layout_path || ! is_file( $layout_path ) ) {
 			return $content;
 		}
@@ -2052,7 +2053,7 @@ class Pages {
 			return $content;
 		}
 
-		$layout_path = (string) get_post_meta( $post_id, '_blockstudio_page_layout', true );
+		$layout_path = Page_Paths::from_meta( $post_id, '_blockstudio_page_layout' );
 
 		if ( '' === $layout_path || ! file_exists( $layout_path ) ) {
 			return $content;

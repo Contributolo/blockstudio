@@ -155,12 +155,12 @@ final class Page_Registry {
 			}
 			$parent_key         = (string) get_post_meta( $post->ID, '_blockstudio_page_parent_key', true );
 			$collection         = (string) get_post_meta( $post->ID, '_blockstudio_page_collection', true );
-			$layout_path        = (string) get_post_meta( $post->ID, '_blockstudio_page_layout', true );
+			$layout_path        = Page_Paths::from_meta( $post->ID, '_blockstudio_page_layout' );
 			$content_type       = (string) get_post_meta( $post->ID, '_blockstudio_page_content_type', true );
-			$source_path        = (string) get_post_meta( $post->ID, '_blockstudio_page_source', true );
-			$template_path      = (string) get_post_meta( $post->ID, '_blockstudio_page_template_path', true );
-			$directory          = (string) get_post_meta( $post->ID, '_blockstudio_page_directory', true );
-			$content_path       = (string) get_post_meta( $post->ID, '_blockstudio_page_content_path', true );
+			$source_path        = Page_Paths::from_meta( $post->ID, '_blockstudio_page_source' );
+			$template_path      = Page_Paths::from_meta( $post->ID, '_blockstudio_page_template_path' );
+			$directory          = Page_Paths::from_meta( $post->ID, '_blockstudio_page_directory' );
+			$content_path       = Page_Paths::from_meta( $post->ID, '_blockstudio_page_content_path' );
 			$template_for       = (string) get_post_meta( $post->ID, '_blockstudio_page_template_for', true );
 			$template_lock      = get_post_meta( $post->ID, '_blockstudio_template_lock', true );
 			$block_editing_mode = get_post_meta( $post->ID, '_blockstudio_block_editing_mode', true );

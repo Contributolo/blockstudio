@@ -23,7 +23,7 @@ class Page_Sync {
 	/**
 	 * Version of the page serialization and managed-meta contract.
 	 */
-	public const SYNC_ENGINE_VERSION = '4';
+	public const SYNC_ENGINE_VERSION = '5';
 
 	/**
 	 * The HTML parser instance.
@@ -314,7 +314,7 @@ class Page_Sync {
 			}
 
 			$key    = (string) get_post_meta( $post->ID, '_blockstudio_page_key', true );
-			$source = (string) get_post_meta( $post->ID, '_blockstudio_page_source', true );
+			$source = Page_Paths::from_meta( $post->ID, '_blockstudio_page_source' );
 
 			if ( ( '' !== $key && isset( $active_keys[ $key ] ) ) || ( '' !== $source && isset( $active_sources[ $source ] ) ) ) {
 				continue;
@@ -614,7 +614,7 @@ class Page_Sync {
 			$post = get_post( (int) $page_data['postId'] );
 
 			if ( $post instanceof WP_Post ) {
-				$source = get_post_meta( $post->ID, '_blockstudio_page_source', true );
+				$source = Page_Paths::from_meta( $post->ID, '_blockstudio_page_source' );
 				$name   = get_post_meta( $post->ID, '_blockstudio_page_name', true );
 				$key    = get_post_meta( $post->ID, '_blockstudio_page_key', true );
 
@@ -660,7 +660,8 @@ class Page_Sync {
 		$posts = get_posts(
 			array(
 				'meta_key'       => '_blockstudio_page_source', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
-				'meta_value'     => $page_data['source_path'], // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
+				'meta_value'     => array_unique( array( $page_data['source_path'], Page_Paths::encode( $page_data['source_path'] ) ) ), // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
+				'meta_compare'   => 'IN',
 				'post_type'      => $post_type,
 				'posts_per_page' => 1,
 				'post_status'    => 'any',
@@ -728,7 +729,7 @@ class Page_Sync {
 		}
 
 		$post   = $posts[0];
-		$source = get_post_meta( $post->ID, '_blockstudio_page_source', true );
+		$source = Page_Paths::from_meta( $post->ID, '_blockstudio_page_source' );
 		$name   = get_post_meta( $post->ID, '_blockstudio_page_name', true );
 		$key    = get_post_meta( $post->ID, '_blockstudio_page_key', true );
 
@@ -988,7 +989,7 @@ class Page_Sync {
 	 * @return void
 	 */
 	private function update_post_meta( int $post_id, array $page_data, int $file_mtime, string $fingerprint, string $engine_fingerprint ): void {
-		update_post_meta( $post_id, '_blockstudio_page_source', $page_data['source_path'] );
+		update_post_meta( $post_id, '_blockstudio_page_source', Page_Paths::encode( $page_data['source_path'] ) );
 		update_post_meta( $post_id, '_blockstudio_page_mtime', $file_mtime );
 		update_post_meta( $post_id, '_blockstudio_page_name', $page_data['name'] );
 		update_post_meta( $post_id, '_blockstudio_page_key', $page_data['key'] ?? $page_data['name'] );
@@ -1047,9 +1048,10 @@ class Page_Sync {
 	private function update_runtime_post_meta( int $post_id, array $page_data ): void {
 		$content_type  = is_scalar( $page_data['contentType'] ?? null ) ? (string) $page_data['contentType'] : 'php';
 		$content_path  = $page_data['content_path'] ?? $page_data['template_path'] ?? '';
-		$template_path = $page_data['template_path'] ?? '';
-		$directory     = $page_data['directory'] ?? '';
-		$layout_path   = $page_data['layout_path'] ?? '';
+		$template_path = Page_Paths::encode( $page_data['template_path'] ?? '' );
+		$directory     = Page_Paths::encode( $page_data['directory'] ?? '' );
+		$layout_path   = Page_Paths::encode( $page_data['layout_path'] ?? '' );
+		$content_path  = is_string( $content_path ) ? Page_Paths::encode( $content_path ) : '';
 		$template_for  = $page_data['templateFor'] ?? '';
 
 		update_post_meta( $post_id, '_blockstudio_page_content_type', $content_type );
@@ -1163,7 +1165,7 @@ class Page_Sync {
 		);
 
 		foreach ( $posts as $post ) {
-			$source = (string) get_post_meta( $post->ID, '_blockstudio_page_source', true );
+			$source = Page_Paths::from_meta( $post->ID, '_blockstudio_page_source' );
 
 			if ( in_array( $source, $active_sources, true ) ) {
 				continue;
@@ -1505,21 +1507,7 @@ class Page_Sync {
 	 * @return string|null Portable path or null for external sources.
 	 */
 	private function portable_theme_path( string $path ): ?string {
-		$path  = wp_normalize_path( $path );
-		$roots = array_filter(
-			array(
-				function_exists( 'get_stylesheet_directory' ) ? get_stylesheet_directory() : null,
-				function_exists( 'get_template_directory' ) ? get_template_directory() : null,
-			)
-		);
-
-		foreach ( $roots as $root ) {
-			$root = trailingslashit( wp_normalize_path( (string) $root ) );
-			if ( str_starts_with( $path, $root ) ) {
-				return 'theme:' . ltrim( substr( $path, strlen( $root ) ), '/' );
-			}
-		}
-
-		return null;
+		$portable = Page_Paths::encode( $path );
+		return str_starts_with( $portable, 'theme:' ) || str_starts_with( $portable, 'parent-theme:' ) ? $portable : null;
 	}
 }

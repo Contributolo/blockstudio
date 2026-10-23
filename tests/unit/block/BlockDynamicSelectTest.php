@@ -22,6 +22,8 @@ class BlockDynamicSelectTest extends TestCase {
 		}
 
 		$this->post_ids = array();
+		Field_Registry::instance()->reset();
+		Field_Type_Registry::instance()->reset();
 	}
 
 	private function dynamic_function_populate(): array {
@@ -426,19 +428,17 @@ class BlockDynamicSelectTest extends TestCase {
 	}
 
 	public function test_populate_without_dynamic_arguments_still_maps_through_its_options(): void {
-		add_filter(
-			'blockstudio/blocks/attributes/populate',
-			static function ( array $options ): array {
-				$options['dynamic_select_test'] = array(
-					array(
-						'value' => 'a',
-						'label' => 'Item A',
-					),
-				);
+		$filter = static function ( array $options ): array {
+			$options['dynamic_select_test'] = array(
+				array(
+					'value' => 'a',
+					'label' => 'Item A',
+				),
+			);
 
-				return $options;
-			}
-		);
+			return $options;
+		};
+		add_filter( 'blockstudio/blocks/attributes/populate', $filter );
 
 		$field = array(
 			'type'         => 'select',
@@ -470,7 +470,7 @@ class BlockDynamicSelectTest extends TestCase {
 				)
 			);
 		} finally {
-			remove_all_filters( 'blockstudio/blocks/attributes/populate' );
+			remove_filter( 'blockstudio/blocks/attributes/populate', $filter );
 		}
 	}
 
@@ -687,19 +687,17 @@ class BlockDynamicSelectTest extends TestCase {
 	}
 
 	public function test_populate_without_dynamic_arguments_still_maps_its_default_through_the_options(): void {
-		add_filter(
-			'blockstudio/blocks/attributes/populate',
-			static function ( array $options ): array {
-				$options['dynamic_select_default_test'] = array(
-					array(
-						'value' => 'a',
-						'label' => 'Item A',
-					),
-				);
+		$filter = static function ( array $options ): array {
+			$options['dynamic_select_default_test'] = array(
+				array(
+					'value' => 'a',
+					'label' => 'Item A',
+				),
+			);
 
-				return $options;
-			}
-		);
+			return $options;
+		};
+		add_filter( 'blockstudio/blocks/attributes/populate', $filter );
 
 		try {
 			$built = ( new Attribute_Builder() )->build(
@@ -716,7 +714,7 @@ class BlockDynamicSelectTest extends TestCase {
 				)
 			);
 		} finally {
-			remove_all_filters( 'blockstudio/blocks/attributes/populate' );
+			remove_filter( 'blockstudio/blocks/attributes/populate', $filter );
 		}
 
 		$this->assertSame(

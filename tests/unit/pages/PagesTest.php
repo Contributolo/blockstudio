@@ -1023,7 +1023,95 @@ class PagesTest extends TestCase {
 
 		$this->assertNotEmpty( $path );
 		$this->assertStringEndsWith( '.md', $path );
-		$this->assertFileExists( $path );
+		$this->assertStringStartsWith( 'theme:', $path );
+		$this->assertFileExists( \Blockstudio\Page_Paths::resolve( $path ) );
+	}
+
+	public function test_portable_and_legacy_page_paths_hydrate_without_sync_or_writes(): void {
+		$post_id = Pages::get_post_id( 'docs-install' );
+		$root = wp_normalize_path( get_stylesheet_directory() );
+		$keys = array( '_blockstudio_page_template_path', '_blockstudio_page_content_path', '_blockstudio_page_layout', '_blockstudio_page_directory' );
+		$stored = array();
+		foreach ( $keys as $key ) {
+			$stored[ $key ] = get_post_meta( $post_id, $key, true );
+			$this->assertStringStartsWith( 'theme:', $stored[ $key ] );
+			$absolute = \Blockstudio\Page_Paths::resolve( $stored[ $key ] );
+			update_post_meta( $post_id, $key, '/old-server/wp-content/themes/' . basename( $root ) . substr( $absolute, strlen( $root ) ) );
+		}
+		$writes = 0;
+		$track = static function ( mixed $meta_id, int $id ) use ( &$writes, $post_id ): void {
+			if ( $id === $post_id ) {
+				++$writes;
+			}
+		};
+		add_action( 'updated_post_meta', $track, 10, 2 );
+		add_action( 'added_post_meta', $track, 10, 2 );
+		try {
+			Pages::reset();
+			$page = Pages::get_page( 'docs-install' );
+			$this->assertSame( $root . '/pages/docs/guide/install/index.md', $page['template_path'] );
+			$this->assertSame( $root . '/pages/docs/guide/install', $page['directory'] );
+			$this->assertTrue( Pages::negotiates_markdown( $post_id ) );
+			$this->assertStringContainsString( 'data-docs-layout', Pages::render_layout( '<p>Portable content</p>', $page ) );
+			$this->assertSame( 0, $writes );
+		} finally {
+			remove_action( 'updated_post_meta', $track, 10 );
+			remove_action( 'added_post_meta', $track, 10 );
+			foreach ( $stored as $key => $value ) {
+				update_post_meta( $post_id, $key, $value );
+			}
+			Pages::reset();
+		}
+	}
+
+	public function test_legacy_paths_reach_frontend_layout_and_prerender_dependency_consumers(): void {
+		$post_id = Pages::get_post_id( 'docs-install' );
+		$root = wp_normalize_path( get_stylesheet_directory() );
+		$stored = array();
+		foreach ( array( '_blockstudio_page_template_path', '_blockstudio_page_content_path', '_blockstudio_page_layout' ) as $key ) {
+			$stored[ $key ] = get_post_meta( $post_id, $key, true );
+			$current = \Blockstudio\Page_Paths::resolve( $stored[ $key ] );
+			update_post_meta( $post_id, $key, '/old-server/wp-content/themes/' . basename( $root ) . substr( $current, strlen( $root ) ) );
+		}
+		$query = $GLOBALS['wp_query'];
+		$main_query = $GLOBALS['wp_the_query'];
+		$post = $GLOBALS['post'] ?? null;
+		$screen = $GLOBALS['current_screen'] ?? null;
+		try {
+			unset( $GLOBALS['current_screen'] );
+			Pages::reset();
+			$GLOBALS['wp_query'] = new WP_Query( array( 'p' => $post_id, 'post_type' => 'bs_docs' ) );
+			$GLOBALS['wp_the_query'] = $GLOBALS['wp_query'];
+			$GLOBALS['wp_query']->in_the_loop = true;
+			$GLOBALS['post'] = get_post( $post_id );
+			$this->assertStringContainsString( 'data-docs-layout', Pages::render_layout_content( '<p>Legacy content</p>' ) );
+			$method = new ReflectionMethod( \Blockstudio\Static_Prerender_Runtime::class, 'page_source_dependencies' );
+			$dependencies = $method->invoke( null );
+			$this->assertContains( $root . '/pages/docs/guide/install/index.md', $dependencies );
+			$this->assertContains( $root . '/pages/docs/layout.php', $dependencies );
+			$this->assertContains( $root . '/pages/docs/pages.json', $dependencies );
+		} finally {
+			$GLOBALS['wp_query'] = $query;
+			$GLOBALS['wp_the_query'] = $main_query;
+			$GLOBALS['post'] = $post;
+			$GLOBALS['current_screen'] = $screen;
+			foreach ( $stored as $key => $value ) {
+				update_post_meta( $post_id, $key, $value );
+			}
+			Pages::reset();
+		}
+	}
+
+	public function test_explicit_sync_migrates_legacy_locations_in_place(): void {
+		$page = Pages::get_page( 'docs-install' );
+		$post_id = Pages::get_post_id( 'docs-install' );
+		$root = wp_normalize_path( get_stylesheet_directory() );
+		update_post_meta( $post_id, '_blockstudio_page_template_path', '/old-server/wp-content/themes/' . basename( $root ) . '/pages/docs/guide/install/index.md' );
+		$this->assertSame( $post_id, ( new Page_Sync() )->force_sync( $page ) );
+		$this->assertSame( 'theme:pages/docs/guide/install/index.md', get_post_meta( $post_id, '_blockstudio_page_template_path', true ) );
+		$posts = get_posts( array( 'post_type' => 'any', 'post_status' => 'any', 'numberposts' => -1, 'meta_key' => '_blockstudio_page_key', 'meta_value' => 'docs:docs-install' ) );
+		$this->assertCount( 1, $posts );
+		$this->assertSame( $post_id, $posts[0]->ID );
 	}
 
 	public function test_raw_markdown_access_requires_publicly_viewable_or_readable_post(): void {
