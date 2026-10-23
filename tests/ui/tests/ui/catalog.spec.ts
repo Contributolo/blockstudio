@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
-const directory = join(__dirname, '../../theme/pages');
+const directory = join(import.meta.dirname, '../../theme/pages');
 const pages = readdirSync(directory, { withFileTypes: true })
   .filter((entry) => entry.isDirectory())
   .map((entry) => ({
