@@ -35,7 +35,7 @@ for (const limit of [0, 40000]) {
     const inspection = await page.request.post(endpoint, { headers });
     expect(inspection.ok()).toBeTruthy();
     const records = await inspection.json();
-    expect(records.cached).toBe(true);
+    expect(records.cached, JSON.stringify(records.diagnostics)).toBe(true);
     const stylesheet = Object.values(records.assets).find((asset: any) =>
       asset.path.endsWith('/global-style.css'),
     ) as any;

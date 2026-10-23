@@ -67,9 +67,35 @@ add_action(
 
 					$path    = \Blockstudio\Build::get_build_dir();
 					$payload = \Blockstudio\Build_Cache::load_runtime( $path, \Blockstudio\Build::get_instance_name( $path ) );
+					$diagnostics = array();
+					if ( ! is_array( $payload ) ) {
+						$key = \Blockstudio\Build_Cache::get_runtime_key( $path, \Blockstudio\Build::get_instance_name( $path ) );
+						$file = \Blockstudio\Build_Cache::get_cache_file( 'runtime', $key );
+						$stored = is_file( $file ) ? include $file : null;
+						$watch = is_array( $stored ) ? ( $stored['watch'] ?? array() ) : array();
+						$current = \Blockstudio\Build_Cache::create_watch_snapshot( array_keys( $watch['files'] ?? array() ), array_keys( $watch['dirs'] ?? array() ) );
+						$changes = array();
+						foreach ( array( 'files', 'dirs' ) as $type ) {
+							foreach ( $watch[ $type ] ?? array() as $watched_path => $snapshot ) {
+								if ( $snapshot !== ( $current[ $type ][ $watched_path ] ?? null ) ) {
+									$changes[ $watched_path ] = array(
+										'expected' => $snapshot,
+										'actual'   => $current[ $type ][ $watched_path ] ?? null,
+									);
+								}
+							}
+						}
+						$diagnostics = array(
+							'file'         => $file,
+							'exists'       => is_file( $file ),
+							'payload'      => is_array( $stored ),
+							'watchChanges' => $changes,
+						);
+					}
 					return array(
-						'cached' => is_array( $payload ),
-						'assets' => $payload['store']['blockstudio/init']['assets'] ?? array(),
+						'cached'      => is_array( $payload ),
+						'assets'      => $payload['store']['blockstudio/init']['assets'] ?? array(),
+						'diagnostics' => $diagnostics,
 					);
 				},
 			)
