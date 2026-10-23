@@ -1091,6 +1091,10 @@ final class Build_Cache {
 					$paths[] = $dependency;
 				}
 			}
+
+			foreach ( array_keys( $data['moduleStyles'] ?? array() ) as $module_style ) {
+				$paths[] = (string) $module_style;
+			}
 		}
 
 		foreach ( $payload['registerable'] ?? array() as $item ) {
@@ -1143,6 +1147,12 @@ final class Build_Cache {
 
 				if ( $resolved !== $source && is_file( $resolved ) ) {
 					$paths[] = $resolved;
+				}
+			}
+
+			foreach ( array_keys( $data['moduleStyles'] ?? array() ) as $module_style ) {
+				if ( is_file( (string) $module_style ) ) {
+					$paths[] = wp_normalize_path( (string) $module_style );
 				}
 			}
 		}

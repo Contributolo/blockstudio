@@ -1074,6 +1074,46 @@ class BuildCacheTest extends TestCase {
 	}
 
 	/**
+	 * Runtime cache vouches for the module stylesheets its blocks render from.
+	 *
+	 * @return void
+	 */
+	public function test_runtime_cache_watches_resolved_module_styles(): void {
+		$directory  = $this->create_temporary_directory();
+		$module_css = $directory . '/_dist/modules/example/1.0.0.css';
+
+		wp_mkdir_p( dirname( $module_css ) );
+		$this->write_file( $module_css, '.module{color:red}' );
+
+		$payload = array(
+			'store'        => array(
+				'blockstudio-test/module-styles' => array(
+					'name'         => 'blockstudio-test/module-styles',
+					'path'         => $directory . '/block.json',
+					'assets'       => array(),
+					'moduleStyles' => array(
+						$module_css => Assets::resolve_output( $module_css ),
+					),
+				),
+			),
+			'registerable' => array(),
+		);
+		$key     = Build_Cache::get_runtime_key( $directory, 'module-styles' );
+
+		$this->track_cache_file( 'runtime', $key );
+		$this->assertTrue( Build_Cache::write_runtime( $directory, 'module-styles', $payload ) );
+
+		$cached = Build_Cache::load_runtime( $directory, 'module-styles' );
+		$this->assertIsArray( $cached );
+		$this->assertArrayHasKey( wp_normalize_path( $module_css ), $cached['watch']['files'] );
+		$this->assertContains( wp_normalize_path( $module_css ), $cached['watch']['required'] );
+
+		unlink( $module_css );
+
+		$this->assertNull( Build_Cache::load_runtime( $directory, 'module-styles' ) );
+	}
+
+	/**
 	 * Runtime cache invalidates when a new nested block file is added.
 	 *
 	 * @return void

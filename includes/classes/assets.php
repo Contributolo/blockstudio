@@ -646,9 +646,9 @@ class Assets {
 						if ( $inline_limit > 0 && null !== $tag ) {
 							$slot                  = "\0blockstudio-css-slot-" . count( $inline_slots ) . "\0";
 							$inline_slots[ $slot ] = array(
-								'path' => $v['path'],
-								'id'   => self::get_id( $k, $block ),
-								'tag'  => $tag,
+								'output' => self::get_output( $v ),
+								'id'     => self::get_id( $k, $block ),
+								'tag'    => $tag,
 							);
 							$head                 .= $slot;
 						} else {
@@ -721,7 +721,7 @@ class Assets {
 	 * keyed by the slot that holds the link's place in the head, so the
 	 * cascade order stays as it was.
 	 *
-	 * @param array $slots Stylesheets by slot, each with its source path, element ID and link tag.
+	 * @param array $slots Stylesheets by slot, each with its resolved output, element ID and link tag.
 	 * @param int   $limit Maximum total size of inlined stylesheets in bytes.
 	 *
 	 * @return array<string, string> The tag to print for each slot.
@@ -731,12 +731,9 @@ class Assets {
 		$files = array();
 
 		foreach ( $slots as $slot => $candidate ) {
-			$files[ $slot ] = self::get_path( $candidate['path'] );
-			// A cache file may disappear after render_tag() checked it.
-			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Concurrent cache eviction falls back to the original link.
-			$size = @filesize( $files[ $slot ] );
-			if ( false !== $size && $size > 0 ) {
-				$sizes[ $slot ] = $size;
+			$files[ $slot ] = $candidate['output']['path'];
+			if ( $candidate['output']['size'] > 0 ) {
+				$sizes[ $slot ] = $candidate['output']['size'];
 			}
 		}
 
@@ -750,6 +747,7 @@ class Assets {
 				break;
 			}
 
+			// A cache file may disappear after its output was resolved.
 			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents,WordPress.PHP.NoSilencedErrors.Discouraged -- Concurrent cache eviction falls back to the original link.
 			$css = @file_get_contents( $files[ $slot ] );
 
@@ -757,10 +755,8 @@ class Assets {
 				continue;
 			}
 
-			$path      = $slots[ $slot ]['path'];
-			$processed = 1 === count( self::get_matches( $path ) ) ? 'data-processed' : '';
-			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- A concurrent cache eviction must not interrupt the response.
-			$key = (int) @filemtime( $files[ $slot ] );
+			$processed = $slots[ $slot ]['output']['processed'] ? 'data-processed' : '';
+			$key       = (int) $slots[ $slot ]['output']['mtime'];
 
 			$result[ $slot ] = "<style id='{$slots[ $slot ]['id']}' $processed data-key='$key'>" . $css . '</style>';
 			$total          += strlen( $css );
@@ -1466,6 +1462,45 @@ class Assets {
 	 * @return void
 	 */
 	public static function get_module_css_assets( $block, &$asset_ids, &$element ): void {
+		$module_styles = $block['moduleStyles'] ?? null;
+
+		if ( ! is_array( $module_styles ) ) {
+			$module_styles = array_fill_keys( self::get_module_css_files( $block ), null );
+		}
+
+		foreach ( $module_styles as $filename => $output ) {
+			$filename = (string) $filename;
+			$file     = pathinfo( $filename );
+
+			if ( in_array( $file['filename'], $asset_ids, true ) ) {
+				continue;
+			}
+			$asset_ids[] = $file['filename'];
+
+			$data = array(
+				'editor' => false,
+				'file'   => $file,
+				'path'   => $filename,
+				'type'   => 'external',
+				'url'    => Files::get_relative_url( $filename ),
+			);
+
+			if ( is_array( $output ) ) {
+				$data['output'] = $output;
+			}
+
+			$element .= self::render_tag( $file['basename'], $data, $block );
+		}
+	}
+
+	/**
+	 * Find the generated CSS module files of a block.
+	 *
+	 * @param array $block The block data.
+	 *
+	 * @return string[] CSS module file paths.
+	 */
+	private static function get_module_css_files( array $block ): array {
 		$source_paths = array( $block['path'] ?? '' );
 
 		foreach ( $block['assets'] ?? array() as $asset ) {
@@ -1482,26 +1517,108 @@ class Assets {
 			);
 		}
 
-		foreach ( array_unique( $filenames ) as $filename ) {
-			$file = pathinfo( $filename );
+		return array_values( array_unique( $filenames ) );
+	}
 
-			if ( in_array( $file['filename'], $asset_ids, true ) ) {
-				continue;
-			}
-			$asset_ids[] = $file['filename'];
+	/**
+	 * Resolve the file an asset renders from.
+	 *
+	 * Reads the generated output directory and the file metadata that
+	 * render_tag() and render_inline() print.
+	 *
+	 * @since 7.7.8
+	 *
+	 * @param string $path Asset source path.
+	 *
+	 * @return array{path:string,processed:bool,size:int,mtime:int|false,sourceMtime:int|false} Resolved output.
+	 */
+	public static function resolve_output( string $path ): array {
+		$resolved = self::get_path( $path );
+		$is_file  = is_file( $resolved );
 
-			$element .= self::render_tag(
-				$file['basename'],
-				array(
-					'editor' => false,
-					'file'   => $file,
-					'path'   => $filename,
-					'type'   => 'external',
-					'url'    => Files::get_relative_url( $filename ),
-				),
-				$block
-			);
+		return array(
+			'path'        => $resolved,
+			'processed'   => 1 === count( self::get_matches( $path ) ),
+			'size'        => $is_file ? (int) filesize( $resolved ) : 0,
+			'mtime'       => $is_file ? filemtime( $resolved ) : false,
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- A missing source keeps the empty version it always printed.
+			'sourceMtime' => @filemtime( $path ),
+		);
+	}
+
+	/**
+	 * Get the resolved output of an asset.
+	 *
+	 * Blocks hydrated from the runtime cache carry the output resolved when
+	 * the cache was written. The cache's watch snapshot covers the source and
+	 * the resolved file, so the record is as current as the payload holding it.
+	 *
+	 * @param array $data The asset data.
+	 *
+	 * @return array{path:string,processed:bool,size:int,mtime:int|false,sourceMtime:int|false} Resolved output.
+	 */
+	private static function get_output( array $data ): array {
+		$output = $data['output'] ?? null;
+
+		if ( is_array( $output ) && is_string( $output['path'] ?? null ) ) {
+			return $output;
 		}
+
+		return self::resolve_output( (string) ( $data['path'] ?? '' ) );
+	}
+
+	/**
+	 * Record the resolved output of a block's assets for the runtime cache.
+	 *
+	 * Runs after the build compiled the block's assets and removed stale
+	 * generated files, so the records describe the files on disk.
+	 *
+	 * @since 7.7.8
+	 *
+	 * @param array $data The block data.
+	 *
+	 * @return array The block data with resolved outputs.
+	 */
+	public static function with_resolved_outputs( array $data ): array {
+		if ( ! isset( $data['assets'] ) || ! is_array( $data['assets'] ) ) {
+			return $data;
+		}
+
+		foreach ( $data['assets'] as $id => $asset ) {
+			if ( is_array( $asset ) && is_string( $asset['path'] ?? null ) ) {
+				self::clear_asset_lookup_cache( $asset['path'] );
+				$data['assets'][ $id ]['output'] = self::resolve_output( $asset['path'] );
+			}
+		}
+
+		$data['moduleStyles'] = array();
+
+		foreach ( self::get_module_css_files( $data ) as $filename ) {
+			$data['moduleStyles'][ $filename ] = self::resolve_output( $filename );
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Drop resolved outputs so assets are looked up on disk again.
+	 *
+	 * @since 7.7.8
+	 *
+	 * @param array $data The block data.
+	 *
+	 * @return array The block data without resolved outputs.
+	 */
+	public static function without_resolved_outputs( array $data ): array {
+		unset( $data['moduleStyles'] );
+
+		foreach ( $data['assets'] ?? array() as $id => $asset ) {
+			if ( is_array( $asset ) ) {
+				unset( $data['assets'][ $id ]['output'] );
+			}
+		}
+
+		return $data;
 	}
 
 	/**
@@ -2564,9 +2681,9 @@ class Assets {
 		$key              = '';
 
 		if ( 'gutenberg' !== $return ) {
-			$path             = self::get_path( $data['path'] );
-			$is_processed     = 1 === count( self::get_matches( $data['path'] ) );
-			$processed_string = $is_processed ? 'data-processed' : '';
+			$output           = self::get_output( $data );
+			$path             = $output['path'];
+			$processed_string = $output['processed'] ? 'data-processed' : '';
 
 			if ( str_ends_with( $path, '.scss' ) ) {
 				return null;
@@ -2574,7 +2691,7 @@ class Assets {
 
 			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reading local file.
 			$contents = file_get_contents( $path );
-			$key      = "data-key='" . filemtime( $path ) . "'";
+			$key      = "data-key='" . $output['mtime'] . "'";
 		} else {
 			$contents = $data;
 		}
@@ -2668,10 +2785,10 @@ class Assets {
 			return null;
 		}
 
-		$path                = $data['path'];
-		$maybe_compiled_path = self::get_path( $path );
+		$output              = self::get_output( $data );
+		$maybe_compiled_path = $output['path'];
 
-		if ( ! is_file( $maybe_compiled_path ) || 0 === filesize( $maybe_compiled_path ) ) {
+		if ( $output['size'] <= 0 ) {
 			return null;
 		}
 
@@ -2686,8 +2803,8 @@ class Assets {
 			return null;
 		}
 
-		$key       = filemtime( $path );
-		$processed = 1 === count( self::get_matches( $path ) ) ? 'data-processed' : '';
+		$key       = $output['sourceMtime'];
+		$processed = $output['processed'] ? 'data-processed' : '';
 
 		if ( self::is_css( $type ) ) {
 			if ( str_ends_with( $src, '.scss' ) ) {

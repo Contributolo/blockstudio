@@ -842,6 +842,11 @@ class Build {
 			}
 		);
 
+		// Cached requests render assets from these records instead of reading the output directories.
+		if ( ! $editor && Build_Cache::is_enabled() ) {
+			$store = array_map( array( Assets::class, 'with_resolved_outputs' ), $store );
+		}
+
 		// Phase 2.5: Discover custom fields.
 		$local_fields = self::discover_local_custom_fields( $path, $source );
 		self::register_custom_field_definitions( $local_fields['fields'] );
@@ -985,6 +990,11 @@ class Build {
 		$registerable = $payload['registerable'] ?? array();
 		$overrides    = $payload['overrides'] ?? array();
 		$registered   = $payload['registeredBlockTypes'] ?? array();
+
+		// A last-good payload predates changed sources, so its resolved outputs may be stale.
+		if ( $last_good ) {
+			$store = array_map( array( Assets::class, 'without_resolved_outputs' ), $store );
+		}
 
 		self::register_blade_templates(
 			$payload['bladeTemplates'] ?? array(),
