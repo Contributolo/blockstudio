@@ -1407,8 +1407,129 @@ class AssetsTest extends TestCase {
 
 	public function test_inline_limit_keeps_missing_files_linked_without_warnings(): void {
 		$method = new ReflectionMethod( Assets::class, 'resolve_inline_slots' );
-		$slot   = array( 'path' => '/missing-blockstudio-asset.css', 'id' => 'missing', 'tag' => '<link id="missing">' );
+		$slot   = array( 'output' => Assets::resolve_output( '/missing-blockstudio-asset.css' ), 'id' => 'missing', 'tag' => '<link id="missing">' );
 		$this->assertSame( array( 'slot' => $slot['tag'] ), $method->invoke( null, array( 'slot' => $slot ), 40000 ) );
+	}
+
+	public function test_parse_output_is_identical_with_resolved_outputs(): void {
+		$page = $this->inline_limit_page(
+			array(
+				'one.css'        => str_repeat( 'a', 100 ),
+				'two.css'        => str_repeat( 'b', 3000 ),
+				'three.css'      => '',
+				'four-inline.js' => 'console.log(1);',
+			),
+			array( 'four-inline.js' => 'inline' )
+		);
+
+		try {
+			foreach ( array( 0, 500 ) as $limit ) {
+				remove_all_filters( 'blockstudio/settings/assets/inline_limit' );
+				$this->add_filter( 'blockstudio/settings/assets/inline_limit', static fn(): int => $limit );
+
+				$from_disk = $this->parse_inline_limit_page( $page );
+
+				Block_Registry::instance()->set_block_data( $page['data']['name'], Assets::with_resolved_outputs( $page['data'] ) );
+				$from_records = $this->parse_inline_limit_page( $page );
+				Block_Registry::instance()->set_block_data( $page['data']['name'], $page['data'] );
+
+				$this->assertSame( $from_disk, $from_records );
+			}
+		} finally {
+			$this->remove_inline_limit_page( $page );
+		}
+	}
+
+	public function test_render_tag_reads_a_resolved_output_instead_of_the_disk(): void {
+		$path  = $this->create_temporary_asset( 'style.css', '.a{color:red}' );
+		$block = array( 'name' => 'blockstudio-test/resolved-output' );
+		$asset = array(
+			'path'   => $path,
+			'type'   => 'external',
+			'editor' => false,
+		);
+
+		$from_disk = Assets::render_tag( 'style.css', $asset, $block );
+		$output    = Assets::resolve_output( $path );
+
+		$this->assertSame( strlen( '.a{color:red}' ), $output['size'] );
+		$this->assertSame( filemtime( $path ), $output['sourceMtime'] );
+
+		unlink( $path );
+
+		$this->assertNull( Assets::render_tag( 'style.css', $asset, $block ) );
+		$this->assertSame( $from_disk, Assets::render_tag( 'style.css', $asset + array( 'output' => $output ), $block ) );
+	}
+
+	public function test_module_styles_render_from_resolved_outputs(): void {
+		$block_path = $this->create_temporary_asset( 'block.json', '{}' );
+		$script     = dirname( $block_path ) . '/script.js';
+		$module_css = Assets::get_dist_folder( $block_path ) . '/modules/example/1.0.0.css';
+
+		file_put_contents( $script, 'console.log(1);' );
+		wp_mkdir_p( dirname( $module_css ) );
+		file_put_contents( $module_css, '.module{color:red}' );
+		$this->temporary_directories[] = Assets::get_dist_folder( $block_path );
+
+		$block = array(
+			'name'   => 'blockstudio-test/module-styles',
+			'path'   => $block_path,
+			'assets' => array(
+				'script.js' => array(
+					'path'   => $script,
+					'type'   => 'external',
+					'editor' => false,
+				),
+			),
+		);
+
+		$resolved = Assets::with_resolved_outputs( $block );
+
+		$this->assertSame( array( wp_normalize_path( $module_css ) ), array_map( 'wp_normalize_path', array_keys( $resolved['moduleStyles'] ) ) );
+		$this->assertArrayHasKey( 'output', $resolved['assets']['script.js'] );
+		$this->assertSame( $block, Assets::without_resolved_outputs( $resolved ) );
+
+		$ids       = array();
+		$from_disk = '';
+		Assets::get_module_css_assets( $block, $ids, $from_disk );
+
+		$ids          = array();
+		$from_records = '';
+		Assets::get_module_css_assets( $resolved, $ids, $from_records );
+
+		$this->assertStringContainsString( "id='blockstudio-blockstudio-test-module-styles-1-0-0-css'", $from_disk );
+		$this->assertSame( $from_disk, $from_records );
+	}
+
+	public function test_cached_outputs_keep_url_and_disable_filters_request_local(): void {
+		$path = $this->create_temporary_asset( 'style.css', '.a{color:red}' );
+		$block = array( 'name' => 'blockstudio-test/cached-filters' );
+		$data = array( 'path' => $path, 'output' => Assets::resolve_output( $path ) );
+		$cdn = 'https://first.example.test/style.css';
+		$url = static function () use ( &$cdn ): string { return $cdn; };
+		$this->add_filter( 'blockstudio/files/url', $url );
+		$tag = Assets::render_tag( 'style.css', $data, $block );
+		$this->assertStringContainsString( $cdn, $tag );
+		$cdn = 'https://second.example.test/style.css';
+		$this->assertStringContainsString( $cdn, Assets::render_tag( 'style.css', $data, $block ) );
+		$this->add_filter( 'blockstudio/assets/disable', static fn(): array => array( Assets::get_id( 'style.css', $block ) ) );
+		$this->assertNull( Assets::render_tag( 'style.css', $data, $block ) );
+	}
+
+	public function test_cached_output_is_ignored_after_source_path_changes_or_metadata_is_malformed(): void {
+		$one = $this->create_temporary_asset( 'one.css', '.one{}' );
+		$two = $this->create_temporary_asset( 'two.css', '.two{}' );
+		$block = array( 'name' => 'blockstudio-test/output-validation' );
+		$expected = Assets::render_tag( 'two.css', array( 'path' => $two ), $block );
+		$this->assertSame( $expected, Assets::render_tag( 'two.css', array( 'path' => $two, 'output' => Assets::resolve_output( $one ) ), $block ) );
+		$this->assertSame( $expected, Assets::render_tag( 'two.css', array( 'path' => $two, 'output' => array( 'source' => wp_normalize_path( $two ), 'path' => $one ) ), $block ) );
+	}
+
+	public function test_missing_cached_inline_file_returns_no_markup_without_warnings(): void {
+		$path = $this->create_temporary_asset( 'style.inline.css', '.inline{}' );
+		$data = array( 'path' => $path, 'output' => Assets::resolve_output( $path ) );
+		unlink( $path );
+		$this->assertNull( Assets::render_inline( 'style.inline.css', $data, array( 'name' => 'blockstudio-test/missing-inline' ), true ) );
 	}
 
 	private function assert_stylesheet_inlined( string $id, string $output ): void {

@@ -955,12 +955,15 @@ final class Build_Cache {
 	/**
 	 * Resolve asset paths to the file that render_inline/render_tag will read.
 	 *
-	 * @param string $path Asset path.
+	 * @param array $asset Asset data.
 	 *
 	 * @return string Resolved asset path.
 	 */
-	private static function resolve_asset_path( string $path ): string {
-		$resolved = Assets::get_path( $path );
+	private static function resolve_asset_path( array $asset ): string {
+		$path     = (string) ( $asset['path'] ?? '' );
+		$output   = $asset['output'] ?? array();
+		$resolved = ( $output['source'] ?? null ) === wp_normalize_path( $path ) && is_string( $output['path'] ?? null )
+			? $output['path'] : Assets::get_path( $path );
 
 		return wp_normalize_path( $resolved );
 	}
@@ -1084,12 +1087,16 @@ final class Build_Cache {
 			foreach ( $data['assets'] ?? array() as $asset ) {
 				if ( isset( $asset['path'] ) ) {
 					$paths[] = $asset['path'];
-					$paths[] = self::resolve_asset_path( $asset['path'] );
+					$paths[] = self::resolve_asset_path( $asset );
 				}
 
 				foreach ( $asset['dependencies'] ?? array() as $dependency ) {
 					$paths[] = $dependency;
 				}
+			}
+
+			foreach ( array_keys( $data['moduleStyles'] ?? array() ) as $module_style ) {
+				$paths[] = (string) $module_style;
 			}
 		}
 
@@ -1139,10 +1146,16 @@ final class Build_Cache {
 				}
 
 				$source   = wp_normalize_path( $asset['path'] );
-				$resolved = self::resolve_asset_path( $source );
+				$resolved = self::resolve_asset_path( $asset );
 
-				if ( $resolved !== $source && is_file( $resolved ) ) {
+				if ( ( $resolved !== $source || ( $asset['output']['size'] ?? 0 ) > 0 ) && is_file( $resolved ) ) {
 					$paths[] = $resolved;
+				}
+			}
+
+			foreach ( array_keys( $data['moduleStyles'] ?? array() ) as $module_style ) {
+				if ( is_file( (string) $module_style ) ) {
+					$paths[] = wp_normalize_path( (string) $module_style );
 				}
 			}
 		}
@@ -1177,6 +1190,16 @@ final class Build_Cache {
 		foreach ( $payload['store'] ?? array() as $data ) {
 			if ( isset( $data['path'] ) ) {
 				$dirs[] = dirname( $data['path'] );
+			}
+			if ( isset( $data['moduleStyles'] ) ) {
+				$sources = array_filter( array_merge( array( $data['path'] ?? '' ), array_column( $data['assets'] ?? array(), 'path' ) ) );
+				foreach ( array_unique( $sources ) as $source ) {
+					$module_root = Assets::get_dist_folder( $source ) . '/modules';
+					$dirs[]      = $module_root;
+					if ( is_dir( $module_root ) ) {
+						$dirs = array_merge( $dirs, self::collect_directories( $module_root ) );
+					}
+				}
 			}
 		}
 

@@ -877,6 +877,11 @@ class Build {
 			return;
 		}
 
+		// Capture final outputs after compilation and registration filters, only when assets are enabled.
+		if ( Settings::get( 'assets/enqueue' ) && Build_Cache::is_enabled() ) {
+			$store = array_map( array( Assets::class, 'with_resolved_outputs' ), $store );
+		}
+
 		Build_Cache::write_runtime(
 			$path,
 			$instance,
@@ -985,6 +990,11 @@ class Build {
 		$registerable = $payload['registerable'] ?? array();
 		$overrides    = $payload['overrides'] ?? array();
 		$registered   = $payload['registeredBlockTypes'] ?? array();
+
+		// A last-good payload predates changed sources, so its resolved outputs may be stale.
+		if ( $last_good ) {
+			$store = array_map( array( Assets::class, 'without_resolved_outputs' ), $store );
+		}
 
 		self::register_blade_templates(
 			$payload['bladeTemplates'] ?? array(),

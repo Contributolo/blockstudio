@@ -1074,6 +1074,148 @@ class BuildCacheTest extends TestCase {
 	}
 
 	/**
+	 * Runtime cache vouches for the module stylesheets its blocks render from.
+	 *
+	 * @return void
+	 */
+	public function test_runtime_cache_watches_resolved_module_styles(): void {
+		$directory  = $this->create_temporary_directory();
+		$module_css = $directory . '/_dist/modules/example/1.0.0.css';
+
+		wp_mkdir_p( dirname( $module_css ) );
+		$this->write_file( $module_css, '.module{color:red}' );
+
+		$payload = array(
+			'store'        => array(
+				'blockstudio-test/module-styles' => array(
+					'name'         => 'blockstudio-test/module-styles',
+					'path'         => $directory . '/block.json',
+					'assets'       => array(),
+					'moduleStyles' => array(
+						$module_css => Assets::resolve_output( $module_css ),
+					),
+				),
+			),
+			'registerable' => array(),
+		);
+		$key     = Build_Cache::get_runtime_key( $directory, 'module-styles' );
+
+		$this->track_cache_file( 'runtime', $key );
+		$this->assertTrue( Build_Cache::write_runtime( $directory, 'module-styles', $payload ) );
+
+		$cached = Build_Cache::load_runtime( $directory, 'module-styles' );
+		$this->assertIsArray( $cached );
+		$this->assertArrayHasKey( wp_normalize_path( $module_css ), $cached['watch']['files'] );
+		$this->assertContains( wp_normalize_path( $module_css ), $cached['watch']['required'] );
+
+		unlink( $module_css );
+
+		$this->assertNull( Build_Cache::load_runtime( $directory, 'module-styles' ) );
+	}
+
+	public function test_cached_raw_assets_invalidate_immediately_inside_debounce_window(): void {
+		$directory = $this->create_temporary_directory();
+		$source = $directory . '/style.css';
+		$this->write_file( $source, '.raw{}' );
+		$data = Assets::with_resolved_outputs( array( 'path' => $directory . '/block.json', 'assets' => array( 'style.css' => array( 'path' => $source ) ) ) );
+		$key = Build_Cache::get_runtime_key( $directory, 'raw-asset' );
+		$this->track_cache_file( 'runtime', $key );
+		$debounce = static fn(): int => 60;
+		add_filter( 'blockstudio/cache/watch_debounce', $debounce );
+		try {
+			$this->assertTrue( Build_Cache::write_runtime( $directory, 'raw-asset', array( 'store' => array( 'raw' => $data ) ) ) );
+			$this->assertIsArray( Build_Cache::load_runtime( $directory, 'raw-asset' ) );
+			unlink( $source );
+			$this->assertNull( Build_Cache::load_runtime( $directory, 'raw-asset' ) );
+		} finally {
+			remove_filter( 'blockstudio/cache/watch_debounce', $debounce );
+		}
+	}
+
+	public function test_disabled_assets_do_not_capture_output_records(): void {
+		$directory = $this->create_temporary_directory();
+		$name = 'blockstudio-test/no-asset-records';
+		$this->write_file( $directory . '/block.json', wp_json_encode( array( 'name' => $name, 'title' => 'Disabled Assets', 'blockstudio' => true ) ) );
+		$this->write_file( $directory . '/index.php', '<div></div>' );
+		$this->write_file( $directory . '/style.css', '.disabled{}' );
+		$disabled = '__return_false';
+		add_filter( 'blockstudio/settings/assets/enqueue', $disabled );
+		\Blockstudio\Settings::reload();
+		Build_Cache::reset_key_input_memo();
+		try {
+			Build::init( array( 'dir' => $directory ) );
+			$data = Block_Registry::instance()->get_block_data( $name );
+			$this->assertIsArray( $data );
+			$this->assertArrayNotHasKey( 'moduleStyles', $data );
+			foreach ( $data['assets'] ?? array() as $asset ) {
+				$this->assertArrayNotHasKey( 'output', $asset );
+			}
+			$this->track_cache_file( 'runtime', Build_Cache::get_runtime_key( $directory, Build::get_instance_name( $directory ) ) );
+		} finally {
+			remove_filter( 'blockstudio/settings/assets/enqueue', $disabled );
+			Block_Registry::instance()->remove_block( $name );
+			WP_Block_Type_Registry::get_instance()->unregister( $name );
+			\Blockstudio\Settings::reload();
+			Build_Cache::reset_key_input_memo();
+		}
+	}
+
+	public function test_last_good_hydration_drops_output_records_before_rendering(): void {
+		$directory = $this->create_temporary_directory();
+		$name = 'blockstudio-test/last-good-output-records';
+		$this->write_file( $directory . '/block.json', wp_json_encode( array( 'name' => $name, 'title' => 'Last Good Outputs', 'blockstudio' => true ) ) );
+		$this->write_file( $directory . '/index.php', '<div></div>' );
+		$this->write_file( $directory . '/style.css', '.last-good{}' );
+		$registry = Block_Registry::instance();
+		try {
+			Build::init( array( 'dir' => $directory ) );
+			$instance = Build::get_instance_name( $directory );
+			$this->track_cache_file( 'runtime', Build_Cache::get_runtime_key( $directory, $instance ) );
+			$payload = Build_Cache::load_runtime( $directory, $instance );
+			$this->assertIsArray( $payload );
+			$this->assertArrayHasKey( 'moduleStyles', $payload['store'][ $name ] );
+			$this->write_file( $directory . '/style.css', '.changed-last-good{}' );
+			$method = new ReflectionMethod( Build::class, 'hydrate_cached_runtime_build' );
+			$method->invoke( null, $payload, $directory, $instance, $registry, true );
+			$data = $registry->get_block_data( $name );
+			$this->assertArrayNotHasKey( 'moduleStyles', $data );
+			foreach ( $data['assets'] as $asset ) {
+				$this->assertArrayNotHasKey( 'output', $asset );
+			}
+		} finally {
+			$registry->remove_block( $name );
+			WP_Block_Type_Registry::get_instance()->unregister( $name );
+		}
+	}
+
+	public function test_cached_module_output_directories_are_watched_outside_source_tree(): void {
+		$directory = $this->create_temporary_directory();
+		$cache = $this->create_temporary_directory();
+		$root = static fn(): string => $cache;
+		$output = static fn(): string => 'cache';
+		add_filter( 'blockstudio/cache/dir', $root );
+		add_filter( 'blockstudio/settings/assets/output', $output );
+		try {
+			$source = $directory . '/script.js';
+			$this->write_file( $source, 'console.log(1)' );
+			$module_root = Assets::get_dist_folder( $source ) . '/modules';
+			wp_mkdir_p( $module_root . '/package' );
+			$this->write_file( $module_root . '/package/1.css', '.module{}' );
+			$data = Assets::with_resolved_outputs( array( 'path' => $directory . '/block.json', 'assets' => array( 'script.js' => array( 'path' => $source ) ) ) );
+			$key = Build_Cache::get_runtime_key( $directory, 'external-modules' );
+			$this->track_cache_file( 'runtime', $key );
+			Build_Cache::write_runtime( $directory, 'external-modules', array( 'store' => array( 'module' => $data ) ) );
+			$payload = Build_Cache::load_runtime( $directory, 'external-modules' );
+			$this->assertIsArray( $payload );
+			$this->assertArrayHasKey( wp_normalize_path( $module_root ), $payload['watch']['dirs'] );
+			$this->assertArrayHasKey( wp_normalize_path( $module_root . '/package' ), $payload['watch']['dirs'] );
+		} finally {
+			remove_filter( 'blockstudio/settings/assets/output', $output );
+			remove_filter( 'blockstudio/cache/dir', $root );
+		}
+	}
+
+	/**
 	 * Runtime cache invalidates when a new nested block file is added.
 	 *
 	 * @return void
