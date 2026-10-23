@@ -81,7 +81,7 @@ trait Accordion_Renderer {
 		$show_icon     = isset( $attrs['showIcon'] ) ? $attrs['showIcon'] : true;
 		$icon_position = isset( $attrs['iconPosition'] ) ? $attrs['iconPosition'] : 'right';
 
-		// Handle lowercased attribute names from older templates.
+		// Older templates may use lowercase attribute names.
 		if ( isset( $attrs['showicon'] ) ) {
 			$show_icon         = $attrs['showicon'];
 			$attrs['showIcon'] = $show_icon;

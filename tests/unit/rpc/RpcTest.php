@@ -385,7 +385,7 @@ class RpcTest extends TestCase {
 	}
 
 	public function test_check_permission_method_not_allowed(): void {
-		// The "greet" function only allows POST (default). Sending GET should fail.
+		// The "greet" fixture allows only POST.
 		$request = new WP_REST_Request( 'GET', '/blockstudio/v1/fn/blockstudio/type-functions/greet' );
 		$request->set_param( 'block', 'blockstudio/type-functions' );
 		$request->set_param( 'function', 'greet' );
@@ -403,7 +403,7 @@ class RpcTest extends TestCase {
 
 		$result = Rpc::check_permission( $request );
 
-		// Should not be a method error (may require auth, but method itself is allowed).
+		// Authentication may still fail even though the method is allowed.
 		if ( $result instanceof WP_Error ) {
 			$this->assertNotSame( 'blockstudio_fn_method_not_allowed', $result->get_error_code() );
 		} else {
@@ -412,7 +412,6 @@ class RpcTest extends TestCase {
 	}
 
 	public function test_check_permission_open_endpoint_allows_anonymous(): void {
-		// Log out to simulate anonymous request.
 		wp_set_current_user( 0 );
 
 		$request = new WP_REST_Request( 'POST', '/blockstudio/v1/fn/blockstudio/type-functions/open_endpoint' );
@@ -438,7 +437,6 @@ class RpcTest extends TestCase {
 	}
 
 	public function test_check_permission_admin_function_forbidden_for_subscriber(): void {
-		// Create a subscriber user.
 		$user_id = wp_insert_user( array(
 			'user_login' => 'rpc_test_subscriber_' . wp_rand(),
 			'user_pass'  => 'password',
@@ -459,7 +457,6 @@ class RpcTest extends TestCase {
 	}
 
 	public function test_check_permission_admin_function_allowed_for_admin(): void {
-		// Get or create an admin user.
 		$user_id = wp_insert_user( array(
 			'user_login' => 'rpc_test_admin_' . wp_rand(),
 			'user_pass'  => 'password',
@@ -596,11 +593,9 @@ class RpcTest extends TestCase {
 	// Load caching (load_all only runs once)
 
 	public function test_load_all_caches_results(): void {
-		// First call loads functions.
 		$first = Rpc::get_all();
 		$this->assertNotEmpty( $first );
 
-		// Second call should return same result without re-loading.
 		$second = Rpc::get_all();
 		$this->assertSame( $first, $second );
 	}

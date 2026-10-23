@@ -88,7 +88,6 @@ class Error_Handler {
 
 		$formatted_message = self::format_message( $message, $level, $context );
 
-		// Use WordPress error log if available.
 		if ( function_exists( 'error_log' ) && defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
 			error_log( $formatted_message ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 		}
@@ -197,12 +196,10 @@ class Error_Handler {
 	 * @return bool Whether to log.
 	 */
 	private static function should_log( string $level ): bool {
-		// Always log errors and warnings.
 		if ( in_array( $level, array( self::LEVEL_ERROR, self::LEVEL_WARNING ), true ) ) {
 			return true;
 		}
 
-		// Debug and info only in debug mode.
 		if ( self::$debug_mode || ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ) {
 			return true;
 		}

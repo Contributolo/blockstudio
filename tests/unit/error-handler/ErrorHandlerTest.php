@@ -290,8 +290,7 @@ class ErrorHandlerTest extends TestCase {
 		$method = new \ReflectionMethod( Error_Handler::class, 'should_log' );
 		$method->setAccessible( true );
 
-		// WP_DEBUG is always true in wp-env, so debug messages always log.
-		// Test the method directly: with WP_DEBUG=true, debug should still log.
+		// WP_DEBUG can enable logging even with the plugin's debug flag cleared.
 		$result = $method->invoke( null, Error_Handler::LEVEL_DEBUG );
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			$this->assertTrue( $result );

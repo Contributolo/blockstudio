@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase;
 class PerfTest extends TestCase {
 
 	protected function setUp(): void {
-		// Reset all static state via reflection.
 		$ref = new ReflectionClass( Perf::class );
 
 		foreach ( array( 'active', 'starts', 'metrics', 'groups', 'finalized' ) as $prop ) {

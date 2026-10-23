@@ -56,7 +56,7 @@ Blockstudio removes all of that. You write a JSON config and a PHP template. The
 - **AI-ready** - ships a pre-built context file with documentation and JSON schemas for LLM coding assistants
 - **50+ PHP and JS hooks** - customize every aspect of the framework
 
-## Quick start
+## Quick Start
 
 1. Install via Composer:
 

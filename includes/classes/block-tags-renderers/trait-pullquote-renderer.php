@@ -23,7 +23,6 @@ trait Pullquote_Renderer {
 	public function render_pullquote( array $attrs, string $inner_content ): array {
 		$citation = isset( $attrs['citation'] ) ? $attrs['citation'] : '';
 
-		// Extract <cite> from inner content if present.
 		$body = $inner_content;
 		if ( preg_match( '/<cite>(.*?)<\/cite>/si', $inner_content, $cite_match ) ) {
 			$citation = $cite_match[1];

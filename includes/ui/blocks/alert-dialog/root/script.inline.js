@@ -47,9 +47,7 @@ function closeAlertDialog(ctx, root) {
         requestAnimationFrame(() => window.__bsui.getAnchor(trigger)?.focus({ preventScroll: true }));
     }, 150);
 }
-// An alert dialog answers Escape like any other modal. It deliberately does
-// not answer a backdrop click: the point of the pattern is that the choice
-// has to be made rather than dismissed by accident.
+// Allow Escape, but ignore backdrop clicks to prevent accidental dismissal.
 document.addEventListener('keydown', (event) => {
     if ('Escape' !== event.key || !openEntry)
         return;

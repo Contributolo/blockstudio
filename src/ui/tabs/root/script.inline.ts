@@ -87,7 +87,7 @@ store('bsui/tabs', {
 
       if (next >= 0) {
         tabs[next].focus({ preventScroll: true });
-        // activateOnFocus: activate tab when focused via keyboard (default true, matching WAI-ARIA recommendation)
+        // Follow WAI-ARIA's automatic activation unless explicitly disabled.
         if (ctx.activateOnFocus !== false) {
           const nextValue = tabs[next].getAttribute('data-tab-value');
           if (nextValue !== null) {
@@ -101,7 +101,6 @@ store('bsui/tabs', {
     init() {
       const ctx = getContext<Context>();
 
-      // If active value is set and the tab exists and is not disabled, keep it
       if (ctx.activeValue) {
         const { ref } = getElement() as { ref: HTMLElement };
         const activeTab = ref.querySelector<HTMLElement>(
@@ -110,7 +109,6 @@ store('bsui/tabs', {
         if (activeTab) return;
       }
 
-      // Fallback: select first non-disabled tab
       const { ref } = getElement() as { ref: HTMLElement };
       const firstEnabled = ref.querySelector<HTMLElement>(
         '[role="tab"]:not([disabled])',

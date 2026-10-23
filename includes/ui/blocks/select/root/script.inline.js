@@ -184,7 +184,7 @@ store('bsui/select', {
                     bubbles: true,
                     detail: { value: ctx.value },
                 }));
-                // Keep open in multiple mode
+                // Keep the listbox open so more options can be selected.
                 return;
             }
             ctx.value = optionValue;

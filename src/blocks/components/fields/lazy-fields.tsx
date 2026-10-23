@@ -1,8 +1,7 @@
 import type { ComponentProps, ComponentType } from 'react';
 import { Suspense, lazy } from '@wordpress/element';
 
-// Code editors and the rich text editor weigh several hundred KB. They load on
-// first use instead of with the editor script.
+// Keep heavy code and rich text editors out of the initial editor bundle.
 const defer = <T extends ComponentType<any>>(
   load: () => Promise<{ default: T }>,
 ) => {

@@ -669,19 +669,12 @@ class Assets {
 			$head = strtr( $head, self::resolve_inline_slots( $inline_slots, $inline_limit ) );
 		}
 
-		// Inject importmap for blocks using the Interactivity API.
 		$interactivity_importmap = self::get_interactivity_importmap( $blocks_on_page, $html );
 		if ( '' !== $interactivity_importmap ) {
 			$head = $interactivity_importmap . $head;
 		}
 
-		/*
-		 * Bundled UI blocks read shared helpers from window.__bsui, and their
-		 * own inline scripts assume it exists. Only the canvas document
-		 * renderer emitted those globals, so a bundled component rendered on
-		 * an ordinary page threw on the first interaction: a dialog could not
-		 * lock scroll, so it never opened.
-		 */
+		// Bundled UI scripts require window.__bsui helpers to be loaded first.
 		if ( method_exists( Ui::class, 'global_assets' ) ) {
 			$ui_globals = Ui::global_assets( array_keys( $blocks_on_page ), $html );
 
@@ -891,11 +884,8 @@ class Assets {
 			) . '</script>';
 		}
 
-		// In the editor, blocks render asynchronously via ServerSideRender.
-		// The Interactivity API runs init() at module load, before those
-		// elements exist. This observer re-hydrates interactive islands that
-		// appear later. It also injects server state (from data-wp-server-state)
-		// and fixes React's <template> handling before hydrating.
+		// ServerSideRender adds blocks after the Interactivity API initializes.
+		// Hydrate new islands after restoring server state and React-rendered template contents.
 		$reinit = '<script type="module">'
 			. 'import{privateApis,store}from"@wordpress/interactivity";'
 			. 'const a=privateApis("I acknowledge that using private APIs means my theme or plugin will inevitably break in the next version of WordPress.");'
@@ -2807,11 +2797,7 @@ class Assets {
 
 		$src = Files::get_relative_url( $maybe_compiled_path );
 
-		/*
-		 * An unresolvable URL used to still emit a tag, so the browser requested
-		 * the current document as a stylesheet or module. Every page carrying
-		 * such an asset logged a MIME type error.
-		 */
+		// An empty URL would request the current document as a stylesheet or module.
 		if ( '' === $src ) {
 			return null;
 		}

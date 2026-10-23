@@ -169,10 +169,10 @@ section markers in Markdown files.
 
 | Command                 | Description                                |
 | ----------------------- | ------------------------------------------ |
-| `npm run docs:check`    | Validate all portable Markdown collections |
-| `npm run docs:generate` | Refresh schema-generated documentation     |
-| `npm run schemas:check` | Validate and checksum the static schemas   |
-| `npm run build:llm`     | Rebuild the bundled LLM context            |
+| `npm run docs:check`     | Validate all portable Markdown collections |
+| `npm run docs:generate`  | Refresh schema-generated documentation     |
+| `npm run schemas:check`  | Validate and checksum the static schemas   |
+| `npm run build:llm`      | Rebuild the bundled LLM context            |
 
 ## Ports
 

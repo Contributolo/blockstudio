@@ -30,7 +30,7 @@ describe('fetchRegistry', () => {
     const url = `${server.url}/ui/registry.json`;
     const first = await fetchRegistry(url);
     const second = await fetchRegistry(url);
-    expect(first).toBe(second); // same reference
+    expect(first).toBe(second);
   });
 
   it('cache clears correctly', async () => {
@@ -38,8 +38,8 @@ describe('fetchRegistry', () => {
     const first = await fetchRegistry(url);
     clearCache();
     const second = await fetchRegistry(url);
-    expect(first).not.toBe(second); // different reference
-    expect(first).toEqual(second); // same data
+    expect(first).not.toBe(second);
+    expect(first).toEqual(second);
   });
 
   it('throws on 404', async () => {

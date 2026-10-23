@@ -107,7 +107,6 @@ export const isAllowedToRender = (
       results.push(resultsInner.filter((e) => !e).length === 0);
     });
 
-    // Don't simplify.
     if (!results.includes(true)) {
       return false;
     }

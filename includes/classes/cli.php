@@ -59,8 +59,6 @@ class Cli {
 		\WP_CLI::success( 'Removed Blockstudio cron events and static prerender state owned by this installation.' );
 	}
 
-	// Pages.
-
 	/**
 	 * Synchronize file-backed pages explicitly.
 	 *
@@ -189,8 +187,6 @@ class Cli {
 		return $lines;
 	}
 
-	// WPML.
-
 	/**
 	 * Generate the WPML language configuration for all Blockstudio blocks.
 	 *
@@ -300,8 +296,6 @@ class Cli {
 		\WP_CLI::success( "Wrote $file ($summary)." );
 	}
 
-	// Blocks.
-
 	/**
 	 * Manage blocks.
 	 *
@@ -393,8 +387,6 @@ class Cli {
 			\WP_CLI::halt( 1 );
 		}
 	}
-
-	// Database.
 
 	/**
 	 * Manage database records.
@@ -585,8 +577,6 @@ class Cli {
 		\WP_CLI\Utils\format_items( $format, $rows, array( 'block', 'schema', 'storage', 'fields' ) );
 	}
 
-	// Content Sync.
-
 	/**
 	 * Manage synced content files.
 	 *
@@ -660,8 +650,6 @@ class Cli {
 			}
 		}
 	}
-
-	// RPC.
 
 	/**
 	 * Manage RPC functions.
@@ -737,8 +725,6 @@ class Cli {
 		\WP_CLI\Utils\format_items( $format, $rows, array( 'block', 'function', 'public', 'capability', 'methods' ) );
 	}
 
-	// Cache.
-
 	/**
 	 * Inspect and drain the runtime cache maintenance backlog.
 	 *
@@ -800,8 +786,6 @@ class Cli {
 		$after = Runtime_Cache::count_legacy_build_locks();
 		\WP_CLI::success( sprintf( 'Removed %d lock(s). %d remain (recent or held locks are left for the next pass).', $total, $after['locks'] ) );
 	}
-
-	// Cron.
 
 	/**
 	 * Manage cron jobs.
@@ -885,8 +869,6 @@ class Cli {
 		\WP_CLI\Utils\format_items( $format, $rows, array( 'block', 'job', 'schedule', 'next_run' ) );
 	}
 
-	// Settings.
-
 	/**
 	 * Manage settings.
 	 *
@@ -913,8 +895,6 @@ class Cli {
 		$all = Settings::get_all();
 		\WP_CLI::log( wp_json_encode( $all, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) );
 	}
-
-	// Tailwind.
 
 	/**
 	 * Compile Tailwind CSS.
@@ -977,8 +957,6 @@ class Cli {
 		\WP_CLI::error( "Unknown subcommand: $subcommand. Use: compile, cache" );
 	}
 
-	// SCSS.
-
 	/**
 	 * Compile SCSS to CSS.
 	 *
@@ -1021,8 +999,6 @@ class Cli {
 			\WP_CLI::error( 'SCSS compilation failed: ' . $e->getMessage() );
 		}
 	}
-
-	// Fields.
 
 	/**
 	 * Manage custom fields.
@@ -1067,8 +1043,6 @@ class Cli {
 
 		\WP_CLI\Utils\format_items( $format, $rows, array( 'name', 'title', 'fields' ) );
 	}
-
-	// Assets.
 
 	/**
 	 * Manage assets.

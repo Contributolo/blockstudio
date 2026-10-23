@@ -102,7 +102,6 @@ test.describe('DB Table Storage', () => {
   });
 
   test('list with limit and offset', async () => {
-    // Create a second row.
     await page.evaluate(
       async ({ route, nonce }) => {
         await fetch(route, {

@@ -1,13 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 
-/**
- * The design contract, measured against the fixture theme.
- *
- * The consuming site runs the same assertions against its own tokens, so a
- * drift is caught wherever it starts: a component sheet, the shared tokens,
- * or a theme override. These read computed styles rather than source, which
- * is the only place stylesheet loading order and asset wiring show up.
- */
+// Computed styles expose loading order and asset wiring missed by source checks.
+// The consuming site uses its own tokens here to catch theme overrides.
 
 const MODALS = [
   {

@@ -94,12 +94,10 @@ class Select_Field_Handler extends Abstract_Field_Handler {
 
 		$attribute = $this->create_base_attribute( $type, $attr_type );
 
-		// Handle multiple select.
 		if ( 'select' === $type && $is_multiple ) {
 			$attribute['multiple'] = true;
 		}
 
-		// Handle options.
 		if (
 			in_array( $type, $this->option_types, true ) &&
 			( ! $is_override || isset( $field['options'] ) || isset( $field['populate'] ) )
@@ -107,17 +105,14 @@ class Select_Field_Handler extends Abstract_Field_Handler {
 			$this->build_options( $field, $attribute );
 		}
 
-		// Handle populate.
 		if ( isset( $field['populate'] ) ) {
 			$attribute['populate'] = $field['populate'];
 		}
 
-		// Handle return format.
 		if ( isset( $field['returnFormat'] ) ) {
 			$attribute['returnFormat'] = $field['returnFormat'] ?? 'value';
 		}
 
-		// Apply defaults with special handling for options.
 		$this->apply_option_defaults( $field, $attribute, $is_multiple );
 		$this->apply_storage( $field, $attribute );
 		$this->apply_set( $field, $attribute );
@@ -158,7 +153,6 @@ class Select_Field_Handler extends Abstract_Field_Handler {
 			return 'object';
 		}
 
-		// Single select also returns object.
 		if ( 'select' === $type ) {
 			return 'object';
 		}
@@ -179,7 +173,6 @@ class Select_Field_Handler extends Abstract_Field_Handler {
 			( $field['populate']['fetch'] ?? false );
 		$options           = $is_fetch_populate ? array() : ( $field['options'] ?? array() );
 
-		// Handle populate.
 		if ( isset( $field['populate'] ) ) {
 			$populate_type    = $field['populate']['type'] ?? false;
 			$should_defer     = $is_fetch_populate && ! ( $field['fromEditor'] ?? false );
@@ -292,7 +285,6 @@ class Select_Field_Handler extends Abstract_Field_Handler {
 			}
 
 			if ( 'color' === $type || 'gradient' === $type ) {
-				// Find matching option.
 				foreach ( $field['options'] ?? array() as $value ) {
 					if ( $value['value'] === $field[ $item ] ) {
 						$attribute[ $item ] = $value;

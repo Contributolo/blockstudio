@@ -189,7 +189,7 @@ export const Canvas = ({
 
   const expectedIframeCount = Math.min(BATCH_SIZE, totalItems);
 
-  // Nothing to wait for: mark ready immediately so SSE can connect.
+  // Empty canvases have no iframe load events to mark them ready.
   useEffect(() => {
     if (!ready && expectedIframeCount === 0) {
       setReady(true);
@@ -587,8 +587,6 @@ export const Canvas = ({
             });
             nextPages = merged;
           } else {
-            // Keep current artboard order stable in live mode updates and
-            // append only newly discovered pages at the end.
             const updatedMap = new Map(data.pages.map((p) => [p.slug, p]));
             const merged = prevPg.map((existing) => {
               const updated = updatedMap.get(existing.slug);
@@ -625,8 +623,7 @@ export const Canvas = ({
             nextPages = merged;
           }
 
-          // Enforce stable live-mode ordering: keep existing pages in their
-          // current order and append only genuinely new pages.
+          // Keep artboards from moving when live updates reorder the pages.
           const nextBySlug = new Map(
             nextPages.map((page) => [page.slug, page]),
           );
@@ -977,7 +974,7 @@ export const Canvas = ({
           setFingerprintRef.current(parsed.fingerprint);
         }
       } catch {
-        // Ignore parse errors.
+        // A failed event must not prevent subsequent live updates.
       }
     });
 
@@ -998,7 +995,7 @@ export const Canvas = ({
 
         enqueueChanged(parsed);
       } catch {
-        // Ignore parse errors.
+        // A failed event must not prevent subsequent live updates.
       }
     });
 

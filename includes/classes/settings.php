@@ -690,7 +690,6 @@ class Settings {
 			$value = $default;
 		}
 
-		// Convert key to snake_case for new filter name.
 		$snake_key = self::to_snake_case( $key );
 		$value     = apply_filters( 'blockstudio/settings/' . $snake_key, $value );
 
@@ -772,7 +771,6 @@ class Settings {
 		$segments = explode( '/', $path );
 		$segments = array_map(
 			function ( $segment ) {
-				// Insert underscore before uppercase letters and convert to lowercase.
 				return strtolower( preg_replace( '/([a-z])([A-Z])/', '$1_$2', $segment ) );
 			},
 			$segments

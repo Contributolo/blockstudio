@@ -1025,7 +1025,6 @@ test.describe('Canvas', () => {
         { timeout: 10000 },
       );
 
-      // Create a new block on disk.
       fs.mkdirSync(newBlockDir, { recursive: true });
       fs.writeFileSync(
         path.join(newBlockDir, 'block.json'),
@@ -1043,7 +1042,6 @@ test.describe('Canvas', () => {
         '<?php\necho \'<div class="canvas-live-test-marker">Canvas Live Test Block</div>\';',
       );
 
-      // Wait for the block to be registered client-side via SSE.
       await page.waitForFunction(
         () => {
           const getBlockType = (window as any).wp?.blocks?.getBlockType;
@@ -1056,19 +1054,16 @@ test.describe('Canvas', () => {
       // Wait for the SSE stream to settle after the first event.
       await page.waitForTimeout(3000);
 
-      // Capture the current revision before changing the template.
       const revisionBefore = await page.evaluate((slug: string) => {
         const artboard = document.querySelector(`[data-canvas-slug="${slug}"]`);
         return artboard ? artboard.getAttribute('data-canvas-revision') : '0';
       }, 'blockstudio-e2e-test');
 
-      // Add the new block to the test page template.
       fs.writeFileSync(
         templatePath,
         originalTemplate + '\n<block name="blockstudio/canvas-live-test" />',
       );
 
-      // Wait for the page artboard revision to increase beyond its pre-change value.
       await page.waitForFunction(
         ({ slug, prev }) => {
           const artboard = document.querySelector(
@@ -1084,7 +1079,6 @@ test.describe('Canvas', () => {
         { timeout: 30000 },
       );
 
-      // Wait until the new block render is present in the artboard iframe.
       // In CI (Docker), the SSE-triggered iframe reload can be missed due to
       // file-system event latency. Retry by re-writing the template to force
       // another file-change event if the marker doesn't appear in time.
@@ -1139,7 +1133,6 @@ test.describe('Canvas', () => {
         await waitForMarker(45000);
       }
 
-      // Verify the artboard rendered the block's PHP output and has no unsupported warnings.
       const result = await page.evaluate((slug: string) => {
         const artboard = document.querySelector(`[data-canvas-slug="${slug}"]`);
         if (!artboard) return { error: 'artboard not found' };
@@ -1216,7 +1209,7 @@ test.describe('Canvas', () => {
           { timeout: 10000 },
         );
 
-        // Create block AND update page template simultaneously (no delay).
+        // Write the block and page without delays so one SSE poll can see both.
         fs.mkdirSync(simultaneousBlockDir, { recursive: true });
         fs.writeFileSync(
           path.join(simultaneousBlockDir, 'block.json'),
@@ -1239,7 +1232,6 @@ test.describe('Canvas', () => {
             '\n<block name="blockstudio/canvas-simultaneous-test" />',
         );
 
-        // Wait for the block to be registered client-side.
         await page.waitForFunction(
           () => {
             const getBlockType = (window as any).wp?.blocks?.getBlockType;
@@ -1252,7 +1244,6 @@ test.describe('Canvas', () => {
           { timeout: 30000 },
         );
 
-        // Wait for the page artboard revision to change.
         await page.waitForFunction(
           (slug: string) => {
             const artboard = document.querySelector(
@@ -1266,7 +1257,6 @@ test.describe('Canvas', () => {
           { timeout: 30000 },
         );
 
-        // Wait until the new block render is actually present in the artboard iframe.
         await page.waitForFunction(
           ({ slug, markerClass, markerText }) => {
             const artboard = document.querySelector(
@@ -1300,7 +1290,6 @@ test.describe('Canvas', () => {
           { timeout: 60000 },
         );
 
-        // Verify the block rendered correctly with no unsupported warnings.
         const result = await page.evaluate((slug: string) => {
           const artboard = document.querySelector(
             `[data-canvas-slug="${slug}"]`,
@@ -1385,7 +1374,7 @@ test.describe('Canvas', () => {
           { timeout: 10000 },
         );
 
-        // Write block.json FIRST, without index.php.
+        // Expose an incomplete block to SSE before adding its template.
         fs.mkdirSync(staggeredBlockDir, { recursive: true });
         fs.writeFileSync(
           path.join(staggeredBlockDir, 'block.json'),
@@ -1402,13 +1391,11 @@ test.describe('Canvas', () => {
         // Wait for SSE to detect the partial block (at least 2 poll cycles).
         await page.waitForTimeout(3000);
 
-        // Now write the template file.
         fs.writeFileSync(
           path.join(staggeredBlockDir, 'index.php'),
           '<?php\necho \'<div class="canvas-staggered-marker">Staggered Block</div>\';',
         );
 
-        // Block should register client-side once the template appears.
         await page.waitForFunction(
           () => {
             const getBlockType = (window as any).wp?.blocks?.getBlockType;
@@ -1420,7 +1407,6 @@ test.describe('Canvas', () => {
           { timeout: 30000 },
         );
 
-        // Add the block to the test page.
         fs.writeFileSync(
           templatePath,
           originalTemplate +
@@ -1440,7 +1426,6 @@ test.describe('Canvas', () => {
           { timeout: 30000 },
         );
 
-        // Wait until the new block render is actually present in the artboard iframe.
         await page.waitForFunction(
           ({ slug, markerClass, markerText }) => {
             const artboard = document.querySelector(
@@ -1564,7 +1549,6 @@ test.describe('Canvas', () => {
           .first();
         await expect(activeIframe).toBeVisible({ timeout: 15000 });
 
-        // Verify extension style tags exist on initial render.
         const initialCount = await page.evaluate(() => {
           const frames = document.querySelectorAll(
             '#blockstudio-canvas iframe',
@@ -1580,7 +1564,6 @@ test.describe('Canvas', () => {
 
         expect(initialCount).toBeGreaterThan(0);
 
-        // Enable live mode.
         const menuButton = page
           .locator('.blockstudio-canvas-menu .components-button')
           .first();
@@ -1588,7 +1571,6 @@ test.describe('Canvas', () => {
         await expect(page.locator('role=menu')).toBeVisible({ timeout: 5000 });
         await page.locator('role=menuitem', { hasText: 'Live mode' }).click();
 
-        // Wait for the initial fingerprint.
         await page.waitForFunction(
           () => {
             const select = (window as any).wp?.data?.select;
@@ -1607,7 +1589,6 @@ test.describe('Canvas', () => {
           original + '\n<p>extension style persistence marker</p>',
         );
 
-        // Wait for the test page artboard revision to change.
         await page.waitForFunction(
           (slug: string) => {
             const ab = document.querySelector(`[data-canvas-slug="${slug}"]`);
@@ -1620,7 +1601,6 @@ test.describe('Canvas', () => {
         // Give the new iframe time to render extension filters.
         await page.waitForTimeout(2000);
 
-        // Verify extension style tags still exist after refresh.
         const afterCount = await page.evaluate(() => {
           const frames = document.querySelectorAll(
             '#blockstudio-canvas iframe',
@@ -1717,8 +1697,8 @@ test.describe('Canvas', () => {
         localStorage.removeItem('blockstudio-canvas-settings'),
       );
 
-      // Write the modified template BEFORE navigating so the initial page load
-      // picks it up (avoids OPcache staleness in long-running SSE processes).
+      // Write before navigation to avoid stale OPcache in long-running
+      // SSE processes.
       fs.writeFileSync(
         blockTemplatePath,
         originalBlockTemplate.replace(

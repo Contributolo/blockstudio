@@ -96,14 +96,13 @@ class Attribute_Builder {
 	 * @return void
 	 */
 	private function register_default_handlers(): void {
-		// Register handlers in order of priority.
 		$this->register_handler( new Text_Field_Handler() );
 		$this->register_handler( new Number_Field_Handler() );
 		$this->register_handler( new Boolean_Field_Handler() );
 		$this->register_handler( new Select_Field_Handler() );
 		$this->register_handler( new Media_Field_Handler() );
 
-		// Container handler needs special setup for recursive building.
+		// Nested containers reuse this builder's registered handlers.
 		$this->container_handler = new Container_Field_Handler();
 		$this->container_handler->set_build_callback( array( $this, 'build_attributes_recursive' ) );
 		$this->register_handler( $this->container_handler );
@@ -187,12 +186,11 @@ class Attribute_Builder {
 
 				$type = $v['type'] ?? '';
 
-				// Skip message type.
+				// Message fields are display-only and do not store attributes.
 				if ( 'message' === $type ) {
 					continue;
 				}
 
-				// Must have ID or be a container type.
 				if ( ! isset( $v['id'] ) && ! in_array( $type, array( 'group', 'tabs' ), true ) ) {
 					continue;
 				}
@@ -205,7 +203,6 @@ class Attribute_Builder {
 					$v['_blockstudio_is_extend'] = true;
 				}
 
-				// Handle tabs at top level.
 				if ( 'tabs' === $type && ! $from_group && ! $from_repeater ) {
 					$handler = $this->get_handler_for_type( $type );
 					if ( $handler ) {
@@ -214,7 +211,6 @@ class Attribute_Builder {
 					continue;
 				}
 
-				// Handle group/repeater at top level.
 				if ( ( 'group' === $type && ! $from_group ) || 'repeater' === $type ) {
 					$handler = $this->get_handler_for_type( $type );
 					if ( $handler ) {
@@ -223,12 +219,10 @@ class Attribute_Builder {
 					continue;
 				}
 
-				// Check for Tailwind activation.
 				if ( 'classes' === $type && ( $v['tailwind'] ?? false ) ) {
 					Block_Registry::instance()->set_tailwind_active( true );
 				}
 
-				// Get handler and build attribute.
 				$handler = $this->get_handler_for_type( $type );
 				if ( $handler ) {
 					$handler->build( $v, $attributes, $prefix );

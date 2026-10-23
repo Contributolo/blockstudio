@@ -17,33 +17,33 @@ Overview of all page-related E2E test coverage.
 | `test-page-twig`          | `blockstudio-e2e-test-twig`          | Twig            | publish | `all`         |
 | `test-page-blade`         | `blockstudio-e2e-test-blade`         | Blade           | publish | `all`         |
 | `test-sync`               | `blockstudio-sync-test`              | PHP             | draft   | `insert`      |
-| `test-keyed-merge`        | `blockstudio-keyed-merge-test`       | PHP             | draft   | —             |
+| `test-keyed-merge`        | `blockstudio-keyed-merge-test`       | PHP             | draft   | -             |
 | `test-block-editing-mode` | `blockstudio-editing-mode-test`      | PHP             | draft   | `all`         |
 | `test-content-only-lock`  | `blockstudio-content-only-lock-test` | PHP             | draft   | `contentOnly` |
 | `test-unlocked`           | `blockstudio-unlocked-test`          | PHP             | draft   | `false`       |
-| `test-sync-disabled`      | `blockstudio-sync-disabled-test`     | PHP             | draft   | —             |
+| `test-sync-disabled`      | `blockstudio-sync-disabled-test`     | PHP             | draft   | -             |
 | `test-template-for`       | `blockstudio-template-for-test`      | PHP             | draft   | `insert`      |
-| `test-post-id`            | `blockstudio-post-id-test`           | PHP             | draft   | —             |
+| `test-post-id`            | `blockstudio-post-id-test`           | PHP             | draft   | -             |
 
 ## page.json Properties
 
 | Property                              | Tested | Where                                  |
 | ------------------------------------- | ------ | -------------------------------------- |
 | `name`                                | Yes    | All test pages                         |
-| `title`                               | Yes    | `default.ts` — page title in admin     |
-| `slug`                                | Yes    | `default.ts` — frontend URL            |
+| `title`                               | Yes    | `default.ts`: page title in admin      |
+| `slug`                                | Yes    | `default.ts`: frontend URL             |
 | `postType`                            | Yes    | All use `page`                         |
-| `postStatus`                          | Yes    | `default.ts` — publish + draft pages   |
-| `templateLock` `"all"`                | Yes    | `default.ts` — verifies via editor API |
-| `templateLock` `"insert"`             | Yes    | `default.ts` — sync test page          |
-| `templateLock` `"contentOnly"`        | Yes    | `default.ts` — content only lock page  |
-| `templateLock` `false`                | Yes    | `default.ts` — unlocked page           |
-| `blockEditingMode` (page-level)       | Yes    | `default.ts` — editing mode test page  |
-| `blockEditingMode` (per-element)      | Yes    | `default.ts` — per-element override    |
-| `blockEditingMode` (ancestor cascade) | Yes    | `default.ts` — ancestor containers     |
-| `templateFor`                         | Yes    | `default.ts` — CPT template test       |
-| `postId`                              | Yes    | `default.ts` — post ID pinning tests   |
-| `sync` `false`                        | Yes    | `default.ts` — sync disabled test      |
+| `postStatus`                          | Yes    | `default.ts`: publish + draft pages    |
+| `templateLock` `"all"`                | Yes    | `default.ts`: verifies via editor API  |
+| `templateLock` `"insert"`             | Yes    | `default.ts`: sync test page           |
+| `templateLock` `"contentOnly"`        | Yes    | `default.ts`: content only lock page   |
+| `templateLock` `false`                | Yes    | `default.ts`: unlocked page            |
+| `blockEditingMode` (page-level)       | Yes    | `default.ts`: editing mode test page   |
+| `blockEditingMode` (per-element)      | Yes    | `default.ts`: per-element override     |
+| `blockEditingMode` (ancestor cascade) | Yes    | `default.ts`: ancestor containers      |
+| `templateFor`                         | Yes    | `default.ts`: CPT template test        |
+| `postId`                              | Yes    | `default.ts`: post ID pinning tests    |
+| `sync` `false`                        | Yes    | `default.ts`: sync disabled test       |
 
 ## Keyed Block Merging (keyed-merge.ts)
 
@@ -70,7 +70,7 @@ Overview of all page-related E2E test coverage.
 | 7   | Template attribute update on keyed block     | New attrs applied, user content kept |
 | 8   | New keyed block added to template            | Block appears with template defaults |
 | 9   | Keyed block removed from template            | Block deleted from post              |
-| 10  | Block type change (same key) — template wins | `<p>` → `<h2>` replaces entirely     |
+| 10  | Block type change (same key): template wins  | `<p>` → `<h2>` replaces entirely     |
 
 ### Movement & Position
 
@@ -176,7 +176,7 @@ Overview of all page-related E2E test coverage.
 
 ## Not Covered (by design)
 
-Areas not suited for E2E testing — would need PHP unit tests:
+Areas not suited for E2E testing. These would need PHP unit tests:
 
 | Feature                                                | Notes                                                                                                 |
 | ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- |

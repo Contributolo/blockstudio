@@ -80,17 +80,14 @@ class Plugin {
 		require_once $classes_dir . 'discovery-sources.php';
 		require_once $classes_dir . 'runtime-context.php';
 
-		// Core configuration classes.
 		require_once $classes_dir . 'field-type-config.php';
 		require_once $classes_dir . 'field-type-registry.php';
 		require_once $classes_dir . 'block-registry.php';
 		require_once $classes_dir . 'option-value-resolver.php';
 
-		// Interfaces.
 		require_once BLOCKSTUDIO_DIR . '/includes/interfaces/field-handler-interface.php';
 		require_once BLOCKSTUDIO_DIR . '/includes/interfaces/storage-handler-interface.php';
 
-		// Field handlers.
 		require_once $classes_dir . 'field-handlers/abstract-field-handler.php';
 		require_once $classes_dir . 'field-handlers/text-field-handler.php';
 		require_once $classes_dir . 'field-handlers/number-field-handler.php';
@@ -100,29 +97,20 @@ class Plugin {
 		require_once $classes_dir . 'field-handlers/container-field-handler.php';
 		require_once $classes_dir . 'field-handlers/custom-field-handler.php';
 
-		// Custom field system.
 		require_once $classes_dir . 'field-registry.php';
 		require_once $classes_dir . 'field-discovery.php';
 
-		// Attribute builder.
 		require_once $classes_dir . 'attribute-builder.php';
 
-		// Storage system.
 		require_once $classes_dir . 'storage-registry.php';
 		require_once $classes_dir . 'storage-handlers/block-storage.php';
 		require_once $classes_dir . 'storage-handlers/post-meta-storage.php';
 		require_once $classes_dir . 'storage-handlers/option-storage.php';
 		require_once $classes_dir . 'storage-sync.php';
 
-		// Block discovery and registration (Phase 5).
 		require_once $classes_dir . 'file-classifier.php';
 		require_once $classes_dir . 'block-discovery.php';
 
-		// Settings loaders (Phase 6).
-
-		// Abstract classes (Phase 6).
-
-		// Error handling (Phase 6).
 		require_once $classes_dir . 'error-handler.php';
 
 		require_once $classes_dir . 'perf.php';
@@ -188,12 +176,10 @@ class Plugin {
 		require_once $classes_dir . 'github-updater.php';
 		require_once $classes_dir . 'translations.php';
 
-		// File-based pages system.
 		require_once $classes_dir . 'page-markdown.php';
 		require_once $classes_dir . 'page-discovery.php';
 		require_once $classes_dir . 'page-registry.php';
 
-		// Block tag renderer traits.
 		require_once $classes_dir . 'block-tags-renderers/trait-paragraph-renderer.php';
 		require_once $classes_dir . 'block-tags-renderers/trait-heading-renderer.php';
 		require_once $classes_dir . 'block-tags-renderers/trait-list-renderer.php';
@@ -227,12 +213,10 @@ class Plugin {
 		require_once $classes_dir . 'page-sync.php';
 		require_once $classes_dir . 'pages.php';
 
-		// File-based patterns system.
 		require_once $classes_dir . 'pattern-discovery.php';
 		require_once $classes_dir . 'pattern-registry.php';
 		require_once $classes_dir . 'patterns.php';
 
-		// File-based Site Editor templates system.
 		require_once $classes_dir . 'site-template-discovery.php';
 		require_once $classes_dir . 'site-template-registry.php';
 		require_once $classes_dir . 'site-templates.php';
@@ -441,12 +425,10 @@ class Plugin {
 	private function init_storage_system(): void {
 		$registry = Storage_Registry::instance();
 
-		// Register storage handlers.
 		$registry->register_handler( new Storage_Handlers\Block_Storage() );
 		$registry->register_handler( new Storage_Handlers\Post_Meta_Storage() );
 		$registry->register_handler( new Storage_Handlers\Option_Storage() );
 
-		// Initialize storage sync.
 		$sync = new Storage_Sync( $registry );
 		$sync->init();
 	}

@@ -52,7 +52,6 @@ class Media_Field_Handler extends Abstract_Field_Handler {
 			'returnSize'  => $field['returnSize'] ?? 'full',
 		);
 
-		// Handle return format.
 		if ( isset( $field['returnFormat'] ) ) {
 			$attribute['returnFormat'] = $field['returnFormat'] ?? 'value';
 		}

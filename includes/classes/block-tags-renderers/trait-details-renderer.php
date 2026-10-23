@@ -23,7 +23,6 @@ trait Details_Renderer {
 	public function render_details( array $attrs, string $inner_content ): array {
 		$summary = isset( $attrs['summary'] ) ? $attrs['summary'] : '';
 
-		// Extract <summary> from inner content if present.
 		$remaining = $inner_content;
 		if ( preg_match( '/<summary>(.*?)<\/summary>/si', $inner_content, $summary_match ) ) {
 			$summary   = $summary_match[1];

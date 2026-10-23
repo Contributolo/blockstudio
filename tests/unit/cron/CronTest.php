@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase;
 class CronTest extends TestCase {
 
 	protected function setUp(): void {
-		// Reset static state via reflection.
 		$ref = new ReflectionClass( Cron::class );
 
 		$jobs = $ref->getProperty( 'jobs' );

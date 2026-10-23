@@ -5,9 +5,7 @@ use PHPUnit\Framework\TestCase;
 
 class BlockTagsHtmlParsingTest extends TestCase {
 
-	// -------------------------------------------------------------------------
-	// Raw HTML element parsing (pages/patterns)
-	// -------------------------------------------------------------------------
+	// Raw HTML element parsing (pages/patterns).
 
 	public function test_paragraph_from_p_tag(): void {
 		$blocks = Block_Tags::parse_all_elements( '<p>Hello world</p>' );
@@ -222,9 +220,7 @@ class BlockTagsHtmlParsingTest extends TestCase {
 		$this->assertSame( 'core/details', $blocks[0]['blockName'] );
 	}
 
-	// -------------------------------------------------------------------------
-	// Plain text between tags
-	// -------------------------------------------------------------------------
+	// Plain text between tags.
 
 	public function test_plain_text_becomes_paragraph(): void {
 		$blocks = Block_Tags::parse_all_elements( 'Just plain text' );
@@ -242,9 +238,7 @@ class BlockTagsHtmlParsingTest extends TestCase {
 		$this->assertSame( 'core/paragraph', $blocks[2]['blockName'] );
 	}
 
-	// -------------------------------------------------------------------------
-	// Mixed: HTML + block tags
-	// -------------------------------------------------------------------------
+	// Mixed: HTML + block tags.
 
 	public function test_mixed_html_and_block_tags(): void {
 		$blocks = Block_Tags::parse_all_elements(
@@ -276,9 +270,7 @@ class BlockTagsHtmlParsingTest extends TestCase {
 		$this->assertSame( 'core/paragraph', $blocks[0]['innerBlocks'][0]['blockName'] );
 	}
 
-	// -------------------------------------------------------------------------
-	// Nested raw HTML
-	// -------------------------------------------------------------------------
+	// Nested raw HTML.
 
 	public function test_nested_divs(): void {
 		$blocks = Block_Tags::parse_all_elements(
@@ -288,9 +280,7 @@ class BlockTagsHtmlParsingTest extends TestCase {
 		$this->assertSame( 'core/group', $blocks[0]['blockName'] );
 	}
 
-	// -------------------------------------------------------------------------
-	// Multiple sibling elements
-	// -------------------------------------------------------------------------
+	// Multiple sibling elements.
 
 	public function test_multiple_paragraphs(): void {
 		$blocks = Block_Tags::parse_all_elements(
@@ -322,9 +312,7 @@ class BlockTagsHtmlParsingTest extends TestCase {
 		$this->assertSame( 'core/quote', $blocks[6]['blockName'] );
 	}
 
-	// -------------------------------------------------------------------------
-	// HTML comments skipped
-	// -------------------------------------------------------------------------
+	// HTML comments skipped.
 
 	public function test_html_comments_skipped(): void {
 		$blocks = Block_Tags::parse_all_elements(
@@ -333,9 +321,7 @@ class BlockTagsHtmlParsingTest extends TestCase {
 		$this->assertCount( 2, $blocks );
 	}
 
-	// -------------------------------------------------------------------------
-	// Empty and edge cases
-	// -------------------------------------------------------------------------
+	// Empty and edge cases.
 
 	public function test_empty_input(): void {
 		$this->assertSame( array(), Block_Tags::parse_all_elements( '' ) );

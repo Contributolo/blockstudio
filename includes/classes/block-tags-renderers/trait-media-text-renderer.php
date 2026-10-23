@@ -23,7 +23,7 @@ trait Media_Text_Renderer {
 	public function render_media_text( array $attrs, string $inner_content ): array {
 		$inner_blocks = Block_Tags::parse_inner_blocks( $inner_content );
 
-		// Remap lowercased attribute names to camelCase.
+		// Older templates may use lowercase attribute names.
 		$camel_map = array(
 			'mediaurl'      => 'mediaUrl',
 			'mediatype'     => 'mediaType',

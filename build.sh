@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-# Ensure script is run from the directory where it resides
+# Resolve Composer paths from the repository, regardless of the caller's directory.
 cd "$(dirname "$0")"
 
 composer install --no-interaction

@@ -185,10 +185,8 @@ class Block_Discovery {
 		$path_info   = pathinfo( $file_path );
 		$contents    = $this->get_file_contents( $file_path );
 
-		// Classify the file.
 		$classification = $this->classify_file( $file_path, $logical_path, $path_info, $contents );
 
-		// Skip hidden files (unless editor mode and basename is '.').
 		if (
 			str_starts_with( $path_info['basename'], '.' ) &&
 			( ! $is_editor || '.' !== $path_info['basename'] )
@@ -196,32 +194,25 @@ class Block_Discovery {
 			return;
 		}
 
-		// Check if this file should be processed.
 		if ( ! $this->should_process( $classification, $is_editor ) ) {
 			return;
 		}
 
-		// Read block.json if needed.
 		$block_json = $this->read_block_json( $file_path, $logical_path );
 
-		// Determine paths.
 		$block_json_path = $this->get_block_json_path( $file_path, $classification );
 
-		// Determine name.
 		$name = $this->determine_name( $block_json, $file_path, $classification, $is_editor );
 
-		// Handle blade templates separately.
 		if ( $classification['is_blade'] ) {
 			$this->register_blade_template( $logical_path, $instance, $name );
 			return;
 		}
 
-		// Handle array names.
 		if ( is_array( $name ) ) {
 			$name = wp_json_encode( $name );
 		}
 
-		// Get name from block.json in editor mode.
 		$name_file      = false;
 		$manifest_entry = $this->resolve_in_directory( $logical_dir, 'block.json' );
 		if ( $is_editor && $manifest_entry ) {
@@ -232,7 +223,6 @@ class Block_Discovery {
 			}
 		}
 
-		// Build level and structure info.
 		$level             = '/' . $logical_path;
 		$is_manifest_init  = $classification['is_init'] && ! $is_editor && null !== $manifest_entry;
 		$directory_entries = $is_manifest_init
@@ -252,14 +242,13 @@ class Block_Discovery {
 		$block_arr_structure       = $logical_path;
 		$render_template           = $is_manifest_init ? false : $this->find_render_template( $logical_dir );
 
-		// Handle init files.
 		if ( $classification['is_init'] ) {
 			$block_json = array(
 				'name' => 'init-' . str_replace( '/', '-', $file_path ),
 			);
 		}
 
-		// Build the data array (exact same structure as Build::init).
+		// Preserve the data shape consumed by Build::init().
 		$data = array(
 			'directory'       => $classification['is_dir'],
 			'example'         => $block_json['example'] ?? false,
@@ -287,29 +276,24 @@ class Block_Discovery {
 			'twig'            => $classification['is_twig'],
 		);
 
-		// Add nameAlt if name equals path.
 		if ( $data['name'] === $data['path'] ) {
 			$data['nameAlt'] = Block::id( $data, $data );
 		}
 
-		// Add value in editor mode.
 		if ( $is_editor && '.' !== $path_info['basename'] ) {
 			$data['value'] = $this->get_file_contents( $file_path );
 		}
 
-		// An extension's name lists the blocks it extends, so several extension
-		// files can share one; each keeps its own entry instead of replacing the
-		// previous one.
+		// Extensions can target the same blocks, so keep each file as a separate entry.
 		$key = $name;
 		if ( $classification['is_extend'] && ! $is_editor && isset( $this->registerable[ $key ] ) ) {
 			$key = $name . '#' . $logical_path;
 		}
 
-		// Store the data using $name as the key (original behavior).
-		// Note: $name_file is only used for the data's 'name' field, not the store key.
+		// The editor's $name_file override must not change the discovery store key.
 		$this->store[ $key ] = $data;
 
-		// Track overrides (needed for both editor and non-editor modes).
+		// Overrides are needed in both editor and frontend modes.
 		if ( $classification['is_override'] ) {
 			$override_key                     = false !== $name_file ? $name_file : $name;
 			$this->overrides[ $override_key ] = array(
@@ -319,7 +303,6 @@ class Block_Discovery {
 			);
 		}
 
-		// Track items that need registration.
 		if ( ( $classification['is_block'] || $classification['is_override'] || $classification['is_extend'] || $classification['is_native'] ) && ! $is_editor ) {
 			$this->registerable[ $key ] = array(
 				'data'           => $data,
@@ -329,7 +312,6 @@ class Block_Discovery {
 			);
 		}
 
-		// Store block_json for later use.
 		$this->block_json_data[ $key ] = $block_json;
 	}
 

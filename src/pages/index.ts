@@ -30,8 +30,7 @@ interface BlockEditorActions {
   setBlockEditingMode: (clientId: string, mode: string) => void;
 }
 
-// Register Blockstudio metadata attributes on every block type via JS filter.
-// This must happen before blocks are parsed so the attributes are preserved.
+// Register metadata before parsing so block attributes are preserved.
 addFilter(
   'blocks.registerBlockType',
   'blockstudio/page-metadata-attributes',
@@ -55,7 +54,6 @@ function findAncestorsOfOverrides(
     const currentPath = [...parentIds, block.clientId];
 
     if (block.attributes.blockEditingMode) {
-      // Mark all parents (not the block itself) as ancestors.
       for (const id of parentIds) {
         ancestors.add(id);
       }
@@ -120,9 +118,7 @@ domReady(() => {
     blocks.forEach((block) => {
       let mode = (block.attributes.blockEditingMode as string) || defaultMode;
 
-      // Only ancestor containers of overridden blocks get "contentOnly"
-      // so their descendants remain interactive. All other containers
-      // keep the page default.
+      // Keep overridden descendants interactive without changing other containers.
       if (
         !block.attributes.blockEditingMode &&
         ancestorIds.has(block.clientId)

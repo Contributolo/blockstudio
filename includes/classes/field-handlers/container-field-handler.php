@@ -130,7 +130,6 @@ class Container_Field_Handler extends Abstract_Field_Handler {
 			return;
 		}
 
-		// Flatten id-less groups and filter out remaining nested groups.
 		$filtered_attributes = Field_Definitions::children( $field['attributes'] );
 
 		$new_prefix = '' === $prefix
@@ -169,7 +168,6 @@ class Container_Field_Handler extends Abstract_Field_Handler {
 			return;
 		}
 
-		// Flatten id-less groups and filter out remaining nested groups from attributes.
 		$inner_attributes = Field_Definitions::children( $field['attributes'] ?? array() );
 
 		$attribute = array(
@@ -180,7 +178,6 @@ class Container_Field_Handler extends Abstract_Field_Handler {
 			'attributes'  => $inner_attributes,
 		);
 
-		// Recursively build inner attributes.
 		if ( count( $inner_attributes ) >= 1 && $this->build_callback ) {
 			$is_override = (bool) ( $field['_blockstudio_is_override'] ?? false );
 			$is_extend   = (bool) ( $field['_blockstudio_is_extend'] ?? false );

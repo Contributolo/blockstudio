@@ -5,9 +5,7 @@ use PHPUnit\Framework\TestCase;
 
 class BlockTagsParserTest extends TestCase {
 
-	// -------------------------------------------------------------------------
-	// Basic parsing
-	// -------------------------------------------------------------------------
+	// Basic parsing.
 
 	public function test_empty_input(): void {
 		$this->assertSame( array(), Block_Tags::parse_inner_blocks( '' ) );
@@ -84,9 +82,7 @@ class BlockTagsParserTest extends TestCase {
 		$this->assertStringContainsString( 'Inside', $blocks[0]['innerBlocks'][0]['innerHTML'] );
 	}
 
-	// -------------------------------------------------------------------------
-	// Syntax equivalence
-	// -------------------------------------------------------------------------
+	// Syntax equivalence.
 
 	public function test_bs_and_block_produce_identical_output(): void {
 		$bs    = Block_Tags::parse_inner_blocks( '<bs:core-paragraph>Same</bs:core-paragraph>' );
@@ -114,9 +110,7 @@ class BlockTagsParserTest extends TestCase {
 		$this->assertSame( $bs[0]['innerHTML'], $block[0]['innerHTML'] );
 	}
 
-	// -------------------------------------------------------------------------
-	// Leaf block builders
-	// -------------------------------------------------------------------------
+	// Leaf block builders.
 
 	public function test_paragraph(): void {
 		$blocks = Block_Tags::parse_inner_blocks( '<bs:core-paragraph>Text</bs:core-paragraph>' );
@@ -237,9 +231,7 @@ class BlockTagsParserTest extends TestCase {
 		$this->assertStringContainsString( '<!--nextpage-->', $blocks[0]['innerHTML'] );
 	}
 
-	// -------------------------------------------------------------------------
-	// List block
-	// -------------------------------------------------------------------------
+	// List block.
 
 	public function test_list_with_items(): void {
 		$blocks = Block_Tags::parse_inner_blocks( '<block name="core/list"><li>One</li><li>Two</li><li>Three</li></block>' );
@@ -254,9 +246,7 @@ class BlockTagsParserTest extends TestCase {
 		$this->assertTrue( $blocks[0]['attrs']['ordered'] );
 	}
 
-	// -------------------------------------------------------------------------
-	// Container blocks
-	// -------------------------------------------------------------------------
+	// Container blocks.
 
 	public function test_group_with_children(): void {
 		$blocks = Block_Tags::parse_inner_blocks(
@@ -337,9 +327,7 @@ class BlockTagsParserTest extends TestCase {
 		$this->assertCount( 2, $nulls );
 	}
 
-	// -------------------------------------------------------------------------
-	// Deep nesting
-	// -------------------------------------------------------------------------
+	// Deep nesting.
 
 	public function test_3_levels_deep(): void {
 		$blocks = Block_Tags::parse_inner_blocks(
@@ -406,9 +394,7 @@ class BlockTagsParserTest extends TestCase {
 		$this->assertStringContainsString( 'Mixed deep', $para['innerHTML'] );
 	}
 
-	// -------------------------------------------------------------------------
-	// Mixed syntax
-	// -------------------------------------------------------------------------
+	// Mixed syntax.
 
 	public function test_bs_inside_block(): void {
 		$blocks = Block_Tags::parse_inner_blocks(
@@ -439,9 +425,7 @@ class BlockTagsParserTest extends TestCase {
 		}
 	}
 
-	// -------------------------------------------------------------------------
-	// Multiple siblings
-	// -------------------------------------------------------------------------
+	// Multiple siblings.
 
 	public function test_many_siblings(): void {
 		$html = '';
@@ -461,9 +445,7 @@ class BlockTagsParserTest extends TestCase {
 		$this->assertCount( 10, $blocks[0]['innerBlocks'] );
 	}
 
-	// -------------------------------------------------------------------------
-	// Attribute parsing
-	// -------------------------------------------------------------------------
+	// Attribute parsing.
 
 	public function test_numeric_attribute(): void {
 		$blocks = Block_Tags::parse_inner_blocks( '<bs:core-spacer height="100" />' );
@@ -482,9 +464,7 @@ class BlockTagsParserTest extends TestCase {
 		$this->assertSame( 200, $blocks[0]['attrs']['width'] );
 	}
 
-	// -------------------------------------------------------------------------
-	// Edge cases
-	// -------------------------------------------------------------------------
+	// Edge cases.
 
 	public function test_tag_without_hyphen_skipped(): void {
 		$blocks = Block_Tags::parse_inner_blocks( '<bs:nohyphen />' );
@@ -522,9 +502,7 @@ class BlockTagsParserTest extends TestCase {
 		$this->assertSame( 'core/separator', $blocks[0]['blockName'] );
 	}
 
-	// -------------------------------------------------------------------------
-	// build_block_array
-	// -------------------------------------------------------------------------
+	// build_block_array.
 
 	public function test_build_block_array_returns_correct_structure(): void {
 		$block = Block_Tags::build_block_array( 'core/paragraph', array(), 'Hello' );
@@ -541,9 +519,7 @@ class BlockTagsParserTest extends TestCase {
 		$this->assertSame( 'bar', $block['attrs']['foo'] );
 	}
 
-	// -------------------------------------------------------------------------
-	// Container block HTML wrappers
-	// -------------------------------------------------------------------------
+	// Container block HTML wrappers.
 
 	public function test_group_html_wrapper(): void {
 		$block = Block_Tags::build_block_array( 'core/group', array(), '<bs:core-paragraph>In</bs:core-paragraph>' );
@@ -634,9 +610,7 @@ class BlockTagsParserTest extends TestCase {
 		$this->assertSame( 'bmot-query__inner', $blocks[0]['innerBlocks'][0]['attrs']['className'] );
 	}
 
-	// -------------------------------------------------------------------------
-	// Leaf block HTML content
-	// -------------------------------------------------------------------------
+	// Leaf block HTML content.
 
 	public function test_paragraph_html(): void {
 		$block = Block_Tags::build_block_array( 'core/paragraph', array(), 'Test' );
@@ -733,9 +707,7 @@ class BlockTagsParserTest extends TestCase {
 		$this->assertSame( 'github', $block['attrs']['service'] );
 	}
 
-	// -------------------------------------------------------------------------
-	// Syntax equivalence for ALL block types
-	// -------------------------------------------------------------------------
+	// Syntax equivalence for ALL block types.
 
 	#[\PHPUnit\Framework\Attributes\DataProvider( 'leafBlockProvider' )]
 	public function test_leaf_block_equivalence( string $block_name, string $bs_name, string $content, array $attrs ): void {
@@ -775,9 +747,7 @@ class BlockTagsParserTest extends TestCase {
 		);
 	}
 
-	// -------------------------------------------------------------------------
-	// Dynamic blocks (fallback path)
-	// -------------------------------------------------------------------------
+	// Dynamic blocks (fallback path).
 
 	public function test_dynamic_block_produces_valid_array(): void {
 		$block = Block_Tags::build_block_array( 'core/archives', array(), '' );
@@ -833,9 +803,7 @@ class BlockTagsParserTest extends TestCase {
 		);
 	}
 
-	// -------------------------------------------------------------------------
-	// All container block wrappers
-	// -------------------------------------------------------------------------
+	// All container block wrappers.
 
 	#[\PHPUnit\Framework\Attributes\DataProvider( 'containerBlockProvider' )]
 	public function test_container_block_has_inner_blocks( string $block_name ): void {
@@ -867,9 +835,7 @@ class BlockTagsParserTest extends TestCase {
 		);
 	}
 
-	// -------------------------------------------------------------------------
-	// Boolean attribute conversion
-	// -------------------------------------------------------------------------
+	// Boolean attribute conversion.
 
 	public function test_boolean_true_attribute(): void {
 		$blocks = Block_Tags::parse_inner_blocks( '<block name="core/paragraph" active="true" />' );
@@ -881,9 +847,7 @@ class BlockTagsParserTest extends TestCase {
 		$this->assertSame( false, $blocks[0]['attrs']['active'] );
 	}
 
-	// -------------------------------------------------------------------------
-	// Key remapping
-	// -------------------------------------------------------------------------
+	// Key remapping.
 
 	public function test_key_remapped_to_blockstudio_key(): void {
 		$block = Block_Tags::build_block_array( 'core/heading', array( 'key' => 'title', 'level' => 2 ), 'Title' );
@@ -909,9 +873,7 @@ class BlockTagsParserTest extends TestCase {
 		);
 	}
 
-	// -------------------------------------------------------------------------
-	// Stress test
-	// -------------------------------------------------------------------------
+	// Stress test.
 
 	public function test_100_nested_groups(): void {
 		$html = '';

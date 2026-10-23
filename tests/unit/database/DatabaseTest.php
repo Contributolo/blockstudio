@@ -655,9 +655,7 @@ class DatabaseTest extends TestCase {
 		$this->assertInstanceOf( WP_Error::class, $result );
 		$data = $result->get_error_data();
 
-		// Missing required email.
 		$this->assertArrayHasKey( 'email', $data['errors'] );
-		// Invalid types.
 		$this->assertArrayHasKey( 'age', $data['errors'] );
 		$this->assertArrayHasKey( 'score', $data['errors'] );
 	}
@@ -978,7 +976,7 @@ class DatabaseTest extends TestCase {
 		$record = $db->create( array( 'title' => 'Cast int', 'count' => '42' ) );
 		$this->track_record( 'blockstudio/type-db-table:default', $record );
 
-		// The value should be stored and returned (may be string from DB, but was cast before insert).
+		// The database may return the cast value as a string.
 		$fetched = $db->get_record( (int) $record['id'] );
 		$this->assertEquals( 42, $fetched['count'] );
 	}
@@ -997,29 +995,23 @@ class DatabaseTest extends TestCase {
 	public function test_full_crud_lifecycle(): void {
 		$db = Db::get( 'blockstudio/type-db-table' );
 
-		// Create.
 		$record = $db->create( array( 'title' => 'Lifecycle item', 'count' => 1 ) );
 		$id     = (int) $record['id'];
 		$this->assertSame( 'Lifecycle item', $record['title'] );
 
-		// Read.
 		$fetched = $db->get_record( $id );
 		$this->assertSame( 'Lifecycle item', $fetched['title'] );
 
-		// Update.
 		$updated = $db->update( $id, array( 'title' => 'Updated lifecycle', 'count' => 2 ) );
 		$this->assertSame( 'Updated lifecycle', $updated['title'] );
 		$this->assertEquals( 2, $updated['count'] );
 
-		// Verify update persisted.
 		$re_fetched = $db->get_record( $id );
 		$this->assertSame( 'Updated lifecycle', $re_fetched['title'] );
 
-		// Delete.
 		$this->assertTrue( $db->delete( $id ) );
 		$this->assertNull( $db->get_record( $id ) );
 
-		// Double delete returns false.
 		$this->assertFalse( $db->delete( $id ) );
 	}
 
@@ -1142,7 +1134,7 @@ class DatabaseTest extends TestCase {
 		$this->assertArrayHasKey( 'blockstudio/type-db-post-type:default', $schemas );
 		$this->assertSame( 'post_type', $schemas['blockstudio/type-db-post-type:default']['storage'] );
 
-		// The CPT name is derived from the schema key. Verify it exists.
+		// Long schema-derived CPT names use a hash.
 		$this->assertTrue( post_type_exists( 'bs_type_db_post_type' ) || $this->cpt_exists_by_hash() );
 	}
 

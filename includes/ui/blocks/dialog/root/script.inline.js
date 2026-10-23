@@ -37,14 +37,14 @@ function closeTopDialog() {
     if (entry._backdropHandler) {
         entry.backdrop.removeEventListener('click', entry._backdropHandler);
     }
-    // Animate out
+    // Reuse the entry styles for the exit transition.
     entry.popup.classList.add('bs-ui-entering');
     if (entry.backdrop?.parentNode === document.body) {
         entry.backdrop.classList.add('bs-ui-entering');
     }
     if (entry.ctx)
         entry.ctx.open = false;
-    // Restore hidden roots immediately so parent content is visible during exit
+    // Restore hidden roots so parent content is visible during the exit transition.
     if (entry._hiddenRoots) {
         entry._hiddenRoots.forEach((el) => {
             el.style.removeProperty('display');
@@ -80,7 +80,7 @@ function openDialog(root, ctx) {
         return;
     window.__bsui.lockScroll();
     const isNested = openDialogStack.length > 0;
-    // Only show backdrop for the outermost dialog
+    // Nested dialogs share the outermost backdrop.
     let backdropPlaceholder = null;
     if (backdrop && !isNested) {
         backdropPlaceholder = portalToBody(backdrop);
@@ -99,8 +99,7 @@ function openDialog(root, ctx) {
             backdrop.classList.remove('bs-ui-entering');
         }
     });
-    // Hide nested dialog root blocks inside the parent popup
-    // and match parent height to this popup for consistent peeking
+    // Keep nested roots from showing behind the portaled popup.
     const hiddenRoots = [];
     if (isNested) {
         const parentEntry = openDialogStack[openDialogStack.length - 1];
@@ -110,7 +109,7 @@ function openDialog(root, ctx) {
             el.style.display = 'none';
             hiddenRoots.push(el);
         });
-        // Match parent height to child so parent peeks evenly
+        // Match the parent's height so it peeks evenly behind the child.
         requestAnimationFrame(() => {
             const childHeight = popup.offsetHeight;
             parentEntry.popup.style.height = childHeight + 'px';

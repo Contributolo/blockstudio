@@ -204,8 +204,8 @@ export const waitForIframeReady = (
       if (doc && doc.readyState === 'complete') {
         onLoaded(iframe);
 
-        // Some previews remain on about:blank and portal content in.
-        // Others navigate after about:blank. Handle both paths.
+        // Some previews render into about:blank; others replace the initial
+        // document by navigating after it has loaded.
         if (doc.URL === 'about:blank') {
           iframe.addEventListener('load', () => onLoaded(iframe), {
             once: true,

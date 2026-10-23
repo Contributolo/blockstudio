@@ -82,7 +82,6 @@ test.describe('Canvas - empty theme', () => {
     const root = page.locator('#blockstudio-canvas');
     await expect(root).toBeVisible({ timeout: 15000 });
 
-    // Enable live mode.
     const menuButton = page
       .locator('.blockstudio-canvas-menu .components-button')
       .first();
@@ -109,7 +108,7 @@ test.describe('Canvas - empty theme', () => {
 
     await page.evaluate(() => (window as any).__emptyTestFingerprintPromise);
 
-    // Write block.json first, then template (staggered).
+    // Expose an incomplete block to SSE before adding its template.
     fs.mkdirSync(blockDir, { recursive: true });
     fs.writeFileSync(
       path.join(blockDir, 'block.json'),
@@ -126,13 +125,11 @@ test.describe('Canvas - empty theme', () => {
     // Wait for SSE to detect the incomplete block.
     await page.waitForTimeout(3000);
 
-    // Now write the template file.
     fs.writeFileSync(
       path.join(blockDir, 'index.php'),
       '<?php\necho \'<div class="empty-test-marker">Empty Theme Block Works</div>\';',
     );
 
-    // Block should register client-side once the template appears.
     await page.waitForFunction(
       () => {
         const getBlockType = (window as any).wp?.blocks?.getBlockType;
@@ -144,7 +141,6 @@ test.describe('Canvas - empty theme', () => {
 
     await page.waitForTimeout(3000);
 
-    // Create a page that uses the block.
     fs.mkdirSync(pageDir, { recursive: true });
     fs.writeFileSync(
       path.join(pageDir, 'page.json'),
@@ -162,7 +158,6 @@ test.describe('Canvas - empty theme', () => {
       '<block name="blockstudio/empty-test-block" />',
     );
 
-    // Wait for the new artboard to appear.
     await page.waitForFunction(
       () => document.querySelectorAll('[data-canvas-slug]').length > 0,
       null,
@@ -221,7 +216,6 @@ test.describe('Canvas - empty theme', () => {
     }
 
     try {
-      // Create a page with plain HTML first.
       fs.mkdirSync(pageDir, { recursive: true });
       fs.writeFileSync(
         path.join(pageDir, 'page.json'),
@@ -285,10 +279,8 @@ test.describe('Canvas - empty theme', () => {
 
       await page.evaluate(() => (window as any).__replaceTestFpPromise);
 
-      // Simulate a real agent: write block.json first (SSE may poll and see
-      // an incomplete block), then after a delay write index.php and the page
-      // update back-to-back. The SSE poll that picks up the complete block may
-      // miss the page change if prev_mtimes already captured the new page mtime.
+      // Expose the incomplete block, then write its template and page together.
+      // SSE can miss the page change if prev_mtimes captured its mtime too early.
       fs.mkdirSync(blockDir, { recursive: true });
       fs.writeFileSync(
         path.join(blockDir, 'block.json'),
@@ -305,7 +297,6 @@ test.describe('Canvas - empty theme', () => {
       // Wait for the SSE to poll and see block.json (incomplete block).
       await page.waitForTimeout(1500);
 
-      // Write index.php and page update back-to-back (same write batch).
       fs.writeFileSync(
         path.join(blockDir, 'index.php'),
         '<?php\necho \'<div class="replace-test-marker">Replaced Content Works</div>\';',
@@ -315,7 +306,6 @@ test.describe('Canvas - empty theme', () => {
         '<block name="blockstudio/replace-test-block" />',
       );
 
-      // The block should register AND the page should update.
       await page.waitForFunction(
         () => {
           const ab = document.querySelector(
@@ -366,7 +356,6 @@ test.describe('Canvas - empty theme', () => {
       const root = page.locator('#blockstudio-canvas');
       await expect(root).toBeVisible({ timeout: 15000 });
 
-      // Enable live mode.
       const menuButton = page
         .locator('.blockstudio-canvas-menu .components-button')
         .first();
@@ -391,7 +380,7 @@ test.describe('Canvas - empty theme', () => {
 
       await page.evaluate(() => (window as any).__noDirTestFpPromise);
 
-      // Create block and page simultaneously (like Claude Code does).
+      // Write the block and page without delays so one SSE poll can see both.
       fs.mkdirSync(blockDir, { recursive: true });
       fs.writeFileSync(
         path.join(blockDir, 'block.json'),
@@ -426,7 +415,6 @@ test.describe('Canvas - empty theme', () => {
         '<block name="blockstudio/no-dir-test-block" />',
       );
 
-      // Wait for the specific new artboard and its rendered block content.
       await page.waitForFunction(
         () => {
           const artboard = document.querySelector(
@@ -483,13 +471,11 @@ test.describe('Canvas - empty theme', () => {
       expect(r.hasMarkerElement).toBe(true);
       expect(r.hasMarkerText).toBe(true);
     } finally {
-      // Restore the blockstudio directory with .gitkeep.
       if (!fs.existsSync(blockstudioDir)) {
         fs.mkdirSync(blockstudioDir, { recursive: true });
       }
       fs.writeFileSync(path.join(blockstudioDir, '.gitkeep'), '');
 
-      // Clean up page.
       if (fs.existsSync(pageDir)) {
         fs.rmSync(pageDir, { recursive: true });
       }

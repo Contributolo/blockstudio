@@ -944,7 +944,6 @@ test.describe('File-based Pages', () => {
     });
 
     test('template lock prevents unlocking', async () => {
-      // Dismiss any modal overlays (welcome dialog, pattern modal, etc.)
       const closeButton = page.locator(
         '.components-modal__screen-overlay button[aria-label="Close"]',
       );

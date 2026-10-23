@@ -29,7 +29,6 @@ test.describe('Component', () => {
     const frame = page.frame('editor-canvas');
     await frame!.waitForLoadState('domcontentloaded');
 
-    // Dismiss welcome modal if present.
     const modalOverlay = await page.$('.components-modal__screen-overlay');
     if (modalOverlay) {
       await page.click('.components-modal__header .components-button.has-icon');

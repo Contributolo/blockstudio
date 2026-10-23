@@ -24,8 +24,7 @@ trait Group_Renderer {
 		$inner_blocks = Block_Tags::parse_inner_blocks( $inner_content );
 		$tag          = 'div';
 
-		// The element core/group saves, as the editor's HTML element setting
-		// offers it; anything else stays a div.
+		// Match the HTML elements offered by the core/group editor setting.
 		if ( isset( $attrs['tagName'] ) ) {
 			$tag_name = is_string( $attrs['tagName'] ) ? strtolower( trim( $attrs['tagName'] ) ) : '';
 			if ( in_array( $tag_name, array( 'header', 'main', 'section', 'article', 'aside', 'footer' ), true ) ) {
@@ -36,7 +35,7 @@ trait Group_Renderer {
 			}
 		}
 
-		// Handle layout attribute (for row/stack variants).
+		// Row and stack variants share the core/group renderer.
 		$class = 'wp-block-group';
 		if ( isset( $attrs['layout'] ) ) {
 			if ( is_string( $attrs['layout'] ) ) {

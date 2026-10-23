@@ -74,14 +74,12 @@ test.describe('interaction/confirmation-delete', () => {
   });
 
   test('cancel then confirm flow works correctly', async ({ page }) => {
-    // Cancel first
     await jsClick(page.locator('[data-testid="delete-btn"]').nth(1));
     await page.waitForTimeout(300);
     await page.locator('[data-testid="cancel-btn"]').click();
     await page.waitForTimeout(300);
     await expect(page.locator('[data-testid="project-item"]')).toHaveCount(3);
 
-    // Now confirm
     await jsClick(page.locator('[data-testid="delete-btn"]').nth(1));
     await page.waitForTimeout(300);
     await page.locator('[data-testid="confirm-btn"]').click();
@@ -112,21 +110,18 @@ test.describe('interaction/confirmation-delete', () => {
   });
 
   test('can delete all items one by one', async ({ page }) => {
-    // Delete first item (Project A)
     await jsClick(page.locator('[data-testid="delete-btn"]').first());
     await page.waitForTimeout(300);
     await page.locator('[data-testid="confirm-btn"]').click();
     await page.waitForTimeout(300);
     await expect(page.locator('[data-testid="project-item"]')).toHaveCount(2);
 
-    // Delete first remaining item (Project B)
     await jsClick(page.locator('[data-testid="delete-btn"]').first());
     await page.waitForTimeout(300);
     await page.locator('[data-testid="confirm-btn"]').click();
     await page.waitForTimeout(300);
     await expect(page.locator('[data-testid="project-item"]')).toHaveCount(1);
 
-    // Delete last item (Project C)
     await jsClick(page.locator('[data-testid="delete-btn"]').first());
     await page.waitForTimeout(300);
     await page.locator('[data-testid="confirm-btn"]').click();

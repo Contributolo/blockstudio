@@ -224,7 +224,8 @@ export const Artboard = ({
             return;
           }
 
-          // Avoid freezing refreshed artboards while async Blockstudio renders are still pending.
+          // Avoid freezing refreshed artboards while async Blockstudio renders
+          // are still pending.
           if (hasActiveDisplay || !hasMeaningfulText) {
             return;
           }

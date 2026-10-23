@@ -20,7 +20,7 @@ function loadSettings(): Partial<CanvasState> {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) return JSON.parse(stored);
   } catch {
-    // Ignore parse errors.
+    // Use defaults when saved settings are invalid or storage is unavailable.
   }
   return {};
 }
@@ -35,7 +35,7 @@ function saveSettings(state: CanvasState): void {
       }),
     );
   } catch {
-    // Ignore storage errors.
+    // Keep in-memory settings usable when persistence is unavailable.
   }
 }
 

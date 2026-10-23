@@ -23,7 +23,7 @@ trait More_Renderer {
 	public function render_more( array $attrs, string $inner_content ): array {
 		$custom_text = isset( $attrs['customText'] ) ? $attrs['customText'] : '';
 
-		// Handle lowercased attribute names.
+		// Older templates may use lowercase attribute names.
 		if ( empty( $custom_text ) && isset( $attrs['customtext'] ) ) {
 			$custom_text         = $attrs['customtext'];
 			$attrs['customText'] = $custom_text;

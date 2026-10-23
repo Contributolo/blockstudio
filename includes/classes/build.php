@@ -765,7 +765,6 @@ class Build {
 			}
 		}
 
-		// Phase 1: Discover blocks using Block_Discovery.
 		$results = Perf::measure(
 			'build:discovery',
 			static function () use ( $source, $instance, $editor ): array {
@@ -788,14 +787,12 @@ class Build {
 
 		self::register_blade_templates( $results['blade_templates'], $registry );
 
-		// Handle overrides in editor mode.
 		if ( $editor ) {
 			foreach ( $overrides as $override_key => $override_info ) {
 				$registry->set_data_override( $override_key, $override_info['data'] );
 			}
 		}
 
-		// Phase 2: Process assets for each discovered item.
 		Perf::measure(
 			'build:assets',
 			static function () use ( &$store, $instance, $editor, $registry, &$empty_dist_folders ): void {
@@ -842,12 +839,10 @@ class Build {
 			}
 		);
 
-		// Phase 2.5: Discover custom fields.
 		$local_fields = self::discover_local_custom_fields( $path, $source );
 		self::register_custom_field_definitions( $local_fields['fields'] );
 		self::register_filtered_custom_fields();
 
-		// Phase 3: Register blocks.
 		$populate_version = Build_Cache::get_populate_cache_version();
 		if ( ! $editor ) {
 			$registered = Perf::measure(
@@ -858,7 +853,6 @@ class Build {
 			);
 		}
 
-		// Final processing.
 		if ( $editor ) {
 			$registry->merge_files( $store );
 			foreach ( $registry->get_data_overrides() as $override ) {
@@ -877,7 +871,7 @@ class Build {
 			return;
 		}
 
-		// Capture final outputs after compilation and registration filters, only when assets are enabled.
+		// Cache resolved outputs only after compilation and registration filters have finished.
 		if ( Settings::get( 'assets/enqueue' ) && Build_Cache::is_enabled() ) {
 			$store = array_map( array( Assets::class, 'with_resolved_outputs' ), $store );
 		}
@@ -904,7 +898,6 @@ class Build {
 		$registry->merge_data( $store );
 		self::include_init_files( $registry );
 
-		// Apply overrides.
 		Perf::measure(
 			'build:overrides',
 			static function () use ( $registry ): void {
@@ -2583,7 +2576,6 @@ class Build {
 				$is_extend
 			);
 
-			// Register storage handlers for fields.
 			Storage_Registry::instance()->process_block_fields(
 				$name,
 				$block_json['blockstudio']['attributes']

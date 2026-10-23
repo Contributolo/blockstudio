@@ -706,10 +706,8 @@ class Block {
 		self::remove_custom_tag( $content, 'MediaPlaceholder' );
 
 		$attributes_to_remove = array(
-			// General.
 			'useBlockProps',
 			'tag',
-			// InnerBlocks.
 			'allowedBlocks',
 			'defaultBlock',
 			'directInsert',
@@ -718,7 +716,6 @@ class Block {
 			'template',
 			'templateInsertUpdatesSelection',
 			'templateLock',
-			// RichText.
 			'attribute',
 			'placeholder',
 			'allowedFormats',
@@ -744,8 +741,7 @@ class Block {
 			$elements = $doc->getElementsByTagName( '*' );
 			foreach ( $elements as $element ) {
 				if ( $element->hasAttribute( 'useblockprops' ) ) {
-					// The cleanup below keeps this attribute on input and
-					// textarea elements, so its value stays what it always was.
+					// Keep the legacy value on input and textarea elements, which bypass cleanup.
 					$element->setAttribute( 'useblockprops', 'true' );
 
 					$classes = $element->getAttribute( 'class' );
@@ -1332,10 +1328,8 @@ class Block {
 			return null;
 		}
 
-		// Content saved through kses, as a sync or an editor save without
-		// unfiltered_html does, stores attribute text entity-encoded. The tag
-		// processor encodes again, so the text is decoded first, the way
-		// esc_attr() leaves existing entities alone.
+		// KSES stores entity-encoded attribute text. Decode it before the tag
+		// processor escapes it again to avoid double-encoding.
 		$value = html_entity_decode( $value, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
 
 		if ( 'style' === $name ) {
@@ -2269,7 +2263,6 @@ class Block {
 		$attr     = $block_attributes;
 		$disabled = $attributes['blockstudio']['disabled'] ?? array();
 
-		// Defaults.
 		foreach ( $attr as $k => $v ) {
 			if ( 'repeater' === ( $v['field'] ?? '' ) && ! isset( $v['default'] ) && ! empty( $v['min'] ) ) {
 				$row = array();
@@ -2284,20 +2277,15 @@ class Block {
 				$attr[ $k ] = $v['default'] ?? false;
 			}
 		}
-		// Attributes written at the top level of the block's attributes, which
-		// is how a REST, WP-CLI or migration client naturally sends them, and
-		// how render() already reads them for the Islands marker. Scoped to
-		// ids the block declares, so WordPress' own attributes (anchor,
-		// className, lock, metadata, style) and Blockstudio's reserved keys can
-		// never enter. A value nested under blockstudio.attributes still wins,
-		// so nothing the editor saves changes.
+		// Accept declared top-level fields from REST, WP-CLI and migration clients
+		// without treating WordPress or reserved attributes as fields.
+		// Nested editor values retain precedence.
 		$attributes = array_merge(
 			$attr,
 			array_intersect_key( $attributes, $attr ),
 			$attributes['blockstudio']['attributes'] ?? array()
 		);
 
-		// Transform.
 		$attribute_names = array();
 		$attribute_data  = self::transform_attributes(
 			$attributes,
@@ -2309,7 +2297,6 @@ class Block {
 			$block_attributes
 		);
 
-		// Examples.
 		$example_attributes = null;
 
 		if ( is_string( $name ) && '' !== $name ) {

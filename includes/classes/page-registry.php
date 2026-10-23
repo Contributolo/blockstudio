@@ -91,7 +91,6 @@ final class Page_Registry {
 	 * Private constructor.
 	 */
 	private function __construct() {
-		// Singleton pattern.
 	}
 
 	/**

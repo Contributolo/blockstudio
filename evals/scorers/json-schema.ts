@@ -19,12 +19,11 @@ function loadPageSchema(): Record<string, unknown> {
   const schema = JSON.parse(
     readFileSync(resolve(__dirname, '../../schemas/page.json'), 'utf-8'),
   ) as Record<string, unknown>;
-  // AJV doesn't support draft-04, strip the $schema property
+  // This Ajv instance cannot compile the schema's draft-04 declaration.
   delete schema.$schema;
   return schema;
 }
 
-// Simplified block schema for eval validation.
 // The full schema includes the complete upstream WordPress block contract, so
 // evals use a focused version for generated Blockstudio examples.
 const blockSchema = {
@@ -71,7 +70,7 @@ const blockSchema = {
   },
 };
 
-// No pattern schema exists in docs
+// Patterns have no standalone schema, so evals validate their core metadata here.
 const patternSchema = {
   type: 'object',
   required: ['name', 'title'],

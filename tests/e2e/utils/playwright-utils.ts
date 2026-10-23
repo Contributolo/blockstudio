@@ -19,23 +19,20 @@ export const login = async (
   await page.waitForURL('**/wp-admin/**');
 };
 
-// Shared page - created once, reused by ALL test files
+// Reuse the authenticated page across test files.
 let sharedPage: Page | null = null;
 let sharedContext: BrowserContext | null = null;
 
-// Get or create the shared page
 export const getSharedPage = async (browser: Browser): Promise<Page> => {
   if (sharedPage && !sharedPage.isClosed()) {
     return sharedPage;
   }
 
-  // First time: create context, page, and login
   sharedContext = await browser.newContext();
   sharedPage = await sharedContext.newPage();
   await sharedPage.setViewportSize({ width: 1920, height: 1080 });
   await sharedPage.emulateMedia({ reducedMotion: 'reduce' });
 
-  // Handle all dialogs automatically (confirm dialogs, alerts, etc.)
   sharedPage.on('dialog', async (dialog) => {
     await dialog.accept();
   });
@@ -45,7 +42,6 @@ export const getSharedPage = async (browser: Browser): Promise<Page> => {
   return sharedPage;
 };
 
-// Get the editor canvas frame (iframed editor with apiVersion 3)
 export const getEditorCanvas = async (page: Page): Promise<Frame> => {
   await page.waitForSelector('iframe[name="editor-canvas"]', {
     timeout: 30000,
@@ -105,7 +101,6 @@ export const waitForCanvasSurface = async (page: Page): Promise<void> => {
   );
 };
 
-// Reset page state - navigate to editor and remove all blocks
 export const resetPageState = async (page: Page) => {
   await page.goto(
     'http://localhost:8888/wp-admin/post.php?post=1483&action=edit',
@@ -113,7 +108,6 @@ export const resetPageState = async (page: Page) => {
   const canvas = await getEditorCanvas(page);
   await canvas.waitForSelector('.editor-styles-wrapper', { timeout: 30000 });
 
-  // Dismiss welcome modal if present
   const modal = await page.$('text=Welcome to the block editor');
   if (modal) {
     await page.click(
@@ -121,7 +115,6 @@ export const resetPageState = async (page: Page) => {
     );
   }
 
-  // Wait for root container and remove all blocks
   await canvas.waitForSelector('.is-root-container', { timeout: 10000 });
   await dismissEditorOverlays(page);
   await page.evaluate(() => {
@@ -235,7 +228,7 @@ export const pBlocks = async (
   const page = await context.newPage();
   await page.emulateMedia({ reducedMotion: 'reduce' });
 
-  // Login first - robust approach to avoid race condition
+  // Complete login before navigating to the editor to avoid a redirect race.
   await page.goto('http://localhost:8888/wp-login.php');
   await page.waitForLoadState('networkidle');
   const userLogin = page.locator('#user_login');
@@ -249,7 +242,7 @@ export const pBlocks = async (
   await page.locator('#wp-submit').click();
   await page.waitForURL('**/wp-admin/**');
 
-  // Navigate to test post (ID 1483 = "Native Single")
+  // Post 1483 is the "Native Single" fixture.
   const postUrl =
     url || 'http://localhost:8888/wp-admin/post.php?post=1483&action=edit';
   await page.goto(postUrl);
@@ -275,7 +268,7 @@ export const pEditor = async (browser: Browser) => {
   page.on('dialog', async (dialog: any) => {
     await dialog.accept();
   });
-  // Login first - robust approach to avoid race condition
+  // Complete login before navigating to the editor to avoid a redirect race.
   await page.goto('http://localhost:8888/wp-login.php');
   await page.waitForLoadState('networkidle');
   const userLogin = page.locator('#user_login');
@@ -423,20 +416,17 @@ export const testType = async (
 ) => {
   let page: Page;
 
-  // Support [displayName, blockName] or just string (uses same for both)
   const displayName = Array.isArray(field) ? field[0] : field;
   const blockName = Array.isArray(field) ? field[1] : field;
 
   test.describe.configure({ mode: 'serial' });
 
   test.beforeAll(async ({ browser }) => {
-    // Get or create the shared page (reused across all test files)
     page = await getSharedPage(browser);
-    // Reset state: navigate to editor + remove all blocks
     await resetPageState(page);
   });
 
-  // Note: No afterAll close - page is shared and reused
+  // Leave the shared page open for subsequent test files.
 
   test.describe(displayName, () => {
     test.describe('defaults', () => {

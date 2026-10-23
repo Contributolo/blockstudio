@@ -63,7 +63,6 @@ export const RegistryBrowser = (): ReactElement => {
         ),
       );
     } catch {
-      // Silently handle for now
     } finally {
       setImporting((prev) => {
         const next = new Set(prev);

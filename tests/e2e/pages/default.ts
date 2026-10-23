@@ -378,7 +378,6 @@ test.describe('File-based Pages', () => {
     });
   });
 
-  // Content Only Lock
   test.describe('Content Only Lock', () => {
     test('contentOnly lock is applied', async () => {
       await navigateToPage('Content Only Lock Test', 'draft');
@@ -398,7 +397,6 @@ test.describe('File-based Pages', () => {
     });
   });
 
-  // Unlocked Page
   test.describe('Unlocked Page', () => {
     test('unlocked page has no template lock', async () => {
       await navigateToPage('Unlocked Test', 'draft');
@@ -421,7 +419,6 @@ test.describe('File-based Pages', () => {
     });
   });
 
-  // Block Editing Mode
   test.describe('Block Editing Mode', () => {
     test('page has blockEditingMode setting', async () => {
       await navigateToPage('Editing Mode Test', 'draft');
@@ -439,7 +436,7 @@ test.describe('File-based Pages', () => {
     });
 
     test('blocks inherit page default editing mode', async () => {
-      // Wait for the editing mode subscription to apply
+      // Wait for the editing mode subscription to apply.
       await page.waitForTimeout(500);
 
       const paragraphMode = await page.evaluate(() => {
@@ -460,7 +457,7 @@ test.describe('File-based Pages', () => {
       const headingMode = await page.evaluate(() => {
         const { select } = (window as any).wp.data;
         const blocks = select('core/block-editor').getBlocks();
-        // The <h1 blockEditingMode="contentOnly"> is the first block
+        // The <h1 blockEditingMode="contentOnly"> is the first block.
         const heading = blocks[0];
         if (!heading) return null;
         return select('core/block-editor').getBlockEditingMode(
@@ -485,10 +482,9 @@ test.describe('File-based Pages', () => {
     });
   });
 
-  // Sync Disabled
   test.describe('Sync Disabled', () => {
     test('sync:false page is not auto-created by normal sync', async () => {
-      // Delete any existing page from previous runs via WP-CLI style deletion
+      // Remove previous-run pages so sync is checked without an existing post.
       await page.evaluate(async (base: string) => {
         const res = await fetch(
           `${base}/wp-json/wp/v2/pages?search=Sync+Disabled+Test&status=draft,publish&per_page=100`,
@@ -511,17 +507,15 @@ test.describe('File-based Pages', () => {
         }
       }, BASE);
 
-      // Trigger normal sync. It should not create the page because sync is false.
       const result = await apiPost('blockstudio-test/v1/pages/trigger-sync', {
         page_name: 'blockstudio-sync-disabled-test',
       });
 
-      // sync() returns 0 for sync:false pages when no existing post found
       expect(result.post_id).toBe(0);
     });
 
     test('sync:false page ignores template changes', async () => {
-      // Force-create the page (ensures it exists regardless of previous state)
+      // Force creation because normal sync is disabled for this page.
       const createResult = await apiPost(
         'blockstudio-test/v1/pages/force-sync',
         { page_name: 'blockstudio-sync-disabled-test' },
@@ -531,7 +525,6 @@ test.describe('File-based Pages', () => {
       const originalContent = createResult.post_content;
       expect(originalContent).toContain('Original Title');
 
-      // Trigger normal sync with changed template. This should be a no-op because sync is false.
       const syncResult = await apiPost(
         'blockstudio-test/v1/pages/trigger-sync',
         {
@@ -545,7 +538,7 @@ test.describe('File-based Pages', () => {
       );
       expect(afterSync.post_content).toBe(originalContent);
 
-      // Restore original template for future runs
+      // Restore the original template for future runs.
       await apiPost('blockstudio-test/v1/pages/force-sync', {
         page_name: 'blockstudio-sync-disabled-test',
         template_content: '<h1>Original Title</h1>\n<p>Original content.</p>',
@@ -553,7 +546,6 @@ test.describe('File-based Pages', () => {
     });
   });
 
-  // Template For
   test.describe('Template For', () => {
     test('CPT template is applied to new posts', async () => {
       await page.goto(
@@ -597,7 +589,6 @@ test.describe('File-based Pages', () => {
     });
   });
 
-  // Post ID Pinning
   test.describe('Post ID Pinning', () => {
     test('page with postId created at specified ID', async () => {
       const result = await apiPost('blockstudio-test/v1/pages/force-sync', {
@@ -614,7 +605,6 @@ test.describe('File-based Pages', () => {
     });
 
     test('page retains ID after delete and re-sync', async () => {
-      // Delete the post
       await page.evaluate(async (base: string) => {
         await fetch(`${base}/wp-json/wp/v2/pages/99999?force=true`, {
           method: 'DELETE',
@@ -622,7 +612,6 @@ test.describe('File-based Pages', () => {
         });
       }, BASE);
 
-      // Force re-sync. It should reclaim the same ID.
       const result = await apiPost('blockstudio-test/v1/pages/force-sync', {
         page_name: 'blockstudio-post-id-test',
       });

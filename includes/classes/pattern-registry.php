@@ -55,7 +55,6 @@ final class Pattern_Registry {
 	 * Private constructor.
 	 */
 	private function __construct() {
-		// Singleton pattern.
 	}
 
 	/**

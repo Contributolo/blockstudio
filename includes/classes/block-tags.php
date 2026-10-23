@@ -164,10 +164,6 @@ class Block_Tags {
 		return $content;
 	}
 
-	// -------------------------------------------------------------------------
-	// <custom-tag> alias syntax
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Replace paired alias tags.
 	 *
@@ -263,10 +259,6 @@ class Block_Tags {
 		);
 	}
 
-	// -------------------------------------------------------------------------
-	// <prefix-slug> namespace shorthand syntax
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Replace paired prefix tags.
 	 *
@@ -358,10 +350,6 @@ class Block_Tags {
 		);
 	}
 
-	// -------------------------------------------------------------------------
-	// <bs:namespace-block> syntax
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Replace paired <bs:name>...</bs:name> tags.
 	 *
@@ -451,10 +439,6 @@ class Block_Tags {
 			}
 		);
 	}
-
-	// -------------------------------------------------------------------------
-	// <block name="namespace/block"> syntax
-	// -------------------------------------------------------------------------
 
 	/**
 	 * Replace paired <block name="...">...</block> tags.
@@ -578,10 +562,6 @@ class Block_Tags {
 
 		return 0 === $copied ? $content : $output . substr( $content, $copied );
 	}
-
-	// -------------------------------------------------------------------------
-	// Resolution and allow/deny
-	// -------------------------------------------------------------------------
 
 	/**
 	 * Return custom tag aliases for block tag parsing.
@@ -1003,10 +983,6 @@ class Block_Tags {
 
 		return $block_name;
 	}
-
-	// -------------------------------------------------------------------------
-	// Shared utilities
-	// -------------------------------------------------------------------------
 
 	/**
 	 * Find the closing > of an opening tag, skipping quoted attribute values.
@@ -1558,11 +1534,9 @@ class Block_Tags {
 		$has_prefix_tags   = self::has_prefix_tags( $content, $prefixes );
 
 		while ( $offset < $len ) {
-			// Find next tag of any kind.
 			$tag_pos = strpos( $content, '<', $offset );
 
 			if ( false === $tag_pos ) {
-				// Remaining text.
 				$text = trim( substr( $content, $offset ) );
 				if ( '' !== $text ) {
 					$blocks[] = self::build_paragraph( array(), $text );
@@ -1570,7 +1544,6 @@ class Block_Tags {
 				break;
 			}
 
-			// Text before tag.
 			if ( $tag_pos > $offset ) {
 				$text = trim( substr( $content, $offset, $tag_pos - $offset ) );
 				if ( '' !== $text ) {
@@ -1578,7 +1551,6 @@ class Block_Tags {
 				}
 			}
 
-			// Check what kind of tag.
 			$parsed_alias = self::parse_alias_open_tag( $content, $tag_pos, $aliases );
 			if ( null !== $parsed_alias ) {
 				$result = self::parse_single_alias_tag( $content, $tag_pos, $parsed_alias );
@@ -1650,8 +1622,7 @@ class Block_Tags {
 				if ( null !== $result ) {
 					$block_arr = $result['block'];
 
-					// In parse_all_elements context, container blocks need
-					// their inner content parsed with parse_all_elements too.
+					// Container children must include raw HTML elements, not just block tags.
 					if ( ! empty( $result['inner'] ) ) {
 						$container_names = array(
 							'core/group',
@@ -1695,21 +1666,18 @@ class Block_Tags {
 				}
 			}
 
-			// Check for HTML comment (<!-- ... -->).
 			if ( '<!--' === substr( $content, $tag_pos, 4 ) ) {
 				$comment_end = strpos( $content, '-->', $tag_pos + 4 );
 				$offset      = false !== $comment_end ? $comment_end + 3 : $tag_pos + 1;
 				continue;
 			}
 
-			// Check for closing tag (skip).
 			if ( '</' === substr( $content, $tag_pos, 2 ) ) {
 				$gt     = strpos( $content, '>', $tag_pos );
 				$offset = false !== $gt ? $gt + 1 : $tag_pos + 1;
 				continue;
 			}
 
-			// Raw HTML element.
 			$tag_match = array();
 			if ( preg_match( '/^<([a-z][a-z0-9]*)/i', substr( $content, $tag_pos, 80 ), $tag_match ) ) {
 				$html_tag = strtolower( $tag_match[1] );
@@ -1751,7 +1719,6 @@ class Block_Tags {
 
 					$inner_for_block = $inner;
 
-					// Heading level from tag name.
 					if ( preg_match( '/^h[1-6]$/', $html_tag ) ) {
 						$attrs['level'] = (int) substr( $html_tag, 1 );
 
@@ -1776,19 +1743,16 @@ class Block_Tags {
 						$attrs['tagName'] = $html_tag;
 					}
 
-					// Ordered list.
 					if ( 'core/list' === $block_name && 'ol' === $html_tag ) {
 						$attrs['ordered'] = true;
 					}
 
-					// Image: extract src/alt from tag attrs or inner <img>.
 					if ( 'core/image' === $block_name ) {
 						if ( isset( $attrs['src'] ) ) {
 							$attrs['url'] = $attrs['src'];
 							unset( $attrs['src'] );
 						}
-						// <figure> wrapping <img>: extract img attrs.
-						// <figure> without <img>: fall back to HTML block.
+						// Figures without an image must retain their raw HTML.
 						if ( 'figure' === $html_tag ) {
 							if ( '' !== $inner && preg_match( '/<img\s+([^>]*)\/?>/i', $inner, $img_match ) ) {
 								$img_attrs = self::parse_attributes( $img_match[1] );
@@ -1815,7 +1779,6 @@ class Block_Tags {
 						}
 					}
 
-					// For container HTML elements, recursively parse with parse_all_elements.
 					$container_blocks = array( 'core/group', 'core/quote' );
 					$is_container     = in_array( $block_name, $container_blocks, true )
 						|| ( isset( self::$html_container_tags[ $html_tag ] ) && ! str_starts_with( $block_name, 'core/' ) );
@@ -1843,7 +1806,7 @@ class Block_Tags {
 				}
 			}
 
-			// Unknown HTML tag: create core/html block.
+			// Preserve unmapped tags as raw HTML.
 			if ( preg_match( '/^<([a-z][a-z0-9]*)/i', substr( $content, $tag_pos, 80 ), $unk_match ) ) {
 				$unk_tag = strtolower( $unk_match[1] );
 				$gt_pos  = self::find_closing_angle( $content, $tag_pos + 1 );
@@ -2017,7 +1980,7 @@ class Block_Tags {
 	 * @return array WordPress block array.
 	 */
 	public static function build_block_array( string $block_name, array $attrs, string $inner_content = '' ): array {
-		// Remap key → __BLOCKSTUDIO_KEY for keyed block merging.
+		// Keyed block merging reads __BLOCKSTUDIO_KEY rather than the authored key.
 		if (
 			array_key_exists( 'key', $attrs ) &&
 			is_scalar( $attrs['key'] ) &&
@@ -2032,7 +1995,6 @@ class Block_Tags {
 			return call_user_func( $renderers[ $block_name ], $attrs, $inner_content );
 		}
 
-		// Generic fallback.
 		$inner_blocks      = self::parse_inner_blocks( $inner_content );
 		$inner_content_arr = array();
 		foreach ( $inner_blocks as $block ) {
@@ -2123,9 +2085,7 @@ class Block_Tags {
 					$value = '';
 				}
 
-				// Attribute text is HTML, so it is decoded once here, the way a
-				// browser reads it. Anything that writes the value back escapes it
-				// again, and an undecoded &amp; came out as &amp;amp;.
+				// Decode HTML entities before downstream escaping to avoid values such as &amp;amp;.
 				if ( is_string( $value ) && str_contains( $value, '&' ) ) {
 					$value = html_entity_decode( $value, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
 				}
@@ -2154,10 +2114,6 @@ class Block_Tags {
 
 		return $attributes;
 	}
-
-	// -------------------------------------------------------------------------
-	// Block rendering
-	// -------------------------------------------------------------------------
 
 	/**
 	 * Render a block with the given attributes.
@@ -2190,7 +2146,7 @@ class Block_Tags {
 		if ( isset( $bs_blocks[ $block_name ] ) ) {
 			self::report_unhandled_attributes( $block_name, $block_attrs );
 
-			// Pre-process all nested tags for Blockstudio blocks.
+			// Blockstudio templates need rendered children rather than nested block tags.
 			if ( '' !== $inner_content ) {
 				$aliases    = self::get_tag_aliases();
 				$prefixes   = self::get_tag_prefixes();

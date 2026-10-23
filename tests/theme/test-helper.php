@@ -42,12 +42,10 @@ add_filter(
 	3
 );
 
-// Load Composer autoloader.
 if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require_once __DIR__ . '/vendor/autoload.php';
 }
 
-// Initialize Timber.
 if ( class_exists( 'Timber\Timber' ) ) {
 	Timber\Timber::init();
 }
@@ -304,7 +302,6 @@ add_filter(
 	2
 );
 
-// Add theme support for block editor.
 add_action(
 	'after_setup_theme',
 	function () {
@@ -534,7 +531,6 @@ add_filter(
 add_filter(
 	'blockstudio/blocks/attributes/populate',
 	function ( $options ) {
-		// Default populate options
 		$options['default'] = array(
 			array(
 				'value' => 'custom-1',
@@ -550,10 +546,8 @@ add_filter(
 			),
 		);
 
-		// Array populate options
 		$options['array'] = array( 'custom-1', 'custom-2', 'custom-3' );
 
-		// Colors
 		$options['colors'] = array(
 			array(
 				'name'  => 'red',
@@ -572,7 +566,6 @@ add_filter(
 			),
 		);
 
-		// Gradients
 		$options['gradients'] = array(
 			array(
 				'name'  => 'JShine',
@@ -645,15 +638,10 @@ add_filter(
 	}
 );
 
-/**
- * Force block discovery after all plugins are loaded.
- */
 add_action(
 	'plugins_loaded',
 	function () {
-		// Trigger block discovery if Blockstudio is available
 		if ( class_exists( 'Blockstudio\\Build' ) ) {
-			// Blocks should auto-discover, but we can force a refresh if needed
 		}
 	},
 	100
@@ -773,7 +761,6 @@ add_action(
 					$blockName = $request->get_param( 'block' );
 					$blocks    = \Blockstudio\Build::getBlocks();
 
-					// Find matching block by name
 					foreach ( $blocks as $path => $data ) {
 						if ( ( $data['name'] ?? '' ) === $blockName ) {
 							return array(
@@ -986,7 +973,6 @@ add_action(
 						'theme' => 'theme',
 					);
 
-					// Helper to create post with specific ID
 					$create_post_with_id = function ( $id, $title, $name, $type = 'post' ) use ( $wpdb, &$created ) {
 						if ( ! get_post( $id ) ) {
 							$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
@@ -1016,17 +1002,14 @@ add_action(
 						return false;
 					};
 
-					// Helper to create dummy image file
 					$create_dummy_image = function ( $filename, $width = 100, $height = 100 ) {
 						$upload_dir = wp_upload_dir();
 						$file_path  = $upload_dir['path'] . '/' . $filename;
 
-						// Create directory if needed
 						if ( ! file_exists( $upload_dir['path'] ) ) {
 							wp_mkdir_p( $upload_dir['path'] );
 						}
 
-						// Create a simple PNG image
 						$image    = imagecreatetruecolor( $width, $height );
 						$bg_color = imagecolorallocate( $image, wp_rand( 0, 255 ), wp_rand( 0, 255 ), wp_rand( 0, 255 ) );
 						imagefill( $image, 0, 0, $bg_color );
@@ -1059,7 +1042,6 @@ add_action(
 						);
 					};
 
-					// Helper to create attachment with specific ID
 					$create_attachment_with_id = function ( $id, $filename, $mime_type, $file_info ) use ( $wpdb, &$created ) {
 						if ( ! get_post( $id ) ) {
 							$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
@@ -1085,10 +1067,8 @@ add_action(
 								)
 							);
 
-							// Set _wp_attached_file meta
 							update_post_meta( $id, '_wp_attached_file', ltrim( $file_info['subdir'], '/' ) . '/' . $filename );
 
-							// Set attachment metadata for images
 							if ( strpos( $mime_type, 'image' ) !== false ) {
 								$metadata = array(
 									'width'  => 100,
@@ -1477,7 +1457,6 @@ add_action(
 						}
 					}
 
-					// Helper to create user with specific ID
 					$create_user_with_id = function ( $id, $login, $email, $display_name ) use ( $wpdb, &$created ) {
 						if ( ! get_user_by( 'id', $id ) ) {
 							$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
@@ -1492,7 +1471,6 @@ add_action(
 									'display_name'    => $display_name,
 								)
 							);
-							// Add user meta for capabilities
 							update_user_meta( $id, 'wp_capabilities', array( 'subscriber' => true ) );
 							update_user_meta( $id, 'wp_user_level', 0 );
 							$created['users'][] = $id;
@@ -1549,20 +1527,17 @@ add_action(
 						);
 					}
 
-					// Helper to create term - uses WP API and accepts any ID
+					// Term fixtures use WordPress-assigned IDs rather than fixed IDs.
 					$create_term = function ( $name, $slug, $taxonomy ) use ( &$created ) {
-						// Check if taxonomy exists
 						if ( ! taxonomy_exists( $taxonomy ) ) {
 							return false;
 						}
 
-						// Check if term already exists
 						$existing = get_term_by( 'slug', $slug, $taxonomy );
 						if ( $existing ) {
 							return $existing->term_id;
 						}
 
-						// Create the term using WordPress API
 						$result = wp_insert_term( $name, $taxonomy, array( 'slug' => $slug ) );
 
 						if ( is_wp_error( $result ) ) {
@@ -1635,7 +1610,6 @@ add_action(
 					$wp_rewrite->set_permalink_structure( '/%postname%/' );
 					$wp_rewrite->flush_rules( true );
 
-					// Clean caches
 					wp_cache_flush();
 
 					// Clear Blockstudio transients to ensure fresh asset capture
@@ -1962,7 +1936,6 @@ add_action(
 			array(
 				'methods'             => 'GET',
 				'callback'            => function () {
-					// Get first few posts
 					$posts = get_posts(
 						array(
 							'numberposts' => 5,
@@ -1970,7 +1943,6 @@ add_action(
 						)
 					);
 
-					// Get first few terms
 					$categories = get_terms(
 						array(
 							'taxonomy'   => 'category',
@@ -1987,7 +1959,6 @@ add_action(
 						)
 					);
 
-					// Get users
 					$users = get_users(
 						array(
 							'number' => 5,

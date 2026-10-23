@@ -209,8 +209,7 @@ class Blocks {
 			$localize_array
 		);
 
-		// Build styles data for CSS classes and variables autocomplete.
-		// Use flag to prevent infinite recursion (get_all_assets triggers enqueue_block_editor_assets).
+		// Asset capture re-enters enqueue_block_editor_assets, so guard against recursion.
 		$styles        = array();
 		$css_classes   = array();
 		$css_variables = array();

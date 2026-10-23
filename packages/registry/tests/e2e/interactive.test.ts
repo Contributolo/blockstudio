@@ -58,9 +58,9 @@ describe('interactive: init', () => {
     const { stdin, unmount } = render(createElement(InitApp, { cwd }));
 
     await wait(200);
-    stdin.write('\r'); // accept default directory
+    stdin.write('\r'); // Accept the default directory.
     await wait(200);
-    stdin.write('n'); // no registries
+    stdin.write('n'); // Skip registry configuration.
     await wait(500);
 
     expect(await fileExists(join(cwd, 'blocks.json'))).toBe(true);
@@ -78,9 +78,9 @@ describe('interactive: init', () => {
     await wait(200);
     stdin.write('my-blocks');
     await wait(100);
-    stdin.write('\r'); // submit
+    stdin.write('\r'); // Submit the custom directory.
     await wait(200);
-    stdin.write('n'); // no registries
+    stdin.write('n'); // Skip registry configuration.
     await wait(500);
 
     expect(await fileExists(join(cwd, 'blocks.json'))).toBe(true);
@@ -96,19 +96,19 @@ describe('interactive: init', () => {
     const { stdin, unmount } = render(createElement(InitApp, { cwd }));
 
     await wait(200);
-    stdin.write('\r'); // accept default directory
+    stdin.write('\r'); // Accept the default directory.
     await wait(200);
-    stdin.write('y'); // yes, add registry
+    stdin.write('y'); // Configure a registry.
     await wait(200);
     stdin.write('ui');
     await wait(100);
-    stdin.write('\r'); // submit name
+    stdin.write('\r'); // Submit the registry name.
     await wait(200);
     stdin.write(`${server.url}/ui/registry.json`);
     await wait(100);
-    stdin.write('\r'); // submit URL
+    stdin.write('\r'); // Submit the registry URL.
     await wait(200);
-    stdin.write('n'); // no more registries
+    stdin.write('n'); // Finish registry configuration.
     await wait(800);
 
     const config = JSON.parse(
@@ -136,11 +136,11 @@ describe('interactive: init', () => {
     const frame = lastFrame();
     expect(frame).toContain('Overwrite');
 
-    stdin.write('y'); // yes overwrite
+    stdin.write('y'); // Confirm overwriting blocks.json.
     await wait(200);
-    stdin.write('\r'); // accept directory
+    stdin.write('\r'); // Accept the default directory.
     await wait(200);
-    stdin.write('n'); // no registries
+    stdin.write('n'); // Skip registry configuration.
     await wait(500);
 
     unmount();
@@ -232,7 +232,7 @@ describe('interactive: add', () => {
     const frame = lastFrame();
     expect(frame).toContain('Overwrite');
 
-    stdin.write('y'); // confirm
+    stdin.write('y'); // Confirm overwriting the existing block.
     await wait(2000);
 
     const finalFrame = lastFrame();
@@ -249,7 +249,7 @@ describe('interactive: add', () => {
     );
 
     await wait(1000);
-    stdin.write('n'); // decline
+    stdin.write('n'); // Keep the existing block.
     await wait(1000);
 
     const frame = lastFrame();

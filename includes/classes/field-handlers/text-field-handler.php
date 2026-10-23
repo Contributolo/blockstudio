@@ -52,23 +52,19 @@ class Text_Field_Handler extends Abstract_Field_Handler {
 
 		$attribute = $this->create_base_attribute( $type, 'string' );
 
-		// Rich text types have HTML source.
 		if ( 'richtext' === $type || 'wysiwyg' === $type ) {
 			$attribute['source'] = 'html';
 		}
 
-		// Code fields have additional properties.
 		if ( 'code' === $type ) {
 			$attribute['language'] = $field['language'] ?? 'html';
 			$attribute['asset']    = $field['asset'] ?? false;
 		}
 
-		// Handle Tailwind for classes type.
 		if ( 'classes' === $type && ( $field['tailwind'] ?? false ) ) {
 			$attribute['tailwind'] = true;
 		}
 
-		// Apply defaults, storage, and set ID.
 		$this->apply_defaults( $field, $attribute );
 		$this->apply_storage( $field, $attribute );
 		$this->apply_set( $field, $attribute );

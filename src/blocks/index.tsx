@@ -160,15 +160,52 @@ Object.values(blocks).forEach((block: BlockstudioBlock) => {
   registerSingleBlock(block);
 });
 
+/**
+ * Store a block definition and register its editor implementation.
+ * Use for block types not yet registered in WordPress. Visibility and conditions
+ * still apply; this does not register a PHP render template.
+ *
+ * @param block Server-prepared block definition, including Blockstudio settings.
+ * @returns No return value.
+ * @example
+ * const block = refreshData.blocksNative['acme/notice'];
+ * window.blockstudio.registerBlock(block);
+ */
 window.blockstudio.registerBlock = (block: BlockstudioBlock) => {
   (blocks as any)[block.name] = block;
   registerSingleBlock(block);
 };
 
+/**
+ * Add server-rendered HTML to the editor render cache.
+ * Entries with non-array object attributes populate the keyed cache; others
+ * queue by block name and mode. Empty rendered output or block names are ignored.
+ *
+ * @param entries Rendered HTML and block names, with optional attributes,
+ * mode (defaults to editor), and context.
+ * @returns No return value.
+ * @example
+ * window.blockstudio.addPreloads([
+ *   { blockName: 'acme/notice', rendered: '<p>Notice</p>' },
+ * ]);
+ */
 window.blockstudio.addPreloads = (entries: PreloadEntry[]) => {
   renderCache.addPreloads(entries);
 };
 
+/**
+ * Replace cached renders for the block names present in the supplied entries.
+ * Clears those blocks' keyed renders and editor/preview queues, then adds the
+ * entries. Other block types and existing client claims are unchanged.
+ *
+ * @param entries Replacement preloads in the same format as addPreloads.
+ * An empty list leaves the cache unchanged.
+ * @returns No return value.
+ * @example
+ * window.blockstudio.replacePreloads([
+ *   { blockName: 'acme/notice', rendered: '<p>Updated notice</p>' },
+ * ]);
+ */
 window.blockstudio.replacePreloads = (entries: PreloadEntry[]) => {
   renderCache.replacePreloads(entries);
 };

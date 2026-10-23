@@ -22,7 +22,7 @@ import { css } from '@/utils/css';
 const cssVariablesCompletion = (
   cssVariables: string[],
 ): ((context: CompletionContext) => CompletionResult | null) => {
-  const variables = cssVariables.map((v) => `--${v}`); // Format variables
+  const variables = cssVariables.map((v) => `--${v}`);
 
   return (context: CompletionContext) => {
     const word = context.matchBefore(/--[\w-]*$/);
@@ -104,7 +104,7 @@ export const Code = ({
     extensions: getExtensions(),
   };
 
-  // Stop undo/redo from bubbling to Gutenberg so CodeMirror handles its own history
+  // Keep CodeMirror's undo/redo history separate from Gutenberg's.
   const handleKeyDown = (e: React.KeyboardEvent) => {
     const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
     const isUndo =

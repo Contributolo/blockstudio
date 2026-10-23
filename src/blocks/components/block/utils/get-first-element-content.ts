@@ -7,8 +7,7 @@ export const getInnerHTML = (htmlString: string) => {
       tag.endsWith('/>') ? `<${name}${attributes}></${name}>` : tag,
   );
 
-  // A template parses a fragment like the spec's fragment algorithm and keeps
-  // its content inert, so nothing loads while the markup is inspected.
+  // A template keeps parsed markup inert so inspection does not load resources.
   const template = document.createElement('template');
   template.innerHTML = htmlString;
 

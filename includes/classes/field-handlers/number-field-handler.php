@@ -45,10 +45,8 @@ class Number_Field_Handler extends Abstract_Field_Handler {
 
 		$attribute = $this->create_base_attribute( $type, 'number' );
 
-		// Apply defaults with special handling for zero.
 		foreach ( array( 'default', 'fallback' ) as $item ) {
 			if ( isset( $field[ $item ] ) ) {
-				// Convert zero to string '0' for proper handling.
 				$attribute[ $item ] = 0 === $field[ $item ] ? '0' : $field[ $item ];
 			}
 		}

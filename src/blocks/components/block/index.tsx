@@ -475,7 +475,7 @@ export const Block = ({
 
   const fetchSingleRef = useRef(fetchSingle);
   fetchSingleRef.current = fetchSingle;
-  // Selection and parent renders must not cancel a queued field/context refresh.
+  // Parent renders and selection changes must not cancel queued refreshes.
   const debouncedFetchSingle = useDebounce(
     useCallback(() => fetchSingleRef.current(), []),
     500,
@@ -545,7 +545,8 @@ export const Block = ({
 
       const mode = getRenderMode();
       const previousAttributes = cloneDeep(attributesRef.current);
-      // RichText already renders from the editor store; typing must not replace its DOM.
+      // RichText already renders from the editor store; typing must not
+      // replace its DOM.
       richTextPaths.current.forEach((path) => {
         unset(previousAttributes, `blockstudio.attributes.${path}`);
         unset(newAttributes, `blockstudio.attributes.${path}`);

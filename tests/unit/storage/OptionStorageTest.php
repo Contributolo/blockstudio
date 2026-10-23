@@ -39,7 +39,6 @@ class OptionStorageTest extends TestCase {
 
 		$this->registered_keys[] = 'test_opt_links';
 
-		// Capture _doing_it_wrong notices.
 		$notices = array();
 		$capture = function ( $function_name ) use ( &$notices ) {
 			$notices[] = $function_name;
@@ -56,7 +55,6 @@ class OptionStorageTest extends TestCase {
 			'register_setting should not trigger _doing_it_wrong for array type'
 		);
 
-		// Verify the setting is registered with correct schema.
 		$settings = get_registered_settings();
 		$this->assertArrayHasKey( 'test_opt_links', $settings );
 		$this->assertSame( 'array', $settings['test_opt_links']['type'] );

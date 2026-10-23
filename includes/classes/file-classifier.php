@@ -51,7 +51,6 @@ class File_Classifier {
 		$basename  = $path_info['basename'] ?? '';
 		$extension = $path_info['extension'] ?? '';
 
-		// Skip hidden files.
 		if ( str_starts_with( $basename, '.' ) ) {
 			return null;
 		}
@@ -69,7 +68,6 @@ class File_Classifier {
 			&& Files::get_render_template( $file_path )
 			&& ! $is_extend;
 
-		// Must be a recognizable type to classify.
 		if ( ! $is_block && ! $is_blade && ! $is_init && ! $is_directory && ! $is_override && ! $is_extend ) {
 			return null;
 		}

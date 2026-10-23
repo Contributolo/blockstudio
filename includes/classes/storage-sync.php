@@ -54,7 +54,7 @@ class Storage_Sync {
 	 */
 	public function sync_post_blocks( $post_id, \WP_Post $post, bool $update = false, ?\WP_Post $post_before = null ): void {
 		$post_id = (int) $post_id;
-		// Skip autosaves and revisions.
+
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return;
 		}
@@ -63,7 +63,6 @@ class Storage_Sync {
 			return;
 		}
 
-		// Parse blocks from content.
 		$blocks = parse_blocks( $post->post_content );
 
 		if ( empty( $blocks ) ) {
@@ -126,7 +125,6 @@ class Storage_Sync {
 			$position = $path . '/' . $index;
 			$this->sync_block( $post_id, $block, $previous[ $this->block_identity( $block, $position ) ] ?? null, $sync_options );
 
-			// Process inner blocks recursively.
 			if ( ! empty( $block['innerBlocks'] ) ) {
 				$this->sync_blocks( $post_id, $block['innerBlocks'], $previous, $sync_options, $position );
 			}
@@ -146,10 +144,8 @@ class Storage_Sync {
 	private function sync_block( int $post_id, array $block, ?array $previous = null, bool $sync_options = true ): void {
 		$block_name = $block['blockName'];
 
-		// Block attributes are nested in blockstudio.attributes.
 		$attrs = $block['attrs']['blockstudio']['attributes'] ?? array();
 
-		// Get block configuration from Build::blocks() (returns WP_Block_Type objects).
 		$block_type = Build::blocks()[ $block_name ] ?? null;
 		if ( ! $block_type || ! isset( $block_type->blockstudio ) ) {
 			return;

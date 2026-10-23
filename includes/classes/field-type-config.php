@@ -56,7 +56,6 @@ final class Field_Type_Config {
 	 * widening, not a contract.
 	 */
 	public const TYPES = array(
-		// String types.
 		'code'       => array(
 			'attribute' => 'string',
 			'default'   => '',
@@ -96,7 +95,6 @@ final class Field_Type_Config {
 			'source'    => 'html',
 		),
 
-		// Number types.
 		'number'     => array(
 			'attribute' => 'number',
 			'default'   => 0,
@@ -106,13 +104,11 @@ final class Field_Type_Config {
 			'default'   => 0,
 		),
 
-		// Boolean types.
 		'toggle'     => array(
 			'attribute' => 'boolean',
 			'default'   => false,
 		),
 
-		// Object types.
 		'color'      => array(
 			'attribute' => 'object',
 			'default'   => null,
@@ -138,7 +134,6 @@ final class Field_Type_Config {
 			'default'   => null,
 		),
 
-		// Array types.
 		'repeater'   => array(
 			'attribute' => 'array',
 			'default'   => array(),
@@ -156,7 +151,6 @@ final class Field_Type_Config {
 			'default'   => array(),
 		),
 
-		// Mixed/special types.
 		'files'      => array(
 			'attribute' => array( 'number', 'object', 'array', 'string' ),
 			'default'   => null,
