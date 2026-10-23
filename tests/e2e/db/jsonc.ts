@@ -33,7 +33,7 @@ test.afterAll(async () => {
             headers: { 'X-WP-Nonce': nonce },
           });
         },
-        { route: ROUTE, nonce, id }
+        { route: ROUTE, nonce, id },
       );
     }
   }
@@ -53,7 +53,7 @@ test.describe('DB JSONC Storage', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce, signupAction }
+      { route: ROUTE, nonce, signupAction },
     );
     expect(r.s).toBe(200);
     expect(r.b.action).toBe(signupAction);
@@ -73,7 +73,7 @@ test.describe('DB JSONC Storage', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce, id }
+      { route: ROUTE, nonce, id },
     );
     expect(r.s).toBe(200);
     expect(r.b.action).toBe(signupAction);
@@ -88,7 +88,7 @@ test.describe('DB JSONC Storage', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce }
+      { route: ROUTE, nonce },
     );
     expect(r.s).toBe(200);
     expect(Array.isArray(r.b)).toBe(true);
@@ -105,7 +105,7 @@ test.describe('DB JSONC Storage', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce, id }
+      { route: ROUTE, nonce, id },
     );
     expect(r.s).toBe(200);
     expect(r.b.details).toBe('Updated details');
@@ -118,11 +118,14 @@ test.describe('DB JSONC Storage', () => {
         const res = await fetch(route, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': nonce },
-          body: JSON.stringify({ action: loginAction, details: 'Returning user' }),
+          body: JSON.stringify({
+            action: loginAction,
+            details: 'Returning user',
+          }),
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce, loginAction }
+      { route: ROUTE, nonce, loginAction },
     );
     expect(r.s).toBe(200);
     expect(Number(r.b.id)).toBeGreaterThan(id);
@@ -132,13 +135,16 @@ test.describe('DB JSONC Storage', () => {
   test('list with filter', async () => {
     const r = await page.evaluate(
       async ({ route, nonce, loginAction }) => {
-        const res = await fetch(`${route}?action=${encodeURIComponent(loginAction)}`, {
-          method: 'GET',
-          headers: { 'X-WP-Nonce': nonce },
-        });
+        const res = await fetch(
+          `${route}?action=${encodeURIComponent(loginAction)}`,
+          {
+            method: 'GET',
+            headers: { 'X-WP-Nonce': nonce },
+          },
+        );
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce, loginAction }
+      { route: ROUTE, nonce, loginAction },
     );
     expect(r.s).toBe(200);
     expect(r.b.length).toBe(1);
@@ -154,7 +160,7 @@ test.describe('DB JSONC Storage', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce, id }
+      { route: ROUTE, nonce, id },
     );
     expect(r.s).toBe(200);
     expect(r.b.deleted).toBe(true);

@@ -1,6 +1,5 @@
 import { select, subscribe } from '@wordpress/data';
 import { addFilter } from '@wordpress/hooks';
-
 import { BlockstudioAttribute } from '@/types/block';
 import { BlockstudioBlock } from '@/types/types';
 
@@ -8,10 +7,7 @@ declare global {
   interface Window {
     YoastSEO?: {
       app?: {
-        registerPlugin: (
-          name: string,
-          opts: { status: string },
-        ) => void;
+        registerPlugin: (name: string, opts: { status: string }) => void;
         registerModification: (
           type: string,
           cb: (c: string) => string,
@@ -28,8 +24,10 @@ declare global {
 
 const PLUGIN_NAME = 'blockstudioSeoIntegration';
 const TEXT_TYPES = new Set(['text', 'textarea', 'richtext', 'wysiwyg']);
-const blocks = window.blockstudioAdmin.data
-  .blocksNative as unknown as Record<string, BlockstudioBlock>;
+const blocks = window.blockstudioAdmin.data.blocksNative as unknown as Record<
+  string,
+  BlockstudioBlock
+>;
 
 let cachedContent = '';
 let seoPluginDetected = false;
@@ -112,9 +110,7 @@ function collectContent(): string {
         const attrs = block.attributes?.blockstudio?.attributes;
         const disabled = block.attributes?.blockstudio?.disabled || [];
         if (attrs && typeof attrs === 'object') {
-          parts.push(
-            extractText(attrs, def.blockstudio.attributes, disabled),
-          );
+          parts.push(extractText(attrs, def.blockstudio.attributes, disabled));
         }
       }
       if (block.innerBlocks?.length) walk(block.innerBlocks);
@@ -156,10 +152,7 @@ function initRankMath() {
 
 let debounceTimer: ReturnType<typeof setTimeout>;
 
-function waitForSeoPlugin(
-  init: () => boolean,
-  attempts = 0,
-) {
+function waitForSeoPlugin(init: () => boolean, attempts = 0) {
   if (seoPluginDetected || init()) return;
   if (attempts < 50) {
     setTimeout(() => waitForSeoPlugin(init, attempts + 1), 200);

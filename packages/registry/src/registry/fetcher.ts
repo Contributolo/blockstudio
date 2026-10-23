@@ -1,4 +1,4 @@
-import { registrySchema, type Registry } from "../config/schema.js";
+import { registrySchema, type Registry } from '../config/schema.js';
 
 const cache = new Map<string, Registry>();
 
@@ -23,9 +23,7 @@ export async function fetchRegistry(
   }
 
   if (!response.ok) {
-    throw new Error(
-      `Registry returned ${response.status} for ${url}`,
-    );
+    throw new Error(`Registry returned ${response.status} for ${url}`);
   }
 
   let json: unknown;
@@ -38,8 +36,8 @@ export async function fetchRegistry(
   const result = registrySchema.safeParse(json);
   if (!result.success) {
     const issues = result.error.issues
-      .map((i) => `  ${i.path.join(".")}: ${i.message}`)
-      .join("\n");
+      .map((i) => `  ${i.path.join('.')}: ${i.message}`)
+      .join('\n');
     throw new Error(`Invalid registry at ${url}:\n${issues}`);
   }
 

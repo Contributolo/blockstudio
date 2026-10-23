@@ -1,10 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-
 // @ts-expect-error No types for BlockPreview
 import { BlockPreview } from '@wordpress/block-editor';
 import { parse } from '@wordpress/blocks';
-
 import { waitForIframeReady } from './wait-for-iframe';
 import type { Page } from './types';
 
@@ -86,10 +84,13 @@ export const Artboard = ({
   activeDisplayRef.current = activeDisplay;
   pendingDisplayIdRef.current = pendingDisplayId;
 
-  const setDisplayIframeRef = useCallback((node: HTMLIFrameElement | null): void => {
-    if (!node) return;
-    (node as HTMLIFrameElement & { _load?: () => void })._load = () => {};
-  }, []);
+  const setDisplayIframeRef = useCallback(
+    (node: HTMLIFrameElement | null): void => {
+      if (!node) return;
+      (node as HTMLIFrameElement & { _load?: () => void })._load = () => {};
+    },
+    [],
+  );
 
   const handlePendingLoad = useCallback((id: number): void => {
     if (pendingDisplayIdRef.current !== id) return;
@@ -121,7 +122,11 @@ export const Artboard = ({
 
   useEffect(() => {
     const rendered = renderedTargetRef.current;
-    if (rendered && rendered.revision === revision && rendered.width === width) {
+    if (
+      rendered &&
+      rendered.revision === revision &&
+      rendered.width === width
+    ) {
       return;
     }
 
@@ -192,11 +197,15 @@ export const Artboard = ({
     const captureSnapshot = (force = false): void => {
       if (cancelled || captured) return;
 
-      const iframe = staging.querySelector('iframe') as HTMLIFrameElement | null;
+      const iframe = staging.querySelector(
+        'iframe',
+      ) as HTMLIFrameElement | null;
       const doc = iframe?.contentDocument;
       const html = iframe?.contentDocument?.documentElement?.outerHTML;
       if (!iframe || !html) return;
-      const hasSpinner = !!doc?.querySelector('.blockstudio-block__inner-spinner');
+      const hasSpinner = !!doc?.querySelector(
+        '.blockstudio-block__inner-spinner',
+      );
       const hasUnsupportedBlock = !!doc?.querySelector('.wp-block-missing');
       const hasActiveDisplay = !!activeDisplayRef.current;
       const spinnerGraceElapsed =
@@ -302,7 +311,9 @@ export const Artboard = ({
   useEffect(() => {
     if (readyDisplayId === null) return;
 
-    const readyLayer = displayLayers.find((layer) => layer.id === readyDisplayId);
+    const readyLayer = displayLayers.find(
+      (layer) => layer.id === readyDisplayId,
+    );
     if (!readyLayer) return;
 
     const previousRevision =
@@ -357,7 +368,9 @@ export const Artboard = ({
                     width: '100%',
                     height: layer.height,
                     zIndex: isReady ? 2 : 1,
-                    visibility: isReady ? ('visible' as const) : ('hidden' as const),
+                    visibility: isReady
+                      ? ('visible' as const)
+                      : ('hidden' as const),
                     pointerEvents: 'none',
                     background: '#fff',
                   }
@@ -388,7 +401,10 @@ export const Artboard = ({
         createPortal(
           <div ref={stagingRef} data-canvas-staging="" style={{ width }}>
             <div data-canvas-layer-active="true">
-              <BlockPreview blocks={stagingLayer.blocks} viewportWidth={width} />
+              <BlockPreview
+                blocks={stagingLayer.blocks}
+                viewportWidth={width}
+              />
             </div>
           </div>,
           stagingHost,

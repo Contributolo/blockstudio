@@ -11,7 +11,7 @@ testType('conditions-default', false, () => {
         await delay(500);
 
         const selectValue = page.locator(
-          '.blockstudio-fields__field--select select'
+          '.blockstudio-fields__field--select select',
         );
         await expect(selectValue).toHaveValue('gradient');
 
@@ -21,14 +21,15 @@ testType('conditions-default', false, () => {
       },
     },
     {
-      description: 'switching select value should show correct conditional field',
+      description:
+        'switching select value should show correct conditional field',
       testFunction: async (page: Page, canvas: Frame) => {
         await canvas.click('[data-type="blockstudio/type-conditions-default"]');
         await delay(300);
 
         await page.selectOption(
           '.blockstudio-fields__field--select select',
-          'color'
+          'color',
         );
         await delay(300);
 

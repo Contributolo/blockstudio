@@ -49,13 +49,16 @@ test.describe('Preload InnerBlocks Multi-Depth', () => {
         const bs = (window as any).blockstudio;
         if (!bs?.blockstudioBlocks) return false;
         const blocks = bs.blockstudioBlocks;
-        const entries = (Array.isArray(blocks) ? blocks : Object.values(blocks)) as any[];
+        const entries = (
+          Array.isArray(blocks) ? blocks : Object.values(blocks)
+        ) as any[];
         const simpleBlocks = entries.filter(
           (e: any) => e.blockName === 'blockstudio/type-preload-simple',
         );
         const containerBlocks = entries.filter(
           (e: any) =>
-            e.blockName === 'blockstudio/component-innerblocks-bare-spaceless' ||
+            e.blockName ===
+              'blockstudio/component-innerblocks-bare-spaceless' ||
             e.blockName === 'blockstudio/component-innerblocks-bare',
         );
         return simpleBlocks.length === 3 && containerBlocks.length === 3;
@@ -103,10 +106,14 @@ test.describe('Preload InnerBlocks Multi-Depth', () => {
       timeout: 15000,
     });
 
-    const titles = await canvas.locator('.preload-simple .preload-title').allTextContents();
+    const titles = await canvas
+      .locator('.preload-simple .preload-title')
+      .allTextContents();
     expect(titles).toEqual(['Level 0', 'Level 1', 'Level 2']);
 
-    const counts = await canvas.locator('.preload-simple .preload-count').allTextContents();
+    const counts = await canvas
+      .locator('.preload-simple .preload-count')
+      .allTextContents();
     expect(counts).toEqual(['10', '20', '30']);
   });
 });

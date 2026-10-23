@@ -33,7 +33,15 @@ async function getNonce(): Promise<string> {
 async function apiPost(path: string, body: Record<string, unknown> = {}) {
   const wpNonce = await getNonce();
   return page.evaluate(
-    async ({ url, data, n }: { url: string; data: Record<string, unknown>; n: string }) => {
+    async ({
+      url,
+      data,
+      n,
+    }: {
+      url: string;
+      data: Record<string, unknown>;
+      n: string;
+    }) => {
       const res = await fetch(url, {
         method: 'POST',
         headers: {
@@ -78,9 +86,10 @@ test.describe('Admin Page - Overview', () => {
   test('header shows Docs link', async () => {
     const admin = page.locator('#blockstudio-admin');
 
-    await expect(
-      admin.getByRole('link', { name: 'Docs' }),
-    ).toHaveAttribute('href', 'https://blockstudio.dev/docs');
+    await expect(admin.getByRole('link', { name: 'Docs' })).toHaveAttribute(
+      'href',
+      'https://blockstudio.dev/docs',
+    );
   });
 });
 
@@ -100,7 +109,9 @@ test.describe('Admin Page - Registry Browser', () => {
 
   test('shows Available status and Import button', async () => {
     await expect(page.getByText('Available').first()).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Import' }).first()).toBeVisible();
+    await expect(
+      page.getByRole('button', { name: 'Import' }).first(),
+    ).toBeVisible();
   });
 });
 
@@ -130,8 +141,12 @@ test.describe('Admin Page - Registry Import', () => {
     const importBtn = cardRow.getByRole('button', { name: 'Import' });
     await importBtn.click();
 
-    await expect(cardRow.getByText('Installed')).toBeVisible({ timeout: 10000 });
-    await expect(cardRow.getByRole('button', { name: 'Reimport' })).toBeVisible();
+    await expect(cardRow.getByText('Installed')).toBeVisible({
+      timeout: 10000,
+    });
+    await expect(
+      cardRow.getByRole('button', { name: 'Reimport' }),
+    ).toBeVisible();
   });
 
   test('REST endpoint rejects missing registry', async () => {
@@ -176,15 +191,12 @@ test.describe('Admin Page - Registry Data', () => {
 
   test('REST endpoint returns registry blocks', async () => {
     const wpNonce = await getNonce();
-    const result = await page.evaluate(
-      async (n: string) => {
-        const res = await fetch('/wp-json/blockstudio/v1/registry/blocks', {
-          headers: { 'X-WP-Nonce': n },
-        });
-        return { status: res.status, body: await res.json() };
-      },
-      wpNonce,
-    );
+    const result = await page.evaluate(async (n: string) => {
+      const res = await fetch('/wp-json/blockstudio/v1/registry/blocks', {
+        headers: { 'X-WP-Nonce': n },
+      });
+      return { status: res.status, body: await res.json() };
+    }, wpNonce);
 
     expect(result.status).toBe(200);
     expect(Array.isArray(result.body)).toBe(true);

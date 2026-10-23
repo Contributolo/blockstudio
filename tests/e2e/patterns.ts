@@ -1,5 +1,10 @@
 import { expect, test, Page } from '@playwright/test';
-import { count, pBlocks, delay, getEditorCanvas } from './utils/playwright-utils';
+import {
+  count,
+  pBlocks,
+  delay,
+  getEditorCanvas,
+} from './utils/playwright-utils';
 
 test.describe('Patterns', () => {
   test('pattern appears in block inserter and inserts correct blocks', async ({
@@ -18,7 +23,7 @@ test.describe('Patterns', () => {
     await delay(1000);
 
     const patternItem = page.locator(
-      '.block-editor-block-patterns-list__item:has-text("Blockstudio E2E Test Pattern")'
+      '.block-editor-block-patterns-list__item:has-text("Blockstudio E2E Test Pattern")',
     );
     await expect(patternItem.first()).toBeVisible({ timeout: 10000 });
 
@@ -72,7 +77,7 @@ test.describe('Patterns', () => {
     await delay(1000);
 
     const patternItem = page.locator(
-      '.block-editor-block-patterns-list__item:has-text("Blockstudio E2E Test Pattern")'
+      '.block-editor-block-patterns-list__item:has-text("Blockstudio E2E Test Pattern")',
     );
     await expect(patternItem.first()).toBeVisible({ timeout: 10000 });
   });
@@ -90,7 +95,7 @@ test.describe('Patterns (Twig)', () => {
     await delay(1500);
 
     return page.locator(
-      '.block-editor-block-patterns-list__item:has-text("Twig")'
+      '.block-editor-block-patterns-list__item:has-text("Twig")',
     );
   };
 
@@ -160,7 +165,7 @@ test.describe('Patterns (Blade)', () => {
     await delay(1500);
 
     return page.locator(
-      '.block-editor-block-patterns-list__item:has-text("Blade")'
+      '.block-editor-block-patterns-list__item:has-text("Blade")',
     );
   };
 

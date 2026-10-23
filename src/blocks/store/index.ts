@@ -5,8 +5,7 @@ import { selectors } from './selectors';
 
 const DEFAULT_STATE = {
   icons: {},
-  media:
-    typeof window !== 'undefined' ? (window.blockstudio?.media ?? {}) : {},
+  media: typeof window !== 'undefined' ? (window.blockstudio?.media ?? {}) : {},
   repeaters: {},
   richText: {},
 } as BlockstudioBlockStore;

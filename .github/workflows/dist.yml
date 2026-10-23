@@ -2,7 +2,7 @@ name: Distribution
 
 on:
   push:
-    branches: [main, '7.*']
+    branches: [main, '7.*', tooling-upgrade]
   workflow_dispatch:
 
 concurrency:
@@ -24,14 +24,22 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.4"
+          php-version: '8.4'
           extensions: dom, json, zip, simplexml, libxml, iconv
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: scripts/ci/npm-ci.sh
+      - run: npm run runtime:check
 
       - name: Install build dependencies
         run: composer install --no-interaction
 
       - name: Build zip
-        run: bash scripts/build-release.sh
+        run: npm run build:release
 
       - name: Verify required files exist
         run: |
@@ -115,7 +123,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.4"
+          php-version: '8.4'
           extensions: dom, json, zip, simplexml, libxml, iconv, mysqli
           tools: wp-cli
 
@@ -189,7 +197,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.4"
+          php-version: '8.4'
           extensions: dom, json, zip, simplexml, libxml, iconv, mysqli
           tools: wp-cli
 
@@ -292,7 +300,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.4"
+          php-version: '8.4'
           extensions: dom, json, zip, simplexml, libxml, iconv, mysqli
           tools: wp-cli
 
@@ -408,7 +416,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.4"
+          php-version: '8.4'
           extensions: dom, json, zip, simplexml, libxml, iconv, mysqli
           tools: wp-cli
 

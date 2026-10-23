@@ -15,9 +15,7 @@ import { css } from '@/utils/css';
 const PAGE_SIZE = 20;
 
 const formatLabel = (key: string): string => {
-  return key
-    .replace(/_/g, ' ')
-    .replace(/\b\w/g, (char) => char.toUpperCase());
+  return key.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
 };
 
 const formatValue = (value: unknown): string => {
@@ -26,7 +24,11 @@ const formatValue = (value: unknown): string => {
   }
 
   if (Array.isArray(value)) {
-    if (value.every((item) => ['string', 'number', 'boolean'].includes(typeof item))) {
+    if (
+      value.every((item) =>
+        ['string', 'number', 'boolean'].includes(typeof item),
+      )
+    ) {
       return value.join(', ');
     }
 
@@ -44,7 +46,10 @@ const formatValue = (value: unknown): string => {
   return String(value);
 };
 
-const inferFieldType = (rows: AdminDatabaseRow[], key: string): Field<AdminDatabaseRow>['type'] => {
+const inferFieldType = (
+  rows: AdminDatabaseRow[],
+  key: string,
+): Field<AdminDatabaseRow>['type'] => {
   const sample = rows.find((row) => undefined !== row[key])?.[key];
 
   if ('number' === typeof sample) {

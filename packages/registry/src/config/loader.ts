@@ -1,8 +1,8 @@
-import { readFile } from "node:fs/promises";
-import { dirname, join, resolve } from "node:path";
-import { configSchema, type Config } from "./schema.js";
+import { readFile } from 'node:fs/promises';
+import { dirname, join, resolve } from 'node:path';
+import { configSchema, type Config } from './schema.js';
 
-const CONFIG_FILE = "blocks.json";
+const CONFIG_FILE = 'blocks.json';
 const MAX_DEPTH = 20;
 
 export async function findConfig(from: string): Promise<string> {
@@ -11,7 +11,7 @@ export async function findConfig(from: string): Promise<string> {
   for (let i = 0; i < MAX_DEPTH; i++) {
     const candidate = join(dir, CONFIG_FILE);
     try {
-      await readFile(candidate, "utf-8");
+      await readFile(candidate, 'utf-8');
       return candidate;
     } catch {
       const parent = dirname(dir);
@@ -31,7 +31,7 @@ export async function loadConfig(from: string): Promise<{
   configDir: string;
 }> {
   const configPath = await findConfig(from);
-  const raw = await readFile(configPath, "utf-8");
+  const raw = await readFile(configPath, 'utf-8');
 
   let json: unknown;
   try {
@@ -43,8 +43,8 @@ export async function loadConfig(from: string): Promise<{
   const result = configSchema.safeParse(json);
   if (!result.success) {
     const issues = result.error.issues
-      .map((i) => `  ${i.path.join(".")}: ${i.message}`)
-      .join("\n");
+      .map((i) => `  ${i.path.join('.')}: ${i.message}`)
+      .join('\n');
     throw new Error(`Invalid ${CONFIG_FILE}:\n${issues}`);
   }
 

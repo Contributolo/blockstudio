@@ -36,7 +36,9 @@ export const RegistryBrowser = (): ReactElement => {
   const [importing, setImporting] = useState<Set<string>>(new Set());
 
   useEffect(() => {
-    apiFetch<AdminRegistryBlockRow[]>({ path: '/blockstudio/v1/registry/blocks' })
+    apiFetch<AdminRegistryBlockRow[]>({
+      path: '/blockstudio/v1/registry/blocks',
+    })
       .then((data) => setItems(data))
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -142,15 +144,17 @@ export const RegistryBrowser = (): ReactElement => {
     },
   ];
 
-  const { data, paginationInfo } = filterSortAndPaginate(
-    items,
-    view,
-    fields,
-  );
+  const { data, paginationInfo } = filterSortAndPaginate(items, view, fields);
 
   if (loading) {
     return (
-      <div css={css({ padding: '20px', display: 'flex', justifyContent: 'center' })}>
+      <div
+        css={css({
+          padding: '20px',
+          display: 'flex',
+          justifyContent: 'center',
+        })}
+      >
         <Spinner />
       </div>
     );
@@ -163,7 +167,7 @@ export const RegistryBrowser = (): ReactElement => {
           <CardBody>
             <Notice isDismissible={false} status="info">
               {__(
-                'No registries are configured. Add registries to your theme\'s blocks.json file.',
+                "No registries are configured. Add registries to your theme's blocks.json file.",
               )}
             </Notice>
           </CardBody>

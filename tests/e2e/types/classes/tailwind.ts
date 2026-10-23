@@ -39,16 +39,16 @@ testType('classes-tailwind', '"classes":"text-red-500"', () => {
           page,
           '#blockstudio-type-classes-tailwind',
           'color',
-          'oklch(0.637 0.237 25.331)'
+          'oklch(0.637 0.237 25.331)',
         );
         await checkStyle(
           page,
           '#blockstudio-type-classes-tailwind',
           'backgroundColor',
-          'oklch(0.623 0.214 259.815)'
+          'oklch(0.623 0.214 259.815)',
         );
         await page.goto(
-          'http://localhost:8888/wp-admin/post.php?post=1483&action=edit'
+          'http://localhost:8888/wp-admin/post.php?post=1483&action=edit',
         );
         await page.reload();
         await getEditorCanvas(page);

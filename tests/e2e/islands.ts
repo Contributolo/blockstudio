@@ -87,10 +87,14 @@ test.describe('Block islands', () => {
     await expect(page.locator('.bs-island-visible-placeholder')).toHaveCount(1);
     await expect(page.locator('.bs-island-visible-fragment')).toHaveCount(0);
 
-    await page.locator('.bs-island-visible-placeholder').scrollIntoViewIfNeeded();
+    await page
+      .locator('.bs-island-visible-placeholder')
+      .scrollIntoViewIfNeeded();
 
     await expect(
-      page.locator('.bs-island-visible-fragment', { hasText: 'Visible island' }),
+      page.locator('.bs-island-visible-fragment', {
+        hasText: 'Visible island',
+      }),
     ).toBeVisible();
     await expect.poll(() => islandRequests.length).toBe(1);
     expect(islandRequests[0].islands).toHaveLength(1);
@@ -121,7 +125,9 @@ test.describe('Block islands', () => {
     ).toHaveAttribute('data-hydrated-fixture', '1');
   });
 
-  test('dynamic placeholders remain useful with JavaScript disabled', async ({ browser }) => {
+  test('dynamic placeholders remain useful with JavaScript disabled', async ({
+    browser,
+  }) => {
     const noJsContext = await browser.newContext({ javaScriptEnabled: false });
     const noJsPage = await noJsContext.newPage();
 
@@ -129,7 +135,9 @@ test.describe('Block islands', () => {
       waitUntil: 'domcontentloaded',
     });
 
-    await expect(noJsPage.locator('.bs-island-placeholder').first()).toBeVisible();
+    await expect(
+      noJsPage.locator('.bs-island-placeholder').first(),
+    ).toBeVisible();
     await expect(noJsPage.locator('.bs-island-fragment')).toHaveCount(0);
     await expect(noJsPage.locator('.bs-island-hydrated-content')).toBeVisible();
 
@@ -137,7 +145,9 @@ test.describe('Block islands', () => {
     await noJsContext.close();
   });
 
-  test('failed dynamic fetch keeps the placeholder and marks the island errored', async ({ browser }) => {
+  test('failed dynamic fetch keeps the placeholder and marks the island errored', async ({
+    browser,
+  }) => {
     const errorContext = await browser.newContext();
     const errorPage = await errorContext.newPage();
 

@@ -15,7 +15,10 @@ const renderRegistryTable = (
   name: RegistryTabName,
   overview: BlockstudioAdminOverview,
   views: ReturnType<typeof createDefaultViews>,
-  onChangeView: (name: RegistryTabName, view: (typeof views)[RegistryTabName]) => void,
+  onChangeView: (
+    name: RegistryTabName,
+    view: (typeof views)[RegistryTabName],
+  ) => void,
 ): ReactElement => {
   switch (name) {
     case 'blocks':

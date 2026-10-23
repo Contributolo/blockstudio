@@ -1,0 +1,244 @@
+import { store, getContext, getElement } from '@wordpress/interactivity';
+import {
+  computePosition,
+  flip,
+  shift,
+  offset,
+} from 'https://esm.sh/@floating-ui/dom@1.7.4';
+
+interface Context {
+  activeIndex: number;
+  open: boolean;
+}
+
+const ITEM_SELECTOR = '[role="menuitem"]:not([aria-disabled="true"])';
+const typeahead = window.__bsui.typeahead();
+
+function getItems(root: HTMLElement) {
+  return [...root.querySelectorAll<HTMLElement>(ITEM_SELECTOR)];
+}
+
+function positionPopup(trigger: HTMLElement, popup: HTMLElement) {
+  popup.style.position = 'fixed';
+  computePosition(window.__bsui.getAnchor(trigger)!, popup, {
+    strategy: 'fixed',
+    placement: 'bottom-start',
+    middleware: [offset(4), flip(), shift({ padding: 8 })],
+  }).then(({ x, y }) => {
+    Object.assign(popup.style, {
+      left: x + 'px',
+      top: y + 'px',
+    });
+  });
+  if (!popup.__bsuiScrollTracked) {
+    popup.__bsuiScrollTracked = true;
+    let frame = 0;
+    const track = () => {
+      if (popup.hasAttribute('hidden')) {
+        popup.__bsuiScrollTracked = false;
+        window.removeEventListener('scroll', onScroll, true);
+        return;
+      }
+      positionPopup(trigger, popup);
+    };
+    const onScroll = (event: Event) => {
+      if (popup.contains(event.target as HTMLInputElement)) return;
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(track);
+    };
+    window.addEventListener('scroll', onScroll, true);
+  }
+}
+
+store('bsui/menu', {
+  state: {
+    get ariaExpanded() {
+      return getContext<Context>().open ? 'true' : 'false';
+    },
+  },
+  actions: {
+    toggle() {
+      const ctx = getContext<Context>();
+      const { ref } = getElement() as { ref: HTMLElement };
+      ctx.open = !ctx.open;
+
+      const root = ref.closest<HTMLElement>('[data-bsui-menu-root]');
+      const popup = root?.querySelector<HTMLElement>('[role="menu"]');
+
+      if (ctx.open) {
+        ctx.activeIndex = -1;
+        if (popup) popup.removeAttribute('hidden');
+        const trigger = root?.querySelector<HTMLElement>(
+          '[data-bsui-menu-trigger]',
+        );
+        requestAnimationFrame(() => {
+          if (popup && trigger) {
+            positionPopup(trigger, popup);
+            popup.focus({ preventScroll: true });
+          }
+        });
+      } else {
+        if (popup) popup.setAttribute('hidden', '');
+      }
+    },
+    handleTriggerKeyDown(event: KeyboardEvent) {
+      const ctx = getContext<Context>();
+
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        event.preventDefault();
+
+        if (!ctx.open) {
+          ctx.open = true;
+          ctx.activeIndex = -1;
+          const { ref } = getElement() as { ref: HTMLElement };
+          const root = ref.closest<HTMLElement>('[data-bsui-menu-root]');
+          const popup = root?.querySelector<HTMLElement>('[role="menu"]');
+          if (popup) popup.removeAttribute('hidden');
+          const trigger = root?.querySelector<HTMLElement>(
+            '[data-bsui-menu-trigger]',
+          );
+          requestAnimationFrame(() => {
+            if (popup && trigger) {
+              positionPopup(trigger, popup);
+              const items = getItems(root!);
+              if (items.length > 0) {
+                const startIndex =
+                  event.key === 'ArrowUp' ? items.length - 1 : 0;
+                ctx.activeIndex = window.__bsui.focusItem(items, startIndex);
+              } else {
+                popup.focus({ preventScroll: true });
+              }
+            }
+          });
+        }
+      }
+    },
+    activateItem() {
+      const { ref } = getElement() as { ref: HTMLElement };
+      if (ref.getAttribute('aria-disabled') === 'true') {
+        return;
+      }
+
+      const ctx = getContext<Context>();
+      ctx.open = false;
+
+      const root = ref.closest<HTMLElement>('[data-bsui-menu-root]');
+      const popup = root?.querySelector<HTMLElement>('[role="menu"]');
+      if (popup) popup.setAttribute('hidden', '');
+      const trigger = root?.querySelector<HTMLElement>(
+        '[data-bsui-menu-trigger]',
+      );
+      requestAnimationFrame(() =>
+        window.__bsui.getAnchor(trigger)?.focus({ preventScroll: true }),
+      );
+    },
+    handlePopupKeyDown(event: KeyboardEvent) {
+      const ctx = getContext<Context>();
+      const { ref } = getElement() as { ref: HTMLElement };
+      const root = ref.closest<HTMLElement>('[data-bsui-menu-root]');
+      if (!root) return;
+
+      const items = getItems(root);
+
+      switch (event.key) {
+        case 'ArrowDown':
+          event.preventDefault();
+          if (items.length === 0) break;
+          ctx.activeIndex = window.__bsui.focusItem(
+            items,
+            ctx.activeIndex < items.length - 1 ? ctx.activeIndex + 1 : 0,
+          );
+          break;
+        case 'ArrowUp':
+          event.preventDefault();
+          if (items.length === 0) break;
+          ctx.activeIndex = window.__bsui.focusItem(
+            items,
+            ctx.activeIndex > 0 ? ctx.activeIndex - 1 : items.length - 1,
+          );
+          break;
+        case 'Home':
+          event.preventDefault();
+          if (items.length === 0) break;
+          ctx.activeIndex = window.__bsui.focusItem(items, 0);
+          break;
+        case 'End':
+          event.preventDefault();
+          if (items.length === 0) break;
+          ctx.activeIndex = window.__bsui.focusItem(items, items.length - 1);
+          break;
+        case 'Enter':
+        case ' ':
+          event.preventDefault();
+          if (ctx.activeIndex >= 0 && ctx.activeIndex < items.length) {
+            items[ctx.activeIndex].click();
+          }
+          break;
+        case 'Escape':
+          event.preventDefault();
+          ctx.open = false;
+          ctx.activeIndex = -1;
+          {
+            const menuPopup = root.querySelector<HTMLElement>('[role="menu"]');
+            if (menuPopup) menuPopup.setAttribute('hidden', '');
+            const trigger = root.querySelector<HTMLElement>(
+              '[data-bsui-menu-trigger]',
+            );
+            requestAnimationFrame(() =>
+              window.__bsui.getAnchor(trigger)?.focus({ preventScroll: true }),
+            );
+          }
+          event.stopPropagation();
+          break;
+        case 'Tab':
+          ctx.open = false;
+          ctx.activeIndex = -1;
+          {
+            const menuPopup = root.querySelector<HTMLElement>('[role="menu"]');
+            if (menuPopup) menuPopup.setAttribute('hidden', '');
+          }
+          break;
+        default:
+          if (
+            items.length > 0 &&
+            event.key.length === 1 &&
+            !event.ctrlKey &&
+            !event.metaKey
+          ) {
+            const match = typeahead.handle(event.key, items);
+            if (match >= 0) {
+              ctx.activeIndex = window.__bsui.focusItem(items, match);
+            }
+          }
+          break;
+      }
+    },
+    handleOutsideClick(event: Event) {
+      const ctx = getContext<Context>();
+      if (!ctx.open) return;
+      const { ref } = getElement() as { ref: HTMLElement };
+      if (!ref.contains(event.target as HTMLInputElement)) {
+        ctx.open = false;
+        ctx.activeIndex = -1;
+        const popup = ref.querySelector<HTMLElement>('[role="menu"]');
+        if (popup) popup.setAttribute('hidden', '');
+      }
+    },
+    handleDocumentKeyDown(event: KeyboardEvent) {
+      if (event.key !== 'Escape') return;
+      const ctx = getContext<Context>();
+      if (!ctx.open) return;
+      ctx.open = false;
+      ctx.activeIndex = -1;
+      const { ref } = getElement() as { ref: HTMLElement };
+      const popup = ref.querySelector<HTMLElement>('[role="menu"]');
+      if (popup) popup.setAttribute('hidden', '');
+      const trigger = ref.querySelector<HTMLElement>(
+        '[data-bsui-menu-trigger]',
+      );
+      requestAnimationFrame(() =>
+        window.__bsui.getAnchor(trigger)?.focus({ preventScroll: true }),
+      );
+    },
+  },
+});

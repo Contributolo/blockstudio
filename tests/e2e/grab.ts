@@ -8,7 +8,8 @@ import {
 
 let page: Page;
 let canvas: Frame;
-const POST_URL = 'http://localhost:8888/wp-admin/post.php?post=1483&action=edit';
+const POST_URL =
+  'http://localhost:8888/wp-admin/post.php?post=1483&action=edit';
 const frontendUrl = 'http://localhost:8888/?p=1483&blockstudio-devtools';
 const frontendUrlNoDevtools = 'http://localhost:8888/?p=1483';
 const modKey = process.platform === 'darwin' ? 'Meta' : 'Control';

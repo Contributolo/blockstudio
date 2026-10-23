@@ -31,7 +31,9 @@ export const waitForIframeReady = (
     }
 
     const waitForMedia = (doc: Document): Promise<void> => {
-      const mediaEls = Array.from(doc.querySelectorAll<HTMLElement>('img, video'));
+      const mediaEls = Array.from(
+        doc.querySelectorAll<HTMLElement>('img, video'),
+      );
 
       return new Promise<void>((resolve) => {
         let settled = false;
@@ -57,7 +59,9 @@ export const waitForIframeReady = (
             if (el instanceof HTMLVideoElement) {
               if (el.readyState >= 1) return Promise.resolve();
               return new Promise<void>((r) => {
-                el.addEventListener('loadedmetadata', () => r(), { once: true });
+                el.addEventListener('loadedmetadata', () => r(), {
+                  once: true,
+                });
                 el.addEventListener('error', () => r(), { once: true });
               });
             }

@@ -1,11 +1,26 @@
 const C_LIKE_CHARACTERS = new Set([
-  'c', 'C',
-  '\u0441', '\u0421',
-  '\u023c', '\u023b',
-  '\u2184', '\u2183',
-  '\u1d04', '\u1d9c',
-  '\u217d', '\u216d',
-  'ç', 'Ç', 'ć', 'Ć', 'č', 'Č', 'ĉ', 'Ĉ', 'ċ', 'Ċ',
+  'c',
+  'C',
+  '\u0441',
+  '\u0421',
+  '\u023c',
+  '\u023b',
+  '\u2184',
+  '\u2183',
+  '\u1d04',
+  '\u1d9c',
+  '\u217d',
+  '\u216d',
+  'ç',
+  'Ç',
+  'ć',
+  'Ć',
+  'č',
+  'Č',
+  'ĉ',
+  'Ĉ',
+  'ċ',
+  'Ċ',
 ]);
 
 const isCLikeKey = (key: string, code?: string): boolean => {
@@ -33,7 +48,10 @@ const isActivationKeyDown = (e: KeyboardEvent): boolean => {
 };
 
 const isActivationKeyUp = (e: KeyboardEvent): boolean => {
-  return isCLikeKey(e.key, e.code) || (isMac() ? e.key === 'Meta' : e.key === 'Control');
+  return (
+    isCLikeKey(e.key, e.code) ||
+    (isMac() ? e.key === 'Meta' : e.key === 'Control')
+  );
 };
 
 const isKeyboardEventTriggeredByInput = (event: KeyboardEvent): boolean => {
@@ -41,10 +59,16 @@ const isKeyboardEventTriggeredByInput = (event: KeyboardEvent): boolean => {
   if (!target) return false;
   if ((target as HTMLElement).isContentEditable) return true;
   const tagName = target.tagName?.toLowerCase();
-  if (tagName === 'input' || tagName === 'textarea' || tagName === 'select') return true;
+  if (tagName === 'input' || tagName === 'textarea' || tagName === 'select')
+    return true;
   const role = target.getAttribute('role');
   if (role === 'textbox' || role === 'searchbox') return true;
   return false;
 };
 
-export { isActivationKeyDown, isActivationKeyUp, isKeyboardEventTriggeredByInput, isMac };
+export {
+  isActivationKeyDown,
+  isActivationKeyUp,
+  isKeyboardEventTriggeredByInput,
+  isMac,
+};

@@ -5,199 +5,196 @@ const OVERLAY_ROOT = '[data-bsui-select-root]:has(input[name="picked"])';
 const PLAIN_ROOT = '[data-bsui-select-root]:has(input[name="plain"])';
 
 type TextMetrics = {
-	left: number;
-	top: number;
-	fontSize: string;
-	text: string;
+  left: number;
+  top: number;
+  fontSize: string;
+  text: string;
 };
 
-async function textRect( locator: Locator ): Promise< TextMetrics | null > {
-	return locator.evaluate( ( el ) => {
-		const walker = document.createTreeWalker( el, NodeFilter.SHOW_TEXT, {
-			acceptNode: ( node ) =>
-				( node.textContent || '' ).trim().length > 0
-					? NodeFilter.FILTER_ACCEPT
-					: NodeFilter.FILTER_REJECT,
-		} );
-		const node = walker.nextNode();
-		if ( ! node ) return null;
-		const range = document.createRange();
-		range.selectNodeContents( node );
-		const rect = range.getBoundingClientRect();
-		return {
-			left: rect.left,
-			top: rect.top,
-			fontSize: getComputedStyle( el ).fontSize,
-			text: ( node.textContent || '' ).trim(),
-		};
-	} );
+async function textRect(locator: Locator): Promise<TextMetrics | null> {
+  return locator.evaluate((el) => {
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
+      acceptNode: (node) =>
+        (node.textContent || '').trim().length > 0
+          ? NodeFilter.FILTER_ACCEPT
+          : NodeFilter.FILTER_REJECT,
+    });
+    const node = walker.nextNode();
+    if (!node) return null;
+    const range = document.createRange();
+    range.selectNodeContents(node);
+    const rect = range.getBoundingClientRect();
+    return {
+      left: rect.left,
+      top: rect.top,
+      fontSize: getComputedStyle(el).fontSize,
+      text: (node.textContent || '').trim(),
+    };
+  });
 }
 
-async function expectTextOverlay( trigger: Locator, option: Locator ) {
-	const triggerText = await textRect( trigger );
-	const optionText = await textRect( option );
+async function expectTextOverlay(trigger: Locator, option: Locator) {
+  const triggerText = await textRect(trigger);
+  const optionText = await textRect(option);
 
-	expect( triggerText, 'trigger must render label text' ).not.toBeNull();
-	expect( optionText, 'selected option must render label text' ).not.toBeNull();
+  expect(triggerText, 'trigger must render label text').not.toBeNull();
+  expect(optionText, 'selected option must render label text').not.toBeNull();
 
-	const a = triggerText as TextMetrics;
-	const b = optionText as TextMetrics;
+  const a = triggerText as TextMetrics;
+  const b = optionText as TextMetrics;
 
-	expect(
-		Math.abs( b.left - a.left ),
-		`option text left ${ b.left } drifts from trigger text left ${ a.left }`
-	).toBeLessThanOrEqual( 1 );
-	expect(
-		Math.abs( b.top - a.top ),
-		`option text top ${ b.top } drifts from trigger text top ${ a.top }`
-	).toBeLessThanOrEqual( 1 );
-	expect( b.fontSize, 'popup text must match trigger font size' ).toBe(
-		a.fontSize
-	);
+  expect(
+    Math.abs(b.left - a.left),
+    `option text left ${b.left} drifts from trigger text left ${a.left}`,
+  ).toBeLessThanOrEqual(1);
+  expect(
+    Math.abs(b.top - a.top),
+    `option text top ${b.top} drifts from trigger text top ${a.top}`,
+  ).toBeLessThanOrEqual(1);
+  expect(b.fontSize, 'popup text must match trigger font size').toBe(
+    a.fontSize,
+  );
 }
 
-test.describe( 'bsui/select precision', () => {
-	test.beforeEach( async ( { page } ) => {
-		await page.goto( PAGE );
-		await page.waitForSelector( '[data-bsui-select-root]' );
-	} );
+test.describe('bsui/select precision', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto(PAGE);
+    await page.waitForSelector('[data-bsui-select-root]');
+  });
 
-	for ( const width of [ 390, 1280 ] ) {
-		test( `toolbar selected label overlays its compact trigger at ${ width }px`, async ( { page }, testInfo ) => {
-			await page.setViewportSize( { width, height: 900 } );
-			await page.goto( '/showcase/' );
-			const toolbar = page.getByRole( 'toolbar' );
-			await toolbar.evaluate( element => element.scrollIntoView( { block: 'center' } ) );
-			const trigger = toolbar.locator( '[data-bsui-select-trigger]' );
-			await trigger.click();
-			await toolbar.getByRole( 'option', { name: 'Georgia', exact: true } ).click();
-			await expect( trigger ).toHaveText( 'Georgia' );
-			await trigger.click();
-			const selected = toolbar.locator( '[role="option"][aria-selected="true"]' );
-			await expect( selected ).toBeVisible();
-			await expect( async () => expectTextOverlay( trigger, selected ) ).toPass();
-			await page.screenshot( { path: testInfo.outputPath( 'toolbar-overlay.png' ) } );
-		} );
-	}
+  for (const width of [390, 1280]) {
+    test(`toolbar selected label overlays its compact trigger at ${width}px`, async ({
+      page,
+    }, testInfo) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto('/showcase/');
+      const toolbar = page.getByRole('toolbar');
+      await toolbar.evaluate((element) =>
+        element.scrollIntoView({ block: 'center' }),
+      );
+      const trigger = toolbar.locator('[data-bsui-select-trigger]');
+      await trigger.click();
+      await toolbar
+        .getByRole('option', { name: 'Georgia', exact: true })
+        .click();
+      await expect(trigger).toHaveText('Georgia');
+      await trigger.click();
+      const selected = toolbar.locator('[role="option"][aria-selected="true"]');
+      await expect(selected).toBeVisible();
+      await expect(async () => expectTextOverlay(trigger, selected)).toPass();
+      await page.screenshot({
+        path: testInfo.outputPath('toolbar-overlay.png'),
+      });
+    });
+  }
 
-	test( 'selected option label text overlays the trigger label text', async ( {
-		page,
-	} ) => {
-		const root = page.locator( OVERLAY_ROOT );
-		const trigger = root.locator( '[data-bsui-select-trigger]' );
-		const listbox = root.locator( '[role="listbox"]' );
+  test('selected option label text overlays the trigger label text', async ({
+    page,
+  }) => {
+    const root = page.locator(OVERLAY_ROOT);
+    const trigger = root.locator('[data-bsui-select-trigger]');
+    const listbox = root.locator('[role="listbox"]');
 
-		await trigger.click();
-		await expect( listbox ).toBeVisible();
-		await page.waitForTimeout( 350 );
+    await trigger.click();
+    await expect(listbox).toBeVisible();
+    await page.waitForTimeout(350);
 
-		await expect( listbox ).toHaveCSS( 'position', 'fixed' );
+    await expect(listbox).toHaveCSS('position', 'fixed');
 
-		const selected = root.locator(
-			'[role="option"][aria-selected="true"]'
-		);
-		await expect( selected ).toHaveCount( 1 );
-		await expect( selected ).toContainText( 'Cherry' );
+    const selected = root.locator('[role="option"][aria-selected="true"]');
+    await expect(selected).toHaveCount(1);
+    await expect(selected).toContainText('Cherry');
 
-		await expectTextOverlay( trigger, selected );
-	} );
+    await expectTextOverlay(trigger, selected);
+  });
 
-	test( 'reopening after selecting keeps the overlay exact', async ( {
-		page,
-	} ) => {
-		const root = page.locator( OVERLAY_ROOT );
-		const trigger = root.locator( '[data-bsui-select-trigger]' );
-		const listbox = root.locator( '[role="listbox"]' );
+  test('reopening after selecting keeps the overlay exact', async ({
+    page,
+  }) => {
+    const root = page.locator(OVERLAY_ROOT);
+    const trigger = root.locator('[data-bsui-select-trigger]');
+    const listbox = root.locator('[role="listbox"]');
 
-		await trigger.click();
-		await expect( listbox ).toBeVisible();
-		await root
-			.locator( '[role="option"]' )
-			.filter( { hasText: 'Grape' } )
-			.click();
-		await expect( listbox ).toBeHidden();
-		await expect( trigger ).toContainText( 'Grape' );
+    await trigger.click();
+    await expect(listbox).toBeVisible();
+    await root.locator('[role="option"]').filter({ hasText: 'Grape' }).click();
+    await expect(listbox).toBeHidden();
+    await expect(trigger).toContainText('Grape');
 
-		await trigger.click();
-		await expect( listbox ).toBeVisible();
-		await page.waitForTimeout( 350 );
+    await trigger.click();
+    await expect(listbox).toBeVisible();
+    await page.waitForTimeout(350);
 
-		const selected = root.locator(
-			'[role="option"][aria-selected="true"]'
-		);
-		await expect( selected ).toHaveCount( 1 );
-		await expect( selected ).toContainText( 'Grape' );
+    const selected = root.locator('[role="option"][aria-selected="true"]');
+    await expect(selected).toHaveCount(1);
+    await expect(selected).toContainText('Grape');
 
-		await expectTextOverlay( trigger, selected );
-	} );
+    await expectTextOverlay(trigger, selected);
+  });
 
-	test( 'the selection check renders on the right edge of the option', async ( {
-		page,
-	} ) => {
-		const root = page.locator( OVERLAY_ROOT );
-		await root.locator( '[data-bsui-select-trigger]' ).click();
-		await expect( root.locator( '[role="listbox"]' ) ).toBeVisible();
-		await page.waitForTimeout( 350 );
+  test('the selection check renders on the right edge of the option', async ({
+    page,
+  }) => {
+    const root = page.locator(OVERLAY_ROOT);
+    await root.locator('[data-bsui-select-trigger]').click();
+    await expect(root.locator('[role="listbox"]')).toBeVisible();
+    await page.waitForTimeout(350);
 
-		const selected = root.locator(
-			'[role="option"][aria-selected="true"]'
-		);
-		const geometry = await selected.evaluate( ( el ) => {
-			const before = getComputedStyle( el, '::before' );
-			const style = getComputedStyle( el );
-			return {
-				content: before.content,
-				right: before.right,
-				left: before.left,
-				paddingLeft: parseFloat( style.paddingLeft ),
-				paddingRight: parseFloat( style.paddingRight ),
-			};
-		} );
+    const selected = root.locator('[role="option"][aria-selected="true"]');
+    const geometry = await selected.evaluate((el) => {
+      const before = getComputedStyle(el, '::before');
+      const style = getComputedStyle(el);
+      return {
+        content: before.content,
+        right: before.right,
+        left: before.left,
+        paddingLeft: parseFloat(style.paddingLeft),
+        paddingRight: parseFloat(style.paddingRight),
+      };
+    });
 
-		expect( geometry.content, 'selected option must draw a check' ).not.toBe(
-			'none'
-		);
-		expect(
-			parseFloat( geometry.right ),
-			`check right ${ geometry.right } must equal the control padding`
-		).toBeCloseTo( 12, 0 );
-		if ( geometry.left !== 'auto' ) {
-			expect(
-				parseFloat( geometry.left ),
-				`check left ${ geometry.left } must sit far from the left edge`
-			).toBeGreaterThan( parseFloat( geometry.right ) );
-		}
-		expect(
-			geometry.paddingRight,
-			`padding-right ${ geometry.paddingRight } must exceed padding-left ${ geometry.paddingLeft }`
-		).toBeGreaterThan( geometry.paddingLeft );
-		expect( geometry.paddingLeft ).toBeCloseTo( 12, 0 );
-	} );
+    expect(geometry.content, 'selected option must draw a check').not.toBe(
+      'none',
+    );
+    expect(
+      parseFloat(geometry.right),
+      `check right ${geometry.right} must equal the control padding`,
+    ).toBeCloseTo(12, 0);
+    if (geometry.left !== 'auto') {
+      expect(
+        parseFloat(geometry.left),
+        `check left ${geometry.left} must sit far from the left edge`,
+      ).toBeGreaterThan(parseFloat(geometry.right));
+    }
+    expect(
+      geometry.paddingRight,
+      `padding-right ${geometry.paddingRight} must exceed padding-left ${geometry.paddingLeft}`,
+    ).toBeGreaterThan(geometry.paddingLeft);
+    expect(geometry.paddingLeft).toBeCloseTo(12, 0);
+  });
 
-	test( 'a select without a value opens below its trigger', async ( {
-		page,
-	} ) => {
-		const root = page.locator( PLAIN_ROOT );
-		const trigger = root.locator( '[data-bsui-select-trigger]' );
-		const listbox = root.locator( '[role="listbox"]' );
+  test('a select without a value opens below its trigger', async ({ page }) => {
+    const root = page.locator(PLAIN_ROOT);
+    const trigger = root.locator('[data-bsui-select-trigger]');
+    const listbox = root.locator('[role="listbox"]');
 
-		await trigger.click();
-		await expect( listbox ).toBeVisible();
-		await page.waitForTimeout( 350 );
+    await trigger.click();
+    await expect(listbox).toBeVisible();
+    await page.waitForTimeout(350);
 
-		await expect( listbox ).toHaveCSS( 'position', 'fixed' );
+    await expect(listbox).toHaveCSS('position', 'fixed');
 
-		const triggerBox = await trigger.boundingBox();
-		const listboxBox = await listbox.boundingBox();
-		expect( triggerBox ).not.toBeNull();
-		expect( listboxBox ).not.toBeNull();
+    const triggerBox = await trigger.boundingBox();
+    const listboxBox = await listbox.boundingBox();
+    expect(triggerBox).not.toBeNull();
+    expect(listboxBox).not.toBeNull();
 
-		const triggerBottom =
-			( triggerBox as { y: number; height: number } ).y +
-			( triggerBox as { y: number; height: number } ).height;
-		expect(
-			( listboxBox as { y: number } ).y,
-			`listbox top ${ ( listboxBox as { y: number } ).y } must sit below trigger bottom ${ triggerBottom }`
-		).toBeGreaterThanOrEqual( triggerBottom );
-	} );
-} );
+    const triggerBottom =
+      (triggerBox as { y: number; height: number }).y +
+      (triggerBox as { y: number; height: number }).height;
+    expect(
+      (listboxBox as { y: number }).y,
+      `listbox top ${(listboxBox as { y: number }).y} must sit below trigger bottom ${triggerBottom}`,
+    ).toBeGreaterThanOrEqual(triggerBottom);
+  });
+});

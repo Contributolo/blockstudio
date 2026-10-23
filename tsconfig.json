@@ -2,7 +2,6 @@
   "compilerOptions": {
     "allowImportingTsExtensions": true,
     "allowSyntheticDefaultImports": true,
-    "baseUrl": "./src",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
@@ -15,12 +14,12 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "paths": {
-      "@/blocks*": ["blocks/*"],
-      "@/components*": ["components/*"],
-      "@/const*": ["const/*"],
-      "@/tailwind*": ["tailwind/*"],
-      "@/types*": ["types/*"],
-      "@/utils*": ["utils/*"]
+      "@/blocks/*": ["./src/blocks/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/const/*": ["./src/const/*"],
+      "@/tailwind/*": ["./src/tailwind/*"],
+      "@/types/*": ["./src/types/*"],
+      "@/utils/*": ["./src/utils/*"]
     },
     "resolveJsonModule": true,
     "skipLibCheck": true,
@@ -30,5 +29,5 @@
     "types": ["node", "@emotion/react/types/css-prop"]
   },
   "include": ["./src", "./tests/**/*.ts"],
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules", "dist", "src/ui", "src/runtime"]
 }

@@ -36,7 +36,7 @@ test.describe('DB Meta Storage', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce }
+      { route: ROUTE, nonce },
     );
     expect(r.s).toBe(200);
     expect(r.b.key).toBe('color');
@@ -54,7 +54,7 @@ test.describe('DB Meta Storage', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce, id }
+      { route: ROUTE, nonce, id },
     );
     expect(r.s).toBe(200);
     expect(r.b.key).toBe('color');
@@ -69,7 +69,7 @@ test.describe('DB Meta Storage', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce }
+      { route: ROUTE, nonce },
     );
     expect(r.s).toBe(200);
     expect(Array.isArray(r.b)).toBe(true);
@@ -85,7 +85,7 @@ test.describe('DB Meta Storage', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce }
+      { route: ROUTE, nonce },
     );
     expect(r.s).toBe(200);
     expect(r.b.every((row: any) => row.key === 'color')).toBe(true);
@@ -101,7 +101,7 @@ test.describe('DB Meta Storage', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce, id }
+      { route: ROUTE, nonce, id },
     );
     expect(r.s).toBe(200);
     expect(r.b.value).toBe('red');
@@ -117,7 +117,7 @@ test.describe('DB Meta Storage', () => {
         });
         return { s: res.status, b: await res.json() };
       },
-      { route: ROUTE, nonce, id }
+      { route: ROUTE, nonce, id },
     );
     expect(r.s).toBe(200);
     expect(r.b.deleted).toBe(true);
@@ -132,7 +132,7 @@ test.describe('DB Meta Storage', () => {
         });
         return res.status;
       },
-      { route: ROUTE, nonce, id }
+      { route: ROUTE, nonce, id },
     );
     expect(r).toBe(404);
   });

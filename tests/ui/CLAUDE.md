@@ -1,15 +1,18 @@
 # Blockstudio UI
 
-Headless UI component library for WordPress, built entirely on the Interactivity API. 60 components ported from [Base UI](https://base-ui.com). Component source lives in `includes/ui`; this test harness enables the bundled UI feature from the theme's `blockstudio.json`.
+Headless UI component library for WordPress, built entirely on the Interactivity API. 60 components ported from [Base UI](https://base-ui.com). PHP/CSS source lives in `includes/ui`, TypeScript behavior in `src/ui`. Run `npm run build:runtime` from the repository root after behavior changes. This test harness enables the bundled UI feature from the theme's `blockstudio.json`.
 
 ## Quick Reference
+
+All browser tests and screenshot automation below are CI-only. Do not run E2E
+locally. Use focused non-E2E tests, types, lint and builds locally.
 
 ```bash
 npm run wp-env:start                        # Start wp-env and activate the UI theme (port 8879)
 npm test                                    # Run all Playwright tests (493 tests)
 npm test -- --grep "tabs"                   # Run specific tests
 npx playwright test tests/ui/tabs.spec.ts --config=playwright.config.ts  # Run one file
-node screenshots.mjs                        # Capture component screenshots
+node screenshots.ts                         # Capture component screenshots (CI only)
 ```
 
 ## Project Structure
@@ -36,9 +39,9 @@ tests/ui/
 
 ```json
 {
-	"ui": {
-		"enabled": true
-	}
+  "ui": {
+    "enabled": true
+  }
 }
 ```
 
@@ -81,19 +84,26 @@ Without `"supports": { "interactivity": true }`, WordPress core will NOT process
 JS getters like `get isUserMessage() { return getContext().msg.role === 'user' }` cannot be evaluated server-side. WordPress can only SSR direct state/context values.
 
 **Bad** (getter, will not SSR):
+
 ```html
-<div data-wp-class--chat-msg-user="state.isUserMessage">
+<div data-wp-class--chat-msg-user="state.isUserMessage"></div>
 ```
 
 **Good** (direct context value, SSRs correctly):
+
 ```html
-<div data-wp-bind--data-role="context.msg.role">
+<div data-wp-bind--data-role="context.msg.role"></div>
 ```
 
 Then use CSS attribute selectors instead of class-based selectors:
+
 ```css
-[data-role="user"] { justify-content: flex-end; }
-[data-role="assistant"] { justify-content: flex-start; }
+[data-role='user'] {
+  justify-content: flex-end;
+}
+[data-role='assistant'] {
+  justify-content: flex-start;
+}
 ```
 
 ### PHP state values for SSR, JS getters for client-side
@@ -134,11 +144,13 @@ $chats_with_active = array_map( function ( $chat ) use ( $current_chat_id ) {
 ```
 
 ```html
-<div data-wp-bind--data-active="context.chat.active">
+<div data-wp-bind--data-active="context.chat.active"></div>
 ```
 
 ```css
-[data-active="true"] { background: var(--bs-ui-accent); }
+[data-active='true'] {
+  background: var(--bs-ui-accent);
+}
 ```
 
 ### Links work without JS
@@ -146,7 +158,11 @@ $chats_with_active = array_map( function ( $chat ) use ( $current_chat_id ) {
 Add URL fields to state items in PHP. Use `href="#"` with `data-wp-bind--href` so SSR resolves the real URL and the link works without JS. `event.preventDefault()` in the JS action prevents navigation when JS is available.
 
 ```html
-<bs:bsui-button href="#" data-wp-bind--href="context.chat.url" data-wp-on--click="actions.selectChat" />
+<bs:bsui-button
+  href="#"
+  data-wp-bind--href="context.chat.url"
+  data-wp-on--click="actions.selectChat"
+/>
 ```
 
 ### Cross-namespace component reuse
@@ -156,7 +172,7 @@ When rendering a sub-block inside another component's namespace (e.g. sidebar in
 ```html
 <!-- header/index.php: sidebar rendered inside bsui/drawer -->
 <bs:bsui-drawer-popup flush="true">
-    <bs:app-chat-sidebar />
+  <bs:app-chat-sidebar />
 </bs:bsui-drawer-popup>
 ```
 
@@ -178,10 +194,10 @@ Page template composes children:
 
 ```html
 <block name="app/chat">
-    <block name="app/chat-sidebar"></block>
-    <block name="app/chat-header"></block>
-    <block name="app/chat-messages"></block>
-    <block name="app/chat-input"></block>
+  <block name="app/chat-sidebar"></block>
+  <block name="app/chat-header"></block>
+  <block name="app/chat-messages"></block>
+  <block name="app/chat-input"></block>
 </block>
 ```
 
@@ -190,7 +206,9 @@ Page template composes children:
 Blockstudio wraps InnerBlocks in a `<div>`. Add `display: contents` so the wrapper does not break CSS grid/flex layouts:
 
 ```css
-[data-app-chat] > div { display: contents; }
+[data-app-chat] > div {
+  display: contents;
+}
 ```
 
 ### Drawer flush prop
@@ -273,10 +291,10 @@ Frontend tests hit the page URL directly. Editor tests log into wp-admin, open t
 
 ### Test directories
 
-| Directory | What it tests |
-|-----------|--------------|
-| `tests/ui/` | Individual components (tabs, dialog, select, etc.) |
-| `tests/interactions/` | Multi-component scenarios |
+| Directory             | What it tests                                      |
+| --------------------- | -------------------------------------------------- |
+| `tests/ui/`           | Individual components (tabs, dialog, select, etc.) |
+| `tests/interactions/` | Multi-component scenarios                          |
 
 ### Running tests
 
@@ -304,6 +322,7 @@ Global tokens in `blocks/global-style.css`. All variables use `--bs-ui-*` prefix
 ## Comment Policy
 
 Same as parent repo:
+
 - No JSDoc internally, comments only for why not what
 - No banner comments (no `// ==========` separators)
 - No em dashes in code, docs, or copy

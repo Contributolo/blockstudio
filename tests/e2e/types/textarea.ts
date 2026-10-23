@@ -16,7 +16,7 @@ testType('textarea', '"textarea":"Default value"', () => {
       testFunction: async (page: Page, canvas: Frame) => {
         await canvas.click('[data-type="blockstudio/type-textarea"]');
         await expect(
-          page.locator('.blockstudio-fields__field--textarea textarea').nth(0)
+          page.locator('.blockstudio-fields__field--textarea textarea').nth(0),
         ).toHaveValue('100');
       },
     },

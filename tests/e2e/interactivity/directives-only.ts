@@ -26,28 +26,41 @@ test.describe('interactivity: directives only', () => {
 
   test('save and reload editor', async () => {
     await save(page);
-    await page.goto('http://localhost:8888/wp-admin/post.php?post=1483&action=edit', { waitUntil: 'domcontentloaded' });
+    await page.goto(
+      'http://localhost:8888/wp-admin/post.php?post=1483&action=edit',
+      { waitUntil: 'domcontentloaded' },
+    );
     const canvas = await getEditorCanvas(page);
-    await canvas.locator('[data-wp-interactive="blockstudioDirectives"]').waitFor({ state: 'visible', timeout: 30000 });
+    await canvas
+      .locator('[data-wp-interactive="blockstudioDirectives"]')
+      .waitFor({ state: 'visible', timeout: 30000 });
   });
 
   test('editor: visible content is visible', async () => {
     const canvas = await getEditorCanvas(page);
-    await expect(canvas.locator('#visible-content')).toBeVisible({ timeout: 10000 });
+    await expect(canvas.locator('#visible-content')).toBeVisible({
+      timeout: 10000,
+    });
   });
 
   test('editor: hidden content is hidden', async () => {
     const canvas = await getEditorCanvas(page);
-    await expect(canvas.locator('#hidden-content')).toBeHidden({ timeout: 10000 });
+    await expect(canvas.locator('#hidden-content')).toBeHidden({
+      timeout: 10000,
+    });
   });
 
   test('editor: context label renders', async () => {
     const canvas = await getEditorCanvas(page);
-    await expect(canvas.locator('#context-label')).toHaveText('Context value', { timeout: 10000 });
+    await expect(canvas.locator('#context-label')).toHaveText('Context value', {
+      timeout: 10000,
+    });
   });
 
   test('visit frontend', async () => {
-    await page.goto('http://localhost:8888/?p=1483', { waitUntil: 'domcontentloaded' });
+    await page.goto('http://localhost:8888/?p=1483', {
+      waitUntil: 'domcontentloaded',
+    });
     await page.waitForLoadState('networkidle');
   });
 

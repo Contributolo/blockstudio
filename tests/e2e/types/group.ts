@@ -11,11 +11,11 @@ testType(
         testFunction: async (page: Page, canvas: Frame) => {
           await page.fill(
             '.blockstudio-fields__field.blockstudio-fields__field--group input[type="text"]',
-            'test'
+            'test',
           );
           await text(
             canvas,
-            '"text":"test","toggle":false,"toggle2":false,"group_text":"Override ID test","group_toggle3":false,"group_toggle4":false,"group_text1":false,"group_text2":false,"addedText":"Added test"'
+            '"text":"test","toggle":false,"toggle2":false,"group_text":"Override ID test","group_toggle3":false,"group_toggle4":false,"group_text1":false,"group_text2":false,"addedText":"Added test"',
           );
         },
       },
@@ -23,11 +23,11 @@ testType(
         description: 'condition without id',
         testFunction: async (page: Page, canvas: Frame) => {
           await page.check(
-            '.blockstudio-fields__field.blockstudio-fields__field--group input[type="checkbox"]'
+            '.blockstudio-fields__field.blockstudio-fields__field--group input[type="checkbox"]',
           );
           await text(
             canvas,
-            '"text":"test","toggle":true,"toggle2":false,"group_text":"Override ID test","group_toggle3":false,"group_toggle4":false,"group_text1":false,"group_text2":false,"addedText":"Added test"'
+            '"text":"test","toggle":true,"toggle2":false,"group_text":"Override ID test","group_toggle3":false,"group_toggle4":false,"group_text1":false,"group_text2":false,"addedText":"Added test"',
           );
           await count(page, 'text=Toggle 2', 1);
         },
@@ -37,13 +37,13 @@ testType(
         testFunction: async (page: Page, canvas: Frame) => {
           await page
             .locator(
-              '.blockstudio-fields__field.blockstudio-fields__field--group input[type="text"]'
+              '.blockstudio-fields__field.blockstudio-fields__field--group input[type="text"]',
             )
             .nth(1)
             .fill('test');
           await text(
             canvas,
-            '"text":"test","toggle":true,"toggle2":false,"group_text":"test","group_toggle3":false,"group_toggle4":false,"group_text1":false,"group_text2":false,"addedText":"Added test"'
+            '"text":"test","toggle":true,"toggle2":false,"group_text":"test","group_toggle3":false,"group_toggle4":false,"group_text1":false,"group_text2":false,"addedText":"Added test"',
           );
         },
       },
@@ -52,13 +52,13 @@ testType(
         testFunction: async (page: Page, canvas: Frame) => {
           await page
             .locator(
-              '.blockstudio-fields__field.blockstudio-fields__field--group input[type="checkbox"]'
+              '.blockstudio-fields__field.blockstudio-fields__field--group input[type="checkbox"]',
             )
             .nth(2)
             .check();
           await text(
             canvas,
-            '"text":"test","toggle":true,"toggle2":false,"group_text":"test","group_toggle3":true,"group_toggle4":false,"group_text1":false,"group_text2":false,"addedText":"Added test"'
+            '"text":"test","toggle":true,"toggle2":false,"group_text":"test","group_toggle3":true,"group_toggle4":false,"group_text1":false,"group_text2":false,"addedText":"Added test"',
           );
           await count(page, 'text=Toggle 4', 1);
         },
@@ -68,13 +68,13 @@ testType(
         testFunction: async (page: Page, canvas: Frame) => {
           await page
             .locator(
-              '.blockstudio-fields__field.blockstudio-fields__field--group input[type="text"]'
+              '.blockstudio-fields__field.blockstudio-fields__field--group input[type="text"]',
             )
             .nth(4)
             .fill('test');
           await text(
             canvas,
-            '"text":"test","toggle":true,"toggle2":false,"group_text":"test","group_toggle3":true,"group_toggle4":false,"group_text1":false,"group_text2":false,"addedText":"test"'
+            '"text":"test","toggle":true,"toggle2":false,"group_text":"test","group_toggle3":true,"group_toggle4":false,"group_text1":false,"group_text2":false,"addedText":"test"',
           );
         },
       },
@@ -83,7 +83,7 @@ testType(
         testFunction: async (page: Page, _canvas: Frame) => {
           await text(
             page,
-            'style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;"'
+            'style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;"',
           );
         },
       },
@@ -93,10 +93,10 @@ testType(
           await count(
             page,
             '.blockstudio-fields__field--group >> nth=2 .blockstudio-fields__field-toggle',
-            0
+            0,
           );
         },
       },
     ];
-  }
+  },
 );

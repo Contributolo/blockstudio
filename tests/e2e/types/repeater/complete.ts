@@ -7,7 +7,10 @@ testType('repeater-complete', false, () => {
       description: 'check repeater values',
       testFunction: async (_page: Page, canvas: Frame) => {
         await text(canvas, '"checkbox":[{"value":"three","label":"Three"}]');
-        await text(canvas, '"color":{"name":"red","value":"#f00","slug":"red"}');
+        await text(
+          canvas,
+          '"color":{"name":"red","value":"#f00","slug":"red"}',
+        );
         await text(canvas, '"text":"Default value"');
         await text(canvas, '"toggle":true');
         await text(canvas, '"number":10');

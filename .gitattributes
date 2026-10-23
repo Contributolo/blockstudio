@@ -10,7 +10,9 @@
 /.github/ export-ignore
 /.gitattributes export-ignore
 /.gitignore export-ignore
-/.prettierrc.json export-ignore
+/.nvmrc export-ignore
+/.oxlintrc.json export-ignore
+/oxfmt.config.ts export-ignore
 /.wp-env.json export-ignore
 /CLAUDE.md export-ignore
 /_homepage_reference/ export-ignore
@@ -20,13 +22,12 @@
 /build.sh export-ignore
 /composer.lock export-ignore
 /docs/ export-ignore
-/eslint.config.mjs export-ignore
 /node_modules/ export-ignore
 /package.json export-ignore
 /package-lock.json export-ignore
 /phpcs.xml export-ignore
 /playwright.config.ts export-ignore
-/playwright.wp-env.config.ts export-ignore
+/playwright.wp-env*.config.ts export-ignore
 /playwright-report/ export-ignore
 /potential-features/ export-ignore
 /scoper.inc.php export-ignore
@@ -34,8 +35,8 @@
 /src/ export-ignore
 /test-results/ export-ignore
 /tests/ export-ignore
-/tsconfig.json export-ignore
+/tsconfig*.json export-ignore
 /ui/ export-ignore
-/webpack.config.cjs export-ignore
+/webpack.config.ts export-ignore
 /composer.json export-ignore
 /evals/ export-ignore

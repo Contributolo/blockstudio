@@ -1,4 +1,4 @@
-import type { ResolvedBlock } from "./resolver.js";
+import type { ResolvedBlock } from './resolver.js';
 
 export type DownloadedFile = {
   path: string;
@@ -14,9 +14,10 @@ export async function downloadBlock(
   block: ResolvedBlock,
 ): Promise<DownloadedBlock> {
   const files: DownloadedFile[] = [];
-  const fetchOpts = block.headers && Object.keys(block.headers).length > 0
-    ? { headers: block.headers }
-    : undefined;
+  const fetchOpts =
+    block.headers && Object.keys(block.headers).length > 0
+      ? { headers: block.headers }
+      : undefined;
 
   for (const file of block.files) {
     const url = `${block.registryBaseUrl}/${block.name}/${file}`;

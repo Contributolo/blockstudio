@@ -17,10 +17,18 @@ testType(
         testFunction: async (page: Page, canvas: Frame) => {
           await canvas.click('[data-type="blockstudio/type-fields-overrides"]');
           await expect(
-            page.locator('.blockstudio-fields__field--text .components-base-control__label').first()
+            page
+              .locator(
+                '.blockstudio-fields__field--text .components-base-control__label',
+              )
+              .first(),
           ).toHaveText('Title');
           await expect(
-            page.locator('.blockstudio-fields__field--textarea .components-base-control__label').first()
+            page
+              .locator(
+                '.blockstudio-fields__field--textarea .components-base-control__label',
+              )
+              .first(),
           ).toHaveText('Subtitle');
         },
       },
@@ -31,5 +39,5 @@ testType(
         },
       },
     ];
-  }
+  },
 );

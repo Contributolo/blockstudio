@@ -1,30 +1,35 @@
-import { useState, useEffect, useRef } from "react";
-import { Box, Text, Static, useApp } from "ink";
-import { loadConfig } from "../config/loader.js";
-import type { Config, Registry } from "../config/schema.js";
-import { resolveRegistryRef } from "../config/schema.js";
-import { fetchRegistry, clearCache } from "../registry/fetcher.js";
+import { useState, useEffect, useRef } from 'react';
+import { Box, Text, Static, useApp } from 'ink';
+import { loadConfig } from '../config/loader.js';
+import type { Registry } from '../config/schema.js';
+import { resolveRegistryRef } from '../config/schema.js';
+import { fetchRegistry, clearCache } from '../registry/fetcher.js';
 import {
   resolveBlock,
   findBlockAcrossRegistries,
   type RegistryMatch,
-  type ResolvedBlock,
-} from "../registry/resolver.js";
-import { downloadBlocks } from "../registry/downloader.js";
-import { writeBlocks, exists } from "../utils/fs.js";
-import { getTargetDir, getBlockDir } from "../utils/paths.js";
-import { parseBlockArg } from "../commands/add.js";
-import { Loading, Success, ErrorMessage, Select, Confirm } from "./components.js";
+} from '../registry/resolver.js';
+import { downloadBlocks } from '../registry/downloader.js';
+import { writeBlocks, exists } from '../utils/fs.js';
+import { getTargetDir, getBlockDir } from '../utils/paths.js';
+import { parseBlockArg } from '../commands/add.js';
+import {
+  Loading,
+  Success,
+  ErrorMessage,
+  Select,
+  Confirm,
+} from './components.js';
 
 type CompletedStep = { key: string; message: string };
 
 type Phase =
-  | { type: "loading" }
-  | { type: "conflict"; blockName: string; matches: RegistryMatch[] }
-  | { type: "confirm-overwrite"; blockName: string; blockDir: string }
-  | { type: "downloading"; blockName: string }
-  | { type: "done" }
-  | { type: "error"; message: string };
+  | { type: 'loading' }
+  | { type: 'conflict'; blockName: string; matches: RegistryMatch[] }
+  | { type: 'confirm-overwrite'; blockName: string; blockDir: string }
+  | { type: 'downloading'; blockName: string }
+  | { type: 'done' }
+  | { type: 'error'; message: string };
 
 export function AddApp({
   blockArgs,
@@ -34,7 +39,7 @@ export function AddApp({
   cwd: string;
 }) {
   const { exit } = useApp();
-  const [phase, setPhase] = useState<Phase>({ type: "loading" });
+  const [phase, setPhase] = useState<Phase>({ type: 'loading' });
   const [steps, setSteps] = useState<CompletedStep[]>([]);
 
   const conflictResolve = useRef<(m: RegistryMatch) => void>();
@@ -56,7 +61,7 @@ export function AddApp({
 
       const registryNames = Object.keys(config.registries);
       if (registryNames.length === 0) {
-        throw new Error("No registries configured in blocks.json.");
+        throw new Error('No registries configured in blocks.json.');
       }
 
       const registries = new Map<string, Registry>();
@@ -69,7 +74,7 @@ export function AddApp({
         }
       }
 
-      addStep("Registries loaded");
+      addStep('Registries loaded');
 
       for (const arg of blockArgs) {
         const { namespace, name } = parseBlockArg(arg);
@@ -87,7 +92,11 @@ export function AddApp({
             throw new Error(`Block "${name}" not found in "${namespace}".`);
           }
         } else {
-          const matches = findBlockAcrossRegistries(name, registries, headersMap);
+          const matches = findBlockAcrossRegistries(
+            name,
+            registries,
+            headersMap,
+          );
 
           if (matches.length === 0) {
             throw new Error(`Block "${name}" not found in any registry.`);
@@ -99,7 +108,7 @@ export function AddApp({
           } else {
             match = await new Promise<RegistryMatch>((resolve) => {
               conflictResolve.current = resolve;
-              setPhase({ type: "conflict", blockName: name, matches });
+              setPhase({ type: 'conflict', blockName: name, matches });
             });
           }
 
@@ -107,7 +116,12 @@ export function AddApp({
           registry = registries.get(registryName)!;
         }
 
-        const resolved = resolveBlock(name, registry, registryName, headersMap.get(registryName));
+        const resolved = resolveBlock(
+          name,
+          registry,
+          registryName,
+          headersMap.get(registryName),
+        );
 
         for (const block of resolved) {
           const blockDir = getBlockDir(config, configDir, block.name);
@@ -115,7 +129,7 @@ export function AddApp({
             const overwrite = await new Promise<boolean>((resolve) => {
               overwriteResolve.current = resolve;
               setPhase({
-                type: "confirm-overwrite",
+                type: 'confirm-overwrite',
                 blockName: block.name,
                 blockDir,
               });
@@ -128,7 +142,7 @@ export function AddApp({
           }
         }
 
-        setPhase({ type: "downloading", blockName: name });
+        setPhase({ type: 'downloading', blockName: name });
         const downloaded = await downloadBlocks(resolved);
         const written = await writeBlocks(downloaded, targetDir);
 
@@ -137,10 +151,10 @@ export function AddApp({
         }
       }
 
-      setPhase({ type: "done" });
+      setPhase({ type: 'done' });
       setTimeout(() => exit(), 100);
     } catch (e: any) {
-      setPhase({ type: "error", message: e.message });
+      setPhase({ type: 'error', message: e.message });
       setTimeout(() => exit(e), 100);
     }
   }
@@ -151,13 +165,13 @@ export function AddApp({
         {(step) => <Success key={step.key} message={step.message} />}
       </Static>
 
-      {phase.type === "loading" && <Loading message="Loading registries..." />}
+      {phase.type === 'loading' && <Loading message="Loading registries..." />}
 
-      {phase.type === "conflict" && (
+      {phase.type === 'conflict' && (
         <Select
           message={`"${phase.blockName}" found in multiple registries:`}
           items={phase.matches.map((m) => ({
-            label: `${m.registryName}/${m.block.name}${m.block.title ? ` - ${m.block.title}` : ""}`,
+            label: `${m.registryName}/${m.block.name}${m.block.title ? ` - ${m.block.title}` : ''}`,
             value: m.registryName,
           }))}
           onSelect={(registryName) => {
@@ -169,27 +183,27 @@ export function AddApp({
         />
       )}
 
-      {phase.type === "confirm-overwrite" && (
+      {phase.type === 'confirm-overwrite' && (
         <Confirm
           message={`${phase.blockName} already exists. Overwrite?`}
           onConfirm={(yes) => overwriteResolve.current?.(yes)}
         />
       )}
 
-      {phase.type === "downloading" && (
+      {phase.type === 'downloading' && (
         <Loading message={`Downloading ${phase.blockName}...`} />
       )}
 
-      {phase.type === "done" && (
+      {phase.type === 'done' && (
         <Text>
-          {"\n"}
+          {'\n'}
           <Text color="green" bold>
             Done!
           </Text>
         </Text>
       )}
 
-      {phase.type === "error" && <ErrorMessage message={phase.message} />}
+      {phase.type === 'error' && <ErrorMessage message={phase.message} />}
     </Box>
   );
 }

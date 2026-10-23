@@ -9,8 +9,9 @@ import {
 
 const injectedSelectorAssetStyles = async (canvas: Frame) =>
   canvas.evaluate(() => {
-    return Array.from(document.querySelectorAll('style[id^="blockstudio-"]'))
-      .filter((style) => style.textContent?.includes('background: black'))
+    return Array.from(
+      document.querySelectorAll('style[id^="blockstudio-"]'),
+    ).filter((style) => style.textContent?.includes('background: black'))
       .length;
   });
 
@@ -23,26 +24,28 @@ testType('code-selector-asset', false, () => {
           canvas,
           '[data-type="blockstudio/type-code-selector-asset"]',
           'backgroundColor',
-          'rgb(0, 0, 0)'
+          'rgb(0, 0, 0)',
         );
-        await canvas.click('[data-type="blockstudio/type-code-selector-asset"]');
+        await canvas.click(
+          '[data-type="blockstudio/type-code-selector-asset"]',
+        );
         await page.click('.cm-line');
         await page.keyboard.press('ControlOrMeta+A');
         await page.keyboard.press('Backspace');
         await page.keyboard.type(
-          '%selector% { background: black; } %selector% h1 { color: yellow !important; }'
+          '%selector% { background: black; } %selector% h1 { color: yellow !important; }',
         );
         await checkStyle(
           canvas,
           '[data-type="blockstudio/type-code-selector-asset"]',
           'backgroundColor',
-          'rgb(0, 0, 0)'
+          'rgb(0, 0, 0)',
         );
         await checkStyle(
           canvas,
           '[data-type="blockstudio/type-code-selector-asset"] h1',
           'color',
-          'rgb(255, 255, 0)'
+          'rgb(255, 255, 0)',
         );
         await saveAndReload(page);
       },
@@ -54,13 +57,13 @@ testType('code-selector-asset', false, () => {
           canvas,
           '[data-type="blockstudio/type-code-selector-asset"]',
           'backgroundColor',
-          'rgb(0, 0, 0)'
+          'rgb(0, 0, 0)',
         );
         await checkStyle(
           canvas,
           '[data-type="blockstudio/type-code-selector-asset"] h1',
           'color',
-          'rgb(255, 255, 0)'
+          'rgb(255, 255, 0)',
         );
       },
     },
@@ -72,16 +75,16 @@ testType('code-selector-asset', false, () => {
           page,
           '.blockstudio-test__block',
           'backgroundColor',
-          'rgb(0, 0, 0)'
+          'rgb(0, 0, 0)',
         );
         await checkStyle(
           page,
           '.blockstudio-test__block h1',
           'color',
-          'rgb(255, 255, 0)'
+          'rgb(255, 255, 0)',
         );
         await page.goto(
-          `http://localhost:8888/wp-admin/post.php?post=1483&action=edit`
+          `http://localhost:8888/wp-admin/post.php?post=1483&action=edit`,
         );
         await page.reload();
         await getEditorCanvas(page);

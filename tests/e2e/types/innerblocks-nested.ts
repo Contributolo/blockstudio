@@ -7,7 +7,9 @@ testType('nested-template', false, () => {
       description: 'nested children render inside group',
       testFunction: async (_page: Page, canvas: Frame) => {
         await delay(3000);
-        await expect(canvas.locator('[data-type="core/heading"]')).toBeVisible({ timeout: 10000 });
+        await expect(canvas.locator('[data-type="core/heading"]')).toBeVisible({
+          timeout: 10000,
+        });
         const group = canvas.locator('[data-type="core/group"]');
         await expect(group).toBeVisible({ timeout: 10000 });
         const nestedParagraph = group.locator('[data-type="core/paragraph"]');

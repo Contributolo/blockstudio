@@ -26,5 +26,5 @@ testType(
       },
     ];
   },
-  false
+  false,
 );

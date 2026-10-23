@@ -16,7 +16,7 @@ testType('blade', '"text":"Default value"', () => {
       testFunction: async (page: Page, canvas: Frame) => {
         await canvas.click('[data-type="blockstudio/type-blade"]');
         await expect(
-          page.locator('.blockstudio-fields__field--text input').nth(0)
+          page.locator('.blockstudio-fields__field--text input').nth(0),
         ).toHaveValue('100');
       },
     },

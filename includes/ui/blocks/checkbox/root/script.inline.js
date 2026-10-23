@@ -1,33 +1,40 @@
+// Generated from src/ui/checkbox/root/script.inline.ts. Run npm run build:runtime; do not edit.
 import { store, getContext, getElement } from '@wordpress/interactivity';
-
-store( 'bsui/checkbox', {
-	state: {
-		get ariaChecked() {
-			const ctx = getContext();
-			if ( ctx.indeterminate ) return 'mixed';
-			return ctx.checked ? 'true' : 'false';
-		},
-		get formValue() {
-			const ctx = getContext();
-			const bound = window.__bsui.resolveBinding( ctx.checkedBinding, 'bsui/checkbox', getContext, store );
-			if ( ctx.indeterminate && bound === undefined ) return '';
-			return ( bound === undefined ? ctx.checked : bound ) ? ( ctx.value || 'on' ) : '';
-		},
-	},
-	actions: {
-		toggle() {
-			const ctx = getContext();
-			if ( ctx.disabled ) return;
-			if ( ctx.indeterminate ) {
-				ctx.indeterminate = false;
-				ctx.checked = true;
-			} else {
-				ctx.checked = ! ctx.checked;
-			}
-			const { ref } = getElement();
-			ref.closest( '[data-bsui-checkbox]' )?.dispatchEvent(
-				new CustomEvent( 'change', { bubbles: true, detail: { value: ctx.checked } } )
-			);
-		},
-	},
-} );
+store('bsui/checkbox', {
+    state: {
+        get ariaChecked() {
+            const ctx = getContext();
+            if (ctx.indeterminate)
+                return 'mixed';
+            return ctx.checked ? 'true' : 'false';
+        },
+        get formValue() {
+            const ctx = getContext();
+            const bound = window.__bsui.resolveBinding(ctx.checkedBinding, 'bsui/checkbox', getContext, store);
+            if (ctx.indeterminate && bound === undefined)
+                return '';
+            return (bound === undefined ? ctx.checked : bound)
+                ? ctx.value || 'on'
+                : '';
+        },
+    },
+    actions: {
+        toggle() {
+            const ctx = getContext();
+            if (ctx.disabled)
+                return;
+            if (ctx.indeterminate) {
+                ctx.indeterminate = false;
+                ctx.checked = true;
+            }
+            else {
+                ctx.checked = !ctx.checked;
+            }
+            const { ref } = getElement();
+            ref.closest('[data-bsui-checkbox]')?.dispatchEvent(new CustomEvent('change', {
+                bubbles: true,
+                detail: { value: ctx.checked },
+            }));
+        },
+    },
+});

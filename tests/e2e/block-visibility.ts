@@ -28,7 +28,9 @@ test.describe('Block visibility (issue #26)', () => {
     const canvas = await getEditorCanvas(page);
     await canvas.waitForSelector('.editor-styles-wrapper', { timeout: 30000 });
 
-    const modalClose = page.locator('.components-modal__header button[aria-label="Close"]');
+    const modalClose = page.locator(
+      '.components-modal__header button[aria-label="Close"]',
+    );
     if (await modalClose.isVisible({ timeout: 2000 }).catch(() => false)) {
       await modalClose.click();
     }
@@ -38,14 +40,18 @@ test.describe('Block visibility (issue #26)', () => {
     await page.locator('button[aria-label="Document Overview"]').click();
     await page.waitForTimeout(500);
 
-    const listBlock = page.locator('.block-editor-list-view-block-select-button').first();
+    const listBlock = page
+      .locator('.block-editor-list-view-block-select-button')
+      .first();
     await listBlock.click();
     await page.waitForTimeout(500);
 
     const hiddenToggle = page.locator(
       '.block-editor-block-toolbar button[aria-label="Hidden"]',
     );
-    const hasToggle = await hiddenToggle.isVisible({ timeout: 3000 }).catch(() => false);
+    const hasToggle = await hiddenToggle
+      .isVisible({ timeout: 3000 })
+      .catch(() => false);
 
     if (hasToggle) {
       await hiddenToggle.click();
@@ -72,9 +78,9 @@ test.describe('Block visibility (issue #26)', () => {
     await page.locator('button[aria-label="Document Overview"]').click();
     await page.waitForTimeout(500);
 
-    const codeElement = canvas.locator(
-      '.blockstudio-block.wp-block-blockstudio-type-text code',
-    ).first();
+    const codeElement = canvas
+      .locator('.blockstudio-block.wp-block-blockstudio-type-text code')
+      .first();
 
     await expect(codeElement).toBeVisible({ timeout: 15000 });
 

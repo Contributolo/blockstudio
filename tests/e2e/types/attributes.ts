@@ -44,7 +44,7 @@ testType('attributes', false, () => {
         await clickVisibleMenuItem('Insert Link');
         await page.fill(
           '[placeholder="Search or type URL"]',
-          'https://google.com'
+          'https://google.com',
         );
         await page.keyboard.press('Enter');
         await page.click('.components-modal__header [aria-label="Close"]');
@@ -65,11 +65,7 @@ testType('attributes', false, () => {
           timeout: 30000,
         });
         const browseTab = page.locator('#menu-item-browse');
-        if (
-          await browseTab
-            .isVisible({ timeout: 5000 })
-            .catch(() => false)
-        ) {
+        if (await browseTab.isVisible({ timeout: 5000 }).catch(() => false)) {
           await browseTab.click();
         }
         await page.locator('.attachments-browser').waitFor({
@@ -88,7 +84,7 @@ testType('attributes', false, () => {
         await attachment.click();
         await expect(attachment).toHaveClass(/selected/);
         const selectButton = page.locator(
-          '.media-frame-toolbar button.media-button-select:visible'
+          '.media-frame-toolbar button.media-button-select:visible',
         );
         await expect(selectButton).toBeEnabled();
         await selectButton.click();
@@ -121,7 +117,9 @@ testType('attributes', false, () => {
         await clickVisibleMenuItem('Delete');
         await delay(500);
 
-        const blockContent = await canvas.locator('[data-type="blockstudio/type-attributes"]').innerHTML();
+        const blockContent = await canvas
+          .locator('[data-type="blockstudio/type-attributes"]')
+          .innerHTML();
         expect(blockContent).not.toContain('null');
       },
     },
@@ -133,7 +131,7 @@ testType('attributes', false, () => {
         await page.goto('http://localhost:8888/native-single');
         await count(page, '[data-test="test"]', 1);
         await page.goto(
-          `http://localhost:8888/wp-admin/post.php?post=1483&action=edit`
+          `http://localhost:8888/wp-admin/post.php?post=1483&action=edit`,
         );
         await page.reload();
         await getEditorCanvas(page);

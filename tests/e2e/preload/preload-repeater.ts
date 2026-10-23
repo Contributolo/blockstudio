@@ -44,9 +44,11 @@ test.describe('Preload Repeater Fields', () => {
         if (!bs?.blockstudioBlocks) return false;
         const blocks = bs.blockstudioBlocks;
         const entries = Array.isArray(blocks) ? blocks : Object.values(blocks);
-        return (entries as any[]).filter(
-          (e: any) => e.blockName === 'blockstudio/type-preload-repeater',
-        ).length === 2;
+        return (
+          (entries as any[]).filter(
+            (e: any) => e.blockName === 'blockstudio/type-preload-repeater',
+          ).length === 2
+        );
       },
       { timeout: 30000 },
     );
@@ -84,7 +86,9 @@ test.describe('Preload Repeater Fields', () => {
     const texts = await items.locator('.preload-item-text').allTextContents();
     expect(texts).toEqual(['Alpha', 'Beta']);
 
-    const numbers = await items.locator('.preload-item-number').allTextContents();
+    const numbers = await items
+      .locator('.preload-item-number')
+      .allTextContents();
     expect(numbers).toEqual(['10', '20']);
   });
 

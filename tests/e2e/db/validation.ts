@@ -33,7 +33,7 @@ const post = async (data: any) => {
       });
       return { s: res.status, b: await res.json() };
     },
-    { route: ROUTE, nonce, data }
+    { route: ROUTE, nonce, data },
   );
 };
 

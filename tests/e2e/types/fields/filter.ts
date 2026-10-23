@@ -13,7 +13,9 @@ testType(['fields filter', 'fields-filter'], '"text":"Click Me"', () => {
       description: 'change filter field value',
       testFunction: async (page: Page, canvas: Frame) => {
         await canvas.click('[data-type="blockstudio/type-fields-filter"]');
-        const input = page.locator('.blockstudio-fields__field--text input').first();
+        const input = page
+          .locator('.blockstudio-fields__field--text input')
+          .first();
         await input.fill('Sign Up');
         await saveAndReload(page);
       },

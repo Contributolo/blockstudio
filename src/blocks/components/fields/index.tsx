@@ -528,13 +528,13 @@ export const Fields = ({
 
     if (portal && item.type === 'code') {
       return (
-          <CodeAssets
-            {...textProps()}
-            {...{ clientId, extensions, repeaterId }}
-            properties={props}
-            item={item}
-            inRepeater={repeaterId !== ''}
-          />
+        <CodeAssets
+          {...textProps()}
+          {...{ clientId, extensions, repeaterId }}
+          properties={props}
+          item={item}
+          inRepeater={repeaterId !== ''}
+        />
       );
     }
     if (extensions && portal) {

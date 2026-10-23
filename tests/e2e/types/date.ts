@@ -8,7 +8,7 @@ testType('date', '"date":"2023-03-14T11:14:03"', () => {
       testFunction: async (page: Page, canvas: Frame) => {
         await canvas.click('[data-type="blockstudio/type-date"]');
         await page.click(
-          '.blockstudio-fields__field--date .components-datetime__date__day >> nth=0'
+          '.blockstudio-fields__field--date .components-datetime__date__day >> nth=0',
         );
         await saveAndReload(page);
       },
@@ -19,8 +19,8 @@ testType('date', '"date":"2023-03-14T11:14:03"', () => {
         await canvas.click('[data-type="blockstudio/type-date"]');
         await expect(
           page.locator(
-            '.blockstudio-fields__field--date [aria-label~="Selected"]'
-          )
+            '.blockstudio-fields__field--date [aria-label~="Selected"]',
+          ),
         ).toHaveText('1');
       },
     },

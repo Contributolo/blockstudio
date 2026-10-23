@@ -22,7 +22,9 @@ test.afterAll(async () => {
 
 test.describe('DB Client', () => {
   test('bs.db is available', async () => {
-    const has = await page.evaluate(() => typeof (window as any).bs?.db === 'function');
+    const has = await page.evaluate(
+      () => typeof (window as any).bs?.db === 'function',
+    );
     expect(has).toBe(true);
   });
 

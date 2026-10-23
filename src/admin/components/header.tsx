@@ -13,7 +13,8 @@ export const Header = ({
   currentPage,
   onNavigate,
 }: HeaderProps): ReactElement | null => {
-  const hasDatabases = (window.blockstudioAdminPage?.databases?.length ?? 0) > 0;
+  const hasDatabases =
+    (window.blockstudioAdminPage?.databases?.length ?? 0) > 0;
   const logo = window.blockstudioAdminPage?.logo;
   const hasRegistry = !!window.blockstudioAdminPage?.registryEnabled;
 
@@ -48,7 +49,7 @@ export const Header = ({
             <Flex
               gap={0}
               css={css({
-                'button': {
+                button: {
                   padding: '6px 12px',
                 },
               })}
@@ -62,7 +63,9 @@ export const Header = ({
               {hasRegistry && (
                 <Button
                   onClick={() => onNavigate('registry')}
-                  variant={currentPage === 'registry' ? 'secondary' : 'tertiary'}
+                  variant={
+                    currentPage === 'registry' ? 'secondary' : 'tertiary'
+                  }
                 >
                   {__('Registry')}
                 </Button>
@@ -70,7 +73,9 @@ export const Header = ({
               {hasDatabases && (
                 <Button
                   onClick={() => onNavigate('databases')}
-                  variant={currentPage === 'databases' ? 'secondary' : 'tertiary'}
+                  variant={
+                    currentPage === 'databases' ? 'secondary' : 'tertiary'
+                  }
                 >
                   {__('Databases')}
                 </Button>

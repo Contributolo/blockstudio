@@ -58,8 +58,7 @@ const getHTMLPreview = (element: Element, tagName: string): string => {
     }
   }
 
-  const text =
-    element.innerText?.trim() ?? element.textContent?.trim() ?? '';
+  const text = element.innerText?.trim() ?? element.textContent?.trim() ?? '';
   const truncatedText = truncateValue(text, PREVIEW_TEXT_MAX_LENGTH);
 
   let content = '';

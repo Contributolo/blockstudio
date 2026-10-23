@@ -6,8 +6,7 @@ import { BlockstudioBlock, BlockstudioBlockAttributes } from '@/types/types';
 type MediaItem = { id: number; [k: string]: unknown };
 type MediaValue = MediaItem | MediaItem[];
 
-const toPath = (key: string): string =>
-  key.replace(/\[(\d+)\]/g, '.$1');
+const toPath = (key: string): string => key.replace(/\[(\d+)\]/g, '.$1');
 
 export const MediaPlaceholder = ({
   attributes,
@@ -31,7 +30,10 @@ export const MediaPlaceholder = ({
     ? get(blockAttr, toPath(attrKey) + '.multiple')
     : blockAttr?.[attrKey]?.multiple;
 
-  const currentAttrs = attributes.blockstudio.attributes as unknown as Record<string, unknown>;
+  const currentAttrs = attributes.blockstudio.attributes as unknown as Record<
+    string,
+    unknown
+  >;
   const currentValue = isNestedPath
     ? get(currentAttrs, toPath(attrKey))
     : currentAttrs[attrKey];

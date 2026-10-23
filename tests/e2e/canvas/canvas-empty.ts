@@ -1,11 +1,11 @@
 import * as fs from 'fs';
 import * as path from 'path';
-
 import { test, expect, Page } from '@playwright/test';
 import { login, waitForCanvasSurface } from '../utils/playwright-utils';
 
 let page: Page;
-const canvasUrl = 'http://localhost:8890/wp-admin/admin.php?page=blockstudio-canvas';
+const canvasUrl =
+  'http://localhost:8890/wp-admin/admin.php?page=blockstudio-canvas';
 const projectRoot = process.cwd();
 const emptyThemePath = path.join(projectRoot, 'tests/theme-empty');
 
@@ -62,9 +62,9 @@ test.describe('Canvas - empty theme', () => {
     const root = page.locator('#blockstudio-canvas');
     await expect(root).toBeVisible({ timeout: 15000 });
 
-    await expect(
-      page.locator('text=No Blockstudio pages found.'),
-    ).toBeVisible({ timeout: 15000 });
+    await expect(page.locator('text=No Blockstudio pages found.')).toBeVisible({
+      timeout: 15000,
+    });
 
     const artboards = page.locator('[data-canvas-slug]');
     await expect(artboards).toHaveCount(0);
@@ -234,10 +234,7 @@ test.describe('Canvas - empty theme', () => {
           templateLock: 'all',
         }),
       );
-      fs.writeFileSync(
-        path.join(pageDir, 'index.php'),
-        '<h1>Hello World</h1>',
-      );
+      fs.writeFileSync(path.join(pageDir, 'index.php'), '<h1>Hello World</h1>');
 
       await page.evaluate(() =>
         localStorage.removeItem('blockstudio-canvas-settings'),
@@ -249,7 +246,9 @@ test.describe('Canvas - empty theme', () => {
 
       await page.waitForFunction(
         () => {
-          const ab = document.querySelector('[data-canvas-slug="replace-test-page"]');
+          const ab = document.querySelector(
+            '[data-canvas-slug="replace-test-page"]',
+          );
           if (!ab) return false;
           const iframe = ab.querySelector('iframe') as HTMLIFrameElement | null;
           if (!iframe) return false;
@@ -407,7 +406,7 @@ test.describe('Canvas - empty theme', () => {
       );
       fs.writeFileSync(
         path.join(blockDir, 'index.php'),
-        "<?php\necho '<div class=\"no-dir-test-marker\">No Dir Block Works</div>';",
+        '<?php\necho \'<div class="no-dir-test-marker">No Dir Block Works</div>\';',
       );
 
       fs.mkdirSync(pageDir, { recursive: true });
@@ -498,8 +497,14 @@ test.describe('Canvas - empty theme', () => {
   });
 
   test('creating an unused block template does not visibly flash existing artboard', async () => {
-    const baseBlockDir = path.join(emptyThemePath, 'blockstudio/flash-base-block');
-    const unusedBlockDir = path.join(emptyThemePath, 'blockstudio/unused-flash-block');
+    const baseBlockDir = path.join(
+      emptyThemePath,
+      'blockstudio/flash-base-block',
+    );
+    const unusedBlockDir = path.join(
+      emptyThemePath,
+      'blockstudio/unused-flash-block',
+    );
     const pageDirA = path.join(emptyThemePath, 'pages/flash-existing-page-a');
     const pageDirB = path.join(emptyThemePath, 'pages/flash-existing-page-b');
 
@@ -541,7 +546,7 @@ test.describe('Canvas - empty theme', () => {
       );
       fs.writeFileSync(
         path.join(baseBlockDir, 'index.php'),
-        "<?php\necho '<div class=\"flash-base-marker\">Flash Base Block</div>';",
+        '<?php\necho \'<div class="flash-base-marker">Flash Base Block</div>\';',
       );
 
       fs.mkdirSync(pageDirA, { recursive: true });
@@ -599,7 +604,9 @@ test.describe('Canvas - empty theme', () => {
               `[data-canvas-slug="${slug}"]`,
             );
             if (!artboard) return false;
-            const iframe = artboard.querySelector('iframe') as HTMLIFrameElement | null;
+            const iframe = artboard.querySelector(
+              'iframe',
+            ) as HTMLIFrameElement | null;
             if (!iframe) return false;
             const doc = iframe.contentDocument;
             if (!doc || !doc.body) return false;
@@ -664,7 +671,9 @@ test.describe('Canvas - empty theme', () => {
           artboards.forEach((artboard) => {
             const slug = artboard.getAttribute('data-canvas-slug') || '';
             if (!trackedSlugs.has(slug)) return;
-            const iframe = artboard.querySelector('iframe') as HTMLIFrameElement | null;
+            const iframe = artboard.querySelector(
+              'iframe',
+            ) as HTMLIFrameElement | null;
 
             if (!iframe) {
               probe.flashDetected = true;
@@ -757,7 +766,7 @@ test.describe('Canvas - empty theme', () => {
       );
       fs.writeFileSync(
         path.join(unusedBlockDir, 'index.php'),
-        "<?php\necho '<div class=\"unused-flash-block-marker\">Unused Flash Block</div>';",
+        '<?php\necho \'<div class="unused-flash-block-marker">Unused Flash Block</div>\';',
       );
 
       await page.waitForFunction(

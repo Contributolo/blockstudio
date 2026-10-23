@@ -1,5 +1,11 @@
 import { expect, Page, Frame } from '@playwright/test';
-import { count, testType, text, saveAndReload, getEditorCanvas } from '../../utils/playwright-utils';
+import {
+  count,
+  testType,
+  text,
+  saveAndReload,
+  getEditorCanvas,
+} from '../../utils/playwright-utils';
 
 testType('classes', '"classes":"class-1 class-2"', () => {
   return [
@@ -18,7 +24,9 @@ testType('classes', '"classes":"class-1 class-2"', () => {
         const input = page.locator('.components-form-token-field input');
         await input.fill('my-custom-class');
         await input.press('Enter');
-        await expect(page.getByRole('button', { name: 'my-custom-class' })).toBeVisible();
+        await expect(
+          page.getByRole('button', { name: 'my-custom-class' }),
+        ).toBeVisible();
       },
     },
     {
@@ -34,7 +42,7 @@ testType('classes', '"classes":"class-1 class-2"', () => {
         });
         await token.hover();
         await expect(
-          token.locator('xpath=following-sibling::div[1]')
+          token.locator('xpath=following-sibling::div[1]'),
         ).toContainText('font-size: 2em');
       },
     },
@@ -51,7 +59,7 @@ testType('classes', '"classes":"class-1 class-2"', () => {
         });
         await token.hover();
         await expect(
-          token.locator('xpath=following-sibling::div[1]')
+          token.locator('xpath=following-sibling::div[1]'),
         ).toContainText('width: 50%');
       },
     },

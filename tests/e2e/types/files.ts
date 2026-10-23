@@ -51,7 +51,7 @@ testType('files', false, () => {
             await countText(
               canvas,
               '["http:\\/\\/localhost:8888\\/wp-content\\/uploads\\/',
-              1
+              1,
             );
           }
           await page.locator(`text=Open Media Library`).nth(index).click();

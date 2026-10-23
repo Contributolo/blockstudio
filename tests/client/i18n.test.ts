@@ -51,6 +51,9 @@ const fixture = (po = '') => {
   );
   writeFileSync(resolve(path, 'package.json'), '{"type":"module"}');
   cpSync(resolve(root, 'scripts/i18n.ts'), resolve(path, 'scripts/i18n.ts'));
+  cpSync(resolve(root, 'scripts/lib'), resolve(path, 'scripts/lib'), {
+    recursive: true,
+  });
   writeFileSync(resolve(path, 'bootstrap.php'), '<?php');
   writeFileSync(
     resolve(path, 'blockstudio.php'),
@@ -84,11 +87,9 @@ translate('Custom label', true);
   }
   writeFileSync(resolve(path, 'languages/blockstudio-de_DE.po'), header + po);
   const run = (...args: string[]) =>
-    spawnSync(
-      process.execPath,
-      ['--import', 'tsx', resolve(path, 'scripts/i18n.ts'), ...args],
-      { encoding: 'utf8' },
-    );
+    spawnSync(process.execPath, [resolve(path, 'scripts/i18n.ts'), ...args], {
+      encoding: 'utf8',
+    });
   return {
     path,
     run,

@@ -34,14 +34,12 @@ test.describe('Block Field', () => {
       .locator('.bf-card .bs-component');
     await expect(card).toBeVisible();
     await expect(card.locator('.comp-heading')).toHaveText('Embedded Card');
-    await expect(card.locator('.comp-content')).toHaveText(
-      'From block field'
-    );
+    await expect(card.locator('.comp-content')).toHaveText('From block field');
   });
 
   test('component CSS loads for embedded block', async () => {
     const styleTag = page.locator(
-      'link[id*="type-component"][rel="stylesheet"]'
+      'link[id*="type-component"][rel="stylesheet"]',
     );
     await expect(styleTag.first()).toBeAttached();
   });
@@ -49,17 +47,15 @@ test.describe('Block Field', () => {
   test('override renders alternative block in card slot', async () => {
     const overrideHost = page.locator('.bs-block-field').nth(1);
     await expect(overrideHost).toBeVisible();
-    await expect(overrideHost.locator('.bf-label')).toHaveText(
-      'Override Host'
-    );
+    await expect(overrideHost.locator('.bf-label')).toHaveText('Override Host');
 
     const altCard = overrideHost.locator('.bf-card .bs-component-alt');
     await expect(altCard).toBeVisible();
     await expect(altCard.locator('.comp-alt-heading')).toHaveText(
-      'Override Card'
+      'Override Card',
     );
     await expect(altCard.locator('.comp-alt-content')).toHaveText(
-      'From override'
+      'From override',
     );
   });
 

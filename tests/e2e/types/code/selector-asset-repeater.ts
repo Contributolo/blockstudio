@@ -15,10 +15,10 @@ testType('code-selector-asset-repeater', false, () => {
           canvas,
           '[data-type="blockstudio/type-code-selector-asset-repeater"]',
           'backgroundColor',
-          'rgb(0, 0, 0)'
+          'rgb(0, 0, 0)',
         );
         await canvas.click(
-          '[data-type="blockstudio/type-code-selector-asset-repeater"]'
+          '[data-type="blockstudio/type-code-selector-asset-repeater"]',
         );
         await page.click('text=Add row');
         await page
@@ -33,13 +33,13 @@ testType('code-selector-asset-repeater', false, () => {
           canvas,
           '[data-type="blockstudio/type-code-selector-asset-repeater"]',
           'backgroundColor',
-          'rgb(0, 0, 0)'
+          'rgb(0, 0, 0)',
         );
         await checkStyle(
           canvas,
           '[data-type="blockstudio/type-code-selector-asset-repeater"]',
           'border-radius',
-          '12px'
+          '12px',
         );
         await saveAndReload(page);
       },
@@ -51,13 +51,13 @@ testType('code-selector-asset-repeater', false, () => {
           canvas,
           '[data-type="blockstudio/type-code-selector-asset-repeater"]',
           'backgroundColor',
-          'rgb(0, 0, 0)'
+          'rgb(0, 0, 0)',
         );
         await checkStyle(
           canvas,
           '[data-type="blockstudio/type-code-selector-asset-repeater"]',
           'border-radius',
-          '12px'
+          '12px',
         );
       },
     },
@@ -69,16 +69,16 @@ testType('code-selector-asset-repeater', false, () => {
           page,
           '.blockstudio-test__block',
           'backgroundColor',
-          'rgb(0, 0, 0)'
+          'rgb(0, 0, 0)',
         );
         await checkStyle(
           page,
           '.blockstudio-test__block',
           'border-radius',
-          '12px'
+          '12px',
         );
         await page.goto(
-          `http://localhost:8888/wp-admin/post.php?post=1483&action=edit`
+          `http://localhost:8888/wp-admin/post.php?post=1483&action=edit`,
         );
         await page.reload();
         await getEditorCanvas(page);

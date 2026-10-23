@@ -102,7 +102,9 @@ domReady(() => {
       return;
     }
 
-    const blockEditor = select('core/block-editor') as BlockEditorStore | undefined;
+    const blockEditor = select('core/block-editor') as
+      | BlockEditorStore
+      | undefined;
     const blockEditorActions = dispatch('core/block-editor') as unknown as
       | BlockEditorActions
       | undefined;

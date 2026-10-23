@@ -48,7 +48,7 @@ test.describe('custom field conditions with idStructure', () => {
 
   test('min field hidden when toggle is off', async () => {
     const minField = page.locator(
-      '.blockstudio-fields__field--number:has-text("Min Size")'
+      '.blockstudio-fields__field--number:has-text("Min Size")',
     );
     await expect(minField).toHaveCount(0);
   });
@@ -59,7 +59,7 @@ test.describe('custom field conditions with idStructure', () => {
         .select('core/block-editor')
         .getBlocks();
       const block = blocks.find(
-        (b: any) => b.name === 'blockstudio/type-fields-conditions'
+        (b: any) => b.name === 'blockstudio/type-fields-conditions',
       );
       return Object.keys(block?.attributes?.blockstudio?.attributes || {});
     });
@@ -72,15 +72,12 @@ test.describe('custom field conditions with idStructure', () => {
 
   test('condition IDs are rewritten with idStructure prefix', async () => {
     const conditions = await page.evaluate(() => {
-      const blocksNative = (window as any).blockstudioAdmin?.data
-        ?.blocksNative;
+      const blocksNative = (window as any).blockstudioAdmin?.data?.blocksNative;
       const blockDef = Object.values(blocksNative).find(
-        (b: any) => b.name === 'blockstudio/type-fields-conditions'
+        (b: any) => b.name === 'blockstudio/type-fields-conditions',
       ) as any;
       const fields = blockDef?.blockstudio?.attributes || [];
-      const minField = fields.find(
-        (f: any) => f.id === 'title_font_min'
-      );
+      const minField = fields.find((f: any) => f.id === 'title_font_min');
       return minField?.conditions;
     });
 
@@ -93,13 +90,13 @@ test.describe('custom field conditions with idStructure', () => {
   test('enabling toggle shows conditional min field', async () => {
     await page.evaluate(() => {
       const input = document.querySelector(
-        '.blockstudio-fields__field--toggle input[type="checkbox"]'
+        '.blockstudio-fields__field--toggle input[type="checkbox"]',
       ) as HTMLInputElement;
       if (input) input.click();
     });
 
     const minField = page.locator(
-      '.blockstudio-fields__field--number:has-text("Min Size")'
+      '.blockstudio-fields__field--number:has-text("Min Size")',
     );
     await expect(minField.first()).toBeVisible({ timeout: 5000 });
   });
@@ -107,13 +104,13 @@ test.describe('custom field conditions with idStructure', () => {
   test('disabling toggle hides conditional min field again', async () => {
     await page.evaluate(() => {
       const input = document.querySelector(
-        '.blockstudio-fields__field--toggle input[type="checkbox"]'
+        '.blockstudio-fields__field--toggle input[type="checkbox"]',
       ) as HTMLInputElement;
       if (input) input.click();
     });
 
     const minField = page.locator(
-      '.blockstudio-fields__field--number:has-text("Min Size")'
+      '.blockstudio-fields__field--number:has-text("Min Size")',
     );
     await expect(minField).toHaveCount(0, { timeout: 5000 });
   });

@@ -32,7 +32,7 @@ testType(
             .fill('test');
           await text(
             canvas,
-            '"toggle":false,"toggle2":false,"text":"test","text2":"test","group_text":false,"group_text2":false'
+            '"toggle":false,"toggle2":false,"text":"test","text2":"test","group_text":false,"group_text2":false',
           );
         },
       },
@@ -44,7 +44,7 @@ testType(
             .check();
           await text(
             canvas,
-            '"toggle":true,"toggle2":false,"text":"test","text2":"test","group_text":false,"group_text2":false'
+            '"toggle":true,"toggle2":false,"text":"test","text2":"test","group_text":false,"group_text2":false',
           );
           await count(page, 'text=Toggle 2', 1);
         },
@@ -63,7 +63,7 @@ testType(
             .fill('test');
           await text(
             canvas,
-            '"toggle":true,"toggle2":false,"text":"test","text2":"test","group_text":"test","group_text2":"test"'
+            '"toggle":true,"toggle2":false,"text":"test","text2":"test","group_text":"test","group_text2":"test"',
           );
           await saveAndReload(page);
         },
@@ -73,10 +73,10 @@ testType(
         testFunction: async (_page: Page, canvas: Frame) => {
           await text(
             canvas,
-            '"toggle":true,"toggle2":false,"text":"test","text2":"test","group_text":"test","group_text2":"test"'
+            '"toggle":true,"toggle2":false,"text":"test","text2":"test","group_text":"test","group_text2":"test"',
           );
         },
       },
     ];
-  }
+  },
 );

@@ -37,9 +37,9 @@ test.describe('expanded editor', () => {
     await expect(trigger).toBeVisible();
     await expect(sidebarFields.first()).toBeVisible();
     await page.locator('.block-editor-block-card__title').click();
-    await expect(page.locator('.blockstudio-expanded-editor__drawer')).toHaveCount(
-      0,
-    );
+    await expect(
+      page.locator('.blockstudio-expanded-editor__drawer'),
+    ).toHaveCount(0);
     const sidebarFieldCount = await sidebarFields.count();
     expect(sidebarFieldCount).toBeGreaterThan(10);
     const selectedClientId = await page.evaluate(() =>
@@ -158,9 +158,7 @@ test.describe('expanded editor', () => {
     await drawer.locator('.blockstudio-fields__field--code .cm-line').click();
     await page.keyboard.press('ControlOrMeta+A');
     await page.keyboard.press('Backspace');
-    await page.keyboard.type(
-      '%selector% { background: rgb(12, 34, 56); }',
-    );
+    await page.keyboard.type('%selector% { background: rgb(12, 34, 56); }');
 
     await checkStyle(
       canvas,
@@ -252,14 +250,10 @@ test.describe('expanded editor', () => {
       property: keyof CSSStyleDeclaration,
       value: string,
     ) => {
-      await expect
-        .poll(() => getStyle(locator, property))
-        .toBe(value);
+      await expect.poll(() => getStyle(locator, property)).toBe(value);
     };
 
-    const expectHeaderAligned = async (
-      drawer: ReturnType<Page['locator']>,
-    ) => {
+    const expectHeaderAligned = async (drawer: ReturnType<Page['locator']>) => {
       const header = drawer.locator(
         '.blockstudio-expanded-editor__drawer-header',
       );
@@ -273,7 +267,9 @@ test.describe('expanded editor', () => {
       await expect
         .poll(() =>
           Promise.all([
-            header.evaluate((element) => element.getBoundingClientRect().bottom),
+            header.evaluate(
+              (element) => element.getBoundingClientRect().bottom,
+            ),
             fields.evaluate((element) => element.getBoundingClientRect().top),
           ]).then(([headerBottom, fieldsTop]) =>
             Math.round(fieldsTop - headerBottom),
@@ -298,7 +294,9 @@ test.describe('expanded editor', () => {
     await expectStyle(sidebarGroup, 'borderBottomWidth', '1px');
 
     await sidebar
-      .locator('.blockstudio-fields__field--group .components-panel__body-toggle')
+      .locator(
+        '.blockstudio-fields__field--group .components-panel__body-toggle',
+      )
       .first()
       .click();
     await expectStyle(sidebarGroup, 'borderBottomWidth', '1px');
@@ -365,7 +363,9 @@ test.describe('expanded editor', () => {
       )
       .first();
     const drawerTabGroup = drawer
-      .locator('.blockstudio-fields__field--tabs .blockstudio-fields__field--group')
+      .locator(
+        '.blockstudio-fields__field--tabs .blockstudio-fields__field--group',
+      )
       .first();
 
     await expectStyle(drawerTabs, 'borderBottomWidth', '1px');

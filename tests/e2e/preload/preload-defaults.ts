@@ -111,8 +111,14 @@ test.describe('Preload Defaults and Zero Values', () => {
     await expect(blocks.first()).toBeVisible({ timeout: 15000 });
 
     // First preload-simple: defaults (title="Hello", count=5)
-    const firstTitle = await blocks.nth(0).locator('.preload-title').textContent();
-    const firstCount = await blocks.nth(0).locator('.preload-count').textContent();
+    const firstTitle = await blocks
+      .nth(0)
+      .locator('.preload-title')
+      .textContent();
+    const firstCount = await blocks
+      .nth(0)
+      .locator('.preload-count')
+      .textContent();
     expect(firstTitle).toBe('Hello');
     expect(firstCount).toBe('5');
   });

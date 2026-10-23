@@ -337,7 +337,10 @@ const init = (): void => {
   abortController = new AbortController();
   const signal = abortController.signal;
 
-  document.addEventListener('keydown', handleKeyDown, { capture: true, signal });
+  document.addEventListener('keydown', handleKeyDown, {
+    capture: true,
+    signal,
+  });
   document.addEventListener('keyup', handleKeyUp, { capture: true, signal });
   window.addEventListener('pointermove', handlePointerMove, {
     passive: true,

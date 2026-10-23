@@ -8,10 +8,10 @@ testType('transforms-2', '"text":"Tester"', () => {
       testFunction: async (page: Page, canvas: Frame) => {
         await canvas.click('[data-type="blockstudio/type-transforms-2"]');
         await page.click(
-          '.block-editor-block-toolbar__block-controls .components-dropdown-menu__toggle'
+          '.block-editor-block-toolbar__block-controls .components-dropdown-menu__toggle',
         );
         await expect(
-          page.getByRole('menuitem', { name: /Native Transforms 1/ })
+          page.getByRole('menuitem', { name: /Native Transforms 1/ }),
         ).toBeVisible();
       },
     },

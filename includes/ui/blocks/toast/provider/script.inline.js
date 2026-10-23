@@ -1,15 +1,15 @@
+// Generated from src/ui/toast/provider/script.inline.ts. Run npm run build:runtime; do not edit.
 import { store, getContext } from '@wordpress/interactivity';
-
-store( 'bsui/toast', {
-	state: {
-		get hasToasts() {
-			return getContext().toasts.length > 0;
-		},
-	},
-	actions: {
-		dismiss() {
-			const ctx = getContext();
-			ctx.toasts = ctx.toasts.filter( ( t ) => t.id !== ctx.toastId );
-		},
-	},
-} );
+store('bsui/toast', {
+    state: {
+        get hasToasts() {
+            return getContext().toasts.length > 0;
+        },
+    },
+    actions: {
+        dismiss() {
+            const ctx = getContext();
+            ctx.toasts = ctx.toasts.filter((t) => t.id !== ctx.toastId);
+        },
+    },
+});

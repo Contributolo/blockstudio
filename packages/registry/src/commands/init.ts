@@ -1,8 +1,8 @@
-import { writeFile } from "node:fs/promises";
-import { join } from "node:path";
-import chalk from "chalk";
-import { exists } from "../utils/fs.js";
-import type { Config } from "../config/schema.js";
+import { writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
+import chalk from 'chalk';
+import { exists } from '../utils/fs.js';
+import type { Config } from '../config/schema.js';
 
 export type InitOptions = {
   cwd: string;
@@ -11,7 +11,7 @@ export type InitOptions = {
 };
 
 export async function runInit(options: InitOptions): Promise<void> {
-  const configPath = join(options.cwd, "blocks.json");
+  const configPath = join(options.cwd, 'blocks.json');
 
   if (await exists(configPath)) {
     if (!options.yes) {
@@ -22,12 +22,12 @@ export async function runInit(options: InitOptions): Promise<void> {
   }
 
   const config: Config = {
-    $schema: "https://blockstudio.dev/schema/blocks.json",
-    directory: options.directory ?? "blockstudio",
+    $schema: 'https://blockstudio.dev/schema/blocks.json',
+    directory: options.directory ?? 'blockstudio',
     registries: {},
   };
 
-  await writeFile(configPath, JSON.stringify(config, null, 2) + "\n", "utf-8");
+  await writeFile(configPath, JSON.stringify(config, null, 2) + '\n', 'utf-8');
 
-  console.log(chalk.green("Created"), configPath);
+  console.log(chalk.green('Created'), configPath);
 }

@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main, '7.*']
+    branches: [main, '7.*', tooling-upgrade]
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -21,17 +21,23 @@ jobs:
 
       - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version-file: .nvmrc
           cache: npm
 
-
       - run: scripts/ci/npm-ci.sh
+
+      - run: npm ci --prefix packages/registry --no-audit --no-fund
 
       - name: JavaScript, docs, schema, and product-neutrality checks
         run: npm run check
 
-      - name: WordPress setup regression tests
-        run: node --test scripts/ci/start-wp-env.test.mjs
+      - name: Verify WordPress production build
+        run: |
+          npm run build
+          git diff --exit-code -- includes/admin/assets includes/ui/blocks includes/assets/runtime
+
+      - name: Registry unit tests
+        run: npm --prefix packages/registry run test:unit
 
   phpcs:
     name: PHPCS
@@ -80,19 +86,18 @@ jobs:
 
       - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version-file: .nvmrc
           cache: npm
 
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.4'
 
-
       - run: scripts/ci/npm-ci.sh
       - run: composer install --no-interaction
 
       - name: Start ${{ matrix.mode }} implementation
-        run: bash scripts/ci/start-wp-env.sh ${{ matrix.mode }}
+        run: node scripts/ci/start-wp-env.ts ${{ matrix.mode }}
 
       - name: Verify ${{ matrix.mode }} implementation
         run: npm run wp-env:implementations:${{ matrix.mode }}:verify
@@ -110,20 +115,19 @@ jobs:
 
       - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version-file: .nvmrc
           cache: npm
 
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.4'
 
-
       - run: scripts/ci/npm-ci.sh
       - run: composer install --no-interaction
       - run: composer install --no-interaction --working-dir=tests/theme
 
       - name: Start wp-env
-        run: bash scripts/ci/start-wp-env.sh
+        run: node scripts/ci/start-wp-env.ts
 
       - name: Run unit tests
         run: |
@@ -162,13 +166,12 @@ jobs:
 
       - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version-file: .nvmrc
           cache: npm
 
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.4'
-
 
       - run: scripts/ci/npm-ci.sh
       - run: composer install --no-interaction
@@ -178,7 +181,7 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Start wp-env
-        run: bash scripts/ci/start-wp-env.sh
+        run: node scripts/ci/start-wp-env.ts
 
       - name: Install SEO plugins for E2E
         run: |
@@ -211,7 +214,7 @@ jobs:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version-file: .nvmrc
           cache: npm
       - uses: shivammathur/setup-php@v2
         with:
@@ -223,7 +226,7 @@ jobs:
       - name: Start UI regression site
         working-directory: tests/ui
         run: |
-          bash ../../scripts/ci/start-wp-env.sh ui
+          node ../../scripts/ci/start-wp-env.ts ui
           npx wp-env run cli wp rewrite structure '/%postname%/' --hard
           npx wp-env run cli wp bs pages sync
       - name: Run UI regressions
@@ -251,13 +254,12 @@ jobs:
 
       - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version-file: .nvmrc
           cache: npm
 
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.4'
-
 
       - run: scripts/ci/npm-ci.sh
       - run: composer install --no-interaction
@@ -266,7 +268,7 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Start empty wp-env
-        run: bash scripts/ci/start-wp-env.sh empty
+        run: node scripts/ci/start-wp-env.ts empty
 
       - name: Run empty theme E2E tests
         run: npm run test:e2e:empty

@@ -85,8 +85,7 @@ testType('repeater', false, () => {
             const block = (window as any).wp.data
               .select('core/block-editor')
               .getSelectedBlock();
-            return block.attributes.blockstudio.attributes.repeater[1]
-              .repeater;
+            return block.attributes.blockstudio.attributes.repeater[1].repeater;
           }),
         ).toEqual([
           expect.objectContaining({
@@ -101,7 +100,10 @@ testType('repeater', false, () => {
         await page.click(
           '[data-rfd-draggable-id="repeater[0].repeater[0].repeater[2]"] > div > .blockstudio-repeater__remove',
         );
-        await page.getByRole('dialog').getByRole('button', { name: 'Delete', exact: true }).click();
+        await page
+          .getByRole('dialog')
+          .getByRole('button', { name: 'Delete', exact: true })
+          .click();
         await count(
           page,
           '[data-rfd-draggable-id="repeater[0].repeater[0].repeater[0]"] > div > button',

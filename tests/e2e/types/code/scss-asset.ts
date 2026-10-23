@@ -11,15 +11,11 @@ testType('code-scss-asset', false, () => {
     {
       description: 'change scss value',
       testFunction: async (page: Page, canvas: Frame) => {
-        await canvas.click(
-          '[data-type="blockstudio/type-code-scss-asset"]',
-        );
+        await canvas.click('[data-type="blockstudio/type-code-scss-asset"]');
         await page.click('.cm-line');
         await page.keyboard.press('ControlOrMeta+A');
         await page.keyboard.press('Backspace');
-        await page.keyboard.type(
-          '%selector% { $bg: blue; background: $bg; }',
-        );
+        await page.keyboard.type('%selector% { $bg: blue; background: $bg; }');
         await checkStyle(
           canvas,
           '[data-type="blockstudio/type-code-scss-asset"]',

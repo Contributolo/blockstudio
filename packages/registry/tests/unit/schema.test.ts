@@ -1,150 +1,150 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect } from 'vitest';
 import {
   configSchema,
   registrySchema,
   blockEntrySchema,
-} from "../../src/config/schema.js";
+} from '../../src/config/schema.js';
 
-describe("configSchema", () => {
-  it("parses a valid config", () => {
+describe('configSchema', () => {
+  it('parses a valid config', () => {
     const result = configSchema.parse({
-      directory: "blockstudio",
+      directory: 'blockstudio',
       registries: {
-        ui: "https://example.com/registry.json",
+        ui: 'https://example.com/registry.json',
       },
     });
-    expect(result.directory).toBe("blockstudio");
-    expect(result.registries.ui).toBe("https://example.com/registry.json");
+    expect(result.directory).toBe('blockstudio');
+    expect(result.registries.ui).toBe('https://example.com/registry.json');
   });
 
-  it("accepts optional $schema", () => {
+  it('accepts optional $schema', () => {
     const result = configSchema.parse({
-      $schema: "https://blockstudio.dev/schema/blocks.json",
-      directory: "blocks",
+      $schema: 'https://blockstudio.dev/schema/blocks.json',
+      directory: 'blocks',
       registries: {},
     });
     expect(result.$schema).toBeDefined();
   });
 
-  it("rejects missing directory", () => {
+  it('rejects missing directory', () => {
     const result = configSchema.safeParse({ registries: {} });
     expect(result.success).toBe(false);
   });
 
-  it("rejects empty directory", () => {
-    const result = configSchema.safeParse({ directory: "", registries: {} });
+  it('rejects empty directory', () => {
+    const result = configSchema.safeParse({ directory: '', registries: {} });
     expect(result.success).toBe(false);
   });
 
-  it("rejects invalid registry URL", () => {
+  it('rejects invalid registry URL', () => {
     const result = configSchema.safeParse({
-      directory: "blocks",
-      registries: { ui: "not-a-url" },
+      directory: 'blocks',
+      registries: { ui: 'not-a-url' },
     });
     expect(result.success).toBe(false);
   });
 
-  it("rejects missing registries", () => {
-    const result = configSchema.safeParse({ directory: "blocks" });
+  it('rejects missing registries', () => {
+    const result = configSchema.safeParse({ directory: 'blocks' });
     expect(result.success).toBe(false);
   });
 
-  it("accepts empty registries", () => {
-    const result = configSchema.parse({ directory: "blocks", registries: {} });
+  it('accepts empty registries', () => {
+    const result = configSchema.parse({ directory: 'blocks', registries: {} });
     expect(result.registries).toEqual({});
   });
 });
 
-describe("registrySchema", () => {
+describe('registrySchema', () => {
   const validRegistry = {
-    name: "ui",
-    baseUrl: "https://example.com/blocks",
+    name: 'ui',
+    baseUrl: 'https://example.com/blocks',
     blocks: [
       {
-        name: "hero",
-        files: ["block.json"],
+        name: 'hero',
+        files: ['block.json'],
       },
     ],
   };
 
-  it("parses a valid registry", () => {
+  it('parses a valid registry', () => {
     const result = registrySchema.parse(validRegistry);
-    expect(result.name).toBe("ui");
+    expect(result.name).toBe('ui');
     expect(result.blocks).toHaveLength(1);
   });
 
-  it("accepts all optional fields", () => {
+  it('accepts all optional fields', () => {
     const result = registrySchema.parse({
       ...validRegistry,
-      description: "Core UI blocks",
+      description: 'Core UI blocks',
       blocks: [
         {
-          name: "tabs",
-          title: "Tabs",
-          description: "Tabbed content",
-          category: "layout",
-          type: "blockstudio",
-          dependencies: ["tab-item"],
-          files: ["block.json", "index.php"],
+          name: 'tabs',
+          title: 'Tabs',
+          description: 'Tabbed content',
+          category: 'layout',
+          type: 'blockstudio',
+          dependencies: ['tab-item'],
+          files: ['block.json', 'index.php'],
         },
       ],
     });
-    expect(result.blocks[0].dependencies).toEqual(["tab-item"]);
+    expect(result.blocks[0].dependencies).toEqual(['tab-item']);
   });
 
-  it("rejects missing name", () => {
-    const { name, ...rest } = validRegistry;
+  it('rejects missing name', () => {
+    const { name: _name, ...rest } = validRegistry;
     expect(registrySchema.safeParse(rest).success).toBe(false);
   });
 
-  it("rejects missing baseUrl", () => {
-    const { baseUrl, ...rest } = validRegistry;
+  it('rejects missing baseUrl', () => {
+    const { baseUrl: _baseUrl, ...rest } = validRegistry;
     expect(registrySchema.safeParse(rest).success).toBe(false);
   });
 
-  it("rejects invalid baseUrl", () => {
+  it('rejects invalid baseUrl', () => {
     expect(
-      registrySchema.safeParse({ ...validRegistry, baseUrl: "nope" }).success,
+      registrySchema.safeParse({ ...validRegistry, baseUrl: 'nope' }).success,
     ).toBe(false);
   });
 
-  it("rejects empty blocks array", () => {
+  it('rejects empty blocks array', () => {
     expect(
       registrySchema.safeParse({ ...validRegistry, blocks: [] }).success,
     ).toBe(false);
   });
 
-  it("rejects blocks with no files", () => {
+  it('rejects blocks with no files', () => {
     expect(
       registrySchema.safeParse({
         ...validRegistry,
-        blocks: [{ name: "hero", files: [] }],
+        blocks: [{ name: 'hero', files: [] }],
       }).success,
     ).toBe(false);
   });
 
-  it("rejects invalid block type", () => {
+  it('rejects invalid block type', () => {
     expect(
       registrySchema.safeParse({
         ...validRegistry,
-        blocks: [{ name: "hero", files: ["a.php"], type: "invalid" }],
+        blocks: [{ name: 'hero', files: ['a.php'], type: 'invalid' }],
       }).success,
     ).toBe(false);
   });
 });
 
-describe("blockEntrySchema", () => {
-  it("parses minimal block", () => {
+describe('blockEntrySchema', () => {
+  it('parses minimal block', () => {
     const result = blockEntrySchema.parse({
-      name: "hero",
-      files: ["block.json"],
+      name: 'hero',
+      files: ['block.json'],
     });
-    expect(result.name).toBe("hero");
+    expect(result.name).toBe('hero');
   });
 
-  it("rejects empty name", () => {
-    expect(
-      blockEntrySchema.safeParse({ name: "", files: ["a"] }).success,
-    ).toBe(false);
+  it('rejects empty name', () => {
+    expect(blockEntrySchema.safeParse({ name: '', files: ['a'] }).success).toBe(
+      false,
+    );
   });
 });

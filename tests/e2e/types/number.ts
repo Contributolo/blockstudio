@@ -16,7 +16,7 @@ testType('number', '"number":10,"numberZero":0,"textOnZero":false', () => {
       testFunction: async (page: Page, canvas: Frame) => {
         await canvas.click('[data-type="blockstudio/type-number"]');
         await expect(
-          page.locator('.blockstudio-fields__field--number input').nth(0)
+          page.locator('.blockstudio-fields__field--number input').nth(0),
         ).toHaveValue('100');
       },
     },

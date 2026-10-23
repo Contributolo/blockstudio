@@ -24,11 +24,17 @@ test.afterAll(async () => {
 test.describe('Block Functions (RPC)', () => {
   test('calls greet function with params', async () => {
     const result = await page.evaluate(async () => {
-      const res = await fetch('/wp-json/blockstudio/v1/fn/blockstudio/type-functions/greet', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': (window as any).blockstudioAdmin.nonceRest },
-        body: JSON.stringify({ params: { name: 'Blockstudio' } }),
-      });
+      const res = await fetch(
+        '/wp-json/blockstudio/v1/fn/blockstudio/type-functions/greet',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-WP-Nonce': (window as any).blockstudioAdmin.nonceRest,
+          },
+          body: JSON.stringify({ params: { name: 'Blockstudio' } }),
+        },
+      );
       return res.json();
     });
     expect(result).toEqual({ message: 'Hello, Blockstudio!' });
@@ -36,11 +42,17 @@ test.describe('Block Functions (RPC)', () => {
 
   test('calls greet with default params', async () => {
     const result = await page.evaluate(async () => {
-      const res = await fetch('/wp-json/blockstudio/v1/fn/blockstudio/type-functions/greet', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': (window as any).blockstudioAdmin.nonceRest },
-        body: JSON.stringify({ params: {} }),
-      });
+      const res = await fetch(
+        '/wp-json/blockstudio/v1/fn/blockstudio/type-functions/greet',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-WP-Nonce': (window as any).blockstudioAdmin.nonceRest,
+          },
+          body: JSON.stringify({ params: {} }),
+        },
+      );
       return res.json();
     });
     expect(result).toEqual({ message: 'Hello, World!' });
@@ -48,11 +60,17 @@ test.describe('Block Functions (RPC)', () => {
 
   test('calls add function', async () => {
     const result = await page.evaluate(async () => {
-      const res = await fetch('/wp-json/blockstudio/v1/fn/blockstudio/type-functions/add', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': (window as any).blockstudioAdmin.nonceRest },
-        body: JSON.stringify({ params: { a: 3, b: 7 } }),
-      });
+      const res = await fetch(
+        '/wp-json/blockstudio/v1/fn/blockstudio/type-functions/add',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-WP-Nonce': (window as any).blockstudioAdmin.nonceRest,
+          },
+          body: JSON.stringify({ params: { a: 3, b: 7 } }),
+        },
+      );
       return res.json();
     });
     expect(result).toEqual({ result: 10 });
@@ -60,14 +78,17 @@ test.describe('Block Functions (RPC)', () => {
 
   test('public function works with CSRF token', async () => {
     const result = await page.evaluate(async () => {
-      const res = await fetch('/wp-json/blockstudio/v1/fn/blockstudio/type-functions/public', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-BS-Token': (window as any).bs._token || '',
+      const res = await fetch(
+        '/wp-json/blockstudio/v1/fn/blockstudio/type-functions/public',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-BS-Token': (window as any).bs._token || '',
+          },
+          body: JSON.stringify({ params: { value: 'test' } }),
         },
-        body: JSON.stringify({ params: { value: 'test' } }),
-      });
+      );
       return { status: res.status, body: await res.json() };
     });
     expect(result.status).toBe(200);
@@ -76,11 +97,14 @@ test.describe('Block Functions (RPC)', () => {
 
   test('public function rejected without CSRF token', async () => {
     const result = await page.evaluate(async () => {
-      const res = await fetch('/wp-json/blockstudio/v1/fn/blockstudio/type-functions/public', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ params: { value: 'test' } }),
-      });
+      const res = await fetch(
+        '/wp-json/blockstudio/v1/fn/blockstudio/type-functions/public',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ params: { value: 'test' } }),
+        },
+      );
       return res.status;
     });
     expect(result).toBe(403);
@@ -88,11 +112,14 @@ test.describe('Block Functions (RPC)', () => {
 
   test('open function works without any token', async () => {
     const result = await page.evaluate(async () => {
-      const res = await fetch('/wp-json/blockstudio/v1/fn/blockstudio/type-functions/open_endpoint', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ params: { value: 'test' } }),
-      });
+      const res = await fetch(
+        '/wp-json/blockstudio/v1/fn/blockstudio/type-functions/open_endpoint',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ params: { value: 'test' } }),
+        },
+      );
       return res.json();
     });
     expect(result).toEqual({ open: true, echo: 'test' });
@@ -100,35 +127,53 @@ test.describe('Block Functions (RPC)', () => {
 
   test('returns 404 for unknown function', async () => {
     const status = await page.evaluate(async () => {
-      const res = await fetch('/wp-json/blockstudio/v1/fn/blockstudio/type-functions/nonexistent', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': (window as any).blockstudioAdmin.nonceRest },
-        body: JSON.stringify({ params: {} }),
-      });
+      const res = await fetch(
+        '/wp-json/blockstudio/v1/fn/blockstudio/type-functions/nonexistent',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-WP-Nonce': (window as any).blockstudioAdmin.nonceRest,
+          },
+          body: JSON.stringify({ params: {} }),
+        },
+      );
       return res.status;
     });
     expect(status).toBe(404);
   });
 
   test('bs.fn is available in editor', async () => {
-    const hasBsFn = await page.evaluate(() => typeof (window as any).bs?.fn === 'function');
+    const hasBsFn = await page.evaluate(
+      () => typeof (window as any).bs?.fn === 'function',
+    );
     expect(hasBsFn).toBe(true);
   });
 
   test('bs.fn works from editor', async () => {
     const result = await page.evaluate(async () => {
-      return (window as any).bs.fn('greet', { name: 'Editor' }, 'blockstudio/type-functions');
+      return (window as any).bs.fn(
+        'greet',
+        { name: 'Editor' },
+        'blockstudio/type-functions',
+      );
     });
     expect(result).toEqual({ message: 'Hello, Editor!' });
   });
 
   test('capability-restricted function works for admin', async () => {
     const result = await page.evaluate(async () => {
-      const res = await fetch('/wp-json/blockstudio/v1/fn/blockstudio/type-functions/admin_only', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': (window as any).blockstudioAdmin.nonceRest },
-        body: JSON.stringify({ params: {} }),
-      });
+      const res = await fetch(
+        '/wp-json/blockstudio/v1/fn/blockstudio/type-functions/admin_only',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-WP-Nonce': (window as any).blockstudioAdmin.nonceRest,
+          },
+          body: JSON.stringify({ params: {} }),
+        },
+      );
       return { status: res.status, body: await res.json() };
     });
     expect(result.status).toBe(200);
@@ -137,11 +182,17 @@ test.describe('Block Functions (RPC)', () => {
 
   test('capability array function works for admin', async () => {
     const result = await page.evaluate(async () => {
-      const res = await fetch('/wp-json/blockstudio/v1/fn/blockstudio/type-functions/editor_up', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': (window as any).blockstudioAdmin.nonceRest },
-        body: JSON.stringify({ params: {} }),
-      });
+      const res = await fetch(
+        '/wp-json/blockstudio/v1/fn/blockstudio/type-functions/editor_up',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-WP-Nonce': (window as any).blockstudioAdmin.nonceRest,
+          },
+          body: JSON.stringify({ params: {} }),
+        },
+      );
       return { status: res.status, body: await res.json() };
     });
     expect(result.status).toBe(200);
@@ -150,10 +201,13 @@ test.describe('Block Functions (RPC)', () => {
 
   test('GET method works when allowed', async () => {
     const result = await page.evaluate(async () => {
-      const res = await fetch('/wp-json/blockstudio/v1/fn/blockstudio/type-functions/get_status', {
-        method: 'GET',
-        headers: { 'X-WP-Nonce': (window as any).blockstudioAdmin.nonceRest },
-      });
+      const res = await fetch(
+        '/wp-json/blockstudio/v1/fn/blockstudio/type-functions/get_status',
+        {
+          method: 'GET',
+          headers: { 'X-WP-Nonce': (window as any).blockstudioAdmin.nonceRest },
+        },
+      );
       return { status: res.status, body: await res.json() };
     });
     expect(result.status).toBe(200);
@@ -162,10 +216,13 @@ test.describe('Block Functions (RPC)', () => {
 
   test('GET method rejected when not allowed', async () => {
     const result = await page.evaluate(async () => {
-      const res = await fetch('/wp-json/blockstudio/v1/fn/blockstudio/type-functions/greet', {
-        method: 'GET',
-        headers: { 'X-WP-Nonce': (window as any).blockstudioAdmin.nonceRest },
-      });
+      const res = await fetch(
+        '/wp-json/blockstudio/v1/fn/blockstudio/type-functions/greet',
+        {
+          method: 'GET',
+          headers: { 'X-WP-Nonce': (window as any).blockstudioAdmin.nonceRest },
+        },
+      );
       return res.status;
     });
     expect(result).toBe(405);
@@ -174,7 +231,9 @@ test.describe('Block Functions (RPC)', () => {
   test('bs.fn is available on frontend', async () => {
     await page.goto(`${BASE_URL}/native-single`);
     await page.waitForLoadState('domcontentloaded');
-    const hasBsFn = await page.evaluate(() => typeof (window as any).bs?.fn === 'function');
+    const hasBsFn = await page.evaluate(
+      () => typeof (window as any).bs?.fn === 'function',
+    );
     expect(hasBsFn).toBe(true);
     await page.goto(POST_URL);
     await getEditorCanvas(page);
