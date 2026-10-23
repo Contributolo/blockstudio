@@ -357,6 +357,20 @@ class Settings {
 	private static ?string $json_checked_result = null;
 
 	/**
+	 * Settings the cached fingerprint was computed from.
+	 *
+	 * @var array|null
+	 */
+	private static ?array $fingerprint_settings = null;
+
+	/**
+	 * Cached fingerprint of the settings above.
+	 *
+	 * @var string
+	 */
+	private static string $fingerprint = '';
+
+	/**
 	 * Get singleton instance.
 	 *
 	 * @return Settings|null The singleton instance.
@@ -870,9 +884,21 @@ class Settings {
 	 */
 	public static function fingerprint(): string {
 		self::get_instance();
+
+		// Runtime paths ask for the fingerprint dozens of times per request.
+		// Comparing with the array it was computed from is constant time while
+		// the settings are unchanged (same array in memory) and still catches
+		// every change, so the JSON encoding and hashing run once per version.
+		if ( static::$settings === self::$fingerprint_settings ) {
+			return self::$fingerprint;
+		}
+
 		$encoded = wp_json_encode( static::$settings, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 
-		return hash( 'sha256', is_string( $encoded ) ? $encoded : '' );
+		self::$fingerprint_settings = static::$settings;
+		self::$fingerprint          = hash( 'sha256', is_string( $encoded ) ? $encoded : '' );
+
+		return self::$fingerprint;
 	}
 
 	/**
@@ -893,6 +919,8 @@ class Settings {
 		self::$json_checked_path         = '';
 		self::$json_checked_at           = 0;
 		self::$json_checked_result       = null;
+		self::$fingerprint_settings      = null;
+		self::$fingerprint               = '';
 	}
 
 	/**

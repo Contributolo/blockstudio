@@ -919,6 +919,43 @@ class SettingsTest extends TestCase {
 			Settings::reload();
 		}
 	}
+
+	// Fingerprint
+
+	private function expected_fingerprint( array $settings ): string {
+		return hash( 'sha256', (string) wp_json_encode( $settings, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) );
+	}
+
+	public function test_fingerprint_hashes_the_resolved_settings(): void {
+		$this->assertSame( $this->expected_fingerprint( Settings::get_all() ), Settings::fingerprint() );
+		$this->assertSame( Settings::fingerprint(), Settings::fingerprint() );
+	}
+
+	public function test_fingerprint_follows_changed_settings(): void {
+		$before   = Settings::fingerprint();
+		$settings = Settings::get_all();
+
+		$settings['tailwind']['enabled'] = ! ( $settings['tailwind']['enabled'] ?? false );
+		( new ReflectionProperty( Settings::class, 'settings' ) )->setValue( null, $settings );
+
+		$this->assertNotSame( $before, Settings::fingerprint() );
+		$this->assertSame( $this->expected_fingerprint( $settings ), Settings::fingerprint() );
+	}
+
+	public function test_fingerprint_follows_a_reload(): void {
+		$before = Settings::fingerprint();
+
+		$this->add_filter(
+			'blockstudio/settings/tailwind/enabled',
+			static function ( $value ) {
+				return ! $value;
+			}
+		);
+		Settings::reset();
+
+		$this->assertNotSame( $before, Settings::fingerprint() );
+		$this->assertSame( $this->expected_fingerprint( Settings::get_all() ), Settings::fingerprint() );
+	}
 }
 
 /**
