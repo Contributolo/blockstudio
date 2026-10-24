@@ -7848,7 +7848,8 @@ return [
 nonces and Blockstudio CSRF tokens are not stored in page HTML, so public calls
 continue working when an external page cache serves HTML older than 24 hours.
 
-RPC and database clients share the refresh, renew credentials after five minutes
+Refresh is lazy: loading a page without calling an API does not make a credential
+request. RPC and database clients share the refresh, renew credentials after five minutes
 of use, and retry once for an expired nonce or CSRF token. Capability failures
 and application errors are not retried. Authentication still follows the current
 visitor's WordPress login cookie; refreshing credentials does not grant access to
@@ -8562,7 +8563,8 @@ Public endpoints (`true`) are protected by an `X-BS-Token` header. `bs.db()` and
 than embedding expiring tokens in page HTML. Pages served from long-lived
 external caches keep working. Anonymous calls without a valid token get a `403` response.
 
-Both clients, including database realtime polling, share one credential refresh
+Credentials are requested on the first API call, not on every page view. Both
+clients, including database realtime polling, share one credential refresh
 in flight. Credentials are refreshed after five minutes of use. A rejected
 WordPress nonce or Blockstudio CSRF token triggers one refresh and retry; ordinary
 permission errors are not retried. Logged-in requests still use the visiting

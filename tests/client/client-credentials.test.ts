@@ -55,6 +55,11 @@ function setup() {
   };
 }
 
+test('unused API clients do not make a credential request', () => {
+  const env = setup();
+  assert.equal(env.requests.length, 0);
+});
+
 test('RPC/database transport shares one uncached credential fetch across simultaneous calls', async () => {
   const env = setup();
   await Promise.all(

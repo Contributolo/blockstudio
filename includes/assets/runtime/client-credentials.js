@@ -72,5 +72,4 @@
         }
         return (await send()).response;
     };
-    void credentials().catch(() => { });
 })();

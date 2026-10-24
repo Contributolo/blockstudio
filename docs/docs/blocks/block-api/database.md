@@ -570,7 +570,8 @@ Public endpoints (`true`) are protected by an `X-BS-Token` header. `bs.db()` and
 than embedding expiring tokens in page HTML. Pages served from long-lived
 external caches keep working. Anonymous calls without a valid token get a `403` response.
 
-Both clients, including database realtime polling, share one credential refresh
+Credentials are requested on the first API call, not on every page view. Both
+clients, including database realtime polling, share one credential refresh
 in flight. Credentials are refreshed after five minutes of use. A rejected
 WordPress nonce or Blockstudio CSRF token triggers one refresh and retry; ordinary
 permission errors are not retried. Logged-in requests still use the visiting

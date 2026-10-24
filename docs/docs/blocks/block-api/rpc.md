@@ -229,7 +229,8 @@ return [
 nonces and Blockstudio CSRF tokens are not stored in page HTML, so public calls
 continue working when an external page cache serves HTML older than 24 hours.
 
-RPC and database clients share the refresh, renew credentials after five minutes
+Refresh is lazy: loading a page without calling an API does not make a credential
+request. RPC and database clients share the refresh, renew credentials after five minutes
 of use, and retry once for an expired nonce or CSRF token. Capability failures
 and application errors are not retried. Authentication still follows the current
 visitor's WordPress login cookie; refreshing credentials does not grant access to

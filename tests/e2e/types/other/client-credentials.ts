@@ -13,7 +13,6 @@ test('anonymous RPC and database clients share fresh uncached credentials', asyn
     response.url().includes('/client/credentials'),
   );
   await page.goto('/native-single/');
-  expect((await response).headers()['cache-control']).toContain('no-store');
   const result = await page.evaluate(async () => {
     const bs = (window as any).bs;
     return Promise.all([
@@ -22,6 +21,7 @@ test('anonymous RPC and database clients share fresh uncached credentials', asyn
     ]);
   });
   expect(result[0]).toEqual({ public: true, echo: 'fresh' });
+  expect((await response).headers()['cache-control']).toContain('no-store');
   expect(Array.isArray(result[1])).toBe(true);
   expect(refreshes).toHaveLength(1);
 });
