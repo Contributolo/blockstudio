@@ -32,7 +32,8 @@ use WP_Error;
  * matched with "*".
  *
  * A storage key can be defined more than once. Each definition is classified
- * as text (text, textarea, richtext, wysiwyg), link, files, repeater, or a
+ * as text (text, textarea, richtext, wysiwyg, and custom field types registered
+ * with "translate" set to true), link, files, repeater, or a
  * value that is not declared (every other built-in type, hidden fields, and
  * fields with "translate": false, which also applies to every field inside a
  * group, tabs, or repeater that sets it):
@@ -567,11 +568,24 @@ final class Wpml_Config {
 			return 'value';
 		}
 
-		if ( in_array( $type, self::TEXT_TYPES, true ) ) {
+		if ( in_array( $type, self::TEXT_TYPES, true ) || self::is_text_field_type( $type ) ) {
 			return 'text';
 		}
 
 		return in_array( $type, array( 'link', 'files', 'repeater' ), true ) ? $type : 'type:' . $type;
+	}
+
+	/**
+	 * Check whether a custom field type declares its value as text to translate.
+	 *
+	 * @param string $type Field type name.
+	 *
+	 * @return bool Whether the registration of the type sets "translate" to true.
+	 */
+	private static function is_text_field_type( string $type ): bool {
+		$registry = Field_Type_Registry::instance();
+
+		return $registry->is_custom_type( $type ) && true === ( $registry->get( $type )['translate'] ?? null );
 	}
 
 	/**
