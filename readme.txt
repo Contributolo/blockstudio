@@ -3,7 +3,7 @@ Contributors: dnnsjsk
 Requires at least: 6.7
 Tested up to: 7.0.0
 Requires PHP: 8.2
-Stable tag: 7.7.8
+Stable tag: 7.7.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,9 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 * [Getting Started](https://blockstudio.dev/docs/getting-started)
 
 == Changelog ==
+
+= 7.7.9 =
+* New: fields support `translate: false` to keep technical values and nested container fields out of generated WPML translation configuration (#180)
 
 = 7.7.8 =
 * Fix: RPC, database clients, and realtime polling refresh credentials outside cached page HTML and recover from expired tokens without relaxing access checks (#176)

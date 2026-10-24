@@ -203,6 +203,19 @@ test.describe('CLI - pages', () => {
 });
 
 test.describe('CLI - WPML', () => {
+  test('omits opted-out fields without omitting the translated block', () => {
+    const generated = wp('bs wpml config');
+    const entry = generated.match(
+      /<gutenberg-block type="blockstudio\/test-wpml-translate"[^>]*>[\s\S]*?<\/gutenberg-block>/,
+    )?.[0];
+
+    expect(entry).toBeDefined();
+    expect(entry).toContain('translate="1"');
+    expect(entry).toContain('<key name="heading"');
+    expect(entry).not.toContain('<key name="account"');
+    expect(entry).not.toContain('<key name="contact_email"');
+  });
+
   test('prints configuration and updates only its managed XML section', () => {
     const generated = wp('bs wpml config');
     expect(generated).toContain('<wpml-config>');

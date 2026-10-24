@@ -146,6 +146,8 @@ export const Fields = ({
       (block?.attributes as Any)?.[item.id]?.options || item.options;
     delete props.type;
     delete props.id;
+    // WPML metadata must not become a native HTML translate attribute.
+    delete props.translate;
 
     let v = (attributes.blockstudio?.attributes as Any)?.[item.id];
     let val = v?.value;
