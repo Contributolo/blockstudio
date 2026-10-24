@@ -5,6 +5,7 @@ import { useEffect, useState } from '@wordpress/element';
 import { isArray } from 'lodash-es';
 import { Base } from '@/blocks/components/base';
 import { selectors } from '@/blocks/store/selectors';
+import { getIconOptions } from '@/blocks/utils/icon-options';
 import { css } from '@/utils/css';
 
 const iconData: Record<string, string[]> = {
@@ -85,20 +86,31 @@ export const Icon = ({
         : iconData[set][0]),
   );
 
+  const [active, setActive] = useState(false);
+
   const string = iconData?.[set]?.includes(subSet) ? `${set}-${subSet}` : set;
+  const iconSet = icons?.[string] as unknown as
+    | Record<string, string>
+    | undefined;
 
   useEffect(() => {
-    if (!icons?.[string]) {
+    // The set carries one SVG per icon (up to 5 MB) and is only shown in the
+    // dropdown, so it is fetched on first interaction instead of on mount.
+    if (active && !iconSet) {
       apiFetch({
         path: iconData?.[set].includes(subSet)
           ? `/blockstudio/v1/icons?set=${set}&subSet=${subSet}`
           : `/blockstudio/v1/icons?set=${set}`,
         method: 'GET',
-      }).then((data) => {
-        setIcons({ [string]: data });
-      });
+      })
+        .then((data) => {
+          setIcons({ [string]: data });
+        })
+        .catch(() => {
+          setIcons({ [string]: {} });
+        });
     }
-  }, [set, subSet]);
+  }, [active, set, subSet]);
 
   useEffect(() => {
     if (value?.set) {
@@ -135,6 +147,7 @@ export const Icon = ({
             })}
           value={set}
           onChange={(value: string) => {
+            setActive(true);
             setSet(value);
           }}
         />
@@ -154,16 +167,15 @@ export const Icon = ({
               };
             })}
           value={subSet}
-          onChange={(value: string) => setSubSet(value)}
+          onChange={(value: string) => {
+            setActive(true);
+            setSubSet(value);
+          }}
         />
-        {icons?.[string] && (
+        <div onFocus={() => setActive(true)}>
           <ComboboxControl
-            options={Object.entries(icons[string]).map(([k]) => {
-              return {
-                value: k.replace('.svg', ''),
-                label: k.replace('.svg', ''),
-              };
-            })}
+            isLoading={active && !iconSet}
+            options={getIconOptions(iconSet, value?.icon)}
             onChange={(icon) =>
               icon &&
               change(
@@ -189,14 +201,12 @@ export const Icon = ({
                   },
                 })}
                 dangerouslySetInnerHTML={{
-                  __html: `${(icons?.[string] as unknown as Record<string, string>)?.[e.item.value + '.svg']} ${
-                    e.item.label
-                  }`,
+                  __html: `${iconSet?.[e.item.value + '.svg']} ${e.item.label}`,
                 }}
               />
             )}
           />
-        )}
+        </div>
       </div>
     </Base>
   );

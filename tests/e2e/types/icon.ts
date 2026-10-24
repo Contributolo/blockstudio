@@ -120,6 +120,23 @@ testType(
           await expect(combobox).toBeVisible({ timeout: 10000 });
         },
       },
+      {
+        description: 'opening the picker lists icons with a preview',
+        testFunction: async (page: Page, _canvas: Frame) => {
+          await page
+            .locator('[data-id="icon"] .components-combobox-control input')
+            .first()
+            .click();
+
+          await expect(
+            page
+              .locator(
+                '[data-id="icon"] .components-form-token-field__suggestion svg',
+              )
+              .first(),
+          ).toBeVisible({ timeout: 10000 });
+        },
+      },
     ];
   },
 );
