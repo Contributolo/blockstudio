@@ -195,6 +195,13 @@ class Attribute_Builder {
 					continue;
 				}
 
+				// Building the tab children would add string keys to the row list, which
+				// reaches the editor as an object. The unbuilt field stays in the list
+				// so the editor can flag it.
+				if ( 'tabs' === $type && $from_repeater ) {
+					continue;
+				}
+
 				if ( $is_override ) {
 					$v['_blockstudio_is_override'] = true;
 				}
