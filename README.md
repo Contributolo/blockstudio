@@ -154,6 +154,11 @@ while webpack still builds the React editor through `@wordpress/scripts`,
 preserving WordPress externals, asset manifests, entry paths and lazy chunks.
 TypeScript 5.9 remains available for generators that use its compiler API.
 
+`npm run types` generates `src/types/block.ts` from `schemas/block.json`,
+including numeric schema constants, and formats the result with the repository
+configuration. Review the generated diff before committing. It does not create
+the removed `src/types/blockstudio.ts` settings module.
+
 The shared Effect tooling in `scripts/lib/` handles typed failures, child-process
 lifetimes, HTTP status checking and scoped temporary files. Generator/parser
 code stays synchronous where it is a short deterministic local operation.
