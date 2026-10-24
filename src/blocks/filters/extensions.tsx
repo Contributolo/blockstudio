@@ -6,6 +6,7 @@ import { addFilter } from '@wordpress/hooks';
 import { cloneDeep, isArray, set as lodashSet } from 'lodash-es';
 import { Fields } from '@/blocks/components/fields';
 import { getEditorDocument } from '@/blocks/utils/get-editor-document';
+import { extensionTargetsBlock } from '@/blocks/utils/extension-targets-block';
 import { joinListValues } from '@/blocks/utils/join-list-values';
 import { needsFieldInitialization } from '@/blocks/utils/needs-field-initialization';
 import { parseTemplate } from '@/blocks/utils/parse-template';
@@ -21,24 +22,11 @@ const isCanvas = !!(window as any).blockstudioCanvas;
 
 type ExtensionSet = { attribute: string; value: string; join?: boolean };
 
-const matchFound = (name: string, string: string) => {
-  if (typeof name === 'string' && name.endsWith('*')) {
-    const prefix = name.slice(0, -1);
-    return string.startsWith(prefix);
-  } else {
-    return name === string;
-  }
-};
-
 const getMatchesWithWildcard = (string: string) => {
   return extensions
-    .filter((e: { name: string | string[] }) => {
-      if (Array.isArray(e.name)) {
-        return e.name.some((name) => matchFound(name, string));
-      } else {
-        return matchFound(e.name, string);
-      }
-    })
+    .filter((e: { name: string | string[]; exclude?: string[] }) =>
+      extensionTargetsBlock(e, string),
+    )
     .sort((a: BlockstudioBlock, b: BlockstudioBlock) => {
       const prioA = (a.blockstudio as Any)?.extend?.priority || 0;
       const prioB = (b.blockstudio as Any)?.extend?.priority || 0;

@@ -78,4 +78,43 @@ class CsrfTest extends TestCase {
 	public function test_header_constant_value(): void {
 		$this->assertSame( 'X-BS-Token', Csrf::HEADER );
 	}
+
+	public function test_credentials_require_a_non_simple_header_and_reject_cross_origin_requests(): void {
+		$request = new WP_REST_Request( 'POST', '/blockstudio/v1/client/credentials' );
+		$this->assertFalse( Csrf::can_refresh( $request ) );
+		$request->set_header( 'X-BS-Credentials', '1' );
+		$this->assertTrue( Csrf::can_refresh( $request ) );
+		$request->set_header( 'Origin', home_url() );
+		$this->assertTrue( Csrf::can_refresh( $request ) );
+		foreach ( array( 'https://evil.example', 'null', home_url( '/not-an-origin' ) ) as $origin ) {
+			$request->set_header( 'Origin', $origin );
+			$this->assertFalse( Csrf::can_refresh( $request ) );
+		}
+		$request->set_header( 'Origin', home_url() );
+		foreach ( array( 'cross-site', 'same-site' ) as $site ) {
+			$request->set_header( 'Sec-Fetch-Site', $site );
+			$this->assertFalse( Csrf::can_refresh( $request ) );
+		}
+	}
+
+	public function test_credentials_are_fresh_and_explicitly_uncacheable(): void {
+		$request = new WP_REST_Request( 'POST', '/blockstudio/v1/client/credentials' );
+		$request->set_header( 'X-BS-Credentials', '1' );
+		$response = Csrf::refresh( $request );
+		$this->assertInstanceOf( WP_REST_Response::class, $response );
+		$this->assertTrue( Csrf::verify( $response->get_data()['token'] ) );
+		$this->assertNotFalse( wp_verify_nonce( $response->get_data()['nonce'], 'wp_rest' ) );
+		$this->assertStringContainsString( 'no-store', $response->get_headers()['Cache-Control'] );
+		$this->assertSame( 'Origin, Cookie', $response->get_headers()['Vary'] );
+		$this->assertSame( 'noindex', $response->get_headers()['X-Robots-Tag'] );
+	}
+
+	public function test_clients_do_not_embed_credentials_in_cacheable_html(): void {
+		foreach ( array( \Blockstudio\Rpc::client_script(), \Blockstudio\Database::client_script() ) as $script ) {
+			$this->assertStringNotContainsString( Csrf::generate(), $script );
+			$this->assertStringNotContainsString( wp_create_nonce( 'wp_rest' ), $script );
+			$this->assertStringContainsString( 'bs._request', $script );
+			$this->assertStringContainsString( 'client/credentials', $script );
+		}
+	}
 }

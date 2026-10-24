@@ -1,0 +1,11 @@
+{
+  "$schema": "https://blockstudio.dev/schema/extend",
+  "name": ["core/separator", "core/spacer"],
+  "exclude": ["core/spacer"],
+  "blockstudio": {
+    "extend": true,
+    "attributes": [
+      { "id": "exclusionFixture", "type": "text", "label": "Exclusion fixture", "set": [{ "attribute": "data-exclusion-fixture", "value": "{attributes.exclusionFixture}" }] }
+    ]
+  }
+}

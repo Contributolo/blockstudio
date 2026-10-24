@@ -5,6 +5,7 @@ type Any = any;
 
 interface BlockstudioBlock extends Block {
   blockstudio: BlockstudioClass;
+  exclude?: string[];
 }
 
 type BlockstudioBlockStore = {

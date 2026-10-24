@@ -103,10 +103,10 @@ class IslandsTest extends TestCase {
 		return (bool) $method->invoke( null );
 	}
 
-	private function render_endpoint_item( string $name, array $attributes, string $signature = '' ) {
+	private function render_endpoint_item( string $name, array $attributes, string $signature = '', array $context = array() ) {
 		$props = Islands::filter_attributes( $name, $attributes );
 		if ( '' === $signature ) {
-			$signature = Islands::signature( Islands::signature_payload( $name, $props ) );
+			$signature = Islands::signature( Islands::signature_payload( $name, $props, $context ) );
 		}
 
 		$request = new WP_REST_Request( 'POST', '/blockstudio/v1/island/render' );
@@ -118,6 +118,7 @@ class IslandsTest extends TestCase {
 					'name'       => $name,
 					'attributes' => $attributes,
 					'signature'  => $signature,
+					'context'    => $context,
 				),
 			)
 		);
@@ -125,6 +126,97 @@ class IslandsTest extends TestCase {
 		$response = Islands::render_endpoint( $request );
 
 		return is_wp_error( $response ) ? $response : $response->get_data()['i1'];
+	}
+
+	public function test_signed_page_context_is_restored_and_fragment_caches_are_page_specific(): void {
+		$name = 'blockstudio/island-page-context';
+		$this->require_block( $name );
+		$first = wp_insert_post( array( 'post_type' => 'page', 'post_status' => 'publish', 'post_title' => 'First context page' ) );
+		$second = wp_insert_post( array( 'post_type' => 'page', 'post_status' => 'publish', 'post_title' => 'Second context page' ) );
+		$previous_query = $GLOBALS['wp_query'];
+		$previous_post = $GLOBALS['post'] ?? null;
+		try {
+			foreach ( array( $first, $second, $first ) as $id ) {
+				$result = $this->render_endpoint_item( $name, array(), '', array( 'postId' => $id, 'postType' => 'page' ) );
+				$this->assertIsString( $result );
+				$this->assertStringContainsString( 'data-post-id="' . $id . '"', $result );
+				$this->assertStringContainsString( 'data-global-id="' . $id . '"', $result );
+				$this->assertStringContainsString( 'data-query-id="' . $id . '"', $result );
+				$this->assertStringContainsString( get_the_title( $id ), $result );
+				$this->assertSame( $previous_query, $GLOBALS['wp_query'] );
+				$this->assertSame( $previous_post, $GLOBALS['post'] ?? null );
+			}
+		} finally {
+			wp_delete_post( $first, true );
+			wp_delete_post( $second, true );
+		}
+	}
+
+	public function test_page_context_is_signed_and_never_bypasses_post_access_checks(): void {
+		$name = 'blockstudio/island-page-context';
+		$this->require_block( $name );
+		$id = wp_insert_post( array( 'post_type' => 'page', 'post_status' => 'publish', 'post_title' => 'Signed page' ) );
+		$context = array( 'postId' => $id, 'postType' => 'page' );
+		$signature = Islands::signature( Islands::signature_payload( $name, array(), $context ) );
+		try {
+			$this->assertIsString( $this->render_endpoint_item( $name, array(), $signature, $context ) );
+			$this->assertSame( array( 'error' => 'blockstudio_island_invalid_signature' ), $this->render_endpoint_item( $name, array(), $signature, array( 'postId' => $id + 1, 'postType' => 'page' ) ) );
+			$this->assertSame( array( 'error' => 'blockstudio_island_invalid_signature' ), $this->render_endpoint_item( $name, array(), $signature, array( 'postId' => $id, 'postType' => 'post' ) ) );
+			wp_set_current_user( 0 );
+			wp_update_post( array( 'ID' => $id, 'post_status' => 'private' ) );
+			$this->assertSame( array( 'error' => 'blockstudio_island_context_forbidden' ), $this->render_endpoint_item( $name, array(), $signature, $context ) );
+			wp_update_post( array( 'ID' => $id, 'post_status' => 'publish', 'post_password' => 'secret' ) );
+			$this->assertSame( array( 'error' => 'blockstudio_island_context_forbidden' ), $this->render_endpoint_item( $name, array(), $signature, $context ) );
+			wp_delete_post( $id, true );
+			$this->assertSame( array( 'error' => 'blockstudio_island_context_forbidden' ), $this->render_endpoint_item( $name, array(), $signature, $context ) );
+			$this->assertSame( array( 'error' => 'blockstudio_island_invalid_context' ), $this->render_endpoint_item( 'blockstudio/island-dynamic', array(), '', $context ) );
+		} finally {
+			wp_delete_post( $id, true );
+		}
+	}
+
+	public function test_marker_signs_the_queried_page_not_the_current_loop_item(): void {
+		$this->require_block( 'blockstudio/island-page-context' );
+		$page = wp_insert_post( array( 'post_type' => 'page', 'post_status' => 'publish' ) );
+		$item = wp_insert_post( array( 'post_type' => 'post', 'post_status' => 'publish' ) );
+		$old_query = $GLOBALS['wp_query'];
+		$old_post = $GLOBALS['post'] ?? null;
+		try {
+			$GLOBALS['wp_query'] = new WP_Query( array( 'page_id' => $page ) );
+			$GLOBALS['post'] = get_post( $item );
+			$html = bs_block( 'blockstudio/island-page-context' );
+			$context = json_decode( $this->marker_attribute( $html, 'data-bs-island-context' ), true );
+			$this->assertSame( array( 'postId' => $page, 'postType' => 'page' ), $context );
+			$this->assertTrue( Islands::verify_signature( Islands::signature_payload( 'blockstudio/island-page-context', array(), $context ), $this->marker_attribute( $html, 'data-bs-island-signature' ) ) );
+		} finally {
+			$GLOBALS['wp_query'] = $old_query;
+			$GLOBALS['post'] = $old_post;
+			wp_delete_post( $page, true );
+			wp_delete_post( $item, true );
+		}
+	}
+
+	public function test_malformed_page_context_is_rejected_before_rendering(): void {
+		foreach ( array( array( 'postId' => 1 ), array( 'postId' => '1', 'postType' => 'page' ), array( 'postId' => 0, 'postType' => 'page' ), array( 'postId' => 1, 'postType' => 'page', 'url' => '/forged' ) ) as $context ) {
+			$this->assertSame( array( 'error' => 'blockstudio_island_invalid_context' ), $this->render_endpoint_item( 'blockstudio/island-page-context', array(), '', $context ) );
+		}
+	}
+
+	public function test_page_context_globals_are_restored_when_rendering_throws(): void {
+		$id = wp_insert_post( array( 'post_type' => 'page', 'post_status' => 'publish' ) );
+		$old = $GLOBALS['wp_query'];
+		$method = new ReflectionMethod( Islands::class, 'with_page_context' );
+		try {
+			$method->invoke( null, array( 'postId' => $id, 'postType' => 'page' ), static function () {
+				throw new RuntimeException( 'render failure' );
+			} );
+			$this->fail( 'Expected render failure.' );
+		} catch ( RuntimeException $exception ) {
+			$this->assertSame( 'render failure', $exception->getMessage() );
+			$this->assertSame( $old, $GLOBALS['wp_query'] );
+		} finally {
+			wp_delete_post( $id, true );
+		}
 	}
 
 	public function test_normalizes_island_config_shorthands(): void {

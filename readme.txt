@@ -55,6 +55,10 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 == Changelog ==
 
 = 7.7.8 =
+* Fix: RPC, database clients, and realtime polling refresh credentials outside cached page HTML and recover from expired tokens without relaxing access checks (#176)
+* Fix: cron documentation distinguishes standalone deactivation from bundled installs and documents host-plugin and theme cleanup hooks (#177)
+* New: dynamic islands can opt into signed queried-page context with page-specific fragment caching and read-access checks (#178)
+* New: extensions support an exclude list of block names and wildcard patterns in the editor and frontend (#179)
 * New: bundled AI-generated translations cover WordPress-supported locales and regional variants while preserving the existing German and formal German translations
 * Performance: warm frontend builds reuse resolved asset metadata and module stylesheet lists while preserving request-time URL and disable filters (#173)
 * Performance: small cache payloads use OPcache-friendly PHP arrays when supported, with bounded compressed fallbacks and a `blockstudio/cache/compress` filter (#174)

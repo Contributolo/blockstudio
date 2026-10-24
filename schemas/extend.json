@@ -13,6 +13,11 @@
       ],
       "description": "The name of the block to extend."
     },
+    "exclude": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Block names or trailing-star prefix patterns excluded after name matching, in the editor and frontend."
+    },
     "priority": {
       "type": "number",
       "default": 0,

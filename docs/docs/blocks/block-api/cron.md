@@ -13,8 +13,10 @@ meta_description: "Define scheduled background tasks per block using WordPress C
 
 The cron system lets you define scheduled tasks that run in the background on a
 recurring interval. Add a `cron.php` file to your block directory and Blockstudio
-registers the jobs with WordPress Cron, manages their lifecycle, and cleans
-them up when the plugin is deactivated.
+registers the jobs with WordPress Cron and manages their lifecycle. Standalone
+plugin installations clean up their jobs on deactivation. Composer installations
+bundled inside a theme or another plugin need host-side cleanup or `wp bs teardown`
+before the host is deactivated, switched, or removed.
 
 This is the final piece of the full-stack block pattern: your block can have a
 UI (`index.twig`), server logic (`rpc.php`), persistent data (`db.php`), and
@@ -27,7 +29,7 @@ now background processing (`cron.php`).
 3. On each page load, Blockstudio checks if the jobs are scheduled
 4. Missing schedules are registered with `wp_schedule_event()`
 5. WordPress Cron fires the callbacks on the defined interval
-6. On plugin deactivation, all Blockstudio cron events are unscheduled
+6. On standalone Blockstudio plugin deactivation, all Blockstudio cron events are unscheduled; bundled installations use the cleanup paths below
 
 ```
 blocks/my-block/
@@ -223,13 +225,13 @@ return [
 
 ## Deactivation
 
-All cron events registered by Blockstudio are automatically unscheduled when
-the plugin is deactivated. This prevents orphaned cron jobs from persisting in
-the database after the plugin is removed.
+When Blockstudio is installed as its own plugin, deactivating that plugin
+automatically unschedules all Blockstudio cron events.
 
 A Composer installation inside a theme or another plugin has no deactivation
-hook of its own, so removing it leaves the events scheduled. Run the teardown
-command before removing Blockstudio:
+hook of its own. Deactivating its host plugin, switching away from its host
+theme, or removing the bundled code leaves events scheduled unless the host
+performs cleanup. Run the teardown command **before** doing any of these:
 
 ```bash
 wp bs teardown
@@ -237,6 +239,33 @@ wp bs teardown
 
 It unschedules every Blockstudio cron event and removes the static prerender
 state the installation owns. See [CLI](/docs/dev/cli#teardown) for details.
+
+The command is only available while Blockstudio is still loaded. A host plugin
+can instead register cleanup from its main plugin file:
+
+```php title="my-plugin.php"
+register_deactivation_hook(__FILE__, function () {
+    if (class_exists(\Blockstudio\Cron::class)) {
+        \Blockstudio\Cron::unschedule_all();
+    }
+});
+```
+
+A bundling theme can use the same callback on `switch_theme`. Register it while
+the old theme is loaded, not on the next theme's `after_switch_theme` hook:
+
+```php title="functions.php"
+add_action('switch_theme', function () {
+    if (class_exists(\Blockstudio\Cron::class)) {
+        \Blockstudio\Cron::unschedule_all();
+    }
+});
+```
+
+`Cron::unschedule_all()` removes all Blockstudio cron events, not only jobs from
+one block or host. These hooks do not remove static prerender state; use
+`wp bs teardown` when retiring the whole installation. Without cleanup, recurring
+events remain in WordPress and may resume if their block code is installed again.
 
 ## Filter
 

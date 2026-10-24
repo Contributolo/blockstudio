@@ -44,6 +44,7 @@ class Rpc {
 	 * @return void
 	 */
 	public static function init(): void {
+		Csrf::init();
 		add_action( 'rest_api_init', array( __CLASS__, 'register_endpoint' ) );
 		add_filter( 'blockstudio/buffer/output', array( __CLASS__, 'inject_frontend_client' ), 2 );
 		add_action( 'enqueue_block_editor_assets', array( __CLASS__, 'inject_editor_client' ) );
@@ -56,18 +57,13 @@ class Rpc {
 	 */
 	private static function get_client_script(): string {
 		$rest_url = esc_url_raw( rest_url( 'blockstudio/v1/fn/' ) );
-		$nonce    = wp_create_nonce( 'wp_rest' );
-
-		$bs_token = Csrf::generate();
-
-		return 'window.bs=window.bs||{};'
-			. 'bs._token="' . $bs_token . '";'
+		return Csrf::client_script()
 			. 'bs._block=function(){var s=document.currentScript;return s&&s.dataset.block||""};'
 			. 'bs.fn=function(n,p,b){'
 			. 'var block=b||bs._block();'
 			. 'if(!block)throw new Error("bs.fn: block name required. Pass as third argument, or use an inline script (module scripts cannot auto-detect).");'
 			. 'var u="' . $rest_url . '"+block+"/"+n;'
-			. 'return fetch(u,{method:"POST",headers:{"Content-Type":"application/json","X-WP-Nonce":"' . $nonce . '","X-BS-Token":"' . $bs_token . '"},body:JSON.stringify({params:p||{}})}).then(function(r){return r.json()});'
+			. 'return bs._request(u,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({params:p||{}})}).then(function(r){return r.json()});'
 			. '};';
 	}
 

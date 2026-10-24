@@ -1,0 +1,10 @@
+{
+  "$schema": "https://blockstudio.dev/schema/block",
+  "name": "blockstudio/island-page-context",
+  "title": "Island Page Context",
+  "category": "blockstudio-test-native",
+  "blockstudio": {
+    "island": { "mode": "dynamic", "context": true, "cache": { "ttl": 60, "per": "global" } },
+    "attributes": []
+  }
+}

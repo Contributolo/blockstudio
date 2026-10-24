@@ -204,6 +204,20 @@ from another site never renders a visitor's personal fragment. In practice:
 | Cross-origin request with the same cookie | anonymous |
 | No cookie | anonymous |
 
+### Which Page Is This?
+
+Add `"context": true` to `blockstudio.island` when the fragment needs its page's
+identity. The marker then signs the queried page's post ID and post type alongside
+the attributes. In the fragment, `$block['postId']`, `$block['postType']`,
+`get_the_ID()`, and `get_queried_object_id()` refer to that page. Inside a Query
+Loop this still means the outer queried page, not the loop item.
+
+Page context is opt-in and is also part of the fragment cache key. The endpoint
+checks access again, even for cached fragments, so a signed marker does not expose
+a page that has since become private or password-protected. See
+[Page Context](/docs/blocks/islands#page-context) for the configuration and security
+details. No arbitrary URL or query parameters are replayed.
+
 ## Step 4: A cart count that refreshes itself
 
 The second island shows the other placeholder style and two runtime options.

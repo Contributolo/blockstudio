@@ -268,7 +268,7 @@ class Extensions {
 	public static function get_matches( $string, $extensions ): array {
 		$matches     = array();
 		$match_found = function ( $name, $string ) {
-			if ( ! $name || ! $string ) {
+			if ( ! is_string( $name ) || ! is_string( $string ) || '' === $name || '' === $string ) {
 				return false;
 			}
 
@@ -282,6 +282,16 @@ class Extensions {
 		};
 
 		foreach ( $extensions as $e ) {
+			$excluded = false;
+			foreach ( is_array( $e->exclude ?? null ) ? $e->exclude : array() as $pattern ) {
+				if ( $match_found( $pattern, $string ) ) {
+					$excluded = true;
+					break;
+				}
+			}
+			if ( $excluded ) {
+				continue;
+			}
 			if ( is_array( $e->name ) ) {
 				foreach ( $e->name as $name ) {
 					if ( $match_found( $name, $string ) ) {

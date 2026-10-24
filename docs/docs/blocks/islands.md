@@ -111,7 +111,51 @@ The `island` value can be a shorthand or an object.
 | `placeholder` | `string` | auto-detected | Relative placeholder template path. |
 | `loading` | `"eager"` or `"visible"` | `"eager"` | When the runtime should fetch a dynamic island. |
 | `event` | `string` | unset | Window event name that refreshes a dynamic island. |
+| `context` | `boolean` | `false` | Sign and restore the queried page's post ID and post type for dynamic fragments. |
 | `cache` | `boolean` or `object` | `false` | Optional fragment cache policy. |
+
+## Page Context
+
+Dynamic fragments normally render independently of the page shell. Opt into its
+page identity when your block reads page-specific settings or related content:
+
+```json title="block.json"
+{
+  "blockstudio": {
+    "island": {
+      "mode": "dynamic",
+      "context": true,
+      "cache": { "ttl": 60, "per": "global" }
+    }
+  }
+}
+```
+
+The marker includes the queried page's `postId` and `postType` in
+`data-bs-island-context`. Both values are signed with the block name and
+allow-listed attributes using the serving site's secret. They cannot be changed
+or added to a request without invalidating the signature. The runtime sends them
+with the existing batched fragment request, including visible and event-driven
+refreshes. This also works with `bs_render_block()`, `bs_block()`, and block tags.
+
+During fragment rendering, `$block['postId']`, `$block['postType']`,
+`get_the_ID()`, and `get_queried_object_id()` refer to that page. WordPress query
+and post globals are restored afterward, including after a render exception.
+This is the **queried page**, not an item inside a Query Loop. It does not replay
+arbitrary URL parameters or restore the original request URL. Use
+`get_permalink($block['postId'])` when you need the HTML page's canonical URL.
+Archives and renders without a queried post send no page identity.
+
+The endpoint checks the page still exists, has the signed post type, and can be
+read by the current visitor before consulting the fragment cache. A valid
+signature does not bypass private-post or password protection, island eligibility,
+attribute allow-lists, or your block's own permission checks. Page identity is
+always part of the fragment cache key when present, so the same block and
+attributes on different pages never share a fragment. Use `per: "user"` or no
+fragment cache when output also depends on the visitor.
+
+With `context` omitted or `false`, existing markers and context-free behavior
+remain unchanged. Do not put confidential data into the public marker.
 
 ## Dynamic Placeholders
 
@@ -232,7 +276,8 @@ Dynamic fragments are uncached by default.
 }
 ```
 
-`per: "global"` shares one cached fragment for the same block and attributes.
+`per: "global"` shares one cached fragment for the same block, attributes, and
+opt-in page context.
 `per: "user"` varies the cache by the current WordPress user ID.
 
 ## Programmatic Rendering

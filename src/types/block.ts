@@ -272,6 +272,24 @@ export interface BlockstudioClass {
    * Enable the WordPress Interactivity API for this block.
    */
   interactivity?: boolean | BlockstudioInteractivity;
+  /**
+   * Hydrate rendered HTML or fetch a signed dynamic fragment after the page shell.
+   */
+  island?: boolean | 'hydrate' | 'hydrated' | 'dynamic' | BlockstudioIsland;
+}
+
+export interface BlockstudioIsland {
+  mode?: 'hydrate' | 'hydrated' | 'dynamic';
+  tag?: string;
+  attributes?: string[];
+  placeholder?: string;
+  loading?: 'eager' | 'visible';
+  event?: string;
+  /**
+   * Sign and restore the queried page's post ID and post type for dynamic fragments.
+   */
+  context?: boolean;
+  cache?: boolean | { ttl?: number; per?: 'global' | 'user' };
 }
 
 export interface BlockstudioInteractivity {

@@ -96,6 +96,28 @@ including blocks made with Blockstudio:
 }
 ```
 
+### Excluding Blocks
+
+Use a top-level `exclude` array to skip blocks that would otherwise match `name`:
+
+```json title="extension.json"
+{
+  "$schema": "https://blockstudio.dev/schema/extend",
+  "name": "core/*",
+  "exclude": ["core/button", "core/image"],
+  "blockstudio": {
+    "extend": true,
+    "attributes": []
+  }
+}
+```
+
+Exclusions use the same exact-name and trailing-`*` prefix matching as `name`.
+They take precedence over single names, name lists, and wildcards. An excluded
+block receives neither the extension's editor fields nor its frontend attributes
+or assets. Other matching extensions are unaffected. Omit `exclude` or use an
+empty array to keep the existing behavior.
+
 ### Blockstudio Key
 
 Just like when using `block.json` for custom blocks, the `blockstudio` property has to be present in the configuration object with `extend` set to `true`.

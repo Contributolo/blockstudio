@@ -146,6 +146,7 @@ final class Islands {
 			'cache'       => self::normalize_cache_config( $config['cache'] ?? false ),
 			'loading'     => $loading,
 			'event'       => $event,
+			'context'     => true === ( $config['context'] ?? false ),
 		);
 	}
 
@@ -466,14 +467,18 @@ final class Islands {
 			}
 
 			$props     = self::filter_attributes( $name, $attributes );
-			$payload   = self::signature_payload( $name, $props );
+			$context   = self::page_context( $config );
+			$payload   = self::signature_payload( $name, $props, $context );
 			$signature = self::signature( $payload );
 
 			$encoded_props                     = wp_json_encode( $props );
 			$attrs['data-bs-island-props']     = false !== $encoded_props ? $encoded_props : '{}';
 			$attrs['data-bs-island-signature'] = $signature;
-			$loading                           = apply_filters( 'blockstudio/islands/loading', $config['loading'] ?? 'eager', $name, $config );
-			$attrs['data-bs-island-loading']   = in_array( $loading, array( 'eager', 'visible' ), true ) ? $loading : 'eager';
+			if ( array() !== $context ) {
+				$attrs['data-bs-island-context'] = wp_json_encode( $context );
+			}
+			$loading                         = apply_filters( 'blockstudio/islands/loading', $config['loading'] ?? 'eager', $name, $config );
+			$attrs['data-bs-island-loading'] = in_array( $loading, array( 'eager', 'visible' ), true ) ? $loading : 'eager';
 
 			if ( ! empty( $config['event'] ) ) {
 				$attrs['data-bs-island-event'] = $config['event'];
@@ -483,6 +488,77 @@ final class Islands {
 		$attrs = apply_filters( 'blockstudio/islands/marker_attributes', $attrs, $name, $attributes, $config, $phase );
 
 		return '<' . $tag . ' ' . self::attributes_to_string( $attrs ) . '>' . $inner_html . '</' . $tag . '>';
+	}
+
+	/**
+	 * Capture only the queried page, never the current Query Loop item.
+	 *
+	 * @param array $config Island configuration.
+	 * @return array Public page identity.
+	 */
+	private static function page_context( array $config ): array {
+		if ( empty( $config['context'] ) ) {
+			return array();
+		}
+		$post = get_queried_object();
+		return $post instanceof \WP_Post
+			? array(
+				'postId'   => $post->ID,
+				'postType' => $post->post_type,
+			)
+			: array();
+	}
+
+	/**
+	 * Scope the verified page identity and restore all WordPress loop globals.
+	 *
+	 * @param array    $context Verified page identity.
+	 * @param callable $render  Fragment renderer.
+	 * @return mixed Render result.
+	 * @throws \RuntimeException If the verified page disappears before rendering.
+	 */
+	private static function with_page_context( array $context, callable $render ) {
+		if ( array() === $context ) {
+			return $render();
+		}
+		$keys  = array( 'wp_query', 'wp_the_query', 'post', 'id', 'authordata', 'currentday', 'currentmonth', 'page', 'pages', 'multipage', 'more', 'numpages' );
+		$saved = array();
+		foreach ( $keys as $key ) {
+			$saved[ $key ] = array( array_key_exists( $key, $GLOBALS ), $GLOBALS[ $key ] ?? null );
+		}
+		$post = get_post( $context['postId'] );
+		if ( ! $post instanceof \WP_Post ) {
+			throw new \RuntimeException( 'Verified island page no longer exists.' );
+		}
+		$query                    = new \WP_Query();
+		$query->queried_object    = $post;
+		$query->queried_object_id = $post->ID;
+		$query->post              = $post;
+		$query->posts             = array( $post );
+		$query->post_count        = 1;
+		$query->found_posts       = 1;
+		$query->is_singular       = true;
+		$query->is_page           = 'page' === $post->post_type;
+		$query->is_single         = ! $query->is_page;
+		$query->set( 'p', $post->ID );
+		$query->set( 'post_type', $post->post_type );
+		try {
+			// phpcs:disable WordPress.WP.GlobalVariablesOverride.Prohibited -- Verified fragment scope; every value is restored in finally.
+			$GLOBALS['wp_query']     = $query;
+			$GLOBALS['wp_the_query'] = $query;
+			$GLOBALS['post']         = $post;
+			// phpcs:enable WordPress.WP.GlobalVariablesOverride.Prohibited
+			setup_postdata( $post );
+			return $render();
+		} finally {
+			foreach ( $saved as $key => $value ) {
+				if ( $value[0] ) {
+					$GLOBALS[ $key ] = $value[1]; // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Restore the exact saved WordPress globals.
+				} else {
+					unset( $GLOBALS[ $key ] );
+				}
+			}
+		}
 	}
 
 	/**
@@ -667,10 +743,11 @@ final class Islands {
     const name = el.dataset.bsIsland || '';
     const attributes = parseJSON(el.dataset.bsIslandProps, {});
     const signature = el.dataset.bsIslandSignature || '';
+    const context = parseJSON(el.dataset.bsIslandContext, {});
     if (!name || !signature) return;
-    const key = JSON.stringify([name, attributes, signature]);
+    const key = JSON.stringify([name, attributes, context, signature]);
     if (!queue.has(key)) {
-      queue.set(key, { clientId: clientId(), name, attributes, signature, elements: [] });
+      queue.set(key, { clientId: clientId(), name, attributes, context, signature, elements: [] });
     }
     queue.get(key).elements.push(el);
     if (!scheduled) {
@@ -698,7 +775,7 @@ final class Islands {
         credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          islands: entries.map(({ clientId, name, attributes, signature }) => ({ clientId, name, attributes, signature }))
+          islands: entries.map(({ clientId, name, attributes, context, signature }) => ({ clientId, name, attributes, context, signature }))
         })
       });
       const data = await response.json();
@@ -809,12 +886,13 @@ JS;
 				$name       = isset( $island['name'] ) ? sanitize_text_field( (string) $island['name'] ) : '';
 				$attributes = isset( $island['attributes'] ) && is_array( $island['attributes'] ) ? $island['attributes'] : array();
 				$signature  = isset( $island['signature'] ) ? (string) $island['signature'] : '';
+				$context    = $island['context'] ?? array();
 
 				if ( '' === $client_id ) {
 					continue;
 				}
 
-				$result = self::render_endpoint_item( $name, $attributes, $signature );
+				$result = self::render_endpoint_item( $name, $attributes, $signature, $context );
 				if ( is_wp_error( $result ) ) {
 					$rendered[ $client_id ] = array(
 						'error' => $result->get_error_code(),
@@ -847,18 +925,29 @@ JS;
 	 * @param string $name       Block name.
 	 * @param array  $attributes Attributes.
 	 * @param string $signature  Signature.
+	 * @param mixed  $context    Signed page identity.
 	 *
 	 * @return string|WP_Error Rendered HTML or error.
 	 */
-	private static function render_endpoint_item( string $name, array $attributes, string $signature ) {
+	private static function render_endpoint_item( string $name, array $attributes, string $signature, $context = array() ) {
 		if ( ! self::can_render_dynamic( $name ) ) {
 			return new WP_Error( 'blockstudio_island_not_allowed', __( 'Invalid island block.', 'blockstudio' ), array( 'status' => 403 ) );
 		}
 
+		$config = self::config( $name );
+		if ( ! is_array( $context ) || ( array() !== $context && ( empty( $config['context'] ) || count( $context ) !== 2 || ! is_int( $context['postId'] ?? null ) || $context['postId'] < 1 || ! is_string( $context['postType'] ?? null ) ) ) ) {
+			return new WP_Error( 'blockstudio_island_invalid_context', __( 'Invalid island signature.', 'blockstudio' ), array( 'status' => 403 ) );
+		}
 		$signature_attributes = self::filter_attributes( $name, $attributes );
-		$payload              = self::signature_payload( $name, $signature_attributes );
+		$payload              = self::signature_payload( $name, $signature_attributes, $context );
 		if ( ! self::verify_signature( $payload, $signature ) ) {
 			return new WP_Error( 'blockstudio_island_invalid_signature', __( 'Invalid island signature.', 'blockstudio' ), array( 'status' => 403 ) );
+		}
+		if ( array() !== $context ) {
+			$post = get_post( $context['postId'] );
+			if ( ! $post || $post->post_type !== $context['postType'] || post_password_required( $post ) || ( ! is_post_publicly_viewable( $post ) && ! current_user_can( 'read_post', $post->ID ) ) ) {
+				return new WP_Error( 'blockstudio_island_context_forbidden', __( 'Invalid island block.', 'blockstudio' ), array( 'status' => 403 ) );
+			}
 		}
 
 		$attributes = apply_filters(
@@ -869,7 +958,7 @@ JS;
 		);
 		$attributes = is_array( $attributes ) ? $attributes : array();
 
-		$cached = self::get_cached_fragment( $name, $attributes );
+		$cached = self::get_cached_fragment( $name, $attributes, $context );
 		if ( null !== $cached ) {
 			return $cached;
 		}
@@ -886,13 +975,17 @@ JS;
 			'innerContent' => array(),
 		);
 
-		$rendered = self::with_phase(
-			'fragment',
-			static fn() => render_block( $block )
+		$rendered = self::with_page_context(
+			$context,
+			static fn() => apply_filters(
+				'blockstudio/islands/fragment',
+				self::with_phase( 'fragment', static fn() => render_block( $block ) ),
+				$name,
+				$attributes
+			)
 		);
 
-		$rendered = apply_filters( 'blockstudio/islands/fragment', $rendered, $name, $attributes );
-		self::set_cached_fragment( $name, $attributes, $rendered );
+		self::set_cached_fragment( $name, $attributes, $rendered, $context );
 
 		do_action( 'blockstudio/islands/rendered', $name, $attributes, $rendered );
 
@@ -904,10 +997,11 @@ JS;
 	 *
 	 * @param string $name       Block name.
 	 * @param array  $attributes Attributes.
+	 * @param array  $context    Signed page identity.
 	 *
 	 * @return string|null Cached fragment or null.
 	 */
-	private static function get_cached_fragment( string $name, array $attributes ): ?string {
+	private static function get_cached_fragment( string $name, array $attributes, array $context = array() ): ?string {
 		$config = self::config( $name );
 		$cache  = $config['cache'] ?? false;
 		if ( ! is_array( $cache ) ) {
@@ -918,7 +1012,7 @@ JS;
 			return null;
 		}
 
-		$key   = self::cache_key( $name, $attributes, $cache );
+		$key   = self::cache_key( $name, $attributes, $cache, $context );
 		$value = get_transient( $key );
 
 		return is_string( $value ) ? $value : null;
@@ -930,10 +1024,11 @@ JS;
 	 * @param string $name       Block name.
 	 * @param array  $attributes Attributes.
 	 * @param string $rendered   Rendered fragment.
+	 * @param array  $context    Signed page identity.
 	 *
 	 * @return void
 	 */
-	private static function set_cached_fragment( string $name, array $attributes, string $rendered ): void {
+	private static function set_cached_fragment( string $name, array $attributes, string $rendered, array $context = array() ): void {
 		$config = self::config( $name );
 		$cache  = $config['cache'] ?? false;
 		if ( ! is_array( $cache ) ) {
@@ -944,7 +1039,7 @@ JS;
 			return;
 		}
 
-		set_transient( self::cache_key( $name, $attributes, $cache ), $rendered, (int) $cache['ttl'] );
+		set_transient( self::cache_key( $name, $attributes, $cache, $context ), $rendered, (int) $cache['ttl'] );
 	}
 
 	/**
@@ -1026,16 +1121,18 @@ JS;
 	 * @param string $name       Block name.
 	 * @param array  $attributes Attributes.
 	 * @param array  $cache      Cache config.
+	 * @param array  $context    Signed page identity.
 	 *
 	 * @return string Cache key.
 	 */
-	private static function cache_key( string $name, array $attributes, array $cache ): string {
+	private static function cache_key( string $name, array $attributes, array $cache, array $context = array() ): string {
 		$scope = 'user' === ( $cache['per'] ?? 'global' ) ? 'user:' . get_current_user_id() : 'global';
 		$hash  = md5(
 			wp_json_encode(
 				array(
 					'name'       => $name,
 					'attributes' => self::sort_recursive( $attributes ),
+					'context'    => self::sort_recursive( $context ),
 					'scope'      => $scope,
 					'runtime'    => Runtime_Context::hash(
 						'island-fragment',

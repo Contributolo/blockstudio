@@ -565,10 +565,20 @@ Each CRUD operation has its own permission level:
 
 ### CSRF protection
 
-Public endpoints (`true`) are protected by a `X-BS-Token` header. Blockstudio
-generates the token on page render and injects it into the `bs.db()` and
-`bs.fn()` clients automatically. External forms or scripts without the token
-get a `403` response.
+Public endpoints (`true`) are protected by an `X-BS-Token` header. `bs.db()` and
+`bs.fn()` fetch fresh credentials from an uncached same-origin endpoint, rather
+than embedding expiring tokens in page HTML. Pages served from long-lived
+external caches keep working. Anonymous calls without a valid token get a `403` response.
+
+Both clients, including database realtime polling, share one credential refresh
+in flight. Credentials are refreshed after five minutes of use. A rejected
+WordPress nonce or Blockstudio CSRF token triggers one refresh and retry; ordinary
+permission errors are not retried. Logged-in requests still use the visiting
+user's session and the schema's capability and record-ownership checks.
+
+Keep `POST /wp-json/blockstudio/v1/client/credentials` outside any proxy or CDN
+cache. It sends `Cache-Control: private, no-store` and requires a same-origin
+request with a non-simple header. The built-in clients handle this automatically.
 
 Use `'open'` when you need truly unauthenticated access without CSRF, for
 example for incoming webhooks from external services.

@@ -78,6 +78,7 @@ test.describe('Block Functions (RPC)', () => {
 
   test('public function works with CSRF token', async () => {
     const result = await page.evaluate(async () => {
+      await (window as any).bs._credentials();
       const res = await fetch(
         '/wp-json/blockstudio/v1/fn/blockstudio/type-functions/public',
         {

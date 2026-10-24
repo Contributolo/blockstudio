@@ -214,6 +214,35 @@ class ExtensionsTest extends TestCase {
 		$this->assertContains( $ext2, $matches );
 	}
 
+	public function test_exclusions_win_over_all_name_matching_forms(): void {
+		foreach ( array( 'core/*', 'core/image', array( 'core/*', 'core/image' ) ) as $name ) {
+			$extension = (object) array(
+				'name'    => $name,
+				'exclude' => array( 'core/image' ),
+			);
+			$this->assertSame( array(), Extensions::get_matches( 'core/image', array( $extension ) ) );
+		}
+		$extension = (object) array(
+			'name'    => '*',
+			'exclude' => array( 'core/*' ),
+		);
+		$this->assertSame( array(), Extensions::get_matches( 'core/image', array( $extension ) ) );
+		$this->assertSame( array( $extension ), Extensions::get_matches( 'acme/card', array( $extension ) ) );
+	}
+
+	public function test_exclusions_do_not_remove_other_matching_extensions(): void {
+		$excluded = (object) array(
+			'name'    => 'core/*',
+			'exclude' => array( 'core/image' ),
+		);
+		$included = (object) array(
+			'name'    => 'core/*',
+			'exclude' => array(),
+		);
+		$this->assertSame( array( $included ), Extensions::get_matches( 'core/image', array( $excluded, $included ) ) );
+		$this->assertSame( array( $excluded, $included ), Extensions::get_matches( 'core/paragraph', array( $excluded, $included ) ) );
+	}
+
 	// parse_template()
 
 	public function test_parse_template_replaces_placeholder(): void {

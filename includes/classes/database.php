@@ -61,6 +61,7 @@ class Database {
 	 * @return void
 	 */
 	public static function init(): void {
+		Csrf::init();
 		add_action( 'rest_api_init', array( __CLASS__, 'register_endpoints' ) );
 		add_filter( 'blockstudio/buffer/output', array( __CLASS__, 'inject_frontend_client' ), 3 );
 		add_action( 'enqueue_block_editor_assets', array( __CLASS__, 'inject_editor_client' ) );
@@ -74,19 +75,16 @@ class Database {
 	 */
 	private static function get_client_script(): string {
 		$rest_url = esc_url_raw( rest_url( 'blockstudio/v1/db/' ) );
-		$nonce    = wp_create_nonce( 'wp_rest' );
-		$bs_token = Csrf::generate();
-
-		$script = 'window.bs=window.bs||{};'
+		$script   = Csrf::client_script()
 			. 'bs.db=function(b,s){'
 			. 'var u="' . $rest_url . '"+b.replace("/","-")+"/"+(s||"default");'
-			. 'var h={"Content-Type":"application/json","X-WP-Nonce":"' . $nonce . '","X-BS-Token":"' . $bs_token . '"};'
+			. 'var h={"Content-Type":"application/json"};'
 			. 'return{'
-			. 'create:function(d){return fetch(u,{method:"POST",headers:h,body:JSON.stringify(d)}).then(function(r){return r.json()})},'
-			. 'list:function(q){var p=q?"?"+new URLSearchParams(q):"";return fetch(u+p,{method:"GET",headers:h}).then(function(r){return r.json()})},'
-			. 'get:function(id){return fetch(u+"/"+id,{method:"GET",headers:h}).then(function(r){return r.json()})},'
-			. 'update:function(id,d){return fetch(u+"/"+id,{method:"PUT",headers:h,body:JSON.stringify(d)}).then(function(r){return r.json()})},'
-			. 'delete:function(id){return fetch(u+"/"+id,{method:"DELETE",headers:h}).then(function(r){return r.json()})}'
+			. 'create:function(d){return bs._request(u,{method:"POST",headers:h,body:JSON.stringify(d)}).then(function(r){return r.json()})},'
+			. 'list:function(q){var p=q?"?"+new URLSearchParams(q):"";return bs._request(u+p,{method:"GET",headers:h}).then(function(r){return r.json()})},'
+			. 'get:function(id){return bs._request(u+"/"+id,{method:"GET",headers:h}).then(function(r){return r.json()})},'
+			. 'update:function(id,d){return bs._request(u+"/"+id,{method:"PUT",headers:h,body:JSON.stringify(d)}).then(function(r){return r.json()})},'
+			. 'delete:function(id){return bs._request(u+"/"+id,{method:"DELETE",headers:h}).then(function(r){return r.json()})}'
 			. '};};'
 
 			// bs.cache: in-memory query cache with manual controls.
@@ -162,11 +160,11 @@ class Database {
 			$script .= 'bs._rh={};'
 				. 'bs._rt=function(c,u,h){'
 				. 'function poll(){'
-				. 'fetch(u+"?_hash=1",{headers:h}).then(function(r){return r.json()}).then(function(d){'
+				. 'bs._request(u+"?_hash=1",{headers:h}).then(function(r){return r.json()}).then(function(d){'
 				. 'var hk=c.block+":"+c.key;'
 				. 'if(bs._rh[hk]!==d.hash){'
 				. 'bs._rh[hk]=d.hash;'
-				. 'fetch(u,{headers:h}).then(function(r){return r.json()}).then(function(rows){'
+				. 'bs._request(u,{headers:h}).then(function(r){return r.json()}).then(function(rows){'
 				. 'if(bs._rm&&(Date.now()-bs._rm)<c.interval*2)return;'
 				. 'bs.cache.set(c.key,rows);'
 				. 'import("@wordpress/interactivity").then(function(m){try{m.store(c.block).state[c.key]=rows}catch(e){}}).catch(function(){})'
@@ -174,7 +172,7 @@ class Database {
 				. '}'
 				. '}).catch(function(){})'
 				. '}'
-				. 'fetch(u+"?_hash=1",{headers:h}).then(function(r){return r.json()}).then(function(d){'
+				. 'bs._request(u+"?_hash=1",{headers:h}).then(function(r){return r.json()}).then(function(d){'
 				. 'bs._rh[c.block+":"+c.key]=d.hash;'
 				. 'var tid=setInterval(poll,c.interval);'
 				. 'document.addEventListener("visibilitychange",function(){'
@@ -186,8 +184,7 @@ class Database {
 				. 'if(!bs._ri){bs._ri=1;document.addEventListener("DOMContentLoaded",function(){'
 				. 'var R=' . wp_json_encode( self::$realtime ) . ';'
 				. 'var U="' . $rest_url . '";'
-				. 'var n=(window.wpApiSettings&&wpApiSettings.nonce)||"' . $nonce . '";'
-				. 'var H={"X-WP-Nonce":n,"X-BS-Token":"' . $bs_token . '"};'
+				. 'var H={};'
 				. 'R.forEach(function(c){'
 				. 'if(!document.querySelector(\'[data-wp-interactive="\'+c.block+\'"]\'))return;'
 				. 'bs._rt(c,U+c.slug+"/"+c.schema,H)'

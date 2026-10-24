@@ -365,7 +365,7 @@ route: /docs/blocks/block-api/cron
 file: docs/docs/blocks/block-api/cron.md
 purpose: Define scheduled background tasks per block using WordPress Cron.
 hooks: blockstudio/cron
-php: Blockstudio\Attributes, Blockstudio\Cron, Blockstudio\Db, Db::get()
+php: Blockstudio\Attributes, Blockstudio\Cron, Blockstudio\Db, Cron::unschedule_all(), Db::get()
 cli: wp bs teardown
 
 ## Docs / Blocks / Hooks

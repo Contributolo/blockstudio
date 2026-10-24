@@ -1438,6 +1438,11 @@
                               }
                             ],
                             "description": "Optional fragment cache policy for dynamic islands."
+                          },
+                          "context": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "Sign and restore the queried page post ID and post type for dynamic fragments; separate fragment caches by that page identity."
                           }
                         },
                         "additionalProperties": false
@@ -5188,6 +5193,11 @@
                                               }
                                             ],
                                             "description": "Optional fragment cache policy for dynamic islands."
+                                          },
+                                          "context": {
+                                            "type": "boolean",
+                                            "default": false,
+                                            "description": "Sign and restore the queried page post ID and post type for dynamic fragments; separate fragment caches by that page identity."
                                           }
                                         },
                                         "additionalProperties": false
@@ -6372,6 +6382,11 @@
                                     }
                                   ],
                                   "description": "Optional fragment cache policy for dynamic islands."
+                                },
+                                "context": {
+                                  "type": "boolean",
+                                  "default": false,
+                                  "description": "Sign and restore the queried page post ID and post type for dynamic fragments; separate fragment caches by that page identity."
                                 }
                               },
                               "additionalProperties": false
@@ -6962,6 +6977,11 @@
                     }
                   ],
                   "description": "Optional fragment cache policy for dynamic islands."
+                },
+                "context": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "Sign and restore the queried page post ID and post type for dynamic fragments; separate fragment caches by that page identity."
                 }
               },
               "additionalProperties": false

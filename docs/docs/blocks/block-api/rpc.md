@@ -222,6 +222,20 @@ return [
 ];
 ```
 
+### Cached Pages
+
+`bs.fn()` fetches fresh credentials from the uncached same-origin
+`POST /wp-json/blockstudio/v1/client/credentials` endpoint. Expiring WordPress
+nonces and Blockstudio CSRF tokens are not stored in page HTML, so public calls
+continue working when an external page cache serves HTML older than 24 hours.
+
+RPC and database clients share the refresh, renew credentials after five minutes
+of use, and retry once for an expired nonce or CSRF token. Capability failures
+and application errors are not retried. Authentication still follows the current
+visitor's WordPress login cookie; refreshing credentials does not grant access to
+private functions. Keep the credential endpoint outside any CDN or proxy cache;
+its responses are explicitly marked `private, no-store`.
+
 ### Open functions
 
 For webhooks or external API callbacks that need truly open access without any
