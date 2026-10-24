@@ -19,10 +19,19 @@ export const generateTypes = Effect.scoped(
         [resolve(root, `schemas/${name}.json`), '-s', 'schema', '-o', output],
         { cwd: root, inherit: true },
       );
-      yield* writeAtomic(
-        resolve(root, `src/types/${name}.ts`),
-        yield* fs.readFile(output),
+      // src/types is ignored by the formatter, so format the temporary file to
+      // keep regenerated output in the committed style.
+      yield* command(
+        resolve(root, 'node_modules/.bin/oxfmt'),
+        ['-c', resolve(root, 'oxfmt.config.ts'), '--write', output],
+        { cwd: root },
       );
+      // quicktype's usage header and runtime comments are not kept in the repo.
+      const source = (yield* fs.readFileString(output)).replace(
+        /^[ \t]*\/\/.*\n/gm,
+        '',
+      );
+      yield* writeAtomic(resolve(root, `src/types/${name}.ts`), source);
     }
     console.log('Generated src/types/block.ts and src/types/blockstudio.ts');
   }),
