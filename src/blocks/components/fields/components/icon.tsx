@@ -6,46 +6,8 @@ import { isArray } from 'lodash-es';
 import { Base } from '@/blocks/components/base';
 import { selectors } from '@/blocks/store/selectors';
 import { getIconOptions } from '@/blocks/utils/icon-options';
+import { getDefaultSubSet, iconData } from '@/blocks/utils/icon-sets';
 import { css } from '@/utils/css';
-
-const iconData: Record<string, string[]> = {
-  octicons: [],
-  'vscode-icons': [],
-  'remix-icons': [
-    'arrows',
-    'buildings',
-    'business',
-    'communication',
-    'design',
-    'development',
-    'device',
-    'document',
-    'editor',
-    'finance',
-    'food',
-    'game-sports',
-    'health-medical',
-    'logos',
-    'map',
-    'media',
-    'others',
-    'system',
-    'user-faces',
-    'weather',
-  ],
-  'tabler-icons': [],
-  'simple-icons': [],
-  'flat-color-icons': [],
-  'bootstrap-icons': [],
-  'material-design-icons': ['two-tone', 'outlined', 'filled', 'round', 'sharp'],
-  'box-icons': ['logos', 'solid', 'regular'],
-  'ion-icons': [],
-  heroicons: ['solid', 'outline'],
-  'feather-icons': [],
-  'fontawesome-free': ['brands', 'solid', 'regular'],
-  'grommet-icons': [],
-  'css-gg': [],
-};
 
 export const Icon = ({
   item,
@@ -79,11 +41,7 @@ export const Icon = ({
   );
 
   const [subSet, setSubSet] = useState(
-    value?.subSet ||
-      (isArray(item?.subSets) ? item?.subSets[0] : item?.subSets) ||
-      (Object.keys(iconData).includes('fontawesome-free')
-        ? 'solid'
-        : iconData[set][0]),
+    value?.subSet || getDefaultSubSet(set, item?.subSets),
   );
 
   const [active, setActive] = useState(false);
@@ -149,6 +107,7 @@ export const Icon = ({
           onChange={(value: string) => {
             setActive(true);
             setSet(value);
+            setSubSet(getDefaultSubSet(value, item?.subSets));
           }}
         />
         <SelectControl
