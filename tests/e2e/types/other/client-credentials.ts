@@ -107,20 +107,18 @@ test('credential endpoint rejects simple and cross-origin requests', async ({
   request,
 }) => {
   const url = '/wp-json/blockstudio/v1/client/credentials';
-  expect((await request.post(url)).status()).toBe(403);
-  expect(
-    (
-      await request.post(url, {
-        headers: { 'X-BS-Credentials': '1', Origin: 'https://evil.example' },
-      })
-    ).status(),
-  ).toBe(403);
-  expect(
-    (
-      await request.post(url, {
-        headers: { 'X-BS-Credentials': '1', 'Sec-Fetch-Site': 'same-site' },
-      })
-    ).status(),
-  ).toBe(403);
+  const rejectedHeaders: Record<string, string>[] = [
+    {},
+    { 'X-BS-Credentials': '1', Origin: 'https://evil.example' },
+    { 'X-BS-Credentials': '1', 'Sec-Fetch-Site': 'same-site' },
+  ];
+  for (const headers of rejectedHeaders) {
+    const response = await request.post(url, { headers });
+    expect(response.status()).toBe(401);
+    const body = await response.json();
+    expect(body.code).toBe('rest_forbidden');
+    expect(body).not.toHaveProperty('nonce');
+    expect(body).not.toHaveProperty('token');
+  }
   expect((await request.get(url)).status()).toBe(404);
 });
