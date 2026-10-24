@@ -179,6 +179,18 @@ limited to static checks, builds, and focused non-E2E tests. `npm run check` is
 the CI aggregate, not a local preflight. CI also builds the WordPress assets and
 checks ZIP/Composer installations before a tooling candidate can be merged.
 
+The PHPCS job audits both Composer lockfiles for security advisories, including
+development tools and the test theme's dependencies. To run the same audits
+without starting WordPress or containers:
+
+```bash
+composer audit --locked
+composer audit --locked --working-dir=tests/theme
+```
+
+Keep both lockfiles updated when addressing an advisory. The audits do not use
+an ignore list or change the dependencies bundled in a release.
+
 ## Translation Maintenance
 
 English strings are extracted into `languages/blockstudio.pot`. Existing German
