@@ -114,7 +114,7 @@ class CsrfTest extends TestCase {
 			$this->assertStringNotContainsString( Csrf::generate(), $script );
 			$this->assertStringNotContainsString( wp_create_nonce( 'wp_rest' ), $script );
 			$this->assertStringContainsString( 'bs._request', $script );
-			$this->assertStringContainsString( 'client/credentials', $script );
+			$this->assertStringContainsString( 'bs._credentialsUrl=' . wp_json_encode( rest_url( 'blockstudio/v1/client/credentials' ) ) . ';', $script );
 		}
 	}
 }
