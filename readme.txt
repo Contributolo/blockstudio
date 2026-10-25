@@ -56,6 +56,7 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 
 = 7.7.9 =
 * New: fields support `translate: false` to keep technical values and nested container fields out of generated WPML translation configuration (#180)
+* New: custom string field types can opt into generated WPML translation configuration through their registration (#187)
 
 = 7.7.8 =
 * Fix: RPC, database clients, and realtime polling refresh credentials outside cached page HTML and recover from expired tokens without relaxing access checks (#176)
