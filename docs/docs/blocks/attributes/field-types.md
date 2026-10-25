@@ -329,6 +329,17 @@ Renders an HTML tag selector. Useful for choosing heading levels or semantic ele
 
 Renders an SVG icon from an icon set.
 
+The editor loads an icon set when you first focus its picker or change the set
+or subset, not when you select the block. Fields requesting the same set share
+the in-flight request. The stored icon name stays visible before loading, and
+refocusing the picker retries a failed request.
+
+`tabler-icons` supports `outline` and `filled`. A subset explicitly configured
+for the chosen set takes precedence; otherwise the picker uses `solid` when
+available, or the set's first subset. Sets without subsets omit `subSet`.
+Set names resolve only to bundled files. Frontend rendering caches individual
+icons rather than storing full icon sets in database transients.
+
 ```json
 {
   "type": "icon"
