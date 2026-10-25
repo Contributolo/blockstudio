@@ -60,6 +60,7 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 * Fix: icon requests and saved values can only resolve bundled icon files, including when old cached values exist (#186)
 * Fix: Tabler icons and default icon subsets match the bundled files, and failed picker requests can retry (#185)
 * Performance: icon sets load on first picker interaction, share concurrent requests, and no longer create full-set database transients (#185)
+* Fix: unsupported tabs inside repeaters show an editor notice and PHPStan diagnostic without breaking sibling fields (#183)
 
 = 7.7.8 =
 * Fix: RPC, database clients, and realtime polling refresh credentials outside cached page HTML and recover from expired tokens without relaxing access checks (#176)
