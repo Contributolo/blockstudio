@@ -62,6 +62,7 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 * Performance: icon sets load on first picker interaction, share concurrent requests, and no longer create full-set database transients (#185)
 * Fix: unsupported tabs inside repeaters show an editor notice and PHPStan diagnostic without breaking sibling fields (#183)
 * Fix: the field-patterns guide uses the correct tabs configuration and explains its field storage (#184)
+* New: `wp bs blocks render` smoke-tests block templates, examples, and explicit field values with structured PHP diagnostics and CI-friendly exit codes (#188)
 
 = 7.7.8 =
 * Fix: RPC, database clients, and realtime polling refresh credentials outside cached page HTML and recover from expired tokens without relaxing access checks (#176)

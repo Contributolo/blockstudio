@@ -184,6 +184,71 @@ test.describe('CLI - server defaults', () => {
   });
 });
 
+test.describe('CLI - block rendering', () => {
+  test('reports renders using defaults and explicit JSON attributes', () => {
+    const result = JSON.parse(
+      wp('bs blocks render blockstudio/type-text --format=json'),
+    );
+    expect(result).toEqual([
+      { block: 'blockstudio/type-text', case: 'defaults', problems: [] },
+    ]);
+    const override = JSON.parse(
+      wp(
+        `bs blocks render blockstudio/type-text --attributes='{"text":"Render check"}' --format=json`,
+      ),
+    );
+    expect(override).toEqual([
+      { block: 'blockstudio/type-text', case: 'attributes', problems: [] },
+    ]);
+  });
+
+  test('accepts attribute files and rejects arrays, malformed JSON, and unknown blocks', () => {
+    const file = 'tests/theme/render-attributes-e2e.json';
+    const theme = wp("eval 'echo get_stylesheet_directory();'");
+    try {
+      writeFileSync(file, JSON.stringify({ text: 'From a file' }));
+      const result = JSON.parse(
+        wp(
+          `bs blocks render blockstudio/type-text --attributes=@${theme}/render-attributes-e2e.json --format=json`,
+        ),
+      );
+      expect(result[0].case).toBe('attributes');
+      expect(result[0].problems).toEqual([]);
+      for (const attributes of ['[]', '[1]', 'null', '{']) {
+        expect(() =>
+          wp(
+            `bs blocks render blockstudio/type-text --attributes='${attributes}' --format=json`,
+          ),
+        ).toThrow();
+      }
+      expect(() =>
+        wp('bs blocks render blockstudio/no-such-block --format=json'),
+      ).toThrow();
+    } finally {
+      rmSync(file, { force: true });
+    }
+  });
+
+  test('returns a failure exit code with parseable JSON for template warnings', () => {
+    const theme = wp("eval 'echo get_stylesheet_directory();'");
+    try {
+      wp(
+        `bs blocks render blockstudio-test/render-warning --require=${theme}/fixtures/render-check.php --format=json`,
+      );
+      throw new Error('Expected the render command to fail.');
+    } catch (error) {
+      const failure = error as { status: number; stdout: string | Buffer };
+      expect(failure.status).toBe(1);
+      const report = JSON.parse(cleanWpOutput(String(failure.stdout)));
+      expect(report[0].problems).toHaveLength(1);
+      expect(report[0].problems[0]).toMatchObject({
+        level: 'Warning',
+        message: 'Render fixture warning',
+      });
+    }
+  });
+});
+
 test.describe('CLI - pages', () => {
   test('synchronizes the complete page inventory and stores its identity', () => {
     const report = JSON.parse(wp('bs pages sync --format=json'));
