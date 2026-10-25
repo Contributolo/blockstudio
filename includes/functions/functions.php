@@ -339,6 +339,10 @@ if ( ! function_exists( 'bs_render_icon' ) ) {
 	 */
 	function bs_render_icon( $args ) {
 		// phpcs:enable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
+		if ( ! is_array( $args ) || ! is_string( $args['set'] ?? null ) || ! is_string( $args['icon'] ?? null ) || '' === $args['icon'] || ( isset( $args['subSet'] ) && ! is_string( $args['subSet'] ) ) ) {
+			return;
+		}
+
 		$path            = BLOCKSTUDIO_DIR . '/includes/icons';
 		$icon_version    = '1';
 		$expiration_time = 30 * DAY_IN_SECONDS;
@@ -347,7 +351,10 @@ if ( ! function_exists( 'bs_render_icon' ) ) {
 		$sub_set = isset( $args['subSet'] ) ? '-' . $args['subSet'] : '';
 		$icon    = $args['icon'];
 
-		$complete_path = "$path/$set$sub_set.json";
+		$complete_path = Utils::icon_set_path( $path, "$set$sub_set" );
+		if ( '' === $complete_path ) {
+			return;
+		}
 
 		$set_icon_transient_key =
 			'blockstudio_' . $icon_version . '_icon_set_' . md5( "$set$sub_set" );
