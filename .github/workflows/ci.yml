@@ -250,6 +250,34 @@ jobs:
             tests/ui/test-results/
           retention-days: 7
 
+  playground-smoke:
+    name: Playground Smoke Tests
+    runs-on: [self-hosted, Linux, X64, inline0-blockstudio]
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+      - run: scripts/ci/npm-ci.sh
+      - run: composer install --no-interaction
+      - run: composer install --no-interaction --working-dir=tests/theme
+      - name: Install Playwright browsers
+        run: node_modules/.bin/playwright install --with-deps chromium
+      - name: Run optional Playground contributor workflow
+        run: npm run test:e2e:playground -- tests/e2e/types/text.ts
+      - name: Upload Playground artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playground-smoke-results
+          path: test-results/
+          retention-days: 7
+
   e2e-empty:
     name: E2E Tests (Empty Theme)
     runs-on: [self-hosted, Linux, X64, inline0-blockstudio]
