@@ -254,6 +254,7 @@ The extension validates every Blockstudio schema file in the project.
 - Missing field `type`
 - Missing `id` on value fields that require one
 - Unknown field types
+- Field properties the field type does not accept, such as `"translat"` instead of `"translate"`, with the closest known property as a suggestion
 - `select`/`radio`/`checkbox` without `options` or `populate`
 - Duplicate field IDs
 - A `tabs` field inside a repeater, directly or inside a group without an `id`
@@ -262,6 +263,30 @@ The extension validates every Blockstudio schema file in the project.
 Container fields like `group` and `tabs`, plus `custom/*` field references, can
 omit `id` when they only expand or wrap other fields.
 
+Field properties are checked against the properties `schemas/block.json`
+declares for each built-in field type, plus the properties every field
+accepts. Wrapper-specific properties on `custom/*` references and project-defined
+namespaced field types are outside this check. Existing field-type and custom
+reference validation still applies. The identifiers are
+`blockstudio.blockJson.property` and `blockstudio.fieldJson.property`.
+
+This checks property names, not just their values: `minimized` is valid on a
+repeater but is reported on a text field. The plugin's runtime behavior is
+unchanged. If a project deliberately attaches its own metadata to built-in
+fields, suppress only these findings without disabling other shape checks:
+
+```neon title="phpstan.neon"
+parameters:
+    ignoreErrors:
+        - identifier: blockstudio.blockJson.property
+        - identifier: blockstudio.fieldJson.property
+```
+
+Built-in fields inside a reusable `field.json` are still checked, even when a
+`custom/*` reference has its own wrapper options. Extension files are outside
+the scope of these property-name diagnostics; extension-specific `set` rules
+remain valid.
+
 **field.json** (custom reusable fields):
 
 - Missing `name`
@@ -269,6 +294,7 @@ omit `id` when they only expand or wrap other fields.
 - Invalid attribute objects or missing field `type`
 - Missing `id` on value fields that require one
 - Unknown field types
+- Field properties the field type does not accept
 - A `tabs` field inside a repeater, directly or inside a group without an `id`
 - Missing, ambiguous, invalid, or cyclic nested `custom/*` references
 

@@ -15,7 +15,9 @@
     },
     "exclude": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Block names or trailing-star prefix patterns excluded after name matching, in the editor and frontend."
     },
     "priority": {
@@ -417,6 +419,13 @@
                         }
                       }
                     }
+                  },
+                  "toggle": {
+                    "type": [
+                      "boolean",
+                      "string"
+                    ],
+                    "description": "Adds a checkbox above the options that selects or clears all of them. A string is used as its label, true uses the default label."
                   }
                 }
               },
@@ -499,6 +508,10 @@
                   "popout": {
                     "type": "boolean",
                     "description": "Whether to show a button that opens the editor in a popup window."
+                  },
+                  "asset": {
+                    "type": "boolean",
+                    "description": "Renders CSS, SCSS, or JavaScript from the field as a block asset, so the template does not need to print the style or script tag."
                   }
                 }
               },
@@ -509,16 +522,16 @@
                   "type": {
                     "const": "color"
                   },
+                  "default": {
+                    "type": "string",
+                    "description": "Value of the option that should be selected when first adding the block."
+                  },
+                  "fallback": {
+                    "type": "string",
+                    "description": "Value of the option that will display when the field value is empty."
+                  },
                   "options": {
                     "type": "array",
-                    "default": {
-                      "type": "array",
-                      "description": "Default value that should be applied when first adding the block."
-                    },
-                    "fallback": {
-                      "type": "array",
-                      "description": "Fallback value that that will display when field value is empty."
-                    },
                     "items": {
                       "type": "object",
                       "properties": {
@@ -701,16 +714,16 @@
                   "type": {
                     "const": "gradient"
                   },
+                  "default": {
+                    "type": "string",
+                    "description": "Value of the option that should be selected when first adding the block."
+                  },
+                  "fallback": {
+                    "type": "string",
+                    "description": "Value of the option that will display when the field value is empty."
+                  },
                   "options": {
                     "type": "array",
-                    "default": {
-                      "type": "array",
-                      "description": "Default value that should be applied when first adding the block."
-                    },
-                    "fallback": {
-                      "type": "array",
-                      "description": "Fallback value that that will display when field value is empty."
-                    },
                     "items": {
                       "type": "object",
                       "properties": {
@@ -1159,6 +1172,13 @@
                                   }
                                 }
                               }
+                            },
+                            "toggle": {
+                              "type": [
+                                "boolean",
+                                "string"
+                              ],
+                              "description": "Adds a checkbox above the options that selects or clears all of them. A string is used as its label, true uses the default label."
                             }
                           }
                         },
@@ -1241,6 +1261,10 @@
                             "popout": {
                               "type": "boolean",
                               "description": "Whether to show a button that opens the editor in a popup window."
+                            },
+                            "asset": {
+                              "type": "boolean",
+                              "description": "Renders CSS, SCSS, or JavaScript from the field as a block asset, so the template does not need to print the style or script tag."
                             }
                           }
                         },
@@ -1251,16 +1275,16 @@
                             "type": {
                               "const": "color"
                             },
+                            "default": {
+                              "type": "string",
+                              "description": "Value of the option that should be selected when first adding the block."
+                            },
+                            "fallback": {
+                              "type": "string",
+                              "description": "Value of the option that will display when the field value is empty."
+                            },
                             "options": {
                               "type": "array",
-                              "default": {
-                                "type": "array",
-                                "description": "Default value that should be applied when first adding the block."
-                              },
-                              "fallback": {
-                                "type": "array",
-                                "description": "Fallback value that that will display when field value is empty."
-                              },
                               "items": {
                                 "type": "object",
                                 "properties": {
@@ -1443,16 +1467,16 @@
                             "type": {
                               "const": "gradient"
                             },
+                            "default": {
+                              "type": "string",
+                              "description": "Value of the option that should be selected when first adding the block."
+                            },
+                            "fallback": {
+                              "type": "string",
+                              "description": "Value of the option that will display when the field value is empty."
+                            },
                             "options": {
                               "type": "array",
-                              "default": {
-                                "type": "array",
-                                "description": "Default value that should be applied when first adding the block."
-                              },
-                              "fallback": {
-                                "type": "array",
-                                "description": "Fallback value that that will display when field value is empty."
-                              },
                               "items": {
                                 "type": "object",
                                 "properties": {
@@ -1829,6 +1853,17 @@
                                   }
                                 }
                               }
+                            },
+                            "display": {
+                              "type": "string",
+                              "enum": [
+                                "buttonGroup"
+                              ],
+                              "description": "Set to buttonGroup to show the options as a group of buttons instead of radio inputs."
+                            },
+                            "allowNull": {
+                              "type": "boolean",
+                              "description": "Allows the user to clear the value by clicking the selected radio input again."
                             }
                           }
                         },
@@ -2446,6 +2481,13 @@
                             "type": {
                               "const": "repeater"
                             },
+                            "default": {
+                              "type": "array",
+                              "items": {
+                                "type": "object"
+                              },
+                              "description": "Rows a new block starts with. Each row is an object of field values. Takes precedence over the rows that min creates."
+                            },
                             "min": {
                               "type": "number",
                               "description": "Minimum amount of rows."
@@ -2661,6 +2703,14 @@
                                   }
                                 }
                               }
+                            },
+                            "mode": {
+                              "type": "string",
+                              "enum": [
+                                "code",
+                                "both"
+                              ],
+                              "description": "code opens the field in the code view. both adds a button to switch between the visual and the code view."
                             }
                           }
                         },
@@ -3013,6 +3063,17 @@
                         }
                       }
                     }
+                  },
+                  "display": {
+                    "type": "string",
+                    "enum": [
+                      "buttonGroup"
+                    ],
+                    "description": "Set to buttonGroup to show the options as a group of buttons instead of radio inputs."
+                  },
+                  "allowNull": {
+                    "type": "boolean",
+                    "description": "Allows the user to clear the value by clicking the selected radio input again."
                   }
                 }
               },
@@ -3630,6 +3691,13 @@
                   "type": {
                     "const": "repeater"
                   },
+                  "default": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    },
+                    "description": "Rows a new block starts with. Each row is an object of field values. Takes precedence over the rows that min creates."
+                  },
                   "min": {
                     "type": "number",
                     "description": "Minimum amount of rows."
@@ -3845,6 +3913,14 @@
                         }
                       }
                     }
+                  },
+                  "mode": {
+                    "type": "string",
+                    "enum": [
+                      "code",
+                      "both"
+                    ],
+                    "description": "code opens the field in the code view. both adds a button to switch between the visual and the code view."
                   }
                 }
               },
@@ -4478,6 +4554,13 @@
                   }
                 }
               }
+            },
+            "toggle": {
+              "type": [
+                "boolean",
+                "string"
+              ],
+              "description": "Adds a checkbox above the options that selects or clears all of them. A string is used as its label, true uses the default label."
             }
           }
         },
@@ -4560,6 +4643,10 @@
             "popout": {
               "type": "boolean",
               "description": "Whether to show a button that opens the editor in a popup window."
+            },
+            "asset": {
+              "type": "boolean",
+              "description": "Renders CSS, SCSS, or JavaScript from the field as a block asset, so the template does not need to print the style or script tag."
             }
           }
         },
@@ -4570,16 +4657,16 @@
             "type": {
               "const": "color"
             },
+            "default": {
+              "type": "string",
+              "description": "Value of the option that should be selected when first adding the block."
+            },
+            "fallback": {
+              "type": "string",
+              "description": "Value of the option that will display when the field value is empty."
+            },
             "options": {
               "type": "array",
-              "default": {
-                "type": "array",
-                "description": "Default value that should be applied when first adding the block."
-              },
-              "fallback": {
-                "type": "array",
-                "description": "Fallback value that that will display when field value is empty."
-              },
               "items": {
                 "type": "object",
                 "properties": {
@@ -4762,16 +4849,16 @@
             "type": {
               "const": "gradient"
             },
+            "default": {
+              "type": "string",
+              "description": "Value of the option that should be selected when first adding the block."
+            },
+            "fallback": {
+              "type": "string",
+              "description": "Value of the option that will display when the field value is empty."
+            },
             "options": {
               "type": "array",
-              "default": {
-                "type": "array",
-                "description": "Default value that should be applied when first adding the block."
-              },
-              "fallback": {
-                "type": "array",
-                "description": "Fallback value that that will display when field value is empty."
-              },
               "items": {
                 "type": "object",
                 "properties": {
@@ -5148,6 +5235,17 @@
                   }
                 }
               }
+            },
+            "display": {
+              "type": "string",
+              "enum": [
+                "buttonGroup"
+              ],
+              "description": "Set to buttonGroup to show the options as a group of buttons instead of radio inputs."
+            },
+            "allowNull": {
+              "type": "boolean",
+              "description": "Allows the user to clear the value by clicking the selected radio input again."
             }
           }
         },
@@ -5913,6 +6011,14 @@
                   }
                 }
               }
+            },
+            "mode": {
+              "type": "string",
+              "enum": [
+                "code",
+                "both"
+              ],
+              "description": "code opens the field in the code view. both adds a button to switch between the visual and the code view."
             }
           }
         },

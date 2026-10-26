@@ -66,8 +66,6 @@
             "id": "allClass4",
             "type": "checkbox",
             "label": "All class 4",
-            "multiple": true,
-            "stylisedUi": true,
             "options": [
               {
                 "value": "option-1",
