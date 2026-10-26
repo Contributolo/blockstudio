@@ -6,26 +6,36 @@ import { main } from './lib/runtime.ts';
 
 const root = resolve(import.meta.dirname, '..');
 
-export const generateTypes = Effect.scoped(
-  Effect.gen(function* () {
-    const fs = yield* FileSystem.FileSystem;
-    const temporary = yield* fs.makeTempDirectoryScoped({
-      prefix: 'blockstudio-types-',
-    });
-    for (const name of ['block', 'blockstudio']) {
-      const output = resolve(temporary, `${name}.ts`);
+export const generateTypes = (
+  destination = resolve(root, 'src/types/block.ts'),
+) =>
+  Effect.scoped(
+    Effect.gen(function* () {
+      const fs = yield* FileSystem.FileSystem;
+      const temporary = yield* fs.makeTempDirectoryScoped({
+        prefix: 'blockstudio-types-',
+      });
+      const output = resolve(temporary, 'block.ts');
       yield* command(
         resolve(root, 'node_modules/.bin/quicktype'),
-        [resolve(root, `schemas/${name}.json`), '-s', 'schema', '-o', output],
+        [resolve(root, 'schemas/block.json'), '-s', 'schema', '-o', output],
         { cwd: root, inherit: true },
       );
-      yield* writeAtomic(
-        resolve(root, `src/types/${name}.ts`),
-        yield* fs.readFile(output),
+      // Remove quicktype's runtime comments before formatting so output stays formatted.
+      const source = (yield* fs.readFileString(output)).replace(
+        /^[ \t]*\/\/.*\n/gm,
+        '',
       );
-    }
-    console.log('Generated src/types/block.ts and src/types/blockstudio.ts');
-  }),
-);
+      yield* fs.writeFileString(output, source);
+      // The tracked destination is formatter-ignored; the temporary file is not.
+      yield* command(
+        resolve(root, 'node_modules/.bin/oxfmt'),
+        ['-c', resolve(root, 'oxfmt.config.ts'), '--write', output],
+        { cwd: root },
+      );
+      yield* writeAtomic(destination, yield* fs.readFile(output));
+      console.log(`Generated ${destination}`);
+    }),
+  );
 
-if (import.meta.main) main(generateTypes);
+if (import.meta.main) main(generateTypes());

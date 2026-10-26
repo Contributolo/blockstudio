@@ -801,6 +801,49 @@ class AttributeBuilderTest extends TestCase {
 		$this->assertSame( 2, $result['rows']['min'] );
 	}
 
+	public function test_build_repeater_does_not_build_tabs_children(): void {
+		$tabs = array(
+			'type' => 'tabs',
+			'tabs' => array(
+				array(
+					'title'      => 'Details',
+					'attributes' => array(
+						array(
+							'id'   => 'detail',
+							'type' => 'text',
+						),
+					),
+				),
+			),
+		);
+
+		$fields = array(
+			array(
+				'id'         => 'items',
+				'type'       => 'repeater',
+				'attributes' => array(
+					array(
+						'id'   => 'title',
+						'type' => 'text',
+					),
+					$tabs,
+					array(
+						'type'       => 'group',
+						'attributes' => array( $tabs ),
+					),
+				),
+			),
+		);
+
+		$row = $this->builder->build( $fields )['items']['attributes'];
+
+		$this->assertTrue( array_is_list( $row ) );
+		$this->assertCount( 3, $row );
+		$this->assertSame( 'title', $row[0]['id'] );
+		$this->assertSame( 'tabs', $row[1]['type'] );
+		$this->assertSame( 'tabs', $row[2]['type'] );
+	}
+
 	public function test_build_repeater_without_id_produces_nothing(): void {
 		$fields = array(
 			array(

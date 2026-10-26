@@ -137,6 +137,17 @@ export const Fields = ({
     if (item.type === 'message')
       return <Message {...{ attributes, block }} value={item.value ?? ''} />;
 
+    // Tabs render through El, which repeater rows bypass. Without this branch
+    // the field has no control and leaves an empty row.
+    if (item.type === 'tabs' && repeaterId !== '')
+      return (
+        <Base>
+          <div className="blockstudio-fields__unsupported">
+            Field type <code>tabs</code> is not supported inside a repeater.
+          </div>
+        </Base>
+      );
+
     const transformed = transform || (block.attributes as Any)?.[item.id ?? ''];
 
     if (item.type === 'group' || !item.id || !item.type) return false;
@@ -146,6 +157,8 @@ export const Fields = ({
       (block?.attributes as Any)?.[item.id]?.options || item.options;
     delete props.type;
     delete props.id;
+    // WPML metadata must not become a native HTML translate attribute.
+    delete props.translate;
 
     let v = (attributes.blockstudio?.attributes as Any)?.[item.id];
     let val = v?.value;

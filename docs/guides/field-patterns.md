@@ -325,9 +325,8 @@ When a block has many settings, tabs provide a cleaner organization than a long 
 ```json title="block.json (partial)"
 {
   "type": "tabs",
-  "attributes": [
+  "tabs": [
     {
-      "type": "group",
       "title": "Content",
       "attributes": [
         { "id": "title", "type": "text", "label": "Title" },
@@ -335,7 +334,6 @@ When a block has many settings, tabs provide a cleaner organization than a long 
       ]
     },
     {
-      "type": "group",
       "title": "Media",
       "attributes": [
         { "id": "image", "type": "files", "label": "Image", "multiple": false },
@@ -343,7 +341,6 @@ When a block has many settings, tabs provide a cleaner organization than a long 
       ]
     },
     {
-      "type": "group",
       "title": "Settings",
       "attributes": [
         { "id": "layout", "type": "select", "label": "Layout", "options": [
@@ -357,7 +354,7 @@ When a block has many settings, tabs provide a cleaner organization than a long 
 }
 ```
 
-Each tab's group children are accessed the same as anonymous groups: `$a['title']`, `$a['image']`, `$a['layout']`. Tabs are purely a UI container.
+The fields of each tab are accessed like top-level fields: `$a['title']`, `$a['image']`, `$a['layout']`. Tabs are purely a UI container.
 
 ## Repeater Patterns
 
@@ -481,7 +478,7 @@ Without `"context": "main"`, the condition would look for a `showDescriptions` f
 
 ### Tabs inside repeaters
 
-Tabs are not available inside repeaters: a `tabs` field inside a repeater row renders an empty row. Keep the fields of a row flat instead. For long rows, a custom row label (`textMinimized`) keeps collapsed rows readable, and conditions inside the row can hide fields that only some rows need, as shown in the patterns above.
+Tabs are not available inside repeaters: a `tabs` field inside a repeater row shows a notice in the editor instead of its fields, and the PHPStan extension reports it. Keep the fields of a row flat instead. For long rows, a custom row label (`textMinimized`) keeps collapsed rows readable, and conditions inside the row can hide fields that only some rows need, as shown in the patterns above.
 
 Set `"minimized": true` on a repeater to start existing rows collapsed. Newly
 added rows open immediately. Expanded exceptions are remembered in this browser

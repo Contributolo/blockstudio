@@ -1,0 +1,37 @@
+{
+  "$schema": "https://blockstudio.dev/schema/block",
+  "name": "blockstudio/test-wpml-translate",
+  "title": "WPML Translation Fields",
+  "category": "blockstudio-test-native",
+  "blockstudio": {
+    "attributes": [
+      {
+        "id": "heading",
+        "type": "text",
+        "label": "Heading",
+        "default": "Translate me"
+      },
+      {
+        "id": "account",
+        "type": "text",
+        "label": "Account handle",
+        "default": "account-handle",
+        "translate": false
+      },
+      {
+        "id": "contact",
+        "type": "group",
+        "label": "Contact settings",
+        "translate": false,
+        "attributes": [
+          {
+            "id": "email",
+            "type": "text",
+            "label": "Contact email",
+            "default": "hello@example.com"
+          }
+        ]
+      }
+    ]
+  }
+}

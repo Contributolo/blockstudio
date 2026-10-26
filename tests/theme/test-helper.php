@@ -962,7 +962,13 @@ add_action(
 			'/e2e/setup',
 			array(
 				'methods'             => 'POST',
-				'callback'            => function () {
+				'callback'            => function ( $request ) {
+					$session = (string) $request->get_header( 'x-blockstudio-playground-session' );
+					if ( defined( 'BLOCKSTUDIO_PLAYGROUND_SESSION' ) || '' !== $session ) {
+						if ( '' === $session || ! defined( 'BLOCKSTUDIO_PLAYGROUND_SESSION' ) || ! hash_equals( (string) BLOCKSTUDIO_PLAYGROUND_SESSION, $session ) ) {
+							return new WP_Error( 'blockstudio_playground_session', 'Refusing to seed an unrelated site.', array( 'status' => 403 ) );
+						}
+					}
 					global $wpdb;
 
 					$all_posts = get_posts(

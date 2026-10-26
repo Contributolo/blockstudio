@@ -40,6 +40,7 @@ All fields share these common properties:
 | `help`        | string  | Help text displayed as a tooltip next to the label                |
 | `hidden`      | boolean | Hide the field from the UI                                        |
 | `switch`      | boolean | Display a toggle that can disable the field. Defaults to `false`. |
+| `translate`   | boolean | Set to `false` to leave the field out of the [WPML configuration](/docs/dev/wpml) |
 | `conditions`  | array   | Conditional logic rules                                           |
 
 Files fields with `"returnFormat": "id"` preserve imported string references,
@@ -327,6 +328,17 @@ Renders an HTML tag selector. Useful for choosing heading levels or semantic ele
 ## icon
 
 Renders an SVG icon from an icon set.
+
+The editor loads an icon set when you first focus its picker or change the set
+or subset, not when you select the block. Fields requesting the same set share
+the in-flight request. The stored icon name stays visible before loading, and
+refocusing the picker retries a failed request.
+
+`tabler-icons` supports `outline` and `filled`. A subset explicitly configured
+for the chosen set takes precedence; otherwise the picker uses `solid` when
+available, or the set's first subset. Sets without subsets omit `subSet`.
+Set names resolve only to bundled files. Frontend rendering caches individual
+icons rather than storing full icon sets in database transients.
 
 ```json
 {
@@ -745,6 +757,14 @@ removed after confirmation, including inside nested repeaters.
 
 For example, `"textRemove": "Remove this team member?"` changes the question.
 The existing `min` restriction still prevents removing rows below the minimum.
+
+## Repeater Nesting
+
+A repeater row accepts every field type except `tabs`. A `tabs` field in a row,
+also inside a group without an `id`, shows a notice in the editor instead of its
+fields. The [PHPStan extension](/docs/dev/phpstan) reports it for `block.json`
+and `field.json`. Keep the fields of the row flat, or move the tabs outside the
+repeater.
 
 ## WYSIWYG Links
 

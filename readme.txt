@@ -3,7 +3,7 @@ Contributors: dnnsjsk
 Requires at least: 6.7
 Tested up to: 7.0.0
 Requires PHP: 8.2
-Stable tag: 7.7.8
+Stable tag: 7.7.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,16 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 * [Getting Started](https://blockstudio.dev/docs/getting-started)
 
 == Changelog ==
+
+= 7.7.9 =
+* New: fields support `translate: false` to keep technical values and nested container fields out of generated WPML translation configuration (#180)
+* New: custom string field types can opt into generated WPML translation configuration through their registration (#187)
+* New: `wp bs blocks render` smoke-tests block templates, examples, and explicit field values with structured PHP diagnostics and CI-friendly exit codes (#188)
+* Fix: icon requests and saved values can only resolve bundled icon files, including when old cached values exist (#186)
+* Fix: Tabler icons and default icon subsets match the bundled files, and failed picker requests can retry (#185)
+* Fix: unsupported tabs inside repeaters show an editor notice and PHPStan diagnostic without breaking sibling fields (#183)
+* Fix: the field-patterns guide uses the correct tabs configuration and explains its field storage (#184)
+* Performance: icon sets load on first picker interaction, share concurrent requests, and no longer create full-set database transients (#185)
 
 = 7.7.8 =
 * Fix: RPC, database clients, and realtime polling refresh credentials outside cached page HTML and recover from expired tokens without relaxing access checks (#176)

@@ -167,6 +167,29 @@ class Utils {
 	}
 
 	/**
+	 * Resolve an icon set name to its bundled JSON file.
+	 *
+	 * Set and sub set names come from stored block attributes and request
+	 * parameters, so only plain file names that exist in the icons folder resolve.
+	 *
+	 * @param string $dir  The folder holding the bundled icon sets.
+	 * @param string $name Set name, with the sub set appended after a dash.
+	 *
+	 * @return string The file path, or an empty string when no bundled set matches.
+	 */
+	public static function icon_set_path( string $dir, string $name ): string {
+		if ( 1 !== preg_match( '/\A[a-z0-9-]+\z/', $name ) ) {
+			return '';
+		}
+
+		$path     = $dir . '/' . $name . '.json';
+		$root     = realpath( $dir );
+		$resolved = realpath( $path );
+
+		return false !== $root && false !== $resolved && str_starts_with( $resolved, $root . DIRECTORY_SEPARATOR ) && is_file( $resolved ) ? $path : '';
+	}
+
+	/**
 	 * Build theme subdirectory paths.
 	 *
 	 * @param string $folder        Folder name relative to the theme root.

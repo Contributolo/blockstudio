@@ -339,6 +339,11 @@ if ( ! function_exists( 'bs_render_icon' ) ) {
 	 */
 	function bs_render_icon( $args ) {
 		// phpcs:enable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
+		if ( ! is_array( $args ) || ! is_string( $args['set'] ?? null ) || ! is_string( $args['icon'] ?? null ) || '' === $args['icon'] || ( isset( $args['subSet'] ) && ! is_string( $args['subSet'] ) ) ) {
+			return;
+		}
+		static $sets = array();
+
 		$path            = BLOCKSTUDIO_DIR . '/includes/icons';
 		$icon_version    = '1';
 		$expiration_time = 30 * DAY_IN_SECONDS;
@@ -347,10 +352,10 @@ if ( ! function_exists( 'bs_render_icon' ) ) {
 		$sub_set = isset( $args['subSet'] ) ? '-' . $args['subSet'] : '';
 		$icon    = $args['icon'];
 
-		$complete_path = "$path/$set$sub_set.json";
-
-		$set_icon_transient_key =
-			'blockstudio_' . $icon_version . '_icon_set_' . md5( "$set$sub_set" );
+		$complete_path = Utils::icon_set_path( $path, "$set$sub_set" );
+		if ( '' === $complete_path ) {
+			return;
+		}
 
 		$icon_transient_key =
 			'blockstudio_' . $icon_version . '_icon_' . md5( "$set$sub_set$icon" );
@@ -358,15 +363,12 @@ if ( ! function_exists( 'bs_render_icon' ) ) {
 		$icon_data = get_transient( $icon_transient_key );
 
 		if ( false === $icon_data ) {
-			$data = get_transient( $set_icon_transient_key );
-
-			if ( false === $data ) {
-				if ( file_exists( $complete_path ) ) {
-					$data = Utils::read_json_file( $complete_path );
-
-					set_transient( $set_icon_transient_key, $data, $expiration_time );
-				}
+			// Sets are decoded once per request but never stored as a transient: a set is up to 5 MB.
+			if ( ! array_key_exists( $complete_path, $sets ) ) {
+				$sets[ $complete_path ] = Utils::read_json_file( $complete_path );
 			}
+
+			$data = $sets[ $complete_path ];
 
 			if ( $data && isset( $data[ $icon . '.svg' ] ) ) {
 				$icon_data = $data[ $icon . '.svg' ];

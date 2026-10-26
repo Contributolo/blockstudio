@@ -2,6 +2,7 @@
 
 use Blockstudio\Attribute_Builder;
 use Blockstudio\Field_Type_Config;
+use Blockstudio\Field_Type_Registry;
 use Blockstudio\Translations;
 use Blockstudio\Wpml_Config;
 use PHPUnit\Framework\TestCase;
@@ -330,6 +331,171 @@ XML;
 
 		$this->assertSame( array( 'outer_title', 'outer_subtitle', 'rows/*/flattened' ), $paths );
 	}
+
+	public function test_leaves_out_fields_with_translate_false_and_everything_inside_such_containers(): void {
+		$text  = static fn( string $id, array $more = array() ): array => array(
+			'id'   => $id,
+			'type' => 'text',
+		) + $more;
+		$paths = $this->declared_paths(
+			array(
+				$text( 'title' ),
+				$text( 'account', array( 'translate' => false ) ),
+				$text( 'explicit', array( 'translate' => true ) ),
+				array(
+					'id'        => 'button',
+					'type'      => 'link',
+					'translate' => false,
+				),
+				array(
+					'id'        => 'image',
+					'type'      => 'files',
+					'translate' => false,
+				),
+				array(
+					'id'         => 'contact',
+					'type'       => 'group',
+					'translate'  => false,
+					'attributes' => array(
+						$text( 'email' ),
+						array(
+							'type'       => 'group',
+							'attributes' => array( $text( 'phone' ) ),
+						),
+					),
+				),
+				array(
+					'type' => 'tabs',
+					'tabs' => array(
+						array(
+							'title'      => 'Content',
+							'attributes' => array( $text( 'intro' ) ),
+						),
+					),
+				),
+				array(
+					'type'       => 'tabs',
+					'translate'  => false,
+					'tabs'       => array(
+						array(
+							'title'      => 'Settings',
+							'attributes' => array( $text( 'css_class' ) ),
+						),
+					),
+				),
+				array(
+					'id'         => 'handles',
+					'type'       => 'repeater',
+					'translate'  => false,
+					'attributes' => array( $text( 'handle' ) ),
+				),
+				array(
+					'id'         => 'cards',
+					'type'       => 'repeater',
+					'attributes' => array(
+						$text( 'heading' ),
+						$text( 'slug', array( 'translate' => false ) ),
+						array(
+							'type'       => 'group',
+							'translate'  => false,
+							'attributes' => array( $text( 'code' ) ),
+						),
+					),
+				),
+			)
+		);
+
+		$this->assertSame( array( 'title', 'explicit', 'intro', 'cards/*/heading' ), $paths );
+	}
+
+	public function test_a_field_with_translate_false_conflicts_with_a_translated_field_of_the_same_key(): void {
+		$section = $this->section(
+			array(
+				array(
+					'id'    => 'note',
+					'type'  => 'text',
+					'label' => 'Note',
+				),
+			),
+			array(
+				array(
+					'id'        => 'note',
+					'type'      => 'text',
+					'translate' => false,
+				),
+			)
+		);
+
+		$this->assertSame( array( 'acme/example: note (text in the block, untranslated text in an extension)' ), $section['conflicts'] );
+		$this->assertStringContainsString( 'translate="0"', $section['xml'] );
+	}
+
+	public function test_translate_false_cannot_be_reenabled_inside_nested_containers(): void {
+		$fields = array(
+			array(
+				'type'       => 'group',
+				'translate'  => false,
+				'attributes' => array(
+					array(
+						'type'      => 'tabs',
+						'translate' => true,
+						'tabs'      => array(
+							array(
+								'title'      => 'Settings',
+								'attributes' => array(
+									array(
+										'id'         => 'accounts',
+										'type'       => 'repeater',
+										'translate'  => true,
+										'attributes' => array(
+											array( 'id' => 'handle', 'type' => 'text', 'translate' => true ),
+										),
+									),
+								),
+							),
+						),
+					),
+				),
+			),
+			array( 'id' => 'heading', 'type' => 'text' ),
+		);
+
+		$this->assertSame( array( 'heading' ), $this->declared_paths( $fields ) );
+		$this->assertTrue( $fields[0]['attributes'][0]['translate'] );
+	}
+
+	public function test_translate_true_preserves_type_and_hidden_field_classification(): void {
+		$fields = array(
+			array( 'id' => 'heading', 'type' => 'text' ),
+			array( 'id' => 'body', 'type' => 'textarea' ),
+			array( 'id' => 'variant', 'type' => 'select' ),
+			array( 'id' => 'hidden', 'type' => 'text', 'hidden' => true ),
+			array( 'id' => 'button', 'type' => 'link' ),
+			array( 'id' => 'image', 'type' => 'files' ),
+		);
+		$before = $this->section( $fields );
+		foreach ( $fields as &$field ) {
+			$field['translate'] = true;
+		}
+		unset( $field );
+
+		$this->assertSame( $before, $this->section( $fields ) );
+	}
+
+	public function test_translate_false_suppresses_unknown_type_warnings_only_when_explicit(): void {
+		$section = $this->section(
+			array(
+				array( 'id' => 'handle', 'type' => 'custom-account', 'translate' => false ),
+				array( 'id' => 'default', 'type' => 'custom-account' ),
+				array( 'id' => 'enabled', 'type' => 'custom-account', 'translate' => true ),
+			)
+		);
+
+		$this->assertSame( array( 'acme/example: default (custom-account)', 'acme/example: enabled (custom-account)' ), $section['skipped'] );
+		$this->assertSame( 0, $section['translated'] );
+		$this->assertSame( 1, $section['untranslated'] );
+	}
+
 	public function test_reports_fields_of_unknown_types_without_declaring_them(): void {
 		$section = $this->section(
 			array(
@@ -360,6 +526,66 @@ XML;
 			$section['skipped']
 		);
 		$this->assertStringContainsString( 'translate="0"', $section['xml'] );
+	}
+
+	public function test_declares_fields_of_custom_types_registered_with_translate(): void {
+		$registry = Field_Type_Registry::instance();
+		$registry->register(
+			'wpmltest/text',
+			array(
+				'attribute' => 'string',
+				'translate' => true,
+			)
+		);
+		$registry->register( 'wpmltest/plain', array( 'attribute' => 'string' ) );
+		$registry->register( 'wpmltest/spacing', array( 'attribute' => 'object' ) );
+
+		try {
+			$fields  = array(
+				array(
+					'id'    => 'headline',
+					'type'  => 'wpmltest/text',
+					'label' => 'Headline',
+				),
+				array(
+					'id'        => 'handle',
+					'type'      => 'wpmltest/text',
+					'translate' => false,
+				),
+				array(
+					'id'   => 'plain',
+					'type' => 'wpmltest/plain',
+				),
+				array(
+					'id'    => 'margin',
+					'type'  => 'wpmltest/spacing',
+					'label' => 'Margin',
+				),
+				array(
+					'id'         => 'rows',
+					'type'       => 'repeater',
+					'attributes' => array(
+						array(
+							'id'   => 'caption',
+							'type' => 'wpmltest/text',
+						),
+					),
+				),
+			);
+			$section = $this->section( $fields );
+
+			$this->assertSame( array( 'headline', 'rows/*/caption' ), $this->declared_paths( $fields ) );
+			$this->assertSame(
+				array(
+					'acme/example: plain (wpmltest/plain)',
+					'acme/example: Margin (wpmltest/spacing)',
+				),
+				$section['skipped']
+			);
+			$this->assertSame( 1, $section['translated'] );
+		} finally {
+			array_map( array( $registry, 'unregister' ), array( 'wpmltest/text', 'wpmltest/plain', 'wpmltest/spacing' ) );
+		}
 	}
 
 	public function test_classifies_every_built_in_field_type(): void {
