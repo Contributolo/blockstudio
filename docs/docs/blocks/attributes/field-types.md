@@ -115,6 +115,7 @@ Renders a set of checkbox inputs.
 | `options` | `array` | Options to choose from. |
 | `returnFormat` | `string` | Specifies the return format value. |
 | `populate` | `object` |  |
+| `toggle` | `boolean \| string` | Adds a checkbox above the options that selects or clears all of them. A string is used as its label, true uses the default label. |
 
 ## classes
 
@@ -158,6 +159,7 @@ Renders a code editor.
 | `maxHeight` | `string` | The maximum height of the editor. |
 | `minHeight` | `string` | The minimum height of the editor. |
 | `popout` | `boolean` | Whether to show a button that opens the editor in a popup window. |
+| `asset` | `boolean` | Renders CSS, SCSS, or JavaScript from the field as a block asset, so the template does not need to print the style or script tag. |
 
 ## color
 
@@ -183,6 +185,8 @@ Renders a color palette and color picker.
 
 | Property | Type | Description |
 |----------|------|-------------|
+| `default` | `string` | Value of the option that should be selected when first adding the block. |
+| `fallback` | `string` | Value of the option that will display when the field value is empty. |
 | `options` | `array` |  |
 | `populate` | `object` |  |
 | `clearable` | `boolean` | Whether the palette should have a clearing button or not. |
@@ -279,6 +283,8 @@ Renders a gradient palette and gradient picker
 
 | Property | Type | Description |
 |----------|------|-------------|
+| `default` | `string` | Value of the option that should be selected when first adding the block. |
+| `fallback` | `string` | Value of the option that will display when the field value is empty. |
 | `options` | `array` |  |
 | `populate` | `object` |  |
 | `clearable` | `boolean` | Whether the palette should have a clearing button or not. |
@@ -328,17 +334,6 @@ Renders an HTML tag selector. Useful for choosing heading levels or semantic ele
 ## icon
 
 Renders an SVG icon from an icon set.
-
-The editor loads an icon set when you first focus its picker or change the set
-or subset, not when you select the block. Fields requesting the same set share
-the in-flight request. The stored icon name stays visible before loading, and
-refocusing the picker retries a failed request.
-
-`tabler-icons` supports `outline` and `filled`. A subset explicitly configured
-for the chosen set takes precedence; otherwise the picker uses `solid` when
-available, or the set's first subset. Sets without subsets omit `subSet`.
-Set names resolve only to bundled files. Frontend rendering caches individual
-icons rather than storing full icon sets in database transients.
 
 ```json
 {
@@ -456,6 +451,8 @@ Renders a set of radio inputs.
 | `options` | `array` | Options to choose from. |
 | `returnFormat` | `string` | Specifies the return format value. |
 | `populate` | `object` |  |
+| `display` | `string` | Set to buttonGroup to show the options as a group of buttons instead of radio inputs. |
+| `allowNull` | `boolean` | Allows the user to clear the value by clicking the selected radio input again. |
 
 ## range
 
@@ -619,6 +616,7 @@ Renders a set of fields that can be repeated.
 
 | Property | Type | Description |
 |----------|------|-------------|
+| `default` | `array` | Rows a new block starts with. Each row is an object of field values. Takes precedence over the rows that min creates. |
 | `min` | `number` | Minimum amount of rows. |
 | `max` | `number` | Maximum amount of rows. |
 | `minimized` | `boolean` | Collapse the existing rows when the editor opens. Rows added in the editor start expanded. |
@@ -683,6 +681,7 @@ Renders a WYSIWYG editor.
 | `default` | `string` | Default value that should be applied when first adding the block. |
 | `fallback` | `string` | Fallback value that that will display when field value is empty. |
 | `toolbar` | `object` | The toolbar configuration for the editor. |
+| `mode` | `string` | code opens the field in the code view. both adds a button to switch between the visual and the code view. |
 
 <!-- GENERATED_FIELD_TYPES_END -->
 
