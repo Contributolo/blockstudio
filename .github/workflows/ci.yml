@@ -275,7 +275,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: playground-smoke-results
-          path: test-results/
+          path: |
+            test-results/
+            artifacts/playground/
           retention-days: 7
 
   e2e-empty:

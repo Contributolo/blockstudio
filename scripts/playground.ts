@@ -5,11 +5,14 @@ import { createServer } from 'node:net';
 import { randomUUID } from 'node:crypto';
 import { resolve, relative, isAbsolute } from 'node:path';
 import { command } from './lib/command.ts';
+import { playgroundServer } from './lib/playground.ts';
 import { attempt, attemptPromise, main, ToolingError } from './lib/runtime.ts';
 
 const root = resolve(import.meta.dirname, '..');
 const php = process.env.PLAYGROUND_PHP ?? '8.4';
 const wordpress = process.env.PLAYGROUND_WP ?? 'latest';
+
+export const runtimeOptions = () => ({ php, wp: wordpress, workers: 6 });
 
 // Playground ignores --php and --wp as soon as a Blueprint is passed, so the versions live in the Blueprint.
 export const blueprint = (
@@ -18,6 +21,7 @@ export const blueprint = (
 ) => ({
   $schema: 'https://playground.wordpress.net/blueprint-schema.json',
   preferredVersions: { php, wp: wordpress },
+  extraLibraries: ['wp-cli'],
   steps: [
     {
       step: 'defineWpConfigConsts',
@@ -101,7 +105,7 @@ const dependencies = Effect.gen(function* () {
   }
 });
 
-const playground = <A, E, R>(inherit: boolean, work: Effect.Effect<A, E, R>) =>
+const playground = <A, E, R>(work: Effect.Effect<A, E, R>) =>
   Effect.scoped(
     Effect.gen(function* () {
       const fs = yield* FileSystem.FileSystem;
@@ -122,36 +126,40 @@ const playground = <A, E, R>(inherit: boolean, work: Effect.Effect<A, E, R>) =>
       );
       yield* dependencies;
       const session = randomUUID();
-      const directory = yield* fs.makeTempDirectoryScoped({
-        prefix: 'blockstudio-playground-',
-      });
-      const file = resolve(directory, 'blueprint.json');
-      yield* fs.writeFileString(
-        file,
-        JSON.stringify(blueprint(config.config, session)),
-      );
-
+      const diagnostics = process.env.CI
+        ? resolve(root, 'artifacts/playground')
+        : undefined;
+      if (diagnostics)
+        yield* fs.makeDirectory(diagnostics, { recursive: true });
       const site = `http://localhost:${config.port}`;
-      const server = command(
-        resolve(root, 'node_modules/.bin/wp-playground-cli'),
-        [
-          'server',
-          `--port=${config.port}`,
-          `--site-url=${site}`,
-          `--blueprint=${file}`,
-          '--mount-dir',
-          root,
-          '/wordpress/wp-content/plugins/blockstudio',
-          '--mount-dir',
-          resolve(root, 'tests/theme'),
-          '/wordpress/wp-content/themes/theme',
+      yield* playgroundServer({
+        command: 'server',
+        ...runtimeOptions(),
+        port: config.port,
+        'site-url': site,
+        mount: [
+          {
+            hostPath: root,
+            vfsPath: '/wordpress/wp-content/plugins/blockstudio',
+          },
+          {
+            hostPath: resolve(root, 'tests/theme'),
+            vfsPath: '/wordpress/wp-content/themes/theme',
+          },
+          ...(diagnostics
+            ? [{ hostPath: diagnostics, vfsPath: '/playground-diagnostics' }]
+            : []),
         ],
-        { cwd: root, inherit, tee: !inherit },
-      ).pipe(
-        Effect.andThen(
-          Effect.fail(new ToolingError({ message: 'Playground stopped.' })),
+        blueprint: blueprint(
+          diagnostics
+            ? {
+                ...config.config,
+                WP_DEBUG_LOG: '/playground-diagnostics/php.log',
+              }
+            : config.config,
+          session,
         ),
-      );
+      });
 
       const client = (yield* HttpClient.HttpClient).pipe(
         HttpClient.filterStatusOk,
@@ -192,7 +200,8 @@ const playground = <A, E, R>(inherit: boolean, work: Effect.Effect<A, E, R>) =>
         console.log(`Playground ready at ${site}`);
       });
 
-      return yield* Effect.raceFirst(server, ready.pipe(Effect.andThen(work)));
+      yield* ready;
+      return yield* work;
     }),
   );
 
@@ -202,7 +211,6 @@ const test = (args: string[]) =>
       validateSpecs(args),
     );
     return yield* playground(
-      false,
       Effect.gen(function* () {
         const { exitCode } = yield* command(
           resolve(root, 'node_modules/.bin/playwright'),
@@ -221,7 +229,7 @@ if (import.meta.main) {
   const [action = 'start', ...args] = process.argv.slice(2);
   main(
     action === 'start' && args.length === 0
-      ? playground(true, Effect.never)
+      ? playground(Effect.never)
       : action === 'test'
         ? test(args)
         : Effect.fail(
