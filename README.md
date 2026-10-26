@@ -218,10 +218,11 @@ as the plugin and `tests/theme` as the `theme` theme, activates both, sets
 `/%postname%/` permalinks and calls the E2E seed endpoint. Every run starts from a
 new site and uses `playwright.wp-env.config.ts` unchanged. PHP 8.4 and the
 latest WordPress are the defaults; set `PLAYGROUND_PHP` or `PLAYGROUND_WP` to
-change them. The Playground CLI is pinned in `package.json`.
+change them. The Playground package is pinned in `package.json`; its SDK manages
+the server lifecycle with six PHP workers.
 
 Differences from wp-env: SQLite instead of MySQL, one site (no PHPUnit, empty or
-implementation environments), and no WP-CLI or Docker. `tests/e2e/cli.ts` and
+implementation environments), and no host WP-CLI or Docker. `tests/e2e/cli.ts` and
 `tests/e2e/seo.ts` call `wp-env run cli` and therefore still need wp-env. Port
 8888 must be free.
 
@@ -229,7 +230,8 @@ Pass exact spec filenames, not directories or broad patterns. Empty spec lists
 and specs that require wp-env are rejected before startup. The runner refuses
 an occupied port and verifies a unique site identity before seeding anything.
 It never seeds an existing WordPress instance. Startup and seeding are bounded;
-errors stop the run and its scoped child process is shut down.
+errors stop the run and its scoped server is shut down. Shutdown failures also
+fail the run. In CI, PHP boot diagnostics are retained with failure artifacts.
 
 Use this disposable server only on a trusted development machine. Do not expose
 its port publicly. Files in the mounted plugin and theme remain real local
