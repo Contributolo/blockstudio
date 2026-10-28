@@ -22,6 +22,11 @@ test('numeric schema constants generate formatted, deterministic block types wit
   const source = readFileSync(output, 'utf8');
   assert.match(source, /apiVersion:\s*number/);
   assert.match(source, /translate\?:\s*boolean/);
+  for (const property of ['asset', 'display', 'mode', 'toggle']) {
+    const pattern = new RegExp(`${property}\\?:`);
+    assert.match(source, pattern);
+    assert.match(maintained, pattern);
+  }
   assert.doesNotMatch(source, /^[ \t]*\/\//m);
   assert.deepEqual(readdirSync(directory), ['block.ts']);
   execFileSync(

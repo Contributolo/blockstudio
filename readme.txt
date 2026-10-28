@@ -3,7 +3,7 @@ Contributors: dnnsjsk
 Requires at least: 6.7
 Tested up to: 7.0.0
 Requires PHP: 8.2
-Stable tag: 7.7.9
+Stable tag: 7.7.10
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,10 @@ Download the latest release zip from [GitHub Releases](https://github.com/inline
 * [Getting Started](https://blockstudio.dev/docs/getting-started)
 
 == Changelog ==
+
+= 7.7.10 =
+* Fix: field schemas and TypeScript definitions include the supported radio, checkbox, code, WYSIWYG, repeater, color, and gradient options (#191)
+* New: PHPStan reports unknown built-in field properties in `block.json` and `field.json`, with type-aware typo suggestions and separately suppressible diagnostics (#190, #192)
 
 = 7.7.9 =
 * New: fields support `translate: false` to keep technical values and nested container fields out of generated WPML translation configuration (#180)

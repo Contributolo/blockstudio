@@ -656,6 +656,25 @@ export interface BlockstudioAttribute {
    */
   allowNull?: boolean | string;
   /**
+   * Renders CSS, SCSS, or JavaScript from the field as a block asset, so the template does not
+   * need to print the style or script tag.
+   */
+  asset?: boolean;
+  /**
+   * Set to buttonGroup to show the options as a group of buttons instead of radio inputs.
+   */
+  display?: 'buttonGroup';
+  /**
+   * code opens the field in the code view. both adds a button to switch between the visual and
+   * the code view.
+   */
+  mode?: 'code' | 'both';
+  /**
+   * Adds a checkbox above the options that selects or clears all of them. A string is used as
+   * its label, true uses the default label.
+   */
+  toggle?: boolean | string;
+  /**
    * Renders a stylised version of a select with the ability to search through items.
    */
   stylisedUi?: boolean;
@@ -1019,6 +1038,25 @@ export interface AttributeAttribute {
    * the option will render the specified string.
    */
   allowNull?: boolean | string;
+  /**
+   * Renders CSS, SCSS, or JavaScript from the field as a block asset, so the template does not
+   * need to print the style or script tag.
+   */
+  asset?: boolean;
+  /**
+   * Set to buttonGroup to show the options as a group of buttons instead of radio inputs.
+   */
+  display?: 'buttonGroup';
+  /**
+   * code opens the field in the code view. both adds a button to switch between the visual and
+   * the code view.
+   */
+  mode?: 'code' | 'both';
+  /**
+   * Adds a checkbox above the options that selects or clears all of them. A string is used as
+   * its label, true uses the default label.
+   */
+  toggle?: boolean | string;
   /**
    * Renders a stylised version of a select with the ability to search through items.
    */
@@ -1426,6 +1464,25 @@ export interface Attribute {
    * the option will render the specified string.
    */
   allowNull?: boolean | string;
+  /**
+   * Renders CSS, SCSS, or JavaScript from the field as a block asset, so the template does not
+   * need to print the style or script tag.
+   */
+  asset?: boolean;
+  /**
+   * Set to buttonGroup to show the options as a group of buttons instead of radio inputs.
+   */
+  display?: 'buttonGroup';
+  /**
+   * code opens the field in the code view. both adds a button to switch between the visual and
+   * the code view.
+   */
+  mode?: 'code' | 'both';
+  /**
+   * Adds a checkbox above the options that selects or clears all of them. A string is used as
+   * its label, true uses the default label.
+   */
+  toggle?: boolean | string;
   /**
    * Renders a stylised version of a select with the ability to search through items.
    */
@@ -3706,6 +3763,10 @@ const typeMap: any = {
       { json: 'trackColor', js: 'trackColor', typ: u(undefined, '') },
       { json: 'withInputField', js: 'withInputField', typ: u(undefined, true) },
       { json: 'allowNull', js: 'allowNull', typ: u(undefined, u(true, '')) },
+      { json: 'asset', js: 'asset', typ: u(undefined, true) },
+      { json: 'display', js: 'display', typ: u(undefined, '') },
+      { json: 'mode', js: 'mode', typ: u(undefined, '') },
+      { json: 'toggle', js: 'toggle', typ: u(undefined, u(true, '')) },
       { json: 'stylisedUi', js: 'stylisedUi', typ: u(undefined, true) },
       { json: 'tabs', js: 'tabs', typ: u(undefined, a(r('FluffyTab'))) },
       { json: 'rows', js: 'rows', typ: u(undefined, 3.14) },
@@ -3878,6 +3939,10 @@ const typeMap: any = {
       { json: 'trackColor', js: 'trackColor', typ: u(undefined, '') },
       { json: 'withInputField', js: 'withInputField', typ: u(undefined, true) },
       { json: 'allowNull', js: 'allowNull', typ: u(undefined, u(true, '')) },
+      { json: 'asset', js: 'asset', typ: u(undefined, true) },
+      { json: 'display', js: 'display', typ: u(undefined, '') },
+      { json: 'mode', js: 'mode', typ: u(undefined, '') },
+      { json: 'toggle', js: 'toggle', typ: u(undefined, u(true, '')) },
       { json: 'stylisedUi', js: 'stylisedUi', typ: u(undefined, true) },
       { json: 'tabs', js: 'tabs', typ: u(undefined, a(r('PurpleTab'))) },
       { json: 'rows', js: 'rows', typ: u(undefined, 3.14) },
@@ -4086,6 +4151,10 @@ const typeMap: any = {
       { json: 'trackColor', js: 'trackColor', typ: u(undefined, '') },
       { json: 'withInputField', js: 'withInputField', typ: u(undefined, true) },
       { json: 'allowNull', js: 'allowNull', typ: u(undefined, u(true, '')) },
+      { json: 'asset', js: 'asset', typ: u(undefined, true) },
+      { json: 'display', js: 'display', typ: u(undefined, '') },
+      { json: 'mode', js: 'mode', typ: u(undefined, '') },
+      { json: 'toggle', js: 'toggle', typ: u(undefined, u(true, '')) },
       { json: 'stylisedUi', js: 'stylisedUi', typ: u(undefined, true) },
       { json: 'tabs', js: 'tabs', typ: u(undefined, a(r('AttributeTab'))) },
       { json: 'rows', js: 'rows', typ: u(undefined, 3.14) },

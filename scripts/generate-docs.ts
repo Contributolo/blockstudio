@@ -1,11 +1,8 @@
 import { readFileSync, writeFileSync, existsSync } from 'fs';
-import { dirname, join, resolve } from 'path';
-import { fileURLToPath } from 'url';
+import { join, resolve } from 'path';
 import { attempt, main as runMain } from './lib/runtime.ts';
 
-export const generateDocs = attempt('generateDocs', () => {
-  const __dirname = dirname(fileURLToPath(import.meta.url));
-  const root = resolve(__dirname, '..');
+const generate = (root: string) => {
   const schemasDir = join(root, 'schemas');
   const CONTENT_DIR = join(root, 'docs/docs');
   const BLOCKS_CONTENT_DIR = join(CONTENT_DIR, 'blocks');
@@ -328,6 +325,9 @@ export const generateDocs = attempt('generateDocs', () => {
   }
 
   main();
-});
+};
 
-if (import.meta.main) runMain(generateDocs);
+export const generateDocs = (root = resolve(import.meta.dirname, '..')) =>
+  attempt('generateDocs', () => generate(root));
+
+if (import.meta.main) runMain(generateDocs());
